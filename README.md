@@ -1,2 +1,2 @@
-# R-codes
-主要存储一些比较凌乱的R代码
+
+For the repository of R related notes, such as RNA sequencing, metabolomics and statistics using R.
