@@ -1,0 +1,122 @@
+---
+title: "dc"
+author: "yincy"
+date: "June 20, 2019"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+```
+
+
+```{r}
+library(tidyverse)
+library(KEGGREST)
+library(biomaRt)
+library(edgeR)
+```
+
+
+biomaRt. Instead use `useMart()` function the `useEnsembl()` can choose which mirror to use.  
+```{r}
+mmart <- useEnsembl(biomart = "ensembl", 
+                    dataset = "mmusculus_gene_ensembl", 
+                    mirror = "asia") # speed up instead of default mirror
+```
+
+
+```{r}
+imm <- read.csv(file = list.files(pattern = "count_table"))
+imm_dc <- imm %>% 
+    dplyr::select("mgi_symbol" = Gene_Symbol, contains("DC", ignore.case = F))
+
+imm_dc_cpm <- cpm(y = imm_dc[, 2:9], 
+                  normalized.lib.size = T, 
+                  lib.size = colSums(imm_dc[, 2:9]))
+imm_dc_cpm <- as.data.frame(imm_dc_cpm)
+imm_dc_cpm$mgi_symbol <- imm_dc[, 1]
+imm_dc_cpm <- imm_dc_cpm %>% 
+  dplyr::select(mgi_symbol, contains("DC", ignore.case = F))
+imm_dc_cpm$mean_cpm <- apply(imm_dc_cpm[, 2:9], 1, mean, na.rm = T)
+```
+
+### DC marker genes
+plasmacytoid DCs: 0.5% spleen; 0.2% lymph nodes  
+Conventional DC (cDC1): 0.5% spleen; 0.1% lymph nodes  
+Conventional DC2 (cDC2): 1% spleen; 0.2% lymph nodes  
+```{r}
+dc_markers <- c("CD45", "CD11c", "HLA", "CD45R", "CD317", "Siglec-H", "Ly-6C", 
+                "CD8a", "XCR1", "CD24", "CLEC9A",
+                "CD4", "SIRPa", "CD11b")
+
+mhc2 <- read.table(file = list.files(pattern = "result"), sep = "\t", header = TRUE)
+mhc2 <- mhc2[!is.na(str_match(mhc2$description, "^histocompatibility 2,")), ] %>% .[, 3]
+dc_markers_entrez <- c("19264", "16411", mhc2, 
+                       "69550", "233274", "17067", 
+                       "12525", "23832", "12484", 
+                       "232414", "12504", "19261",
+                       "16409")
+dc_markers_entrez <- unique(dc_markers_entrez)
+
+dc_markers <- getBM(
+    attributes = c("mgi_symbol", "entrezgene", "ensembl_gene_id"),
+    filters = "entrezgene",
+    values = dc_markers_entrez,
+    mart = mmart
+)
+dc_markers
+```
+
+
+```{r}
+own_dc <- read.csv(file = "dc_read_table.csv", header = T)
+
+own_dc_cpm <- cpm(y = own_dc[, 2, drop = FALSE], 
+                  lib.size = colSums(own_dc[, 2, drop = F]))
+own_dc_cpm <- as.data.frame(own_dc_cpm)
+own_dc_cpm$mgi_symbol <- own_dc[, 1]
+own_dc_cpm <- own_dc_cpm %>% 
+  dplyr::select(mgi_symbol, "cpm"=reads)
+```
+
+### mapped reads
+```{r}
+#ours
+data.frame(ours = colSums(own_dc[, 2, drop = F]))
+
+#immG
+data.frame(immG = sort(colSums(imm_dc[, 2:9])))
+```
+
+
+
+```{r, message=FALSE}
+meg <- merge(x = own_dc_cpm, y = imm_dc_cpm, by.x = "mgi_symbol", by.y = "mgi_symbol")
+lab_index <- data.frame(x = c(30, 30), y = c(8500, 2000), label = c("ours", "immG"), group = c("cpm", "mean_cpm"))
+meg %>% 
+  dplyr::select(mgi_symbol, cpm, mean_cpm) %>% 
+  gather(key = "group", value = "cpm", "ours" = cpm, "imm" = mean_cpm) %>% 
+  filter(mgi_symbol %in% dc_markers$mgi_symbol) %>% 
+  ggplot(aes(reorder(mgi_symbol, cpm), cpm)) +
+  geom_bar(aes(group = factor(group), fill = group),stat = "identity", position = "stack") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), legend.position = "top") +
+  xlab(NULL) +
+    scale_y_continuous(trans = "log2")
+```
+
+```{r, message=FALSE}
+VennDiagram::venn.diagram(
+  x = list(ours = own_dc_cpm$mgi_symbol[which(own_dc_cpm$cpm >= 10)],
+       immG = imm_dc_cpm$mgi_symbol[which(imm_dc_cpm$mean_cpm >= 10)]),
+  filename = "Venn.tiff",
+  main = "ours v.s. immG",
+  sub = "counts per million (cpm) >= 10 ")
+```
+
+
+![](I:/dc/Venn.tiff)
+
+
