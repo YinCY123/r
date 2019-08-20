@@ -1,0 +1,342 @@
+---
+title: "OOP_coursera"
+author: "yincy"
+date: "8/20/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(magrittr)
+```
+
+# S3  
+
+A class is a blueprint for an object: it describes the parts of an object, how to make an object, and what the object is able to do.   
+
+
+Conveniently everything in R is an object.  
+```{r}
+class(2)
+```
+
+```{r}
+class("is in session")
+```
+
+
+```{r}
+class(class)
+```
+
+
+In the S3 system you can arbitrarily assign a class to any object, which goes against most of what we discussed in the *Object Oriented Principles* section. Class assignments can be made using the `structure()` function, or you can assign the class using `class()` and `<-`:  
+
+```{r}
+special_num_1 <- structure(.Data = 1, class = "special_number")
+```
+
+```{r}
+special_num_2 <- 2
+class(special_num_2)
+```
+
+```{r}
+class(special_num_2) <- "special_number"
+class(special_num_2)
+```
+
+S3 constructor  
+```{r}
+shape_S3 <- function(side_lengths){
+    structure(list(side_lengths = side_lengths), class = "shape_S3")
+}
+```
+
+```{r}
+square_4 <- shape_S3(side_lengths = c(4,4,4,4))
+```
+
+```{r}
+triangle_3 <- shape_S3(side_lengths = c(3, 3, 3))
+```
+
+**generic methods**  
+```{r}
+mean(c(2, 3, 7))
+```
+
+```{r}
+mean(c(as.Date("2016-09-01"), as.Date("2016-09-03")))
+```
+
+The creation of every generic method uses the `UseMethod()` function in the following way with only slight variations.  
+
+[name_of_method] <- function(x) UseMethod("[name_of_method]")
+
+
+```{r}
+is_square <- function(x)UseMethod("is_square")
+```
+
+Now we can add the actual function definition for detecting wether or not a shape is a square by specifying `is_square.shape_S3`. By putting a dot(.) and the name of the class after `is_square`, we can create a method that associates `is_square` with the `shape_S3` class.   
+```{r}
+is_square.shape_S3 <- function(x){
+    length(x$side_lengths) == 4 &&
+        x$side_lengths[1] == x$side_lengths[2] &&
+        x$side_lengths[2] == x$side_lengths[3] &&
+        x$side_lengths[3] == x$side_lengths[4]
+}
+
+is_square(square_4)
+is_square(triangle_3)
+```
+
+return NA when its argument is not a `shape_S3`.  
+
+We can specify `is_square.default` as a last resort if there is not method associated with the object passed to `is_square`.  
+
+```{r}
+is_square.default <- function(x){
+    NA
+}
+
+is_square("square")
+is_square(c(1,1,1,1))
+```
+
+```{r}
+print(square_4)
+```
+
+`print()` is a generic method, so we can pecify a print method for the shape_S3 class  
+```{r}
+print.shape_S3 <- function(x){
+    if(length(x$side_lengths) == 3){
+        paste("A triangle with side length of", x$side_lengths[1], 
+              x$side_lengths[2], "and",x$side_lengths[3])
+    }else if(length(x$side_lengths) == 4){
+        if(is_square(x)){
+            paste("A square with four side length", x$side_lengths[1])
+        }else{
+            paste("A quadrilateral with side length of", x$side_lengths[1],
+                  x$side_lengths[2],x$side_lengths[3], "and", x$side_lengths[4])
+        }
+    }else {
+        paste("A shape with", length(x$side_lengths), "slides.")
+    }
+}
+
+
+print(square_4)
+print(triangle_3)
+print(shape_S3(side_lengths = c(10, 10, 20, 20, 15)))
+print(shape_S3(side_lengths = c(3, 4,4)))
+```
+
+Since printing an object to the console is one of the most common things to do in R, nearly every class has an associated print method. To see all of the methods associated with a generic like `print()` use the `methods()` function:  
+```{r}
+methods(print) %>% head(n = 10)
+```
+
+
+Since you can assign any class to an object in S3, you can specify a super class for an object the same way you would specify a class for an object.  
+```{r}
+class(square_4)
+class(square_4) <- c("shape_S3", "square")
+class(square_4)
+```
+
+To check if an object is a sub-class of a specified class you can use the `inherits()` function.  
+```{r}
+inherits(x = square_4, what = "square")
+```
+
+
+
+# S4  
+To create a new class in S4 you need to use the `setClass()` function.  
+
+You need to specify two or three arguments for this function: `Class` which is the name of the class as a string,`slots`, which is a named list of attributes for the class with the class of those attributes specified, and optionally `contains` which includes the super-class of they class you’re specifying (if there is a super-class).   
+
+```{r}
+setClass("bus_S4",
+         slots = list(n_seats = "numeric", 
+                      top_speed = "numeric",
+                      current_speed = "numeric",
+                      brand = "character"))
+setClass("party_bus_S4",
+         slots = list(n_subwoofers = "numeric",
+                      smoke_machine_on = "logical"),
+         contains = "bus_S4")
+```
+
+Now that we’ve created the bus_S4 and the party_bus_S4 classes we can create bus objects using the new() function. The new()function’s arguments are the name of the class and values for each “slot” in our S4 object.  
+```{r}
+my_bus <- new(Class = "bus_S4", 
+              n_seats = 20,
+              top_speed = 30,
+              current_speed = 20,
+              brand = "Volvo")
+```
+
+```{r}
+my_party_bus <- new(Class = "party_bus_S4",
+                    n_seats = 10,
+                    top_speed = 100,
+                    current_speed = 50,
+                    brand = "Mercedes",
+                    n_subwoofers = 2,
+                    smoke_machine_on = FALSE)
+```
+
+You can use the `@` operator to access the slots of an S4 object  
+```{r}
+my_bus@n_seats
+my_party_bus@n_subwoofers
+```
+
+S4 classes use a generic method system that is similar to S3 classes. In order to implement a new generic method you need to use the `setGeneric()` function and the `standardGeneric()` function in the following way  
+```{r}
+?setGeneric
+?standardGeneric
+setGeneric(name= "new_generic", def = function(x){
+    standardGeneric(f = "new_generic")
+})
+```
+
+Let’s create a generic function called is_bus_moving() to see if a bus_S4 object is in motion  
+```{r}
+setGeneric(name = "is_bus_moving", def = function(x){
+    standardGeneric(f = "is_bus_moving")
+})
+```
+
+
+Now we need to actually define the function which we can do with `setMethod()`. The `setMethod()` functions takes as arguments the name of the method as a string, the method signature which specifies the class of each argument for the method, and then the function definition of the method.    
+```{r}
+?setMethod
+setMethod(f = "is_bus_moving", # the name of thee generic function
+          signature = c(x = "bus_S4"), # the class of the function
+          definition = function(x){ # the function called when class is matched
+              x@current_speed > 0
+          })
+
+is_bus_moving(my_bus)
+my_bus@current_speed <- 0
+is_bus_moving(my_bus)
+```
+
+**setClass() -> new() -> setGeneric() -> setMethod()**  
+
+In addition to creating your own generic methods, you can also create a method for your new class from an existing generic. 
+
+# modify existing generic methods  
+First use the `setGeneric()` function with the name of the existing method you want to use with your class, and then use the `setMethod()` function like in the previous example. Let’s make a print() method for the bus_S4 class:  
+```{r}
+setGeneric("print")
+
+setMethod(f = "print",
+          signature = c(x = "bus_S4"),
+          definition = function(x){
+              paste("This", x@brand, "bus is traveling at a speed of", x@current_speed)
+          })
+
+print(my_party_bus)
+```
+
+# RC class  
+We can use the setRefClass() function to define a class’ fields, methods, and super-classes  
+```{r}
+?setRefClass
+student <- setRefClass(
+    Class = "student", # the class name
+    fields = list( # field names
+        name = "character",
+        grad_year = "numeric",
+        credits = "numeric",
+        id = "character",
+        course = "list"
+    ),
+    methods = list( # a named list of function that can be invokig by objects from this class
+        hello = function(){
+            paste("Hi! my name is", name)
+        },
+        add_credits = function(n){
+            credits <<- credits + n
+        },
+        get_email = function(){
+            paste(id, "@jhu.edu")
+        }
+    )
+)
+```
+
+we’ve created a class definition called Student which defines the student class. This class has five fields and three methods.   
+
+To create a Student object use the new() method  
+```{r}
+brooke <- student$new(name = "Brooke", grad_year = 2019, credits = 40,
+                    id = "ba123", course = list("Ecology", "Calculus III"))
+roger <- student$new(name = "Roger", grad_year = 2020, credits = 10,
+                    id = "rp456", course = list("Puppetry", "Elementary Algebra"))
+```
+
+You can access the fields and methods of each object using the $operator  
+```{r}
+brooke$course
+brooke$credits
+brooke$add_credits(4)
+brooke$credits
+roger$get_email()
+roger$hello()
+```
+
+Notice that the add_credits() method uses the **complex assignment operator** (<<-). You need to use this operator if you want to modify one of the fields of an object with a method.  
+
+
+Reference classes can inherit from other classes by specifying the contains argument when they’re defined.   
+```{r}
+grad_student <- setRefClass(Class = "grad_student",
+                            fields = list(
+                                thesis_topics = "character"
+                            ),
+                            contains = "student",
+                            methods = list(
+                                defend = function(x){
+                                    paste(thesis_topics, ". QED.")
+                                }
+                            ))
+```
+
+```{r}
+jeff <- grad_student$new(name = "Jeff", 
+                         grad_year = 2021, 
+                         credits = 8,
+                         id = "jl55", 
+                         course = list("Fitbit Repair", 
+                                       "Advanced Base Graphics"),
+                         thesis_topics = "Batch Effects")
+
+jeff$defend()
+```
+
+summary:  
+    1. R has three object oriented systems: S3, S4, and Reference Classes.  
+    2. Reference Classes are the most similar to classes and objects in other programming languages.  
+    3. Classes are blueprints for an object.  
+    4. Objects are individual instances of a class.  
+    5. Methods are functions that are associated with a particular class.  
+    6. Constructors are methods that create objects.  
+    6. Everything in R is an object.  
+    7. S3 is a liberal object oriented system that allows you to assign a class to any object.  
+    8. S4 is a more strict object oriented system that build upon ideas in S3.  
+    9. Reference Classes are a modern object oriented system that is similar to Java, C++, Python, or Ruby.    
+
+
+
+
+
