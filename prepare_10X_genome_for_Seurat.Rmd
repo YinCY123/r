@@ -1,5 +1,5 @@
 ---
-title: "prepare_for Seurat"
+title: "prepare_for_Seurat"
 author: "yincy"
 date: "8/31/2019"
 output: html_document
