@@ -23,7 +23,7 @@ df <- tibble(
 df <- df %>%
   arrange(x) %>% 
   mutate(
-    rank = rank(x, ties.method = "min"),
+    rank = rank(x, ties.method = "first"),
     uniq = duplicated(x),
     logical = as.numeric(uniq),
     log_cum = cumsum(logical),
