@@ -1,0 +1,119 @@
+---
+title: "a_user's_guide_to_network_analysis"
+author: "yincy"
+date: "10/13/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Part I netWork Analysis Fundamentals  
+## Chapter 2 The network Analysis `Five-number Summary`  
+```{r}
+library(statnet)
+library(UserNetR)
+data("Moreno")
+```
+
+```{r}
+gender <- Moreno %v% "gender" 
+class(Moreno)
+plot(Moreno, vertex.col = gender + 2, vertex.cex = 1.2)
+```
+
+### Size  
+```{r}
+network.size(Moreno)
+```
+
+```{r}
+summary(Moreno, print.adj = F)
+```
+
+
+### density  
+density is the proportion of observed ties (also called edges, arcs, or relations) in a network to the maximum number of possible ties.  
+
+```{r}
+2*46/(33*32)
+gden(Moreno)
+```
+
+
+### Components  
+An informal definition of a component is a subgroup in which all actors are connencted directed or indirectly.  
+```{r}
+sna::components(Moreno)
+```
+
+
+### Diameter  
+A path is the series of steps required to go from node A to node B in a network. The diameter for an entire network is the longest of the shortest paths across all pairs of nodes.  
+```{r}
+lgc <- component.largest(Moreno, result = "graph")
+gd <- geodist(lgc)
+max(gd$gdist)
+```
+
+
+### Clustering Coefficient  
+One of the fundamental characteristics of social networks (compared to random networks) is the presence of clustering, or the tendency to formed closed triangles.
+
+Transitivity is defined as the proportion of closed triangles (triads where all three ties are observed) to the total number of open and closed triangles (triads where either two or all three ties are observed).  
+```{r}
+gtrans(Moreno, mode = "graph")
+```
+
+
+## Chapter 3 Network Data Management in R  
+```
+Knowledge is of two kinds. We know a subject ourselves, or we known where we can find information upon it.  
+```
+
+### Network data structure  
+- **sociomatrix** also called **adjacency matrix**   
+- **edge-list**  
+
+
+### information stored in network objects  
+In general, a network data object can contain up to five types of information  
+1. Nodes: list of nodes in network, along with node labels  
+2. Ties: List of ties in the network  
+3. Node attributes: attributes of the nodes  
+4. Tie attributes: attributes of the ties  
+5. Metadata: other information about the entrie network  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
