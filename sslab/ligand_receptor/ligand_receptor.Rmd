@@ -1,5 +1,5 @@
 ---
-title: "ligand_recetpor"
+title: "ligand_receptor"
 author: "yincy"
 date: "10/15/2019"
 output: html_document
