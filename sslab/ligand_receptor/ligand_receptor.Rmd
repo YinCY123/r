@@ -78,7 +78,7 @@ ligand_receptor_df <- data.frame(
 ```
 
 ```{r}
-write.csv(x = ligand_receptor, file = "ligand_receptor_pairs.csv")
+write.csv(x = ligand_receptor_df, file = "ligand_receptor_pairs.csv")
 ```
 
 
@@ -88,9 +88,18 @@ library(igraph)
 
 ```{r}
 ligand_receptor <- igraph::graph_from_data_frame(d = ligand_receptor_df, directed = T)
-plot(ligand_receptor, 
-     vertice.size = 1)
 ```
 
+```{r}
+pdf(file = "ligand_receptor.pdf", width = 10, height = 10)
+plot(ligand_receptor, 
+     vertex.size = 2.5,
+     edge.arrow.size = 0.05,
+     layout = layout_with_fr,
+     vertex.label.cex = 0.2,
+     vertex.label.dist = 0,
+     edge.width = 0.1)
+dev.off()
+```
 
 
