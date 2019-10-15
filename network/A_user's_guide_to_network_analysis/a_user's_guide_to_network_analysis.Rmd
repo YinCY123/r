@@ -86,27 +86,230 @@ In general, a network data object can contain up to five types of information
 5. Metadata: other information about the entrie network  
 
 
+### Creating and Managing Network Objects in R  
+
+create network object from adjacency matrix  
+```{r}
+netmat1 <- rbind(c(0,1,1,0,0),
+                 c(0,0,1,1,0),
+                 c(0,1,0,0,0),
+                 c(0,0,0,0,0),
+                 c(0,0,1,0,0))
+
+rownames(netmat1) <- c("A", "B", "C", "D", "E")
+colnames(netmat1) <- c("A", "B", "C", "D", "E")
+```
+
+```{r}
+net1 <- network(x = netmat1, 
+                matrix.type = "adjacency")
+```
 
 
+```{r}
+class(net1)
+```
+
+```{r}
+summary(net1)
+```
+
+```{r}
+gplot(net1, 
+      vertex.col = 2, 
+      displaylabels = T)
+```
 
 
+create network object from edge list  
+```{r}
+netmat2 <- rbind(
+  c(1,2),
+  c(1,3),
+  c(2,3),
+  c(2,4),
+  c(3,2),
+  c(5,3)
+)
+
+net2 <- network(x = netmat2,
+                matrix.type = "edgelist")
+
+network.vertex.names(net2) <- c("A", "B", "C", "D", "E")
+summary(net2)
+```
+
+```{r}
+gplot(net2)
+```
+
+```{r}
+as.sociomatrix(net1)
+```
+
+```{r}
+as.matrix(net1, matrix.type = "edgelist")
+```
 
 
+```{r}
+class(as.sociomatrix(net1))
+```
+
+#### Node and tie attributes  
+```{r}
+set.vertex.attribute(x = net1, "gender", c("F", "F", "M", "F", "M"))
+
+net1 %v% "alldeg" <- degree(net1)
+
+list.vertex.attributes(net1)
+```
+
+```{r}
+summary(net1)
+```
+
+```{r}
+list.vertex.attributes(net1)
+```
+
+```{r}
+list.edge.attributes(net1)
+```
+
+```{r}
+get.vertex.attribute(x = net1, "gender")
+```
+
+```{r}
+net1 %v% "gender"
+```
 
 
+```{r}
+set.edge.attribute(net1, "rndval", runif(network.size(net1), 0, 1))
+```
+
+```{r}
+list.edge.attributes(net1)
+```
+
+```{r}
+get.edge.attribute(net1, "rndval")
+```
+
+```{r}
+net1 %e% "rndval"
+```
+
+```{r}
+summary(net1 %e% "rndval")
+```
+
+```{r}
+summary(get.edge.attribute(net1, "rndval"))
+```
 
 
+```{r}
+netval1 <- rbind(
+  c(0,2,3,0,0),
+  c(0,0,3,1,0),
+  c(0,1,0,0,0),
+  c(0,0,0,0,0),
+  c(0,0,2,0,0)
+)
+
+netval1 <- network(netval1, 
+                   matrix.type = "adjacency",
+                   ignore.eval = F,
+                   names.eval = "like")
+
+network.vertex.names(netval1) <- c("A", "B", "C", "D", "E")
+list.edge.attributes(netval1)
+```
+
+```{r}
+gplot(netval1)
+```
 
 
+```{r}
+get.edge.attribute(netval1, "like")
+```
+
+```{r}
+as.sociomatrix(netval1)
+```
+
+```{r}
+as.sociomatrix(netval1, "like")
+```
 
 
+```{r}
+detach(package:statnet)
+library(igraph)
+```
 
 
+### Ceating a Network object in igraph  
+```{r}
+inet1 <- graph.adjacency(netmat1)
+class(inet1)
+```
+
+```{r}
+summary(inet1)
+```
+
+```{r}
+inet1
+```
+
+```{r}
+str(inet1)
+```
+
+```{r}
+inet2 <- graph.edgelist(el = netmat2)
+summary(inet2)
+```
+
+```{r}
+V(inet2)$name <- c("A", "B", "C", "D", "E")
+E(inet2)$val <- c(1:6)
+
+summary(inet2)
+```
+
+```{r}
+inet2
+```
+
+convert between igraph object and statnet object  
+```{r}
+library(intergraph)
+```
+
+```{r}
+class(net1)
+```
+
+```{r}
+net1igraph <- asIgraph(net1)
+class(net1igraph)
+net1igraph
+```
 
 
+```{r}
+inet1network <- asNetwork(inet1)
+class(inet1network)
+inet1network
+```
 
-
-
+### import network data  
 
 
 
