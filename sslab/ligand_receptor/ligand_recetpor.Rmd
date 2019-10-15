@@ -18,7 +18,79 @@ library(tidyverse)
 ```
 
 ```{r}
-
+mm <- read_tsv(file = "Mmusc20170205CR.txt.gz")
+mm <- mm %>% 
+  filter(`Taxid interactor A` == "taxid:10090(Mus musculus)" & `Taxid interactor B` == "taxid:10090(Mus musculus)")
+mm <- mm[, -17]
 ```
+
+
+```{r}
+id_interactor_a <- mm$`ID interactor A`
+grep(pattern = "^DIP-", x = id_interactor_a, value = F) 
+```
+
+```{r}
+library(biomaRt)
+mmart <- useEnsembl(biomart = "ensembl", dataset = "mmusculus_gene_ensembl")
+listAttributes(mmart)
+searchAttributes(mmart, "interaction")
+```
+
+
+```{r}
+dlrp <- read_tsv(file = "/home/yincy/Desktop/dlrp.txt",
+                   col_types = "ccc",
+                 skip_empty_rows = F,
+                 col_names = F, 
+                 comment = "#")
+```
+
+```{r}
+break_location <- c(0, grep("TRUE", is.na(dlrp$X2)))
+```
+
+```{r}
+a = c(break_location[-1], 837)
+b = break_location
+
+num_receptor_per_breaks <- (a - b) - 2
+num_receptor_per_breaks <- num_receptor_per_breaks[-length(num_receptor_per_breaks)]
+sum(num_receptor_per_breaks)
+```
+
+
+```{r}
+ligand <- dlrp$X2[(break_location + 1)]
+ligand <- ligand[-length(ligand)]
+
+receptor_ind <- setdiff(x = 1:835, y = sort(c(break_location[-1], break_location[-length(break_location)] + 1)))
+receptor <- dlrp$X2[receptor_ind]
+```
+
+
+
+```{r}
+ligand_receptor_df <- data.frame(
+  ligand = rep(ligand, times = num_receptor_per_breaks),
+  receptor = receptor
+)
+```
+
+```{r}
+write.csv(x = ligand_receptor, file = "ligand_receptor_pairs.csv")
+```
+
+
+```{r}
+library(igraph)
+```
+
+```{r}
+ligand_receptor <- igraph::graph_from_data_frame(d = ligand_receptor_df, directed = T)
+plot(ligand_receptor, 
+     vertice.size = 1)
+```
+
 
 
