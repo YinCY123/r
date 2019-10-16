@@ -102,4 +102,24 @@ plot(ligand_receptor,
 dev.off()
 ```
 
+convert mouse id to human id  
+```{r}
+m_ligand_receptor <- read.csv(file = "ligand_receptor_pairs.csv")
+```
+
+```{r}
+m_lr <- c(as.character(m_ligand_receptor$ligand), as.character(m_ligand_receptor$receptor))
+m_lr <- unique(m_lr)
+```
+
+```{r}
+?biomaRt::getLDS
+
+h_lr <- biomaRt::getLDS(attributes = c("mgi_symbol"), filters = "mgi_symbol", values = m_lr, mart = mmart,
+       attributesL = c("hgnc_symbol"), martL = hmart, uniqueRows = T)
+```
+
+
+
+
 
