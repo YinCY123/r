@@ -153,7 +153,7 @@ ep <- read.table(file = "ep.txt")
 
 
 ```{r}
-m_ppi %>% 
+selected_lr <- m_ppi %>% 
   filter(mgi_symbol_a %in% kid_21_top_3000$symbol | mgi_symbol_b %in% kid_21_top_3000$symbol| mgi_symbol_a %in% ep$symbol | mgi_symbol_b %in% ep$symbol)
 ```
 
