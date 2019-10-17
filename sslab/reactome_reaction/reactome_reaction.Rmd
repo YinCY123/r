@@ -1,0 +1,42 @@
+---
+title: "reactome_reaction"
+author: "yincy"
+date: "10/16/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+reactome_reaction_physical <- reactome_reaction %>% 
+    dplyr::filter(`Interaction type` == "physical association", )
+```
+
+```{r}
+library(biomaRt)
+m_genes <- keggList("mmu")
+m_genes <- names(m_genes)
+m_genes <- gsub("mmu:", "", m_genes)
+mmart <- useEnsembl(biomart = "ensembl", dataset = "mmusculus_gene_ensembl")
+
+listAttributes(mmart)
+genes <- getBM(attributes = c("ensembl_gene_id", "mgi_symbol"),
+               filters = "entrezgene_id",
+               values = m_genes,
+               mart = mmart)
+```
+
+
+
+
+
+
+
+
+
+
+
+
