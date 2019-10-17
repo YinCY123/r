@@ -387,7 +387,7 @@ n3 <- delete.vertices(asIgraph(n3), isolates(n3))
 gden(n3)
 ```
 
-
+  
 4. Filtering based on edge values  
 
 
