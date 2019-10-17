@@ -4,7 +4,6 @@ Cish,Epor,DIP-907N,DIP-657N,Q62225,P14753,MI:0218(physical interaction),MI:0019(
 Sla,Epha2,DIP-292N,DIP-829N,Q60898,Q03145,MI:0218(physical interaction)|MI:0218(physical interaction),MI:0018(two hybrid)|MI:0019(coimmunoprecipitation),dip-quality-status:core
 Rab6a,Gdi2,DIP-120N,DIP-348N,P35279,Q61598,MI:0218(physical interaction)|MI:0218(physical interaction)|MI:0218(physical interaction),MI:0018(two hybrid)|MI:0045(experimental interaction detection)|MI:0401(biochemical),dip-quality-status:core
 Dennd5a,Rab6a,DIP-287N,DIP-120N,Q6PAL8,P35279,MI:0218(physical interaction)|MI:0218(physical interaction),MI:0018(two hybrid)|MI:0401(biochemical),dip-quality-status:core
-Vim,Vim,DIP-188N,DIP-188N,P20152,P20152,MI:0218(physical interaction),MI:0018(two hybrid),dip-quality-status:core
 Stat3,Il10ra,DIP-442N,DIP-247N,P42227,Q61727,MI:0218(physical interaction),MI:0019(coimmunoprecipitation),dip-quality-status:core
 Notch1,Rbpj,DIP-214N,DIP-171N,Q01705,P31266,MI:0218(physical interaction)|MI:0915(physical association)|MI:0915(physical association),MI:0018(two hybrid)|MI:0007(anti tag coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Myc,Max,DIP-1064N,DIP-116N,P01108,P28574,MI:0254(genetic interference),MI:0254(genetic interference),dip-quality-status:core
@@ -15,7 +14,6 @@ Stat5b,Ghr,DIP-898N,DIP-441N,P42232,P16882,MI:0218(physical interaction),MI:0013
 Fos,Jun,DIP-1066N,DIP-1068N,P01101,P05627,MI:0218(physical interaction),MI:0018(two hybrid),dip-quality-status:core
 Mapk1,Araf,DIP-661N,DIP-1070N,P63085,P04627,MI:0218(physical interaction),MI:0401(biochemical),dip-quality-status:core
 Mxi1,Sin3b,DIP-489N,DIP-470N,P50540,Q62141,MI:0218(physical interaction)|MI:0218(physical interaction),MI:0019(coimmunoprecipitation)|MI:0018(two hybrid),dip-quality-status:core
-Jun,Jun,DIP-1068N,DIP-1068N,P05627,P05627,MI:0218(physical interaction),MI:0018(two hybrid),dip-quality-status:core
 Jun,Atf4,DIP-1068N,DIP-30969N,P05627,Q06507,MI:0218(physical interaction),MI:0018(two hybrid),dip-quality-status:core
 Jun,Tpm1,DIP-1068N,DIP-300N,P05627,P58771,MI:0218(physical interaction),MI:0018(two hybrid),dip-quality-status:core
 Tpm2,Jun,DIP-628N,DIP-1068N,P58774,P05627,MI:0218(physical interaction),MI:0018(two hybrid),dip-quality-status:core
@@ -36,7 +34,6 @@ Lifr,Lif,DIP-5772N,DIP-5771N,P42703,P09056,MI:0218(physical interaction),MI:0401
 Lifr,Ctf1,DIP-5772N,DIP-5773N,P42703,Q60753,MI:0218(physical interaction),MI:0401(biochemical),dip-quality-status:core
 Ccr9,Ccl25,DIP-5886N,DIP-5885N,Q9WUT7,O35903,MI:0218(physical interaction),MI:0045(experimental interaction detection),dip-quality-status:core
 Fgfr1,Fgf9,DIP-6033N,DIP-6032N,P16092,P54130,MI:0218(physical interaction),MI:0401(biochemical),dip-quality-status:core
-Hprt,Hprt,DIP-6034N,DIP-6034N,P00493,P00493,MI:0218(physical interaction),MI:0018(two hybrid),dip-quality-status:core
 B2m,H2-D1,DIP-6111N,DIP-6121N,P01887,P01899,MI:0407(direct interaction),MI:0114(x-ray crystallography),dip-quality-status:core
 H2-K1,B2m,DIP-6189N,DIP-6111N,P01901,P01887,MI:0407(direct interaction),MI:0114(x-ray crystallography),dip-quality-status:core
 Rela,Nfkb1,DIP-6219N,DIP-85N,Q04207,P25799,MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0915(physical association)|MI:0407(direct interaction)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0107(surface plasmon resonance)|MI:0114(x-ray crystallography)|MI:0096(pull down)|MI:0071(molecular sieving)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0096(pull down),dip-quality-status:core
@@ -52,8 +49,6 @@ Ccnd1,Cdk6,DIP-284N,DIP-24175N,P25322,Q64261,MI:0218(physical interaction),MI:00
 Cdk2,Cdkn1a,DIP-24176N,DIP-24178N,P97377,P39689,MI:0218(physical interaction),MI:0019(coimmunoprecipitation),dip-quality-status:core
 Cdkn1a,Cdk4,DIP-24178N,DIP-194N,P39689,P30285,MI:0218(physical interaction),MI:0019(coimmunoprecipitation),dip-quality-status:core
 Cdk6,Cdkn1a,DIP-24175N,DIP-24178N,Q64261,P39689,MI:0218(physical interaction),MI:0019(coimmunoprecipitation),dip-quality-status:core
-Pycard,Pycard,DIP-27619N,DIP-27619N,Q9EPB4,Q9EPB4,MI:0218(physical interaction),MI:0019(coimmunoprecipitation),dip-quality-status:core
-Diaph1,Diaph1,DIP-29028N,DIP-29028N,O08808,O08808,MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction),MI:0065(isothermal titration calorimetry)|MI:0065(isothermal titration calorimetry)|MI:0065(isothermal titration calorimetry)|MI:0065(isothermal titration calorimetry)|MI:0114(x-ray crystallography),dip-quality-status:core
 Icam2,Rdx,DIP-29094N,DIP-29091N,P35330,P26043,MI:0407(direct interaction),MI:0107(surface plasmon resonance),dip-quality-status:core
 Rdx,Icam1,DIP-29091N,DIP-29096N,P26043,P13597,MI:0407(direct interaction),MI:0107(surface plasmon resonance),dip-quality-status:core
 Rdx,Vcam1,DIP-29091N,DIP-29097N,P26043,P29533,MI:0407(direct interaction),MI:0107(surface plasmon resonance),dip-quality-status:core
@@ -67,10 +62,8 @@ Nr2c1,Nrip1,DIP-29275N,DIP-29280N,Q505F1,Q8CBD1,MI:0915(physical association)|MI
 Nr2c1,Kat2b,DIP-29275N,DIP-29281N,Q505F1,Q9JHD1,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0018(two hybrid)|MI:0001(interaction detection method)|MI:0018(two hybrid),dip-quality-status:core
 Kat2a,Atxn7,DIP-29180N,DIP-29176N,Q9JHD2,Q8R4I1,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Wasf2,Abi1,DIP-29535N,DIP-29534N,Q8BH43,Q8CBW3,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
-Ndel1,Ndel1,DIP-29553N,DIP-29553N,Q9ERR1,Q9ERR1,MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction),MI:0028(cosedimentation in solution)|MI:0016(circular dichroism)|MI:0114(x-ray crystallography),dip-quality-status:core
 Pafah1b1,Ndel1,DIP-29555N,DIP-29553N,P63005,Q9ERR1,MI:0407(direct interaction)|MI:0407(direct interaction),MI:0042(electron paramagnetic resonance)|MI:0096(pull down),dip-quality-status:core
 Stub1,Akt1,DIP-29751N,DIP-736N,Q9WUD1,P31750,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
-Vcp,Vcp,DIP-29796N,DIP-29796N,Q01853,Q01853,MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction),MI:0410(electron tomography)|MI:0071(molecular sieving)|MI:0114(x-ray crystallography),dip-quality-status:core
 Bcl2a1a,Bak1,DIP-29804N,DIP-29807N,Q07440,O08734,MI:0407(direct interaction)|MI:0407(direct interaction),MI:0114(x-ray crystallography)|MI:0065(isothermal titration calorimetry),dip-quality-status:core
 Traf6,Ikbkg,DIP-29812N,DIP-29811N,P70196,O88522,MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
 Ext2,Ndst1,DIP-29858N,DIP-29859N,P70428,Q3UHN9,MI:0915(physical association)|MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
@@ -86,8 +79,8 @@ Casp8,Fadd,DIP-37435N,DIP-34771N,O89110,Q61160,MI:0915(physical association)|MI:
 Rela,Nfkbib,DIP-6219N,DIP-37418N,Q04207,Q60778,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Hif1a,Arnt,DIP-31083N,DIP-280N,Q61221,P53762,MI:0915(physical association)|MI:0407(direct interaction)|MI:0915(physical association)|MI:0407(direct interaction)|MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation)|MI:0071(molecular sieving)|MI:0096(pull down)|MI:0114(x-ray crystallography)|MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
 Ripk1,Tnfrsf1a,DIP-34962N,DIP-34532N,Q60855,P25118,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
-Clock,Arntl,DIP-30958N,DIP-43977N,O08785,Q9WTL8,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0809,(bimolecular fluorescence complementation)|MI:0007(anti tag coimmunoprecipitation)|MI:0018(two hybrid)|MI:0007(anti tag coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation)|MI:0018(two hybrid)|MI:0006(anti bait coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
-Acy3,Acy3,DIP-44060N,DIP-44060N,Q91XE4,Q91XE4,MI:0407(direct interaction),MI:0114(x-ray crystallography),dip-quality-status:core
+Clock,Arntl,DIP-30958N,DIP-43977N,O08785,Q9WTL8,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0809,(bimolecular fluorescence complementation)|MI:0007(anti tag coimmunoprecipitation)|MI:0018(two hybrid)|MI:0007(anti tag coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation)|MI:0018(two hybrid)|MI:0006(anti bait coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)
+dip-quality-status:core,,,,,,,,
 Tgfbr1,Shc1,DIP-42262N,DIP-271N,Q64729,P98083,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
 Pmaip1,Mcl1,DIP-45232N,DIP-33343N,Q9JM54,P97287,MI:0407(direct interaction)|MI:0407(direct interaction),MI:0077(nuclear magnetic resonance)|MI:0065(isothermal titration calorimetry),dip-quality-status:core
 Tlr4,Ly96,DIP-38573N,DIP-38572N,Q9QUK6,Q9JHF9,MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction),MI:0071(molecular sieving)|MI:0114(x-ray crystallography)|MI:0404(comigration in non denaturing gel electrophoresis)|MI:0826(x ray scattering)|MI:0071(molecular sieving),dip-quality-status:core
@@ -130,13 +123,11 @@ Casp8,Atg5,DIP-37435N,DIP-46420N,O89110,Q99J83,MI:0218(physical interaction),MI:
 Elavl1,Copb1,DIP-46480N,DIP-42642N,P70372,Q9JIF7,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Insr,Cav1,DIP-41452N,DIP-35140N,P15208,P49817,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Lef1,Hipk2,DIP-35132N,DIP-31712N,P27782,Q9QZR5,MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
-Carm1,Carm1,DIP-44593N,DIP-44593N,Q9WVG6,Q9WVG6,MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
 Cry1,Clock,DIP-38515N,DIP-30958N,P97784,O08785,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
 Srsf2,Polr2a,DIP-44831N,DIP-46369N,Q62093,P08775,MI:0218(physical interaction),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Cdk9,Polr2a,DIP-46368N,DIP-46369N,Q99J95,P08775,MI:0218(physical interaction),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Nfkbia,Rela,DIP-36160N,DIP-6219N,Q9Z1E3,Q04207,MI:0915(physical association)|MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Tgfbr1,Tgfbr2,DIP-42262N,DIP-44605N,Q64729,Q62312,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
-Pdcd6ip,Pdcd6ip,DIP-41418N,DIP-41418N,Q9WU78,Q9WU78,MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction),MI:0826(x ray scattering)|MI:0071(molecular sieving)|MI:0029(cosedimentation through density gradient)|MI:0067(light scattering)|MI:0809(bimolecular fluorescence complementation)|MI:0944(mass spectrometry study of hydrogen/deuterium exchange),dip-quality-status:core
 Ptpn23,Grap2,DIP-48351N,DIP-41343N,Q6PB44,O89100,MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction),MI:0114(x-ray crystallography)|MI:0081(peptide array)|MI:0065(isothermal titration calorimetry),dip-quality-status:core
 Sumo1,Mdm2,DIP-29278N,DIP-24196N,P63166,P23804,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Itpr1,Atp1a2,DIP-32243N,DIP-48355N,P11881,Q6PIE5,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
@@ -145,12 +136,10 @@ Eif4ebp1,Eif4e,DIP-32577N,DIP-42768N,Q60876,P63073,MI:0915(physical association)
 Neto1,Dlg2,DIP-48395N,DIP-31569N,Q8R4I7,Q91XM9,MI:0407(direct interaction),MI:0018(two hybrid),dip-quality-status:core
 Dlg3,Neto1,DIP-31585N,DIP-48395N,P70175,Q8R4I7,MI:0407(direct interaction),MI:0018(two hybrid),dip-quality-status:core
 Med17,Rela,DIP-48407N,DIP-6219N,Q8VCD5,Q04207,MI:0915(physical association)|MI:0407(direct interaction)|MI:0915(physical association)|MI:0407(direct interaction),MI:0006(anti bait coimmunoprecipitation)|MI:0018(two hybrid)|MI:0007(anti tag coimmunoprecipitation)|MI:0809(bimolecular fluorescence complementation),dip-quality-status:core
-Rela,Rela,DIP-6219N,DIP-6219N,Q04207,Q04207,MI:0407(direct interaction)|MI:0407(direct interaction),MI:0107(surface plasmon resonance)|MI:0809(bimolecular fluorescence complementation),dip-quality-status:core
 Tubb3,Capzb,DIP-48419N,DIP-31383N,Q9ERD7,P47757,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0096(pull down),dip-quality-status:core
 Capza2,Capzb,DIP-31382N,DIP-31383N,P47754,P47757,MI:0407(direct interaction),MI:0404(comigration in non denaturing gel electrophoresis),dip-quality-status:core
 Eps8,Baiap2,DIP-32858N,DIP-32392N,Q08509,Q8BKX1,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Atp1a1,Itpr1,DIP-31885N,DIP-32243N,Q8VDN2,P11881,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
-Traf6,Traf6,DIP-29812N,DIP-29812N,P70196,P70196,MI:0407(direct interaction),MI:0055(fluorescent resonance energy transfer),dip-quality-status:core
 Casp3,Cryab,DIP-44076N,DIP-31060N,P70677,P23927,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Lin28a,Ddx21,DIP-48573N,DIP-48574N,Q8K3Y3,Q9JIK5,MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
 Lin28a,Mov10,DIP-48573N,DIP-48575N,Q8K3Y3,P23249,MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
@@ -160,7 +149,6 @@ Ybx1,Lin28a,DIP-34256N,DIP-48573N,P62960,Q8K3Y3,MI:0915(physical association),MI
 Kpna1,Atf4,DIP-48614N,DIP-30969N,Q60960,Q06507,MI:0915(physical association),MI:0096(pull down),dip-quality-status:core
 Atf4,Kpna6,DIP-30969N,DIP-48616N,Q06507,O35345,MI:0915(physical association),MI:0096(pull down),dip-quality-status:core
 Ltbp3,Tgfb1,DIP-48641N,DIP-48640N,Q61810,P04202,MI:0195(covalent binding),MI:0808(comigration in sds page),dip-quality-status:core
-Tgfb1,Tgfb1,DIP-48640N,DIP-48640N,P04202,P04202,MI:0195(covalent binding),MI:0808(comigration in sds page),dip-quality-status:core
 Eif4e,Rps6,DIP-42768N,DIP-42772N,P63073,P62754,MI:0915(physical association),MI:0096(pull down),dip-quality-status:core
 Chrna4,Lypd1,DIP-48731N,DIP-48729N,O70174,Q8BLC3,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Syne4,Klc4,DIP-48702N,DIP-48704N,Q8CII8,Q9DBS5,MI:0407(direct interaction),MI:0018(two hybrid),dip-quality-status:core
@@ -181,8 +169,6 @@ Baz1b,Gata4,DIP-36072N,DIP-33032N,Q9Z277,Q08369,MI:0915(physical association),MI
 Baz1b,Pcna,DIP-36072N,DIP-39409N,Q9Z277,P17918,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Smarca5,Pcna,DIP-36073N,DIP-39409N,Q91ZW3,P17918,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Smarcc1,Baz1b,DIP-39986N,DIP-36072N,P97496,Q9Z277,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
-Plxna1,Plxna1,DIP-29745N,DIP-29745N,P70206,P70206,MI:0407(direct interaction),MI:0404(comigration in non denaturing gel electrophoresis),dip-quality-status:core
-Sept2,Sept2,DIP-32438N,DIP-32438N,P42208,P42208,MI:0407(direct interaction),MI:0114(x-ray crystallography),dip-quality-status:core
 Lef1,Hmgb2,DIP-35132N,DIP-899N,P27782,P30681,MI:0407(direct interaction)|MI:0407(direct interaction),MI:0096(pull down)|MI:0096(pull down),dip-quality-status:core
 Polr2a,Ehmt2,DIP-46369N,DIP-31916N,P08775,Q9Z148,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Ap3b1,Kif3a,DIP-49018N,DIP-46318N,Q9Z1T1,P28741,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
@@ -199,16 +185,13 @@ Mdm2,Mdm4,DIP-24196N,DIP-24201N,P23804,O35618,MI:0915(physical association),MI:0
 Fgfr1,Kl,DIP-6033N,DIP-39894N,P16092,O35082,MI:0915(physical association)|MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
 Kcnj11,Ank2,DIP-42790N,DIP-58645N,Q61743,Q8C8R3,MI:0915(physical association)|MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Lrrk2,Stub1,DIP-58648N,DIP-29751N,Q5S006,Q9WUD1,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
-Slc40a1,Slc40a1,DIP-58649N,DIP-58649N,Q9JHI9,Q9JHI9,MI:0915(physical association)|MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
 Rcn2,Stk40,DIP-46963N,DIP-58526N,Q8BP92,Q7TNL3,MI:0915(physical association)|MI:0407(direct interaction)|MI:0915(physical association),MI:0096(pull down)|MI:0096(pull down)|MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
-Irf3,Irf3,DIP-29881N,DIP-29881N,P70671,P70671,MI:0915(physical association)|MI:0915(physical association),MI:0404(comigration in non denaturing gel electrophoresis)|MI:0404(comigration in non denaturing gel electrophoresis),dip-quality-status:core
 Wnt1,Wls,DIP-39896N,DIP-49004N,P04426,Q6DID7,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation)|MI:0096(pull down),dip-quality-status:core
 Wls,Wnt3,DIP-49004N,DIP-39897N,Q6DID7,P17553,MI:0915(physical association),MI:0096(pull down),dip-quality-status:core
 Wls,Wnt5a,DIP-49004N,DIP-39893N,Q6DID7,P22725,MI:0915(physical association),MI:0096(pull down),dip-quality-status:core
 Ctnnb1,Tcf4,DIP-31560N,DIP-42841N,Q02248,Q60722,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Mllt10,Tcf4,DIP-58954N,DIP-42841N,O54826,Q60722,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Mllt10,Ctnnb1,DIP-58954N,DIP-31560N,O54826,Q02248,MI:0915(physical association)|MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
-Iigp1,Iigp1,DIP-58958N,DIP-58958N,Q9QZ85,Q9QZ85,MI:0407(direct interaction)|MI:0407(direct interaction),MI:0067(light scattering)|MI:0018(two hybrid),dip-quality-status:core
 Chd1l,Tcf4,DIP-58953N,DIP-42841N,Q9CXF7,Q60722,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Kmt2a,Clock,DIP-58597N,DIP-30958N,P55200,O08785,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Tcf7l2,Tcf4,DIP-40920N,DIP-42841N,Q924A0,Q60722,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
@@ -229,7 +212,6 @@ Flii,Tcf4,DIP-47641N,DIP-42841N,Q9JJ28,Q60722,MI:0915(physical association),MI:0
 Smarcd2,Tcf4,DIP-58950N,DIP-42841N,Q99JR8,Q60722,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Tcf4,Arid1a,DIP-42841N,DIP-58952N,Q60722,A2BH40,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Eif3f,Notch1,DIP-42766N,DIP-214N,Q9DCH4,Q01705,MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
-Baiap2l2,Baiap2l2,DIP-59098N,DIP-59098N,Q80Y61,Q80Y61,MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction),MI:0114(x-ray crystallography)|MI:0067(light scattering)|MI:0071(molecular sieving),dip-quality-status:core
 Ikbkg,Sharpin,DIP-29811N,DIP-49461N,O88522,Q91WA6,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Rnf31,Sharpin,DIP-49579N,DIP-49461N,Q924T7,Q91WA6,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0071(molecular sieving)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Hdac1,Smarca4,DIP-31499N,DIP-59249N,O09106,Q3TKT4,MI:0915(physical association)|MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
@@ -254,15 +236,12 @@ Cdon,Cdh2,DIP-57227N,DIP-31564N,Q32MD9,P15116,MI:0915(physical association),MI:0
 Hdac1,Sin3a,DIP-31499N,DIP-469N,O09106,Q60520,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Hdac1,Mta2,DIP-31499N,DIP-36630N,O09106,Q9R190,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Efnb3,Mapk1,DIP-44833N,DIP-661N,O35393,P63085,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
-Syk,Syk,DIP-32621N,DIP-32621N,P48025,P48025,MI:0217(phosphorylation reaction),MI:0424(protein kinase assay),dip-quality-status:core
 Syk,Stat3,DIP-32621N,DIP-442N,P48025,P42227,MI:0915(physical association)|MI:0217(phosphorylation reaction)|MI:0915(physical association)|MI:0407(direct interaction)|MI:0407(direct interaction),MI:0006(anti bait coimmunoprecipitation)|MI:0424(protein kinase assay)|MI:0006(anti bait coimmunoprecipitation)|MI:0047(far western blotting)|MI:0047(far western blotting),dip-quality-status:core
 Cnot1,Nanos2,DIP-46845N,DIP-59508N,Q6ZQ08,P60322,MI:0915(physical association)|MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
 Mapk1,Cry2,DIP-661N,DIP-38517N,P63085,Q9R194,MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
 Mid1ip1,Acaca,DIP-31345N,DIP-32276N,Q9CQ20,Q5SWU9,MI:0915(physical association)|MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
-Mid1ip1,Mid1ip1,DIP-31345N,DIP-31345N,Q9CQ20,Q9CQ20,MI:0407(direct interaction)|MI:0407(direct interaction),MI:0071(molecular sieving)|MI:0028(cosedimentation in solution),dip-quality-status:core
 Tnfsf11,Tnfrsf11a,DIP-59480N,DIP-48710N,O35235,O35305,MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction),MI:0071(molecular sieving)|MI:0065(isothermal titration calorimetry)|MI:0107(surface plasmon resonance)|MI:0114(x-ray crystallography)|MI:0114(x-ray crystallography)|MI:0969(bio-layer interferometry),dip-quality-status:core
 Stat6,Ppara,DIP-49680N,DIP-5958N,P52633,P23204,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
-Cd79b,Cd79b,DIP-59498N,DIP-59498N,P15530,P15530,MI:0195(covalent binding)|MI:0407(direct interaction)|MI:0407(direct interaction),MI:0808(comigration in sds page)|MI:0114(x-ray crystallography)|MI:0071(molecular sieving),dip-quality-status:core
 Olfm4,Nod1,DIP-59534N,DIP-59535N,Q3UZZ4,Q8BHB0,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Ankrd42,Nfkb1,DIP-59545N,DIP-85N,Q3V096,P25799,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Adrb1,Adrb2,DIP-59567N,DIP-59568N,P34971,P18762,MI:0915(physical association)|MI:0915(physical association),MI:0892(solid phase assay)|MI:0892(solid phase assay),dip-quality-status:core
@@ -308,7 +287,6 @@ Crtc2,Itpr1,DIP-46162N,DIP-32243N,Q3U182,P11881,MI:0915(physical association),MI
 Plxna1,Trem2,DIP-29745N,DIP-59896N,P70206,Q99NH8,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Nrp1,Plxna1,DIP-39360N,DIP-29745N,P97333,P70206,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
 Plxna1,Tyrobp,DIP-29745N,DIP-29746N,P70206,O54885,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
-Tbk1,Tbk1,DIP-29880N,DIP-29880N,Q9WUN2,Q9WUN2,MI:0217(phosphorylation reaction)|MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0217(phosphorylation reaction)|MI:0217(phosphorylation reaction),MI:0424(protein kinase assay)|MI:0114(x-ray crystallography)|MI:0071(molecular sieving)|MI:0424(protein kinase assay)|MI:0424(protein kinase assay),dip-quality-status:core
 Tmem173,Tbk1,DIP-59959N,DIP-29880N,Q3TBT3,Q9WUN2,MI:0217(phosphorylation reaction),MI:0424(protein kinase assay),dip-quality-status:core
 Ptpn11,Pirb,DIP-29669N,DIP-59889N,P35235,P97484,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Rnf43,Fzd5,DIP-59915N,DIP-41260N,Q5NCP0,Q9EQD0,MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
@@ -334,7 +312,6 @@ Mecom,Fos,DIP-46516N,DIP-1066N,P14404,P01101,MI:0915(physical association)|MI:09
 Tomm20,Cth,DIP-60017N,DIP-60018N,Q9DCC8,Q8VCN5,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Mta2,Satb2,DIP-36630N,DIP-60021N,Q9R190,Q8VI24,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Ticam1,Tbk1,DIP-60033N,DIP-29880N,Q80UF7,Q9WUN2,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
-Ifih1,Ifih1,DIP-60085N,DIP-60085N,Q8R5F7,Q8R5F7,MI:0407(direct interaction),MI:0020(transmission electron microscopy),dip-quality-status:core
 Camsap2,Camsap3,DIP-60092N,DIP-52404N,Q8C1B1,Q80VC9,MI:0915(physical association)|MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
 Vcp,Ufd1,DIP-29796N,DIP-60008N,Q01853,P70362,MI:0915(physical association),MI:0096(pull down),dip-quality-status:core
 Fosb,Mecom,DIP-1067N,DIP-46516N,P13346,P14404,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
@@ -374,7 +351,6 @@ Cdkn2b,Cdk4,DIP-60249N,DIP-194N,P55271,P30285,MI:0915(physical association),MI:0
 Kdm1a,Ctbp1,DIP-38599N,DIP-33907N,Q6ZQ88,O88712,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Bcl10,Ripk1,DIP-60309N,DIP-34962N,Q9Z0H7,Q60855,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Zeb1,Ctbp1,DIP-60280N,DIP-33907N,Q64318,O88712,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
-Dnmt3a,Dnmt3a,DIP-38005N,DIP-38005N,O88508,O88508,MI:0407(direct interaction),MI:0071(molecular sieving),dip-quality-status:core
 Psmc5,Sp1,DIP-35174N,DIP-35276N,P62196,O89090,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Pin1,Nanog,DIP-44280N,DIP-29932N,Q9QUR7,Q80Z64,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Pou5f1,Trim28,DIP-29931N,DIP-31477N,P20263,Q62318,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
@@ -411,7 +387,6 @@ Krt17,Eef1a1,DIP-38042N,DIP-46609N,Q9QWL7,P10126,MI:0915(physical association),M
 Krt17,Eef1b2,DIP-38042N,DIP-32121N,Q9QWL7,O70251,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Hspa5,Dnajb11,DIP-32341N,DIP-60531N,P20029,Q99KV1,MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction),MI:0055(fluorescent resonance energy transfer)|MI:0107(surface plasmon resonance)|MI:0880(atpase assay)|MI:0055(fluorescent resonance energy transfer),dip-quality-status:core
 Rb1cc1,Atg16l1,DIP-49679N,DIP-31966N,Q9ESK9,Q8C0J2,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0676(tandem affinity purification)|MI:0006(anti bait coimmunoprecipitation)|MI:0096(pull down)|MI:0096(pull down),dip-quality-status:core
-Atg16l1,Atg16l1,DIP-31966N,DIP-31966N,Q8C0J2,Q8C0J2,MI:0915(physical association),MI:0096(pull down),dip-quality-status:core
 Arpc5,Arpin,DIP-60589N,DIP-60588N,Q9CPW4,Q9D0A3,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Prdm16,Ehmt2,DIP-60593N,DIP-31916N,A2A935,Q9Z148,MI:0407(direct interaction),MI:0096(pull down),dip-quality-status:core
 Ctbp1,Prdm16,DIP-33907N,DIP-60593N,O88712,A2A935,MI:0407(direct interaction),MI:0096(pull down),dip-quality-status:core
@@ -431,13 +406,10 @@ Rbm17,Atxn1,DIP-60651N,DIP-6004N,Q8JZX4,P54254,MI:0915(physical association),MI:
 Atxn1,Cic,DIP-6004N,DIP-60650N,P54254,Q924A2,MI:0915(physical association)|MI:0915(physical association),MI:0071(molecular sieving)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Fhl1,Rbpj,DIP-42041N,DIP-171N,P97447,P31266,MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction),MI:0065(isothermal titration calorimetry)|MI:0114(x-ray crystallography)|MI:0065(isothermal titration calorimetry)|MI:0065(isothermal titration calorimetry),dip-quality-status:core
 Mief2,Dnm1l,DIP-60661N,DIP-54818N,Q5NCS9,Q8K1M6,MI:0407(direct interaction)|MI:0407(direct interaction),MI:0419(gtpase assay)|MI:0028(cosedimentation in solution),dip-quality-status:core
-Mafb,Mafb,DIP-60663N,DIP-60663N,P54841,P54841,MI:0407(direct interaction),MI:0114(x-ray crystallography),dip-quality-status:core
 Mafb,Fos,DIP-60663N,DIP-1066N,P54841,P01101,MI:0915(physical association)|MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation)|MI:0114(x-ray crystallography)|MI:0071(molecular sieving)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 S1pr2,Rtn4,DIP-60681N,DIP-41976N,P52592,Q99P72,MI:0915(physical association)|MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Fbxw5,Skp1a,DIP-60700N,DIP-38596N,Q9QXW2,Q9WTX5,MI:0407(direct interaction)|MI:0915(physical association),MI:0071(molecular sieving)|MI:0096(pull down),dip-quality-status:core
 Atf4,Ddit3,DIP-30969N,DIP-60705N,Q06507,P35639,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
-Ctnna1,Ctnna1,DIP-35299N,DIP-35299N,P26231,P26231,MI:0407(direct interaction)|MI:0407(direct interaction),MI:0067(light scattering)|MI:0071(molecular sieving),dip-quality-status:core
-Ctnna2,Ctnna2,DIP-31971N,DIP-31971N,Q61301,Q61301,MI:0407(direct interaction)|MI:0407(direct interaction),MI:0071(molecular sieving)|MI:0067(light scattering),dip-quality-status:core
 Arntl,Ciart,DIP-43977N,DIP-60818N,Q9WTL8,Q3TQ03,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
 Per1,Cry1,DIP-38519N,DIP-38515N,O35973,P97784,MI:0915(physical association)|MI:0915(physical association),MI:0018(two hybrid)|MI:0018(two hybrid),dip-quality-status:core
 Kars,Rpsa,DIP-36058N,DIP-38089N,Q99MN1,P14206,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
@@ -464,7 +436,6 @@ Cry2,Ciart,DIP-38517N,DIP-60818N,Q9R194,Q3TQ03,MI:0915(physical association)|MI:
 Bhlhe41,Ciart,DIP-57696N,DIP-60818N,Q99PV5,Q3TQ03,MI:0915(physical association)|MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
 Per1,Cry2,DIP-38519N,DIP-38517N,O35973,Q9R194,MI:0915(physical association)|MI:0915(physical association),MI:0018(two hybrid)|MI:0018(two hybrid),dip-quality-status:core
 Per1,Per3,DIP-38519N,DIP-60820N,O35973,O70361,MI:0915(physical association),MI:0018(two hybrid),dip-quality-status:core
-Per1,Per1,DIP-38519N,DIP-38519N,O35973,O35973,MI:0915(physical association),MI:0018(two hybrid),dip-quality-status:core
 Cry1,Cbs,DIP-38515N,DIP-60823N,P97784,Q91WT9,MI:0915(physical association),MI:0018(two hybrid),dip-quality-status:core
 Ptpn6,Fcrl5,DIP-41455N,DIP-60955N,P29351,Q68SN8,MI:0915(physical association),MI:0096(pull down),dip-quality-status:core
 Cyba,Cybb,DIP-60456N,DIP-60841N,Q61462,Q61093,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
@@ -480,7 +451,6 @@ Vcp,Ngly1,DIP-29796N,DIP-41155N,Q01853,Q9JI78,MI:0407(direct interaction)|MI:040
 Bak1,Mfn1,DIP-29807N,DIP-60969N,O08734,Q811U4,MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
 Bak1,Mfn2,DIP-29807N,DIP-60970N,O08734,Q80U63,MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
 Rela,Pias4,DIP-6219N,DIP-60971N,Q04207,Q9JM05,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
-Cebpa,Cebpa,DIP-44054N,DIP-44054N,P53566,P53566,MI:0915(physical association),MI:0012(bioluminescence resonance energy transfer),dip-quality-status:core
 Cttn,Ctnnd1,DIP-31562N,DIP-31972N,Q60598,P30999,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0407(direct interaction),MI:0006(anti bait coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0096(pull down),dip-quality-status:core
 Cttn,Gm28635,DIP-31562N,DIP-31972N,Q60598,P30999,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0407(direct interaction),MI:0006(anti bait coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0096(pull down),dip-quality-status:core
 Atp1b4,Syne1,DIP-60965N,DIP-60966N,Q99ME6,Q6ZWR6,MI:0915(physical association),MI:0018(two hybrid),dip-quality-status:core
@@ -495,7 +465,6 @@ Ntrk1,Sqstm1,DIP-60900N,DIP-38490N,Q3UFB7,Q64337,MI:0915(physical association),M
 Fgf21,Fgfr1,DIP-60919N,DIP-6033N,Q9JJN1,P16092,MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
 Lep,Lepr,DIP-60999N,DIP-42763N,P41160,P48356,MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction),MI:0826(x ray scattering)|MI:1022(field flow fractionation)|MI:0104(static light scattering)|MI:0065(isothermal titration calorimetry)|MI:0020(transmission electron microscopy)|MI:0071(molecular sieving),dip-quality-status:core
 Plk4,Cep152,DIP-42244N,DIP-56915N,Q64702,A2AUM9,MI:0407(direct interaction),MI:0096(pull down),dip-quality-status:core
-Trp53,Trp53,DIP-369N,DIP-369N,P02340,P02340,MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
 Il1r1,Myd88,DIP-40669N,DIP-34957N,P13504,P22366,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Stat6,Parp14,DIP-49680N,DIP-38053N,P52633,Q2EMV9,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation)|MI:0018(two hybrid),dip-quality-status:core
 Ckmt1,Elk1,DIP-32284N,DIP-61141N,P30275,P41969,MI:0915(physical association)|MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
@@ -511,7 +480,6 @@ Adrb2,Erbb2,DIP-59568N,DIP-40912N,P18762,P70424,MI:0915(physical association)|MI
 Ccnd1,Nrf1,DIP-284N,DIP-61236N,P25322,Q9WU00,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Ncs1,Itpr1,DIP-61316N,DIP-32243N,Q8BNY6,P11881,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Apbb1ip,Tln1,DIP-29358N,DIP-647N,Q8R5A3,P26039,MI:0915(physical association)|MI:0915(physical association)|MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0407(direct interaction)|MI:0915(physical association)|MI:0407(direct interaction)|MI:0407(direct interaction),MI:0096(pull down)|MI:0096(pull down)|MI:0096(pull down)|MI:0114(x-ray crystallography)|MI:0096(pull down)|MI:0096(pull down)|MI:0096(pull down)|MI:0096(pull down),dip-quality-status:core
-Bax,Bax,DIP-29541N,DIP-29541N,Q07813,Q07813,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0826(x ray scattering)|MI:0042(electron paramagnetic resonance)|MI:0018(two hybrid),dip-quality-status:core
 Dzip1,Rab8a,DIP-61407N,DIP-31053N,Q8BMD2,P55258,MI:0915(physical association)|MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Rab10,Dzip1,DIP-37720N,DIP-61407N,P61027,Q8BMD2,MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
 Gdi2,Dzip1,DIP-348N,DIP-61407N,Q61598,Q8BMD2,MI:0915(physical association)|MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
@@ -551,7 +519,6 @@ Trp53,Ep400,DIP-369N,DIP-61766N,P02340,Q8CHI8,MI:0915(physical association),MI:0
 Ep300,Trp53,DIP-60610N,DIP-369N,B2RWS6,P02340,MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Casp4,Gsdmd,DIP-61776N,DIP-61777N,P70343,Q9D8T2,MI:0570(protein cleavage),MI:0435(protease assay),dip-quality-status:core
 Wdr5,Rbbp5,DIP-38618N,DIP-61809N,P61965,Q8BX09,MI:0915(physical association),MI:0096(pull down),dip-quality-status:core
-Shc1,Shc1,DIP-271N,DIP-271N,P98083,P98083,MI:0407(direct interaction)|MI:0407(direct interaction),MI:0071(molecular sieving)|MI:0808(comigration in sds page),dip-quality-status:core
 Cav1,Tgfbr1,DIP-35140N,DIP-42262N,P49817,Q64729,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0007(anti tag coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation)|MI:0007(anti tag coimmunoprecipitation),dip-quality-status:core
 Tgfbr1,Ap2b1,DIP-42262N,DIP-32161N,Q64729,Q9DBG3,MI:0915(physical association)|MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
 Clock,Ddb1,DIP-30958N,DIP-56812N,O08785,Q3U1J4,MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association)|MI:0915(physical association),MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation)|MI:0006(anti bait coimmunoprecipitation),dip-quality-status:core
