@@ -310,13 +310,84 @@ inet1network
 ```
 
 ### import network data  
+```{r}
+library(statnet)
+```
+
+```{r}
+netmat3 <- rbind(
+  c("A", "B"),
+  c("A", "C"),
+  c("B", "C"),
+  c("B", "D"),
+  c("C", "B"),
+  c("E", "C")
+)
+```
+
+```{r}
+net_df <- data.frame(netmat3, stringsAsFactors = F)
+```
+
+```{r}
+write.csv(net_df, file = "MyData.csv", row.names = F)
+net_edge <- read.csv(file = "MyData.csv")
+net_import <- network(x = net_edge,
+                      matrix.type = "edgelist")
+summary(net_import)
+```
+
+```{r}
+gden(net_import)
+```
 
 
+### Common Network Data Tasks  
+1. Filtering networks based on vertex or edge attribute values  
+2. Filtering based on node value  
+
+```{r}
+n1F <- get.inducedSubgraph(net1, which(net1 %v% "gender" == "F"))
+```
+
+```{r}
+gplot(n1F, displaylabels = T)
+```
 
 
+```{r}
+deg <- net1 %v% "alldeg"
+```
+
+```{r}
+n2 <- net1 %s% which(deg > 1)
+n2 <- get.inducedSubgraph(net1, which(deg > 1))
+```
+
+```{r}
+gplot(n2, displaylabels = T)
+```
+
+3. removing isolates  
+```{r}
+data("ICTS_G10")
+gden(ICTS_G10)
+```
+
+```{r}
+length(isolates(ICTS_G10))
+```
+
+```{r}
+n3 <- ICTS_G10
+n3 <- delete.vertices(asIgraph(n3), isolates(n3))
+```
+
+```{r}
+gden(n3)
+```
 
 
-
-
+4. Filtering based on edge values  
 
 
