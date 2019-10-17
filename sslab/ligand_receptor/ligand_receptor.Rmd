@@ -13,111 +13,154 @@ knitr::opts_chunk$set(echo = TRUE)
 find ligand and recetpor pair between epithelial cell and macrophage  
 ```
 
-```{r}
+```
+data from DIP database 
+using data Mmusc20170205.txt.gz; Mmusc20170205CR.txt.gz
+```
+
+```{r load packages}
 library(tidyverse)
-```
-
-```{r}
-mm <- read_tsv(file = "Mmusc20170205CR.txt.gz")
-mm <- mm %>% 
-  filter(`Taxid interactor A` == "taxid:10090(Mus musculus)" & `Taxid interactor B` == "taxid:10090(Mus musculus)")
-mm <- mm[, -17]
-```
-
-
-```{r}
-id_interactor_a <- mm$`ID interactor A`
-grep(pattern = "^DIP-", x = id_interactor_a, value = F) 
-```
-
-```{r}
 library(biomaRt)
-mmart <- useEnsembl(biomart = "ensembl", dataset = "mmusculus_gene_ensembl")
-listAttributes(mmart)
-searchAttributes(mmart, "interaction")
+library(readxl)
+```
+
+
+```{r loading data}
+m_ppi <- read_tsv(file = "Mmusc20170205.txt.gz")
+```
+
+
+```{r rename columns}
+m_ppi <- m_ppi %>% 
+  select("id_interactor_a" = `ID interactor A`, 
+         "id_interactor_b" = `ID interactor B`,
+         "alt_id_interactor_a" = `Alt. ID interactor A`,
+         "alt_id_interactor_b" = `Alt. ID interactor B`,
+         "alias_interactor_a" = `Alias(es) interactor A`,
+         "alias_interactor_b" = `Alias(es) interactor B`,
+         "interaction_detection_methods" = `Interaction detection method(s)`,
+         "publication_1st_author" = `Publication 1st author(s)`,
+         "publication_identifier" = `Publication Identifier(s)`,
+         "taxid_interactor_a" = `Taxid interactor A`,
+         "taxid_interactor_b" = `Taxid interactor B`,
+         "interaction_types" = `Interaction type(s)`,
+         "source_databases" = `Source database(s)`,
+         "interaction_identifier" = `Interaction identifier(s)`,
+         "confidence_value" = `Confidence value(s)`,
+         "processing_status" = `Processing Status`)
+```
+
+
+```{r separate into different columns}
+m_ppi <- m_ppi %>% 
+  filter(taxid_interactor_a == "taxid:10090(Mus musculus)", taxid_interactor_b == "taxid:10090(Mus musculus)") %>% 
+    separate(col = id_interactor_a,
+             into = c("dip_id_a", "refseq_id_a", "uniprot_id_a"),
+             sep = "\\|") %>% 
+  separate(col = id_interactor_b,
+           into = c("dip_id_b", "refseq_id_b", "uniprot_id_b"),
+           sep = "\\|") %>% 
+  select(-publication_1st_author, -publication_identifier, -alt_id_interactor_a, -alt_id_interactor_b, -alias_interactor_a, -alias_interactor_b)
+```
+
+
+```{r separate id in different columns}
+for(i in 1:dim(m_ppi)[1]){
+  if(grepl("uniprot", m_ppi[i, 2], ignore.case = T)){
+    m_ppi[i, 3] = m_ppi[i, 2]
+    m_ppi[i, 2] = NA
+  }
+}
+
+for(i in 1:dim(m_ppi)[1]){
+  if(grepl("uniprot", m_ppi[i, 5], ignore.case = T)){
+    m_ppi[i, 6] = m_ppi[i, 5]
+    m_ppi[i, 5] = NA
+  }
+}
+
+m_ppi <- m_ppi %>% 
+  dplyr::select(-source_databases, -taxid_interactor_a, -taxid_interactor_b, -interaction_identifier, -processing_status)
+```
+
+```{r replace columns into uniform id}
+m_ppi$refseq_id_a <- gsub("refseq:", "", m_ppi$refseq_id_a)
+m_ppi$uniprot_id_a <- gsub("uniprotkb:", "", m_ppi$uniprot_id_a)
+m_ppi$refseq_id_b <- gsub("refseq:", "", m_ppi$refseq_id_b)
+m_ppi$uniprot_id_b <- gsub("uniprotkb:", "", m_ppi$uniprot_id_b)
+```
+
+```{r}
+unique(m_ppi$uniprot_id_a) %>% length()
+```
+
+
+
+```{r create mmart object}
+mmart <- useEnsembl(biomart = "ensembl", 
+                    dataset = "mmusculus_gene_ensembl",
+                    mirror = "asia")
+```
+
+
+```{r convert uniprotswissprot protin id to mgi symbol id}
+mgi_symbol_a <- getBM(attributes = c("mgi_symbol", "uniprotswissprot"),
+                      filters = "uniprotswissprot",
+                      values = m_ppi$uniprot_id_a,
+                      mart = mmart)
+colnames(mgi_symbol_a) <- c("mgi_symbol_a", "uniprotswissprot_a")
+
+mgi_symbol_b <- getBM(attributes = c("mgi_symbol", "uniprotswissprot"),
+                     filters = "uniprotswissprot",
+                     values = m_ppi$uniprot_id_b,
+                     mart = mmart)
+colnames(mgi_symbol_b) <- c("mgi_symbol_b", "uniprotswissprot_b")
 ```
 
 
 ```{r}
-dlrp <- read_tsv(file = "/home/yincy/Desktop/dlrp.txt",
-                   col_types = "ccc",
-                 skip_empty_rows = F,
-                 col_names = F, 
-                 comment = "#")
+m_ppi <- left_join(x = m_ppi, y = mgi_symbol_a, by = c("uniprot_id_a" = "uniprotswissprot_a"))
+m_ppi <- left_join(x = m_ppi, y = mgi_symbol_b, by = c("uniprot_id_b" = "uniprotswissprot_b"))
+
+m_ppi <- m_ppi %>% 
+  dplyr::select(mgi_symbol_a, mgi_symbol_b, dip_id_a, dip_id_b, uniprot_id_a, uniprot_id_b, interaction_types, interaction_detection_methods, confidence_value) %>% 
+  filter(!is.na(mgi_symbol_a), !is.na(mgi_symbol_b))
+
+ind <- duplicated(m_ppi[,1:2])
+m_ppi <- m_ppi[!ind, ]
+```
+
+
+
+## 2016 science  
+```{r}
+kid_21 <- kidney_macrophage_p21 %>%
+  mutate(avg = (kid_mac_p21_1+kid_mac_p21_2)/2) %>% 
+  dplyr::select(ensembl, symbol, avg) 
 ```
 
 ```{r}
-break_location <- c(0, grep("TRUE", is.na(dlrp$X2)))
+kid_21_top_3000 <- kid_21 %>% 
+  arrange(desc(avg)) %>% 
+  top_n(n = 3000)
 ```
 
+## science 2018  
 ```{r}
-a = c(break_location[-1], 837)
-b = break_location
-
-num_receptor_per_breaks <- (a - b) - 2
-num_receptor_per_breaks <- num_receptor_per_breaks[-length(num_receptor_per_breaks)]
-sum(num_receptor_per_breaks)
-```
-
-
-```{r}
-ligand <- dlrp$X2[(break_location + 1)]
-ligand <- ligand[-length(ligand)]
-
-receptor_ind <- setdiff(x = 1:835, y = sort(c(break_location[-1], break_location[-length(break_location)] + 1)))
-receptor <- dlrp$X2[receptor_ind]
+ep <- read.table(file = "ep.txt")
 ```
 
 
 
 ```{r}
-ligand_receptor_df <- data.frame(
-  ligand = rep(ligand, times = num_receptor_per_breaks),
-  receptor = receptor
-)
-```
-
-```{r}
-write.csv(x = ligand_receptor_df, file = "ligand_receptor_pairs.csv")
+m_ppi %>% 
+  filter(mgi_symbol_a %in% kid_21_top_3000$symbol | mgi_symbol_b %in% kid_21_top_3000$symbol| mgi_symbol_a %in% ep$symbol | mgi_symbol_b %in% ep$symbol)
 ```
 
 
-```{r}
-library(igraph)
-```
 
-```{r}
-ligand_receptor <- igraph::graph_from_data_frame(d = ligand_receptor_df, directed = T)
-```
 
-```{r}
-pdf(file = "ligand_receptor.pdf", width = 10, height = 10)
-plot(ligand_receptor, 
-     vertex.size = 2.5,
-     edge.arrow.size = 0.05,
-     layout = layout_with_fr,
-     vertex.label.cex = 0.2,
-     vertex.label.dist = 0,
-     edge.width = 0.1)
-dev.off()
-```
 
-convert mouse id to human id  
-```{r}
-m_ligand_receptor <- read.csv(file = "ligand_receptor_pairs.csv")
-```
-
-```{r}
-m_lr <- c(as.character(m_ligand_receptor$ligand), as.character(m_ligand_receptor$receptor))
-m_lr <- unique(m_lr)
-```
-
-```{r}
-?biomaRt::getLDS
-
-h_lr <- biomaRt::getLDS(attributes = c("mgi_symbol"), filters = "mgi_symbol", values = m_lr, mart = mmart,
-       attributesL = c("hgnc_symbol"), martL = hmart, uniqueRows = T)
-```
 
 
 
