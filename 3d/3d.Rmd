@@ -1,0 +1,43 @@
+---
+title: "3d"
+author: "yincy"
+date: "10/19/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 3d plot with rgl package  
+
+```{r}
+library(rgl)
+```
+
+Three dimensional objects are very popular but negatively affect the accuracy and speed at which one can interprete a graphic in most cases.  
+
+Basically, 3d scatterplot and surface plots are the only tolerated exceptions.  
+
+```{r}
+data <- iris
+mycolors <- c('royalblue1', 'darkcyan', 'oldlace')
+data$color <- mycolors[as.numeric(data$Species)]
+```
+
+```{r}
+par(mar = c(0,0,0,0))
+plot3d(x = data$Sepal.Length,
+       y = data$Sepal.Width,
+       z = data$Petal.Length,
+       col = data$color,
+       type = "s",
+       radius = 0.1,
+       xlab = "Sepal length",
+       ylab = "Sepal Width",
+       zlab = "PEtal length")
+writeWebGL(filename = "3dscatter.html", width = 600, height = 600)
+```
+
+
+
