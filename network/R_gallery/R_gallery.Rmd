@@ -1,0 +1,34 @@
+---
+title: "R_gallery"
+author: "yincy"
+date: "10/19/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Adjacency matrix  
+An adjacency matrix is a square matrix where individuals in rows and columns are the same.  
+
+It's typically the kind of matrix you get when calculating the correlation between each pair of individual. By default, we get an unweighted and oriented network.  
+
+adjacency matrix: ![](adjacency matrix.PNG)
+
+```{r}
+library(igraph)
+set.seed(10)
+```
+
+
+```{r}
+data <- matrix(sample(x = 0:2, size = 25, replace = T), nrow = 5)
+rownames(data) <- LETTERS[1:5];colnames(data) <- LETTERS[1:5]
+```
+
+```{r}
+network <- graph_from_adjacency_matrix(data)
+plot(network)
+```
+
