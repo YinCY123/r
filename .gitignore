@@ -1,1 +1,5 @@
+# ignore auto-generated R history
 .Rhistory
+
+# ignore generated html file
+*.html
