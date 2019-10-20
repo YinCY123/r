@@ -1,0 +1,57 @@
+---
+title: "tensorflow"
+author: "yincy"
+date: "10/20/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(devtools)
+install_github("rstudio/keras")
+```
+
+
+```{r}
+library(keras)
+install_keras()
+```
+
+
+```{r}
+mnist <- dataset_mnist()
+x_train <- mnist$train$x
+y_train <- mnist$train$y
+
+x_test <- mnist$test$x
+y_text <- mnist$test$y
+```
+
+
+```{r reshape}
+x_train <- array_reshape(x_train, c(nrow(x_train), 784))
+x_test <- array_reshape(x_test, c(nrow(x_test), 784))
+```
+
+```{r rescale}
+x_train <- x_train / 255
+x_test <- x_test / 255
+```
+
+```{r}
+y_train <- to_categorical(y_train, 10)
+y_test <- to_categorical(y_test, 10)
+```
+
+
+define the model  
+```{r}
+
+```
+
+
+
