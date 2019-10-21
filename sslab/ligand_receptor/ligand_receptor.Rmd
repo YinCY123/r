@@ -140,14 +140,27 @@ kid_21 <- kidney_macrophage_p21 %>%
 ```
 
 ```{r}
-kid_21_top_3000 <- kid_21 %>% 
+kid_21_top_2000 <- kid_21 %>% 
   arrange(desc(avg)) %>% 
-  top_n(n = 3000)
+  top_n(n = 2000)
 ```
+
+```{r}
+write.csv(x = kid_21_top_2000[, 2], file = "kid_top_2000.csv",row.names = F, quote = F)
+```
+
+
 
 ## science 2018  
 ```{r load 2018 science data}
 ep <- read.table(file = "ep.txt")
+```
+
+```{r}
+write.csv(x = ep,
+          file = "epithelial_top_2000.csv",
+          row.names = F,
+          quote = F)
 ```
 
 
@@ -180,8 +193,51 @@ write.csv(x = selected_ppi, file = "selected_ppi.csv", row.names = F, quote = F)
 ```
 
 
+```{r}
+human_ligang_receptor_pairs <- read.csv(file = "ligand_receptor_pairs.csv", 
+                                        stringsAsFactors = F)
+```
 
 
+```{r}
+library(biomaRt)
+library(magrittr)
+```
+
+
+```{r}
+hmart <- useEnsembl(biomart = "ensembl",
+                    dataset = "hsapiens_gene_ensembl",
+                    mirror = "asia")
+
+mmart <- useEnsembl(biomart = "ensembl",
+                    dataset = "mmusculus_gene_ensembl",
+                    mirror = "asia")
+```
+
+```{r}
+human_lr <- c(human_ligang_receptor_pairs$ligand, human_ligang_receptor_pairs$receptor) %>% 
+  unique()
+```
+
+```{r}
+?getLDS
+h_to_m <- getLDS(
+  attributes = "hgnc_symbol",
+  filters = "hgnc_symbol",
+  values = human_lr,
+  mart = hmart,
+  attributesL = "mgi_symbol",
+  martL = mmart
+)
+```
+
+```{r}
+write.csv(x = h_to_m, 
+          file = "human_to_mouse.csv",
+          row.names = F,
+          quote = F)
+```
 
 
 
