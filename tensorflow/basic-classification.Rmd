@@ -147,6 +147,15 @@ prediction[1, ]
 ```
 
 
+```{r}
+pred_class <- predict_classes(object = model, x = test_image)
+```
+
+
+```{r predict accuracy}
+table(pred_class, test_labels) %>% diag() %>% sum()/length(test_labels)
+```
+
 
 
 

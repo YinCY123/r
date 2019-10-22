@@ -26,9 +26,9 @@ install_keras()
 mnist <- dataset_mnist()
 x_train <- mnist$train$x
 y_train <- mnist$train$y
-s
+
 x_test <- mnist$test$x
-y_text <- mnist$test$y
+y_test <- mnist$test$y
 ```
 
 
@@ -50,8 +50,56 @@ y_test <- to_categorical(y_test, 10)
 
 define the model  
 ```{r}
+model <- keras_model_sequential()
 
+model %>% 
+  layer_dense(units = 256, activation = "relu", input_shape = c(784)) %>% 
+  layer_dropout(rate = 0.4) %>% 
+  layer_dense(units = 128, activation = "relu") %>% 
+  layer_dropout(rate = 0.3) %>% 
+  layer_dense(units = 10, activation = "softmax")
 ```
+
+
+```{r}
+summary(model)
+```
+
+```{r}
+model %>% 
+  compile(
+    loss = "categorical_crossentropy",
+    optimizer = optimizer_rmsprop(),
+    metrics = c("accuracy")
+  )
+```
+
+
+Tranning and evaluation  
+```{r}
+history <- model %>% 
+  fit(
+    x_train, y_train,
+    epochs = 30, batch_size = 128,
+    validation_split = 0.2
+  )
+```
+
+
+```{r}
+str(history)
+```
+
+evaluate the model's performance on the test data  
+```{r}
+model %>% evaluate(x_test, y_test)
+```
+
+generate predictions on new data  
+```{r}
+model %>% predict_classes(x_test) %>% table()
+```
+
 
 
 
