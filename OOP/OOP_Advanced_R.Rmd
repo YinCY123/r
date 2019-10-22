@@ -1,0 +1,455 @@
+---
+title: "OOP_Advanced_R"
+author: "yincy"
+date: "8/28/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Chapter 7 OOfield guide  
+R has three object oriented systems and the base type.  
+
+Central to any object-oriented system are the concepts of **class** and **method**.  
+
+A **class** defines the behaviour of **objects** by describing their attributes and their relationship to other classes. The class is also used when selecting **methods**, functions that behave differently depending on the class of their input.  
+
+Classes are usually organised in a hierarchy: if a method does not exist for a child, then the parent's method is used instead; the child **inherits** behavious from the parent.  
+
+
+
+## Base types  
+Underlying every R object is a C structure (or struct) that describes how that object is stored in memory. The struct includes the contents of the object, the information needed for memory management, and, most importantly a **type**. This is the **base type** of an R object.  
+
+Base types are not really an object system because only the R core team can create new types.  
+
+determine an object's base type with `typeof()`.  
+
+Unfortunately the names of base types are not used consistently throughout R, and type and the corresponding 'is' function may use different names.  
+
+```{r}
+f <- function(){}
+typeof(f)
+is.function(f)
+```
+
+```{r}
+typeof(sum)
+is.primitive(sum)
+```
+
+to see if an object is an pure base type. -- doesn't have S3, S4 or RC behaviour   
+```{r}
+is.object(f)
+```
+
+## S3  
+```{r}
+library(pryr)
+```
+
+```{r}
+df <- data.frame(x = 1:10, y = letters[1:10])
+otype(df) # data frame is an S3 class
+otype(df$x) # vector isn't
+otype(df$y) # factor is an S3 class
+```
+
+In S3, methods belong to functions, called **generic functions**, or generic for short.  
+S3 methods do not belong to objects or classes. This is different from most other programming languages, but is a legitimate OO style.  
+
+
+`pryr` also provides **ftype()** which describes the object system associated with a function  
+```{r}
+mean
+ftype(mean)
+```
+
+You can see all the methods that belong to a generic with `methods()`  
+```{r}
+methods("mean")
+```
+
+
+### Defining classes and creating objects  
+S3 is a simple and ad hoc system; it has no formal definition of a class. To make an object an instance of a class, you just take an existing base object and set the class attribute.  
+
+You can do that during creating with `structure()`, or after the fact with class() <- ""  
+```{r}
+foo <- structure(.Data = list(), class = "foo")
+otype(foo)
+```
+
+or  
+```{r}
+foo <- list()
+class(foo) <- "foo"
+otype(foo)
+```
+
+
+**S3 objects are usually built on top of lists, or atomic vectors with attributtes**. 
+
+```{r}
+mod <- lm(log(mpg) ~ log(disp), data = mtcars)
+class(mod)
+print(mod)
+```
+
+```{r}
+class(mod) <- "data.frame"
+class(mod)
+print(mod)
+class(mod) <- "lm"
+print(mod)
+```
+
+You can determine the class of any object using `class(x)`, and see if an object inherits from a specific class using `inherits(x, "classname")`  
+```{r}
+class(foo)
+inherits(foo, "foo")
+```
+
+The class of an S3 object can be a vector, which describes behaviour from most to least specific.  
+
+Apart from developer supplied constructor functions, S3 has no checks for correctness.  
+
+
+
+
+
+## Creating new methods and generics  
+To add a new generic, create a function that calls `UseMethod()`.  
+
+`UseMethod()` takes two arguments: the name of the generic function, and the argument to use for method dispatch.  
+
+If you omit the second argument it will dispatch the first argument to the function.  
+
+There is no need to pass any of the arguments of the generic to `UseMethod()` and you shouldn't do so. `UseMethod()` uses black magic to find them out for itself.  
+
+
+**A generic isn't useful without some methods**.  
+
+```{r}
+f <- function(x)UseMethod(generic = "f")
+f.a <- function(x)"Class a" # class a's method
+a <- structure(list(), class = "a")
+class(a)
+f(a)
+```
+
+Adding a method to an existing generic works in the same way  
+```{r}
+mean.a <- function(x)"class a method"
+mean(a)
+```
+
+
+## Method dispatch  
+`UseMethod()` creates a vector of function names, like paste0("generic", ".", c(class(x), "defualt"))  
+
+The defualt class makes it possible to set up a fall back method for otherwise unknown classes.  
+
+```{r}
+f <- function(x) UseMethod(generic = "f")
+f.a <- function(x) "class a method"
+f.default <- function(x) "unknown class"
+```
+
+```{r}
+f(structure(list(), class = "a"))
+```
+
+no method for b class, so use method for a class  
+```{r}
+f(structure(list(), class = c("b", "a")))
+```
+
+no method for c class, so falls back to default  
+```{r}
+f(structure(list(), class = "c"))
+```
+
+
+Group generic mehtods add a little more complexity.  
+
+Group generics makes it possible to implement methods for multiple generics with one function.  
+
+The four group generics and the functions they include are:  
+1. **Math**: abs, sign, sqrt, floor, cos, sin, log, exp, ...  
+2. **Ops**: +, -, *, /, ^, %%, %/%, &, |, !, ==, !=, <, <=, >, >=  
+3. **Summary**: all, any, sum, prod, min, max, range  
+4. **Complex**: Arg, Conj, Im, Mod, Re  
+
+find more information `?groupGeneric`  
+
+The most important thing to take away from this is to recognise that **Math**, **Ops**, **Summary**, and **Complex** aren't real functions, but instead represent groups of functions.  
+
+Note that inside a group generic function a special variable `.Generic` provides the actual generic function called.  
+
+methods are normal R functions, you can call them directly  
+```{r}
+c <- structure(list(), class = "c")
+
+# call the correct method
+f.default(c)
+
+
+# force R to call the wrong method  
+f.a(c)
+```
+
+
+
+## S4  
+S4 works in a similar way to S3, but it adds formality and rigour. Methods still belong to functions, not classes, but:  
+1. Classes have formal definitions which describe their fields and inheritance structures (parent classes).  
+2. Method dispatch can be based on multiple arguments to a generic function, not just one.  
+3. There is a special operator, @, for extracting slots (aka fields) from an S4 object.  
+
+All S4 related code is stored in the `methods` package.  
+
+
+## Recognising objects, generic functions, and methods  
+
+## identify S4 object  
+1. `str()` describe it as a 'formal' class  
+2. `isS4()` returns TRUE  
+3. `pryr::otype()` reurn 'S4'  
+
+## identify S4 generics and methods  
+1. `pryr::ftype()`  
+
+```{r}
+library(pryr)
+library(stats4)
+```
+
+```{r}
+y <- c(26, 17, 13, 12, 20, 5, 9, 8, 5, 4, 8)
+nLL <- function(lambda) - sum(dpois(y, lambda, log = TRUE))
+fit <- mle(nLL, start = list(lambda = 5), nobs = length(y))
+```
+
+```{r}
+isS4(fit)
+```
+
+```{r}
+otype(fit)
+```
+
+```{r}
+ftype(nobs)
+```
+
+
+```{r}
+mle_nobs <- method_from_call(nobs(fit))
+isS4(mle_nobs)
+```
+
+```{r}
+ftype(mle_nobs)
+```
+
+Use `is()` with one argument to list all classes that an object inherits from.  
+Use `is()` with two arguments to test if an object inherits from a specific class.  
+
+```{r}
+is(fit)
+```
+
+```{r}
+is(fit, "mle")
+```
+
+get a list of all S4 generics with `getGenerics()`.  
+
+get a list of all S4 classes with `getClasses()`.  
+
+list all S4 methods with `showMethods()`, optionally restricting selection either by `generic` or by `class` (or both).  
+
+
+
+### Defining classes and creating objects  
+An S4 class has three key properties:  
+1. A **name**: an alpha-numeric class identifer. By convention, S4 class names use UpperCamelCase.  
+2. A named list of **slots** (fields), which defines slot names and permitted classes. For example, a person class might be represented by a character name and a numeric age: lsit(name = "character", age = "numeric").  
+
+3. A string giving the class it inherits from, or, in S4 terminology, that it **contains**. You can provide multiple classes for multiple inheritance, but this is an advanced technique which adds much complexity.  
+
+In slots and contains you can use S4 classes, S3 classes registered with `setOldClass()`, or the implicit class of a base type. In slots you can also use the special class **ANY** which does not restrict the input.  
+
+
+```{r}
+setClass(Class = "Person",
+         slots = list(name = "character", age = "numeric"))
+
+setClass(Class = "Employee", 
+         slots = list(boss = "Person"),
+         contains = "Person")
+
+alice <- new(Class = "Person", name = "Alice", age = 40)
+john <- new(Class = "Employee", name = "John", age = 20, boss = alice)
+```
+
+To access slots of an S4 objects use @ or `slot()`  
+```{r}
+alice@name
+slot(john, name = "boss")
+```
+
+
+**@ is equivalent to $, and slot() to [[**.  
+
+```{r}
+slotNames(john)
+slot(object = john, name = "boss")
+john
+```
+
+
+If an S4 object contains (inherits) from an S3 class or a base type, it will have a special `.Data` slot which contains the underlying base type or S3 object.  
+
+```{r}
+setClass(Class = "RangedNumeric",
+         contains = "numeric",
+         slots = list(min = "numeric", max = "numeric"))
+rn <- new(Class = "RangedNumeric", 1:10, min = 1, max = 10)
+slotNames(rn)
+```
+
+
+### Creating new methods and generics  
+S4 provides special functions for creating new generics and methods.  
+
+`setGeneric()` creates a new generic or converts an existing function into a generic.  
+
+`setMethod()` takes the name of the generic, the classes the method shoud be associated with, and a function that implements the method.  
+
+```{r}
+setGeneric(name = "union")
+
+setMethod(f = "union",
+          c(x = "data.frame", y = "data.frame"),
+          function(x, y){
+              unique(rbind(x, y))
+          })
+```
+
+
+If you create a new generic from scratch, you need to supply a function that calls `standardGeneric()`:  
+```{r}
+setGeneric(name = "myGeneric",
+           def = function(x){
+               standardGeneric(f = "myGeneric")
+           })
+```
+
+`standardGeneric()` is the equivalent to `UseMethod()`.  
+
+
+
+### Method dispatch  
+```{r}
+selectMethod(f = "nobs", 
+             signature = list("mle"))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

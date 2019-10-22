@@ -1,0 +1,157 @@
+---
+title: "basic-classification"
+author: "yincy"
+date: "10/22/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(keras)
+```
+
+
+```{r}
+fashion_mnist <- dataset_fashion_mnist()
+```
+
+```{r}
+c(train_images, train_labels) %<-% fashion_mnist$train
+c(test_image, test_labels) %<-% fashion_mnist$test 
+```
+
+```{r}
+class_names <- c(
+  "T-shirt/top",
+  "Trouser",
+  'Pullover',
+  "Dress",
+  "Coat",
+  "Sandal",
+  "Shirt",
+  "Sneaker",
+  "Bag",
+  "Ankle boot"
+)
+```
+
+```{r}
+dim(train_images)
+```
+
+```{r}
+dim(train_labels)
+```
+
+
+```{r}
+dim(test_image)
+```
+
+```{r}
+dim(test_labels)
+test_labels %>% head()
+```
+
+
+
+Preprocess the data  
+```{r}
+library(tidyr)
+library(ggplot2)
+```
+
+```{r}
+image_1 <- as.data.frame(train_images[1, , ])
+colnames(image_1) <- seq_len(length.out = ncol(image_1))
+image_1$y <- seq_len(length.out = nrow(image_1))
+image_1 <- gather(image_1, key = "x", value = "value", -y)
+image_1$x <- as.integer(image_1$x)
+```
+
+```{r}
+ggplot(image_1, aes(x, y, fill = value)) +
+  geom_tile()+
+  scale_fill_gradient(low = "white", high = "black", na.value = NA) +
+  scale_y_reverse()+
+  theme_minimal()+
+  theme(panel.grid = element_blank(), aspect.ratio = 1) +
+  xlab("") + ylab("")
+```
+
+```{r scale}
+train_images <- train_images/255
+test_image <- test_image/255
+```
+
+
+```{r}
+par(mfrow = c(5, 5), mar = c(0, 0, 1.5, 0), xaxs = "i", yaxs = "i")
+for(i in 1:25){
+  img = train_images[i, , ]
+  img = t(apply(img, 2, rev))
+  image(1:28, 1:28, img, col = gray((0:255)/255), xaxt = "n", yaxt = "n", main = paste(class_names[train_labels[i] + 1]))
+}
+```
+
+Build the model  
+building the neural network requires configuring the layers of the model, then compiling the model.  
+
+the basic building block of a neural network is the layer. layers extract representations from the data fed into them. and hopefully, these representations are more meaningful for the problem at hand.  
+
+Most of deep learning consists of chaining together simple layers. most layers, like `layer_dense` have parameters that are during training.  
+```{r setup the layers}
+model <- keras_model_sequential()
+
+model %>% layer_flatten(input_shape = c(28, 28)) %>% 
+  layer_dense(units = 128, activation = "relu") %>% 
+  layer_dense(units = 10, activation = "softmax")
+```
+
+- the `layer_flattern` transform 2d-array to 1d-array  
+
+compile the model  
+```{r}
+model %>% 
+  compile(
+    optimizer = "adam",
+    loss = "sparse_categorical_crossentropy",
+    metrics = c("accuracy")
+  )
+```
+
+
+train the model  
+```{r}
+model %>% fit(train_images, train_labels, epochs = 5)
+```
+
+evaluate accuracy  
+```{r}
+score <- model %>% evaluate(test_image, test_labels)
+cat("Test loss:", score$loss, "\n")
+cat("Test accuracy: ", score$accuracy, "\n")
+```
+It turns out, the accuracy on the test dataset is a little less than the accuracy on the training dataset.  
+
+This gap between training accuracy and test accuracy is an example of overfitting. Overfitting is when a machine learning model performs worse on new data than on their training data.  
+
+make predictions 
+```{r}
+prediction <- model %>% predict(test_image)
+prediction[1, ]
+```
+
+
+
+
+
+
+
+
+
+
