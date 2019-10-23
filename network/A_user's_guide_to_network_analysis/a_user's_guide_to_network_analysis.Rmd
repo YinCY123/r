@@ -384,7 +384,8 @@ n3 <- delete.vertices(asIgraph(n3), isolates(n3))
 ```
 
 ```{r}
-gden(n3)
+class(n3)
+gden(asNetwork(n3))
 ```
 
 
