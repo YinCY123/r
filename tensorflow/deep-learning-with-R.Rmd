@@ -1,0 +1,85 @@
+---
+title: "deep-learning-with-R"
+author: "yincy"
+date: "10/24/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(keras)
+mnist <- dataset_mnist() 
+train_images <- mnist$train$x 
+train_labels <- mnist$train$y 
+test_images <- mnist$test$x 
+test_labels <- mnist$test$y
+```
+
+
+```{r}
+network <- keras_model_sequential() %>% 
+  layer_dense(units = 512, activation = "relu", input_shape = c(28*28)) %>% 
+  layer_dense(units = 10, activation = "softmax")
+```
+
+
+```{r}
+network %>% compile(
+  optimizer = "rmsprop",
+  loss = "categorical_crossentropy",
+  metrics = c("accuracy")
+)
+```
+
+
+```{r}
+train_images <- array_reshape(train_images, dim = c(60000, 28*28))
+train_images <- train_images / 255
+
+test_images <- array_reshape(test_images, dim = c(10000, 28*28))
+test_images <- test_images / 255
+```
+
+
+```{r}
+train_labels <- to_categorical(train_labels)
+test_labels <- to_categorical(test_labels)
+```
+
+
+```{r}
+network %>% fit(train_images, train_labels, epochs = 5, batch_size = 128)
+```
+
+
+```{r}
+metrics <- network %>% evaluate(test_images, test_labels)
+```
+
+```{r}
+network %>% predict_classes(test_images[1:10, ])
+```
+
+
+```{r}
+par(mfrow = c(3, 3), mar = c(0,0,1,0))
+digits <- train_images[1:9, , ]
+for(i in 1:9){
+    plot(as.raster(digits[i, , ], max = 255))
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
