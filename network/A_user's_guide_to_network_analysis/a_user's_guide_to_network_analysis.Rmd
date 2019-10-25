@@ -345,30 +345,22 @@ gden(net_import)
 ### Common Network Data Tasks  
 1. Filtering networks based on vertex or edge attribute values  
 2. Filtering based on node value  
+3. removing isolates  
+4. Filtering based on edge values  
 
 ```{r}
-n1F <- get.inducedSubgraph(net1, which(net1 %v% "gender" == "F"))
+n1F <- get.inducedSubgraph(x = net1, which(net1 %v% "gender" == "F"))
 ```
+
+the `get.inducedSubgraph()` function returns a new network object that is filtered based on the vertex attribute criteria.  
+
+This works because the %v% operator returns a list of vertex ids.  
 
 ```{r}
 gplot(n1F, displaylabels = T)
 ```
 
 
-```{r}
-deg <- net1 %v% "alldeg"
-```
-
-```{r}
-n2 <- net1 %s% which(deg > 1)
-n2 <- get.inducedSubgraph(net1, which(deg > 1))
-```
-
-```{r}
-gplot(n2, displaylabels = T)
-```
-
-3. removing isolates  
 ```{r}
 data("ICTS_G10")
 gden(ICTS_G10)
@@ -377,19 +369,74 @@ gden(ICTS_G10)
 ```{r}
 length(isolates(ICTS_G10))
 ```
+the `isolates()` function returns a vector of vertex IDs. This can be fed to the `delete.vertices()` function.   
+```{r}
+n3 <- asIgraph(ICTS_G10)
+n4 <- delete.vertices(n3, v = V(n3)[degree(n3) == 0])
+
+pdf(file = "isolates.pdf")
+plot(n4, 
+     vertex.size = 5,
+     vertex.label.cex = 0.7)
+
+dev.off()
+```
+
 
 ```{r}
-n3 <- ICTS_G10
-n3 <- delete.vertices(asIgraph(n3), isolates(n3))
+data(DHHS)
+d <- asIgraph(DHHS)
 ```
 
 ```{r}
-class(n3)
-gden(asNetwork(n3))
+class(d)
+list.edge.attributes(d)
+get.edge.attribute(d, "collab")
+
+list.vertex.attributes(d)
+get.vertex.attribute(d, "agency")
 ```
 
 
-4. Filtering based on edge values  
+```{r}
+gden(d)
+```
+
+```{r}
+op <- par(mar = rep(0, 4))
+gplot(d, gmode = "graph",
+      edge.lwd = d %e% "collab",
+      edge.col = "grey50",
+      vertex.col = "lightblue",
+      vertex.cex = 1.0,
+      vertex.sides = 20)
+```
+
+
+```{r}
+d1 <- delete.edges(d, edges = E(d)[E(d)$collab < 3])
+rglplot(d1,
+     edge.width = E(d1)$collab,
+     layout = layout_with_fr,
+     vertex.label = NA,
+     vertex.size = 10)
+```
+
+
+### Transforming a Directed network to a non-directed network  
+```{r}
+net1mat <- symmetrize(net1, rule = "week")
+```
+
+
+```{r}
+net1symm <- network(net1mat, matrix.type = "adjacency")
+network.vertex.names(net1symm) <- c("A", "B", "C", "D", "E")
+summary(net1symm)
+```
+
+
+
 
 
   
