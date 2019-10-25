@@ -9,6 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Introduction  
 ```{r}
 library(keras)
 mnist <- dataset_mnist() 
@@ -65,6 +66,15 @@ network %>% predict_classes(test_images[1:10, ])
 
 
 ```{r}
+mnist <- dataset_mnist() 
+train_images <- mnist$train$x 
+train_labels <- mnist$train$y 
+test_images <- mnist$test$x 
+test_labels <- mnist$test$y
+```
+
+
+```{r}
 par(mfrow = c(3, 3), mar = c(0,0,1,0))
 digits <- train_images[1:9, , ]
 for(i in 1:9){
@@ -72,14 +82,141 @@ for(i in 1:9){
 }
 ```
 
+### Element-wise operations  
+```{r}
+x <- matrix(data = rnorm(100, 1, 1), 10, 10)
+```
+
+```{r}
+naive_relu <- function(x){
+  for(i in 1:nrow(x))
+    for(j in 1:ncol(x))
+      x[i, j] <- max(x[i, j], 0)
+  x
+}
+```
+
+```{r}
+naive_relu(x)
+```
+
+```{r}
+y <- matrix(data = rnorm(100, 10, 2), 10, 10)
+```
 
 
+```{r}
+naive_add <- function(x, y){
+  for(i in 1:nrow(x))
+    for(j in 1:ncol(x))
+      x[i, j] = x[i, j] + y[i, j]
+  x
+}
+```
+
+```{r}
+naive_add(x, y)
+```
 
 
+### Operations involving tensors of different dimensions  
+```{r}
+?sweep
+x <- matrix(1:100, 10,10)
+y <- c(1:10)
+```
+
+```{r}
+sweep(x = x, MARGIN = 2, STATS = y, FUN = "+")
+```
+
+MARGIN: 1 - row element wise operation; 2 - colulmn element wise operation  
 
 
+```{r}
+# x is a tensor of random values with shape (64, 3, 32, 10)
+x <- array(round(runif(1000, 0, 9)), dim = c(64, 3, 32, 10))
+
+# y is a tensor of 5s of shape (32, 10)
+y <- array(data = 5, dim = c(32, 10))
+
+# the output z has shape (64, 3, 32, 10) like x
+z <- sweep(x = x, MARGIN = c(3, 4), STATS = y, FUN = pmax)
+dim(z)
+```
 
 
+### tensor dot  
+```{r}
+x <- matrix(rnorm(16), 4, 4)
+y <- matrix(rnorm(16), 4, 4)
+x;y
+```
 
+```{r}
+x %*% y
+```
+
+```{r}
+x <- 1:5;y <- 6:10
+
+naive_vector_dot <- function(x, y){
+  z <- 0
+  for(i in 1:length(x))
+    z <- z + x[[i]] + y[[i]]
+  z
+}
+```
+
+```{r}
+naive_vector_dot(x, y)
+```
+
+```{r}
+naive_matrix_vector_dot <- function(x, y){
+  z <- rep(0, nrow(x))
+  for(i in 1:nrow(x))
+    for(j in 1:ncol(x))
+      z[[i]] <- z[[i]] + x[[i, j]] * y[[j]]
+  z
+}
+```
+
+```{r}
+x <- matrix(1:12, 3, 4)
+y <- 1:4
+
+x;y
+```
+
+```{r}
+naive_matrix_vector_dot(x, y)
+```
+
+
+```{r}
+x <- matrix(1:12, 3, 4)
+y <- 1:4
+x;y
+```
+
+```{rs}
+x %*% y
+```
+
+```{r}
+naive_matrix_vector_dot <- function(x, y){
+  z <- rep(0, nrow(x))
+  for(i in 1:nrow(x))
+    z[[i]] <- naive_vector_dot(x[i, ], y)
+  z
+}
+```
+
+```{r}
+naive_matrix_vector_dot(x, y)
+```
+
+  
 
 
