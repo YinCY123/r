@@ -1,0 +1,248 @@
+---
+title: "Bioconductor"
+author: "yincy"
+date: "10/24/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+Bioconductor NGS base package: `IRanges` or `GenomicRanges` and `Biostrings`
+
+
+```
+IRange define the IRange class
+
+IRange(start=NULL, end=NULL, width=NULL, names=NULL)
+```
+
+GRanges structure based on `IRanges`  
+```
+GRanges(seqnames = Rle(), ranges = IRanges(), strand=Rle("*", length(seqnames)), ..., seqlengths = NULL, seqinfo = NULL)
+```
+
+
+```{r}
+seqinfo <- Seqinfo(seqnames = paste0("chr", 1:3), 
+                   seqlengths = c(1000, 2000, 1500), 
+                   isCircular = NA, 
+                   genome = "mock1")
+
+gr <- GRanges(
+    seqnames = Rle(values = c("chr1", "chr2", "chr1", "chr3"), lengths = c(1, 3, 2, 4)),
+    ranges = IRanges(start = 1:10, width = 10:1, names = head(letters, 10)),
+    strand = Rle(values = strand(c("-", "+", "*", "+", "-")), lengths = c(1, 2, 2, 3, 2)),
+    score = 1:10,
+    GC = seq(1, 0, length.out = 10),
+    seqinfo = seqinfo
+)
+```
+
+
+```{r}
+start(gr)
+end(gr)
+seqnames(gr)
+```
+
+
+```{r}
+seqlevels(gr)
+```
+
+```{r}
+seqlevels(gr) <- sub("chr", "chrom", seqlevels(gr))
+gr
+```
+
+```{r}
+seqlevels(gr) <- sub("chrom", "chr", seqlevels(gr))
+gr
+```
+
+```{r}
+names(gr)
+```
+
+```{r}
+names(gr)[1:3] <- LETTERS[1:3]
+gr
+```
+
+```{r}
+strand(gr)
+width(gr)
+score(gr)
+```
+
+
+access meta data columns (the right of vertical line)  
+```{r}
+mcols(gr)
+```
+
+
+```{r}
+mcols(gr)$GC
+mcols(gr)$score
+```
+
+
+```{r}
+gr$score
+gr$GC
+```
+
+```{r}
+gr$score[1:5] <- 5:1
+```
+
+
+access rows  
+```{r}
+gr[1:3]
+```
+
+```{r}
+gr[c("A", "C", "d")]
+```
+
+
+```{r}
+ranges(gr)
+```
+
+```{r}
+shift(gr, shift = 5)
+```
+
+```{r}
+resize(gr, width = 2)
+```
+
+```{r}
+coverage(gr)
+```
+
+```{r}
+gr1 <- shift(x= gr, shift = 3)
+countOverlaps(gr, gr1)
+```
+
+
+## ExpressionSet  
+```
+http://qiubio.com/archives/2957
+```
+```{r}
+dataDir <- system.file("extdata", package = "Biobase")
+
+ex <- file.path(dataDir, "exprsData.txt")
+```
+
+```{r}
+exprs <- as.matrix(read.table(ex, header = TRUE, sep = "\t", row.names = 1, as.is = T))
+head(exprs)
+```
+
+
+准备头文件  
+```{r}
+pDataFile <- file.path(dataDir, "pData.txt")
+
+pData <- read.table(pDataFile, row.names = 1, header = TRUE, sep = "\t")
+```
+
+
+```{r}
+all(rownames(pData) == colnames(exprs))
+```
+
+
+将pData转换成一个AnnotationDataFrame     
+```{r}
+metadata <- data.frame(labelDescription = c("Patient gender", "Case/control status", "Tumor progress on XYZ scale"), row.names = colnames(pData))
+
+
+adf <- new("AnnotatedDataFrame", data = pData, varMetadata = metadata)
+```
+
+```{r}
+dim(adf)
+```
+
+```{r}
+varMetadata(adf)
+```
+
+```{r}
+sampleNames(adf)
+```
+
+```{r}
+head(pData(adf))
+```
+
+
+```{r}
+annotation <- "hgu95av2"
+```
+
+
+
+GEOquery  
+```{r}
+gset <- getGEO(GEO = "GSE46106", GSEMatrix = TRUE)
+class(gset)
+length(gset)
+gset <- gset[1]
+```
+
+```{r}
+pdata <- pData(gset)
+
+mat <- exprs(gset)
+dim(mat)
+```
+
+
+```{r}
+boxplot(mat[, 1:5], col = rainbow(5))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
