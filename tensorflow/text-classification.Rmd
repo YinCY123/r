@@ -8,3 +8,22 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+```{r load package}
+library(keras)
+library(dplyr)
+library(ggplot2)
+library(purrr)
+```
+
+
+## download the IMDB dataset  
+```{r download IMDB dataset, cache=TRUE}
+imdb <- dataset_imdb(num_words = 10000)
+
+c(train_data, train_labels) %<-% imdb$train
+c(test_data, test_labels) %<-% imdb$test 
+```
+
+
+

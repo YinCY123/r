@@ -194,15 +194,10 @@ naive_matrix_vector_dot(x, y)
 ```
 
 
-```{r}
-x <- matrix(1:12, 3, 4)
-y <- 1:4
-x;y
-```
-
 ```{rs}
 x %*% y
 ```
+
 
 ```{r}
 naive_matrix_vector_dot <- function(x, y){
