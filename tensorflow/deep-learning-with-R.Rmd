@@ -212,6 +212,24 @@ naive_matrix_vector_dot <- function(x, y){
 naive_matrix_vector_dot(x, y)
 ```
 
+
+### tensor reshaping  
+```{r}
+x <- matrix(c(0, 1,
+              2, 3,
+              4, 5),
+            nrow = 3, ncol = 2, byrow = T)
+```
+
+```{r}
+x <- array_reshape(x, dim = c(6,1))
+```
+
+```{r}
+x <- array_reshape(x, dim = c(2, 3))
+```
   
+# Chapter 3 Getting started with neural networks  
+
 
 
