@@ -9,6 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
 ```{r load package}
 library(keras)
 library(dplyr)
@@ -24,6 +25,216 @@ imdb <- dataset_imdb(num_words = 10000)
 c(train_data, train_labels) %<-% imdb$train
 c(test_data, test_labels) %<-% imdb$test 
 ```
+
+
+```{r}
+word_index <- dataset_imdb_word_index()
+```
+
+
+## explore the data  
+
+
+```{r}
+paste0("Training entries: ", length(train_data), ", labels: ", length(train_labels))
+```
+
+```{r}
+train_data[[1]]
+```
+
+```{r}
+length(train_data[[1]]); length(train_data[[2]])
+```
+movie reviews may be different length, but the inputs to neural network must be the same length, we will need to resolve this later.  
+
+### convert the integers back to words  
+```{r}
+word_index_df <- data.frame(
+  word = names(word_index),
+  idx = unlist(word_index, use.names = FALSE),
+  stringsAsFactors = FALSE
+)
+```
+
+the first indices are reserved   
+```{r}
+word_index_df <- word_index_df %>% 
+  mutate(idx = idx + 3)
+```
+
+```{r}
+word_index_df <- word_index_df %>% 
+  add_row(word = "<PAD>", idx = 0) %>% 
+  add_row(word = "<START>", idx = 1) %>% 
+  add_row(word = "<UNK>", idx = 2) %>% 
+  add_row(word = "<UNUSED>", idx = 3)
+```
+
+```{r}
+word_index_df %>% 
+  arrange(idx)
+```
+
+
+```{r}
+decode_review <- function(text){
+  paste(map(text, function(number) word_index_df %>% 
+              filter(idx == number) %>% 
+              select(word) %>% 
+              pull()),
+        collapse = " ")
+}
+```
+
+
+```{r}
+decode_review(train_data[[1]])
+```
+
+
+## Prepare the data  
+the reviews - the arrays of integers - must be converted to tensor before fed into the neural network. This conversion can be done a couple of ways:    
+
+- One-hot-encode the arrays to convert them into vectors of 0s and 1s. For example, the sequence [3, 5] would become a 10,000-dimensional vector that is all zeros except for indices 3 and 5, which are ones. Then, make this the first layer in our network — a dense layer — that can handle floating point vector data. This approach is memory intensive, though, requiring a num_words * num_reviews size matrix.  
+
+- Alternatively, we can pad the arrays so they all have the same length, then create an integer tensor of shape num_examples * max_length. We can use an embedding layer capable of handling this shape as the first layer in our network.
+```{r}
+train_data <- pad_sequences(
+  sequences = train_data,
+  value = word_index_df %>% filter(word == "<PAD>") %>% select(idx) %>% pull(),
+  padding = "post",
+  maxlen = 256
+)
+
+
+test_data <- pad_sequences(
+  sequences = test_data,
+  value = word_index_df %>% filter(word == "<PAD>") %>% select(idx) %>% pull(),
+  padding = "post",
+  maxlen = 256
+)
+```
+
+```{r}
+length(train_data[1, ]); length(train_data[2, ])
+```
+
+
+```{r}
+train_data[1, ]
+```
+
+
+## Building the model  
+The neural network is created by stacking layers -- this is required two main architectural decisions:  
+- How many layers to use in the model?  
+- How many hidden units to use for each layers?  
+
+
+```{r}
+vocab_size <- 10000
+
+model <- keras_model_sequential()
+model %>% 
+  layer_embedding(input_dim = vocab_size, output_dim = 16) %>% 
+  layer_global_average_pooling_1d() %>% 
+  layer_dense(units = 16, activation = "relu") %>% 
+  layer_dense(units = 1, activation = "sigmoid")
+```
+
+
+```{r}
+model %>% summary()
+```
+
+
+The layers are stacked sequentially to build the classifier:  
+- The first layer is an embedding layer. This layer takes the integer-encoded vocabulary and looks up the embedding vector for each word-index. These vectors are learned as the model trains. The vectors add a dimension to the output array. The resulting dimensions are: (batch, sequence, embedding).  
+
+- Next, a global_average_pooling_1d layer returns a fixed-length output vector for each example by averaging over the sequence dimension. This allows the model to handle input of variable length, in the simplest way possible.  
+
+- This fixed-length output vector is piped through a fully-connected (dense) layer with 16 hidden units.  
+
+- The last layer is densely connected with a single output node. Using the sigmoid activation function, this value is a float between 0 and 1, representing a probability, or confidence level.  
+
+
+### Hidden Units  
+The above model has two intermediate or “hidden” layers, between the input and output. The number of outputs (units, nodes, or neurons) is the dimension of the representational space for the layer. In other words, the amount of freedom the network is allowed when learning an internal representation.  
+
+If a model has more hidden units (a higher-dimensional representation space), and/or more layers, then the network can learn more complex representations. However, it makes the network more computationally expensive and may lead to learning unwanted patterns — patterns that improve performance on training data but not on the test data. This is called overfitting, and we’ll explore it later.  
+
+
+### Loss function and optimizer  
+A model needs a loss function and an optimizer for training. Since this is a binary classification problem and the model outputs a probability (a single-unit layer with a sigmoid activation), we’ll use the binary_crossentropy loss function.  
+
+This isn’t the only choice for a loss function, you could, for instance, choose mean_squared_error. But, generally, binary_crossentropy is better for dealing with probabilities — it measures the “distance” between probability distributions, or in our case, between the ground-truth distribution and the predictions.   
+
+Later, when we are exploring regression problems (say, to predict the price of a house), we will see how to use another loss function called mean squared error.  
+
+```{r}
+model %>% 
+  compile(
+    optimizer = "adam",
+    loss = "binary_crossentropy",
+    metrics = list("accuracy")
+  )
+```
+
+
+## Create a validation set  
+When training, we want to check the accuracy of the model on data it hasn’t seen before. Create a validation set by setting apart 10,000 examples from the original training data. (Why not use the testing set now? Our goal is to develop and tune our model using only the training data, then use the test data just once to evaluate our accuracy).  
+
+```{r}
+x_val <- train_data[1:10000, ]
+partial_x_train <- train_data[10001:nrow(train_data), ]
+
+y_val <- train_labels[1:10000]
+partial_y_train <- train_labels[10001:length(train_labels)]
+```
+
+
+## Train the model  
+Train the model for 20 epochs in mini-batches of 512 samples. This is 20 iterations over all samples in the x_train and y_train tensors.  
+```{r}
+history <- model %>% 
+  fit(
+    partial_x_train,
+    partial_y_train,
+    epochs = 40, 
+    batch_size = 512,
+    validation_data = list(x_val, y_val),
+    verbose = 1
+  )
+```
+
+
+## Evaluate the model  
+```{r}
+results <- model %>% 
+  evaluate(test_data, test_labels)
+```
+
+
+## Create a graph of accuracy and loss over time  
+```{r}
+plot(history)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
