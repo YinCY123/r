@@ -521,6 +521,22 @@ plot(iBali,
 
 
 ## Chapter 5 Effective network graphic design  
+```{r}
+iBali <- asIgraph(Bali)
+
+get.vertex.attribute(iBali, "role")
+
+cols <- brewer.pal(n = length(unique(V(iBali)$role)), name = "Set1")
+names(cols) <- unique(V(iBali)$role)
+l <- layout_with_fr(iBali)
+```
+
+
+```{r}
+plot(iBali, vertex.color = cols[V(iBali)$role], vertex.label = V(iBali)$role, vertex.label.cex = 0.7,
+     layout = l)
+legend("bottomleft", legend = unique(V(iBali)$role), pch = 19, pt.cex = 2, col = cols, bty = "n")
+```
 
 
 
