@@ -435,6 +435,120 @@ network.vertex.names(net1symm) <- c("A", "B", "C", "D", "E")
 summary(net1symm)
 ```
 
+# PartII Visualization  
+## Chapter 4 Basic network plotting and layout  
+```{r}
+data(Moreno)
+
+op <- par(mar = rep(0, 4), mfrow = c(1,2))
+plot(Moreno,
+     mode = "circle",
+     vertex.cex = 1.5)
+```
+
+```{r}
+plot(Moreno, mode = "fruchtermanreingold", vertex.cex = 1.5)
+par(op)
+```
+
+
+```{r}
+gplot(Moreno, gmode = "graph", mode = "random", vertex.cex = 1.5, main = "Random layout")
+```
+
+```{r}
+gplot(Moreno, gmode = "graph", mode = "fruchtermanreingold", vertex.cex = 1.5, main = "Fruchterman-Reingold")
+```
+
+
+## Basic plotting algorithms and methods  
+
+```{r}
+data("Bali")
+mycoords1 <- gplot(Bali, gmode = "graph", vertex.cex = 1.5)
+```
+
+```{r}
+mycoords2 <- mycoords1
+
+mycoords2[, 2] <- mycoords1[, 2] * 1.5
+
+mycoords1;mycoords2
+```
+
+
+```{r}
+par(mfrow = c(1,2))
+gplot(Bali, 
+      gmode = "graph", 
+      coord = mycoords1, 
+      vertex.cex = 1.5, 
+      suppress.axes = F,
+      ylim = c(min(mycoords2[, 2]) - 1, max = mycoords2[, 2] + 1),
+      main = "Original coordinates")
+
+gplot(Bali,
+      gmode = "graph",
+      coord = mycoords2,
+      vertex.cex = 1.5,
+      suppress.axes = F,
+      ylim = c(min(mycoords2[,2]) - 1, max(mycoords2[,2]) - 1),
+      main = "Modified coordinates")
+```
+
+
+```{r}
+detach(package:statnet)
+library(igraph)
+library(intergraph)
+```
+
+```{r}
+iBali <- asIgraph(Bali)
+par(mfrow = c(1, 3), mar = c(0,0,3,0))
+plot(iBali,
+     layout = layout_in_circle,
+     main = "Circle")
+
+plot(iBali,
+     layout = layout_randomly,
+     main = "Randomly")
+
+plot(iBali,
+     layout = layout_with_kk,
+     main = "Kamada-Kawai")
+```
+
+
+## Chapter 5 Effective network graphic design  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
