@@ -3,3 +3,6 @@
 
 # ignore generated html file
 *.html
+
+# ignore auto saved R data
+.RData
