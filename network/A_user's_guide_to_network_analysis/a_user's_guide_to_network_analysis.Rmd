@@ -540,17 +540,96 @@ legend("bottomleft", legend = unique(V(iBali)$role), pch = 19, pt.cex = 2, col =
 
 
 
+```{r}
+op <- par(mar = c(0, 0, 0, 0))
+plot(Bali, displaylabels = TRUE, label.cex = 0.8,
+     pad = 0.4, label.col = "darkblue")
+
+par(op)
+```
+
+
+```{r}
+rolelab <- get.vertex.attribute(Bali, "role")
+plot(Bali,
+    usearrows = F,
+    label = rolelab,
+    displaylabels = T,
+    label.col = "darkblue")
+```
 
 
 
+## Chapter 6 Advanced network graphics  
+## Interactive network graphics  
+```{r}
+library(intergraph)
+library(igraph)
+data(Bali)
+```
+
+```{r}
+iBali <- asIgraph(Bali)
+coord <- tkplot(iBali, vertex.size = 3, 
+                vertex.label = V(iBali)$role,
+                vertex.color = "darkgreen")
+
+MCoord <- tkplot.getcoords(coord)
+tkplot.close(coord)
+
+plot(iBali, layout = MCoord, vertex.size = 5, 
+     vertex.label = NA, 
+     vertex.color = "lightblue")
+```
 
 
+```{r}
+library("networkD3")
+```
 
 
+```{r}
+src <- c("A", "A", "B", "B", "C", "E")
+target <- c("B", "C", "C", "D", "B", "C")
+net_edge <- data.frame(src, target)
+simpleNetwork(net_edge)
+```
+
+```{r}
+net_D3 <- simpleNetwork(net_edge)
+saveNetwork(network = net_D3, 
+            file = "Net_test1.html", 
+            selfcontained = T)
+```
 
 
+```{r}
+iBali_edge <- get.edgelist(iBali)
+iBali_edge <- iBali_edge - 1
+
+iBali_edge <- data.frame(iBali_edge)
+
+iBali_nodes <- data.frame(
+  node_id = as.numeric(V(iBali) -1),
+  group = V(iBali)$role,
+  node_size = degree(iBali))
+```
 
 
+```{r}
+net_D3 <- forceNetwork(Links = iBali_edge,
+                       Nodes = iBali_nodes,
+                       Source = 'X1',
+                       Target = "X2",
+                       NodeID = "node_id",
+                       Nodesize = "node_size",
+                       radiusCalculation = "Math.sqrt(d.nodesize)*3",
+                       Group = "group",
+                       opacity = 0.8,
+                       legend = TRUE)
+```
+
+# Part III Description and Analysis  
 
 
 
