@@ -267,9 +267,7 @@ summary(inet1)
 inet1
 ```
 
-```{r}
-str(inet1)
-```
+
 
 ```{r}
 inet2 <- graph.edgelist(el = netmat2)
@@ -385,26 +383,14 @@ dev.off()
 
 ```{r}
 data(DHHS)
-d <- asIgraph(DHHS)
+d <- DHHS
 ```
 
-```{r}
-class(d)
-list.edge.attributes(d)
-get.edge.attribute(d, "collab")
-
-list.vertex.attributes(d)
-get.vertex.attribute(d, "agency")
-```
-
-
-```{r}
-gden(d)
-```
 
 ```{r}
 op <- par(mar = rep(0, 4))
-gplot(d, gmode = "graph",
+gplot(d, 
+      gmode = "graph",
       edge.lwd = d %e% "collab",
       edge.col = "grey50",
       vertex.col = "lightblue",
@@ -414,6 +400,8 @@ gplot(d, gmode = "graph",
 
 
 ```{r}
+library(igraph)
+d <- asIgraph(d)
 d1 <- delete.edges(d, edges = E(d)[E(d)$collab < 3])
 rglplot(d1,
      edge.width = E(d1)$collab,
@@ -522,6 +510,7 @@ plot(iBali,
 
 ## Chapter 5 Effective network graphic design  
 ```{r}
+library(RColorBrewer)
 iBali <- asIgraph(Bali)
 
 get.vertex.attribute(iBali, "role")
@@ -550,7 +539,7 @@ par(op)
 
 
 ```{r}
-rolelab <- get.vertex.attribute(Bali, "role")
+rolelab <- get.vertex.attribute(asIgraph(Bali), "role")
 plot(Bali,
     usearrows = F,
     label = rolelab,
@@ -630,6 +619,124 @@ net_D3 <- forceNetwork(Links = iBali_edge,
 ```
 
 # Part III Description and Analysis  
+## Chapter 7 Actor Prominence  
+#### Centrality: Prominence for Undirected Networks  
+```{r}
+par(mar = rep(0,4))
+gplot(Bali,
+     vertex.cex = 2,
+     label = Bali %v% 'vertex.names',
+     gmode = "graph",
+     label.cex = 0.7,
+     vertex.col = "orange")
+```
+
+```{r}
+Bali %v% "vertex.names"
+```
+
+
+Three Common Measures of Centrality  
+- Degreee centrality  
+> The simplest measure of centrality by far is based on the notion that a node that has more direct ties is more prominent than nodes with fewer or no ties.  
+
+![](./graph/degree centrality.PNG)
+```{r}
+data("Bali")
+sna::degree(Bali)
+```
+
+
+- Closeness Centrality  
+> Instead of examining only the direct connections of the nodes, we can focus on how close each node is to every other node in a network. This leads to the concept of closeness centrality, where nodes are more prominent to the extent they are close to all other nodes in the network.  
+![](./graph/closeness centrality.PNG)
+
+```{r}
+sna::closeness(Bali)
+```
+
+- Betweenness Centrality  
+> Betweenness centrality measures the extent that a node sits ‘between’ pairs of other nodes in the network, such that a path between the other nodes has to go through that node. A node with high betweenness is prominent, then, because that node is in a position to observe or control the flow of information in the network.  
+![](./graph/betweenness centrality.PNG)
+
+
+```{r}
+dum1 <- rbind(c(1,2), c(1,3), c(1, 4), c(1,5))
+start_net <- network(dum1, directed = F)
+
+dum2 <- rbind(c(1, 2), c(2, 3), c(3, 4), c(4, 5), c(5, 1))
+circle_net <- network(dum2, directed = F)
+```
+
+
+```{r}
+par(mar = c(4, 4, 0.1, 0.1))
+my_pal <- RColorBrewer::brewer.pal(5, "Set1")
+gplot(start_net, 
+      usearrows = F, 
+      displaylabels = F,
+      vertex.cex = 2, 
+      vertex.col = my_pal[1],
+      edge.lwd = 0, 
+      edge.col = "grey50",
+      xlab = "Star graph")
+```
+
+```{r}
+gplot(circle_net,
+      usearrows = F,
+      displaylabels = F,
+      vertex.cex = 2,
+      vertex.col = my_pal[1],
+      edge.lwd = 0,
+      edge.col = "grey50",
+      xlab = "Circle graph")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
