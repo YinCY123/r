@@ -287,7 +287,7 @@ c(c(train_data, train_labels), c(test_data, test_labels)) %<-% retuers
 ```
 
 ```{r}
-length(train_data);length(test_data)
+length(train_data);length(train_labels);length(test_data);length(test_labels)
 ```
 
 
@@ -295,10 +295,12 @@ length(train_data);length(test_data)
 train_data[[1]]
 ```
 
+
 ```{r}
 word_index <- dataset_reuters_word_index()
 word_index %>% head()
 ```
+
 
 ```{r}
 reverse_word_index <- names(word_index)
@@ -320,10 +322,6 @@ decoded_newswire <- sapply(train_data[[1]], function(index){
   word <- if(index >= 3) reverse_word_index[as.character(index - 3)]
   if(!is.null(word)) word else "?"
 })
-```
-
-```{r}
-train_labels[[1]]
 ```
 
 
