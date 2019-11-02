@@ -292,7 +292,7 @@ length(train_data);length(train_labels);length(test_data);length(test_labels)
 
 
 ```{r}
-train_data[[1]]
+train_data[[2]] %>% length()
 ```
 
 
@@ -326,7 +326,7 @@ decoded_newswire <- sapply(train_data[[1]], function(index){
 
 
 ```{r}
-vectorize_sequences <- function(sequences, dimension = 10000){
+vectorize_sequences <- function(sequences, dimension = 10000){ # 10000 words
   results <- matrix(0, nrow = length(sequences), ncol = dimension)
   for(i in 1:length(sequences))
     results[i, sequences[[i]]] <- 1
@@ -362,7 +362,7 @@ one_hot_test_labels <- to_categorical(test_labels)
 
 ```{r}
 model <- keras_model_sequential() %>% 
-  layer_dense(units = 64, activation = "relu", input_shape = c(10000)) %>% 
+  layer_dense(units = 64, activation = "relu", input_shape = c(10000)) %>% # dimensionality of the input not sample axis, in this case is the dimension of columns
   layer_dense(units = 64, activation = "relu") %>% 
   layer_dense(units = 46, activation = "softmax")
 ```
@@ -397,6 +397,189 @@ histry <- model %>%
     validation_data = list(x_val, y_val)
   )
 ```
+
+
+
+```{r}
+plot(histry)
+```
+
+
+```{r}
+predictions <- model %>% 
+  predict(x_test)
+
+dim(predictions)
+```
+
+```{r}
+classes <- apply(predictions, 1, which.max)
+```
+
+
+### a different way to handle the labels and loss  
+```{r}
+model %>% 
+  compile(
+    optimizer = "rmsprop",
+    loss = "sparse_categorical_crossentropy",
+    metrics  = c("accuracy")
+  )
+```
+this new loss function is still mathematically the same as `categorical_crossentropy`; it just has a different interface.  
+
+### the importance of having sufficiently large intermediate layers  
+We mentioned earlier that because the final outputs are 46-dimensional, you should avoid intermediate layers with many fewer than 46 hidden units.  
+
+```{r}
+model <- keras_model_sequential() %>% 
+  layer_dense(units = 64, activation = "relu", input_shape = c(10000)) %>% 
+  layer_dense(units = 4, activation = "relu") %>% 
+  layer_dense(units = 46, activation = "softmax")
+```
+
+```{r}
+model %>% 
+  compile(
+    optimizer = "rmsprop",
+    loss = "categorical_crossentropy",
+    metrics = c("accuracy")
+  )
+```
+
+
+```{r}
+history <- model %>% 
+  fit(
+    partial_x_train,
+    partial_y_train,
+    epochs = 20,
+    batch_size = 128,
+    validation_data = list(x_val, y_val)
+  )
+```
+
+
+```{r}
+plot(history)
+```
+
+
+
+## Predicting house prices: a regression example  
+The two previous examples considered classification problems, where the goal was to predict a single discrete label of an input data point. Another common type of machine-learning problem is regression , which consists of predicting a continuous value instead of a discrete label: for instance, predicting the temperature tomorrow, given meteorological data; or predicting the time that a software project will take to complete, given its specifications.  
+
+> Don't confuse *regression* and the algorithm *logistic regression*. Confusingly, logistic regression isn't a regression algorithm -- it's a classification algorithm.  
+
+### the bosten housing price dataset  
+```{r}
+library(keras)
+
+dataset <- dataset_boston_housing()
+c(c(train_data, train_targets), c(test_data, test_targets)) %<-% dataset 
+```
+
+
+```{r}
+str(train_data);str(test_data)
+```
+
+
+### preparing the data  
+It would be problematic to feed into a neural network values that all take wildly different ranges. The network might be able to automatically adapt to such heterogeneous data, but it would definitely make learning more difficult. A widespread best practice to deal with such data is to do feature-wise normalization.  
+
+```{r}
+mean <- apply(train_data, 2, mean)
+sd <- apply(train_data, 2, sd)
+
+train_data_s <- scale(train_data, center = mean, scale = sd)
+test_data_s <- scale(test_data, center = mean, scale = sd)
+```
+you should never use in your workflow any quantity computed on the test data, even for something as simple as data normalization.  
+
+
+
+### building the network  
+Because so few samples are available, you will use a very small network with 2 hidden layers, each with 64 units.  
+
+In general, the less training data you have, the worse overfitting will be, and using a small network is one way to migate overfitting.  
+
+```{r}
+huild_model <- function(){
+  model <- keras_model_sequential() %>% 
+    layer_dense(units = 64, activation = "relu", input_shape = dim(train_data)[[2]]) %>% 
+    layer_dense(units = 64, activation = "relu") %>% 
+    layer_dense(units = 1)
+  
+  model %>% 
+    compile(
+      optimizer = "rmsprop",
+      loss = "mse",
+      metrics = c("mae")
+    )
+}
+```
+
+The network ends with a single unit and no activation (it will be a linear layer).
+
+
+### Validating your approach using k-fold validation  
+```{r}
+k <- 4
+
+indices <- sample(1:nrow(train_data))
+folds <- cut(indices, breaks = k, labels = F)
+
+num_epochs <- 100
+all_scores <- c()
+
+for(i in 1:k){
+  cat("processsing fold #", i, "\n")
+  
+  val_indices <- which(folds == i, arr.ind = T)
+  val_data <- train_data[val_indices, ]
+  val_targets <- train_targets[val_indices]
+  
+  partial_train_data <- train_data[-val_indices, ]
+  partial_train_targets <- train_targets[-val_indices]
+  
+  model <- huild_model()
+  
+  model %>% 
+    fit(
+      partial_train_data,
+      partial_train_targets,
+      epochs = num_epochs,
+      batch_size = 1, 
+      verbose = 0)
+  
+  results <- model %>% 
+    evaluate(val_data, val_targets, verbose = 0)
+  
+  all_scores <- c(all_scores, results$mae)
+}
+```
+
+```{r}
+all_scores; mean(all_scores)
+```
+
+
+# Chapter 4 Fundamentals of machine learning  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
