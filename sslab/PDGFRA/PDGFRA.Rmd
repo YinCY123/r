@@ -1,0 +1,47 @@
+---
+title: "PDGFRA"
+author: "yincy"
+date: "11/14/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(biomaRt)
+library(Biostrings)
+```
+
+
+```{r}
+mmart <- useMart(biomart = "ensembl", dataset = "mmusculus_gene_ensembl")
+```
+
+```
+PDGFRA: 18595, Pdgfra
+```
+
+```{r}
+pdgfra <- "18595"
+```
+
+
+```{r}
+listAttributes(mmart, page = "sequences")
+```
+
+```{r}
+listFilters(mmart)
+```
+
+
+```{r}
+pdgfra_seq <- getBM(attributes = c("entrezgene_id", "refseq_mrna"),
+                    filters = "entrezgene_id",
+                    values = pdgfra,
+                    mart = mmart)
+```
+
