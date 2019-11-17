@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-```{r}
+```{r load packages, message=FALSE}
 library(biomaRt)
 library(Biostrings)
 ```
@@ -44,4 +44,23 @@ pdgfra_seq <- getBM(attributes = c("entrezgene_id", "refseq_mrna"),
                     values = pdgfra,
                     mart = mmart)
 ```
+
+```{r}
+supportedUCSCtables(genome = "mm10")
+```
+
+
+```{r}
+mtxdb <- makeTxDbFromUCSC(genome = "mm10", tablename = "refGene")
+```
+
+```{r}
+columns(mtxdb)
+exons(x = mtxdb, filter = list(gene_id = "18595"), columns = c("GENEID", "TXID"))
+```
+
+```{r}
+exonsBy(x = mtxdb, by = "tx")
+```
+
 
