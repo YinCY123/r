@@ -491,10 +491,28 @@ plot(net.m, vertex.color = "orange", main = "Tie:mention", vertex.label = NA, re
 
 
 
+# Network and node descriptives  
+density  
+```{r}
+edge_density(net, loops = F)
+```
 
 
+```{r}
+ecount(net) / (vcount(net)*(vcount(net) - 1))
+```
+
+Reciprocity: the proportion of reciprocated ties (for a directed network)  
+```{r}
+reciprocity(net)
+
+dyad_census(net) # mutal, asymmetric and null node pairs
+
+2*dyad.census(net)$mut / ecount(net)
+```
 
 
+        
 
 
 
