@@ -6,3 +6,6 @@
 
 # ignore auto saved R data
 .RData
+
+# ignore .zip file
+*.zip
