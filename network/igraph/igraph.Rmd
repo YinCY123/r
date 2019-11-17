@@ -313,6 +313,7 @@ plot(rn %du% tr, vertex.size = 10, vertex.label = NA)
 
 
 # Reading network data from files  
+## Dataset 1 edgelist  
 ```{r}
 nodes <- read.csv(file = "Dataset1-Media-Example-NODES.csv", header = TRUE, as.is = TRUE)
 links <- read.csv(file = "Dataset1-Media-Example-EDGES.csv", header = TRUE, as.is = TRUE)
@@ -342,6 +343,178 @@ links <- links[order(links$from, links$to), ]
 colnames(links)[4] <- "weight"
 rownames(links) <- NULL
 ```
+
+## Dataset 2 matrix  
+```{r}
+nodes2 <- read.csv(file = "Dataset2-Media-User-Example-NODES.csv", header = TRUE, as.is = TRUE)
+links2 <- read.csv(file = "Dataset2-Media-User-Example-EDGES.csv", header = TRUE, as.is = TRUE)
+```
+
+```{r}
+head(nodes2)
+head(links2)
+```
+
+```{r}
+links2 <- as.matrix(links2)
+dim(links2); dim(nodes2)
+```
+
+
+## Turning networks into igraph objects  
+```{r}
+net <- graph_from_data_frame(d = links, vertices = nodes, directed = TRUE)
+class(net)
+```
+
+```{r}
+net
+```
+
+```{r}
+E(net)
+```
+
+```{r}
+V(net)
+```
+
+
+```{r}
+E(net)$type
+V(net)$media
+```
+
+```{r}
+edge_attr(net)
+print("-------------------------")
+vertex_attr(net)
+```
+
+
+```{r}
+plot(net,
+     edge.arrow.size = 0.4,
+     vertex.label = NA)
+```
+
+```{r}
+net <- simplify(graph = net, 
+                remove.loops = TRUE, 
+                remove.multiple = F,
+                edge.attr.comb = list(weight = "sum", type = "first"))
+plot(net, 
+     vertex.label = NA,
+     edge.arrow.size = 0.5,
+     edge.curved = 0,
+     layout = layout_with_fr)
+```
+
+
+```{r}
+head(nodes2)
+head(links2)
+```
+
+
+```{r}
+net2 <- graph_from_incidence_matrix(incidence = links2)
+table(V(net2)$type)
+```
+
+To transform a one-mode network matrix into an igraph object, use instead `graph_from_adjacency_matrix`.   
+
+```{r}
+colors <- c("gray50", "tomato", "gold")
+V(net)$color <- colors[V(net)$media.type]
+edge.start <- ends(net, es = E(net), names = F)[,1]
+edge.col <- V(net)$color[edge.start]
+
+plot(net, edge.color = edge.col, edge.curved = 0.1, vertex.label = NA)
+```
+
+By default, the coordinates of the plots are rescaled to the [-1,1] interval for both x and y. You can change that with the parameter `rescale=FALSE` and rescale your plot manually by multiplying the coordinates by a scalar.  
+
+You can use `norm_coords` to normalize the plot with the boundaries you want.  
+
+```{r}
+net.bg <- sample_pa(n = 80)
+V(net.bg)$size <- 8
+V(net.bg)$frame.color <- "white"
+V(net.bg)$label <- NA
+E(net.bg)$arrow.mode <- 0
+
+l <- layout_with_fr(net.bg)
+ll <- norm_coords(layout = l, ymin = -1, ymax = 1, xmin = -1, xmax = 1)
+
+par(mfrow = c(2, 2), mar = c(0, 0, 0, 0))
+plot(net.bg, rescale = F, layout = ll*0.4)
+plot(net.bg, rescale = F, layout = ll*0.6)
+plot(net.bg, rescale = F, layout = ll*0.8)
+plot(net.bg, rescale = F, layout = ll*1.0)
+```
+
+
+
+```{r}
+layouts <- grep("^layout_", ls("package:igraph"), value = T)[-1]
+
+layouts <- layouts[!grepl("bipartite|merge|norm|sugiyama|tree", layouts)]
+```
+
+```{r}
+par(mfrow = c(5, 3), mar = c(1, 1, 1, 1))
+
+for(layout in layouts){
+        l <- do.call(layout, list(net))
+        plot(net, 
+             edge.arrow.mode = 0, 
+             layout = l, 
+             main = layout,
+             vertex.label = NA)
+}
+```
+
+
+
+```{r}
+net.m <- net - E(net)[E(net)$type == "hyperlink"]
+net.h <- net - E(net)[E(net)$type == "mention"]
+```
+
+
+```{r}
+par(mfrow = c(1,2))
+plot(net.h, vertex.color = "orange", main = "Tie:Hyperlink", vertex.label = NA, rescale = T)
+plot(net.m, vertex.color = "orange", main = "Tie:mention", vertex.label = NA, rescale = T)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
