@@ -492,7 +492,7 @@ plot(net.m, vertex.color = "orange", main = "Tie:mention", vertex.label = NA, re
 
 
 # Network and node descriptives  
-density  
+### density  
 ```{r}
 edge_density(net, loops = F)
 ```
@@ -502,29 +502,129 @@ edge_density(net, loops = F)
 ecount(net) / (vcount(net)*(vcount(net) - 1))
 ```
 
-Reciprocity: the proportion of reciprocated ties (for a directed network)  
+### Reciprocity: the proportion of reciprocated ties (for a directed network)  
 ```{r}
 reciprocity(net)
 
 dyad_census(net) # mutal, asymmetric and null node pairs
 
-2*dyad.census(net)$mut / ecount(net)
+2*dyad.census(net)$mut / ecount(net) # for a directed network 
 ```
 
 
-        
+### Transitivity  
+- global - ratio of triangles (directed disregarded) to connected triples  
+- local - ratio of triangles to connected triples each vertex is part of.  
+```{r}
+transitivity(net, type = "global") # net is treated as an undirected network 
+transitivity(as.undirected(net, mode = "collapse")) # same as above
+transitivity(net, type = "local")
+triad.census(net) # for directed networks  
+```
+
+### Diameter   
+A network diameter is the longest geodesic distance (length of the shortest path between two nodes) in the network.     
+
+In igraph, `diameter()` returns the distance, while `get_diameter()` returns the nodes along the first found path of that distance.  
+
+Note that edge weights are used by defualt, unless set to NA  
+```{r}
+diameter(net, directed = F, weights = NA)
+```
+
+```{r}
+diameter(net, directed = F)
+```
+
+```{r}
+diam <- get_diameter(net, directed = F) # get the nodes 
+```
+
+Note though that when asked to behaved as a vector, a vertex sequence will produce the numeric indexes of the nodes in it. The same applies for edge sequences.  
+
+
+```{r}
+as.vector(diam)
+```
+
+```{r}
+vcol <- rep("grey40", vcount(net))
+vcol[diam] <- "gold"
+
+ecol <- rep("grey80", ecount(net))
+ecol[E(net, path = diam, directed = F)] <- "orange"
+
+plot(net, 
+     vertex.color = vcol,
+     edge.color = ecol,
+     edge.arrow.mode = 0,
+     vertex.label = NA, 
+     vertex.size = V(net)$audience.size, 
+     layout = layout_with_lgl,
+     rescale = T)
+```
+
+
+### Node degrees  
+```{r}
+deg <- degree(net, mode = "all")
+plot(net, vertex.size = deg*3,
+     vertex.label = NA)
+```
+
+```{r}
+hist(deg, breaks = 1:vcount(net)-1, main = "Histogram of node degree")
+```
+
+### degree distribution  
+```{r}
+deg.dist <- degree_distribution(graph = net, cumulative = TRUE, mode = "all")
+
+plot(x = 0:max(deg), y = 1-deg.dist, pch = 19, cex = 1.2, col = "orange", xlab = "Degree")
+```
+
+
+### Centrality and centralization  
+Centrality functions (vertex level) and centralization functions (graph level).  
+
+The centralization functions return res - vertex centrality, centralization, and theoretical_max - maximum centralization score for a graph of that size  
+
+The centrality function can run on a subset of nodes (set with the vids parameter).  
+
+degree: number of ties  
+```{r}
+degree(net, mode = "in")
+```
+
+```{r}
+centr_degree(net, mode = "in", normalized = TRUE)
+```
+
+
+Closeness:(centrality based on distance to others in the graph)  
+```{r}
+closeness(net, mode = "all", weights = NA)
+centr_clo(net, mode = "all", normalized = T)
+```
+
+
+Eigenvector: centrality proportional to the sum of connection centralities  
+```{r}
+eigen_centrality(net, directed = T, weights = NA)
+centr_eigen(net, directed = T, normalized = T)
+```
 
 
 
+Betweenness: centrality based on a broker position connecting others  
+```{r}
+betweenness(net, directed = T, weights = NA)
+edge_betweenness(net, directed = T, weights = NA)
+centr_betw(net, directed = T, normalized = T)
+```
 
 
-
-
-
-
-
-
-
+### Hubs and authorities  
 
 
 
