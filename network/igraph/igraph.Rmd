@@ -1,0 +1,358 @@
+---
+title: "igraph"
+author: "yincy"
+date: "11/17/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load package, message=FALSE}
+library(igraph)
+library(magrittr)
+```
+
+**all igraph's parameter is here!!**  
+```{r}
+?igraph.plotting
+```
+
+The discription of an `igraph` object starts with up to four letters  
+```
+- D or U for a directed or undirected graph  
+- N for a named graph (where nodes have a name attribute)  
+- W for a weighted graph (where edges have a weight attribute)  
+- B for a bipartite (two-mode) graph (where nodes have a type attribute)  
+```
+
+```
+(g/c) - graph-level character attribute  
+(v/c) - vertex-level character attribute  
+(e/n) - edge-level numeric attru=ibute 
+```
+
+
+# Networks in igraph  
+```{r}
+g1 <- graph(edges = c(1,2, 2,3, 3, 1), n = 3, directed = F)
+plot(g1)
+```
+
+```{r}
+class(g1)
+g1
+```
+
+
+```{r}
+g2 <- graph( edges=c(1,2, 2,3, 3, 1), n=10 )
+plot(g2)
+```
+
+when the edge list has vertex names, the number of nodes is not needed  
+```{r}
+g3 <- graph(edges = c("John", "Jim", "Jim", "Jill", "Jill", "John")) # named vertices  
+plot(g3)
+```
+
+```{r}
+g3
+```
+
+```{r}
+g4 <- graph( c("John", "Jim", "Jim", "Jack", "Jim", "Jack", "John", "John"), 
+             isolates=c("Jesse", "Janis", "Jennifer", "Justin") )
+
+plot(g4, 
+     edge.size = 0.5,
+     vertex.color = "gold",
+     vertex.size = 15,
+     vertex.frame.color = "gray",
+     vertex.label.color = "black",
+     veretex.label.cex = 0.8,
+     vertex.label.dist = 2,
+     edge.curved = 0.2)
+```
+
+
+```{r}
+plot(graph_from_literal(a---b, b---c)) # the number of dashes doesn't matter
+```
+
+
+```{r}
+plot(graph_from_literal(a--+b, b+--c))
+```
+
+```{r}
+plot(graph_from_literal(a+-+b, b+-+c))
+```
+
+
+```{r}
+g1 <- graph_from_literal(a-b-c-d-e-f, a-g-h-b, h-e:f:i, j)
+plot(g1)
+```
+
+
+## edge, vertex, and network attributes  
+access vertices and edges  
+```{r}
+E(g4)
+```
+
+```{r}
+V(g4)
+```
+
+```{r}
+g4[]
+```
+
+```{r}
+g4[1, ]
+```
+
+
+Add attributes to the network, vertices, or edges  
+```{r}
+V(g4)$name
+```
+
+
+```{r}
+V(g4)$gender <- c("male", "male", "male", "male", "female", "female", "male")
+E(g4)$type <- "email"
+E(g4)$weight <- 10
+```
+
+
+```{r}
+edge_attr(g4)
+```
+
+```{r}
+vertex_attr(g4)
+```
+
+
+```{r}
+graph_attr(g4)
+```
+
+
+Another way to set attributes  
+```{r}
+g4 <- set_graph_attr(g4, name = "name", value = "Email Network")
+g4 <- set_graph_attr(g4, name = "something", value = "a thing")
+
+graph_attr(g4)
+```
+
+
+```{r}
+graph_attr(g4, name = "name")
+```
+
+
+```{r}
+g4 <- delete_graph_attr(graph = g4, name = "something")
+```
+
+```{r}
+graph_attr(g4)
+```
+
+
+```{r}
+plot(g4,
+     edge.arrow.size = 0.5, 
+     vertex.label.color = "black",
+     vertex.label.dist =1.5,
+     vertex.color = c("pink", "skyblue")[1 + (V(g4)$gender == "male")])
+```
+
+
+simplify graph to remove loops and multiple edges between the same nodes  
+`edge.attr.comb` possible options: sum, mean, prod, min, max, first, last and ignore.  
+`ignore`: the attributes be disregarded and dropped  
+```{r}
+g4s <- simplify(graph = g4, 
+                remove.loops = TRUE,
+                remove.multiple = TRUE,
+                edge.attr.comb = c(type = "ignore", weight = "sum"))
+```
+
+```{r}
+plot(g4s,
+     vertex.label.dist = 1.5)
+```
+
+```{r}
+g4s
+```
+
+
+## Specific graphs and graph models  
+empty graph  
+```{r}
+eg <- make_empty_graph(40)
+plot(eg, vertex.size = 10,
+     vertex.label = NA)
+```
+
+
+Full graph  
+```{r}
+fg <- make_full_graph(n = 40)
+
+plot(fg, 
+     vertex.size = 10,
+     vertex.label = NA)
+```
+
+Simple star graph  
+```{r}
+st <- make_star(40)
+
+plot(st, 
+     vertex.size = 10,
+     vertex.label = NA)
+```
+
+Tree graph  
+```{r}
+tr <- make_tree(n = 40,
+                children = 3,
+                mode = "undirected")
+plot(tr, 
+     vertex.size = 10,
+     vertex.label = NA)
+```
+
+Ring graph  
+```{r}
+rn <- make_ring(n = 40)
+
+plot(rn, 
+     vertex.size = 10,
+     vertex.label = NA)
+```
+
+
+Erdos-Renyi random graph model  
+```{r}
+er <- sample_gnm(n = 100, m = 40)
+
+plot(er,
+     vertex.size = 6,
+     vertex.label = NA)
+```
+
+Watts-Strogatz small-world model  
+```{r}
+sw <- sample_smallworld(dim = 2, 
+                        size = 10,
+                        nei = 1, 
+                        p = 0.1)
+
+plot(sw,
+     vertex.size = 6,
+     vertex.label = NA,
+     layout = layout_in_circle)
+```
+
+
+Barabasi-Albert preferential attachment model for scale-free graphs  
+```{r}
+ba <- sample_pa(n = 100, 
+                power = 1,
+                m = 1,
+                directed = F)
+
+plot(ba, vertex.size = 6,
+     vertex.label = NA)
+```
+
+```{r}
+zach <- graph(edges = "Zachary")
+
+plot(zach,
+     vertex.size = 10,
+     vertex.label = NA)
+```
+
+Rewiring a graph  
+`each_edge()` is a rewiring method that changes the edge endpoints uniformaly randomly with a probability **prob**  
+```{r}
+rn.rewiring <- rewire(rn, each_edge(prob = 0.1))
+
+plot(rn.rewiring, vertex.size = 10, vertex.label = NA)
+```
+
+Rewire to connect vertices to other vertices at a certain distance.  
+```{r}
+rn.neigh <- connect.neighborhood(graph = rn, order = 5)
+
+plot(rn.neigh, vertex.size = 8, vertex.label = NA)
+```
+
+
+Combine graphs (disjoint union, assuming separate vertex sets): **%du%**  
+```{r}
+par(mfrow = c(1, 2))
+plot(rn, vertex.size = 10, vertex.label = NA)
+plot(tr, vertex.size = 10, vertex.label = NA)
+```
+
+```{r}
+plot(rn %du% tr, vertex.size = 10, vertex.label = NA)
+```
+
+
+# Reading network data from files  
+```{r}
+nodes <- read.csv(file = "Dataset1-Media-Example-NODES.csv", header = TRUE, as.is = TRUE)
+links <- read.csv(file = "Dataset1-Media-Example-EDGES.csv", header = TRUE, as.is = TRUE)
+```
+
+```{r}
+head(nodes)
+```
+
+```{r}
+head(links)
+```
+
+
+```{r}
+nrow(nodes); unique(links[, c("from", "to")]) %>% nrow()
+```
+
+```{r}
+?aggregate
+links <- aggregate(x = links[, 3], by = links[, -3], FUN = sum)
+links <- links[order(links$from, links$to), ]
+```
+
+
+```{r}
+colnames(links)[4] <- "weight"
+rownames(links) <- NULL
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
