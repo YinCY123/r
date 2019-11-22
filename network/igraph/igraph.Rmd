@@ -625,6 +625,165 @@ centr_betw(net, directed = T, normalized = T)
 
 
 ### Hubs and authorities  
+Hubs were expected to contain catalogs with a large number of outgoing links; while authorities would get many incoming links from hubs, presumably because of their high-quality relevant information.  
+
+```{r}
+hs <- hub_score(net, weights = NA)$vector
+as <- authority_score(net, weights = NA)$vector
+```
+
+```{r}
+par(mfrow = c(1, 2))
+plot(net, 
+     vertex.size = hs*50, 
+     main = "Hubs",
+     vertex.label = NA,
+     edge.arrow.size = 0.5)
+plot(net, 
+     vertex.size = as*50, 
+     main = "Authorities",
+     vertex.label = NA,
+     edge.arrow.size = 0.5)
+```
+
+
+### Distances and paths  
+Average path length: the mean of the shortest distance between each pair of nodes in the network (in both directions for directed graphs).  
+
+```{r}
+mean_distance(net, directed = F)
+```
+
+```{r}
+mean_distance(net, directed = T)
+```
+
+find all shortest paths in the graph  
+```{r}
+distances(net) # with edge weights
+distances(net, weights = NA) # ignore weights
+```
+
+get the distance of every media from the New York Times  
+```{r}
+dist.from.NYT <- distances(graph = net, v = V(net)[media == "NY Times"], to = V(net), weights = NA)
+```
+
+```{r}
+oranges <- colorRampPalette(colors = c("dark red", "gold"))
+col <- oranges(max(dist.from.NYT)+1)
+col <- col[dist.from.NYT + 1]
+```
+
+```{r}
+plot(net,
+     vertex.color = col,
+     vertex.label = dist.from.NYT,
+     edge.arrow.size = 0.6,
+     vertex.label.color = "white")
+```
+
+
+find shortest path between specific nodes  
+```{r}
+news.path <- shortest_paths(graph = net,
+                            from = V(net)[media == "MSNBC"],
+                            to = V(net)[media == "New York Post"],
+                            output = "both")
+
+
+```
+
+```{r}
+ecol <- rep("gray80", ecount(net))
+ecol[unlist(news.path$epath)] <- "orange"
+
+ew <- rep(2, ecount(net))
+ew[unlist(news.path$epath)] <- 4
+
+
+vcol <- rep("gray40", vcount(net))
+vcol[unlist(news.path$vpath)] <- "gold"
+
+vlab <- V(net)$media
+vlab[setdiff(x = 1:vcount(net), y = unlist(news.path$vpath))] <- NA
+
+plot(net,
+     vertex.color = vcol,
+     edge.color = ecol,
+     edge.width = ew,
+     edge.arrow.mode = 0,
+     vertex.label = vlab,
+     vertex.label.cex = 0.7,
+     vertex.label.color = "blue")
+```
+
+
+Identify the edges going into or out of a vertex, for instance the WSJ. For a single node, use `incident()`, for multiple nodes use `incident_edges()`.  
+
+```{r}
+inc.edges <- incident(graph = net, 
+                      v = V(net)[media == "Wall Street Journal"], 
+                      mode = "all")
+
+ecol <- rep("gray80", ecount(net))
+ecol[unlist(inc.edges)] <- "orange"
+```
+
+```{r}
+vcol <- rep("gray40", vcount(net))
+vcol[V(net)$media == "Wall Street Journal"] <- "gold"
+
+plot(net, 
+     vertex.color = vcol, 
+     edge.color = ecol, 
+     edge.arrow.size = 0.5,
+     vertex.label = NA)
+```
+
+find immediate neighbors of a vertex  
+
+`neighbors()` finds all nodes one step out from the focal actor.  
+```{r}
+neigh.nodes <- neighbors(graph = net, v = V(net)[media == "Wall Street Journal"], mode = "out")
+
+vcol <- rep("gray40", vcount(net))
+vcol[neigh.nodes] <- "tomato"
+vcol[V(net)$media  == "Wall Street Journal"] <- "orange"
+vlab <- V(net)$media
+vlab[setdiff(x = 1:vcount(net), y = unlist(neigh.nodes))] <- NA
+
+plot(net, 
+     vertex.color = vcol,
+     vertex.label = vlab,
+     edge.arrow.size = 0.5,
+     vertex.label.cex = 0.7)
+```
+
+To find the neighbors for multiple nodes, use adjacent_vertices() instead of neighbors().  
+
+To find node neighborhoods going more than one step out, use function ego() with parameter order set to the number of steps out to go from the focal node(s).  
+
+Special operators for the indexing of edge sequences: %-%, %->%, %<-%  
+```
+E(network)[X %-% Y]: selects edges between vertex sets X and Y, ignoring direction  
+
+E(network)[X %->% Y]: selects edges from vertex sets X to vertex set Y  
+
+E(network)[X %<-% Y]: selects edges from vertex sets Y to vertex set X  
+```
+
+example: select edges from newspapers to online sources:  
+```{r}
+E(net)[V(net)[type.label == "Newspaper"] %->% V(net)[type.label == "Online"]]
+```
+
+
+### Subgroups and communities  
+
+
+
+
 
 
 
