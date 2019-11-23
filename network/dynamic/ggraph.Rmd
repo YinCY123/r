@@ -1,0 +1,224 @@
+---
+title: "ggraph"
+author: "yincy"
+date: "11/23/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r load packages, message=FALSE, warning=FALSE}
+library(ggraph)
+library(tidygraph)
+library(purrr)
+library(rlang)
+```
+
+
+## Edges  
+### Meet the `geom_edge_*` family  
+```{r}
+set_graph_style(plot_margin = margin(1, 1, 1, ))
+
+hierarchy <- as_tbl_graph(x = hclust(dist(iris[, 1:4]))) %>% 
+    mutate(Class = map_bfs_back_chr(node_is_root(), .f = function(node, path,...){
+        if(leaf[node]){
+            as.character(iris$Species[as.integer(label[node])])
+        }else{
+            species <- unique(unlist(path$result))
+            if(length(species) == 1){
+                species
+            }else{
+                NA_character_
+            }
+        }
+    }))
+
+
+hairball <- as_tbl_graph(highschool) %>% 
+  mutate(
+    year_pop = map_local(mode = 'in', .f = function(neighborhood, ...) {
+      neighborhood %E>% pull(year) %>% table() %>% sort(decreasing = TRUE)
+    }),
+    pop_devel = map_chr(year_pop, function(pop) {
+      if (length(pop) == 0 || length(unique(pop)) == 1) return('unchanged')
+      switch(names(pop)[which.max(pop)],
+             '1957' = 'decreased',
+             '1958' = 'increased')
+    }),
+    popularity = map_dbl(year_pop, ~ .[1]) %|% 0
+  ) %>% 
+  activate(edges) %>% 
+  mutate(year = as.character(year))
+```
+
+
+### Link  
+while you don't have to use a straight line for edges it is certainly possible and `geom_edge_link()` is here to server your needs:  
+```{r}
+ggraph(hairball, layout = "stress") +
+    geom_edge_link(aes(color = year))
+```
+
+### Fan  
+Sometimes the graph is not simple, i.e. it has multiple edges between the same nodes. Using links is a bad choice here because edges will overlap and the viewer will be unable to discover parallel edges. geom_edge_fan() got you covered here. If there are no parallel edges it behaves like geom_edge_link() and draws a straight line, but if parallel edges exists it will spread them out as arcs with different curvature. Parallel edges will be sorted by directionality prior to plotting so edges flowing in the same direction will be plottet together:  
+```{r}
+ggraph(hairball, layout = "stress") +
+    geom_edge_fan(aes(color = year))
+```
+
+
+### Parallel  
+An alternative to geom_edge_fan() is geom_edge_parallel(). It will draw edges as straight lines but in the case of multi-edges it will offset each edge a bit so they run parallel to each other. As with geom_edge_fan() the edges will be sorted by direction first. The offset is done at draw time and will thus remain constant even during resizing:  
+```{r}
+ggraph(hairball, layout = "stress") +
+    geom_edge_parallel(aes(color = year))
+```
+
+
+### Loops  
+Loops cannot be shown with regular edges as they have no length. A directed `geom_edge_loop()` exists for these cases:  
+```{r}
+loopy_hairball <- hairball %>% 
+    bind_edges(tibble::tibble(from = 1:5, to = 1:5, year = rep("1957", 5)))
+
+ggraph(loopy_hairball, layout = "stress") +
+    geom_edge_link(aes(color = year), alpha = 0.25) +
+    geom_edge_loop(aes(color = year))
+```
+
+
+### Density  
+```{r, warning=FALSE, message=FALSE}
+ggraph(graph = hairball, layout = "stress") +
+    geom_edge_density(aes(fill = year)) +
+    geom_edge_link(alpha = 0.25)
+```
+
+### Arcs  
+```{r, warning=FALSE}
+ggraph(graph = hairball, layout = "linear") +
+    geom_edge_arc(aes(color = year))
+```
+
+```{r, warning=FALSE}
+ggraph(graph = hairball, layout = "linear", circular = TRUE) +
+    geom_edge_arc(aes(color = year)) +
+    coord_fixed()
+```
+
+### Elbow  
+```{r}
+ggraph(graph = hierarchy, layout = "dendrogram", height = height) +
+    geom_edge_elbow()
+```
+
+### Diagonals  
+```{r}
+ggraph(graph = hierarchy, layout = "dendrogram", height = height) +
+    geom_edge_diagonal()
+```
+
+
+### Bendds  
+```{r}
+ggraph(graph = hierarchy, layout = "dendrogram", height = height) +
+    geom_edge_bend()
+```
+
+### Hive  
+```{r, warning=FALSE}
+ggraph(graph = hairball, layout = "hive", axis = pop_devel, sort.by = popularity) +
+    geom_edge_hive(aes(color = year)) +
+    geom_axis_hive(label = T) +
+    coord_fixed()
+```
+
+
+### Span  
+```{r}
+ggraph(graph = hairball, layout = "fabric", sort.by = node_rank_fabric()) +
+    geom_node_range(color = "grey")+
+    geom_edge_span(end_shape = "circle") +
+    coord_fixed()
+```
+
+### Point and tile  
+
+
+
+
+
+
+
+
+
+
+# tidygraph and ggraph  
+```{r}
+graph <- as_tbl_graph(
+  data.frame(
+    from = sample(5, 20, TRUE),
+    to = sample(5, 20, TRUE),
+    weight = runif(20)
+  )
+)
+graph
+```
+
+```{r}
+ggraph(graph = graph, layout = "fr", weights = weight)+
+    geom_edge_link()+
+    geom_node_point()
+```
+
+
+```{r}
+ggraph(graph = graph, layout = "fr", weights = log(weight)) +
+    geom_edge_link()+
+    geom_node_point()
+```
+
+
+```{r}
+graph <- create_notable(name = "zachary")
+
+ggraph(graph = graph, layout = "fr") +
+    geom_edge_link()+
+    geom_node_point(aes(size = centrality_pagerank())) +
+    scale_x_continuous(name = "") +
+    scale_y_continuous(name = "")+
+    theme(legend.position = "bottom")+
+    scale_size_continuous(name = "centrality")
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+ggraph(graph = graph, layout = "matrix", sort.by = node_rank_leafsort()) +
+    geom_edge_point(aes(color = centrality_edge_betweenness()), mirror = TRUE) +
+    theme(legend.position = "bottom")
+```
+
+
+```{r, warning=FALSE}
+ggraph(graph = graph, layout = "fr") +
+    geom_edge_link()+
+    geom_node_point()+
+    facet_nodes(facets = ~ group_infomap())
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
