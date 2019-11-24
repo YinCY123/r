@@ -225,18 +225,34 @@ play_geometry(n = 50, radius = 0.25) %>%
 ```
 
 ## Searches  
-An integral type of operation on graphs is to perform a search, that is, start from one node and then traverse the edges until all nodes has been visited. The most common approaches are either **breath first search** where all neighbors of a node is visited before moving on to the next node, or **depth first search** where you move along to the next node immediately and only backtracks and visit other neighbors when you’ve hit a dead end.  
+**An integral type of operation on graphs is to perform a search, that is, start from one node and then traverse the edges until all nodes has been visited**. The most common approaches are either **breath first search** where all neighbors of a node is visited before moving on to the next node, or **depth first search** where you move along to the next node immediately and only backtracks and visit other neighbors when you’ve hit a dead end.  
 
 Different statistics from these searches are available in `tidygraph` through the **bfs_*()** and **dfs_*()** family of functions e.g. the distance to the start node along the search can be obtained with **bfs_dist**()/**dfs_dist**().  
 
- The root node can be specified in the same way as with node pairs. Sorting based on a search from the node with highest centrality can thus be done with:  
+The root node can be specified in the same way as with node pairs. Sorting based on a search from the node with highest centrality can thus be done with:  
 ```{r}
 play_geometry(n = 50, radius = 0.25) %>% 
   mutate(order = bfs_rank(which.max(centrality_alpha())))
 ```
  
 
+## Local measures of a node   
+Often we find ourselves interested in the local neighborhood of a node for various reasons. We might want to know the average degree around a node or the number of triangles each node participate in. The `local_*()` family of functions provide access to a range of node measures that are dependent on the local neighborhood of each node.  
+```{r}
+play_smallworld(n_dim = 1, dim_size = 100, order = 3, p_rewire = 0.05) %>% 
+  mutate(weighted_degree = centrality_degree() / local_ave_degree())
+```
 
+## Graph measures  
+Along with computations on the individual nodes and edges it is sometimes necessary to get summary statistics on the graph itself. These can be simple measures such as the number of nodes and edges as well as more involved measures such as assortativity (the propensity of similar nodes to be connected).  
+
+All of these measures can be calculated through the `graph_*()` function family and they will all return a scale.  
+```{r}
+play_islands(n_islands = 5, size_islands = 10, p_within = 0.7, m_between = 3) %>% 
+  mutate(norm_adhesion = node_adhesion_to(nodes = c(50, 1:49)) / graph_adhesion())
+```
+
+## Mapping over nodes  
 
 
 
