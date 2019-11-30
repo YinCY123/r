@@ -1,0 +1,141 @@
+---
+title: "DC_RNA-seq"
+author: "yincy"
+date: "11/30/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
+```
+
+
+```{r}
+library(readxl)
+library(magrittr)
+library(tidyverse)
+library(edgeR)
+library(biomaRt)
+library(pheatmap)
+library(factoextra)
+library(RColorBrewer)
+```
+
+
+```{r}
+dc <- read_xlsx(path = "reads-counts.xlsx")
+dc <- dc[, -1]
+colnames(dc) <- c("Symbol", "3um_atp", "3um_atp-inhibitor", "500um_atp", "control")
+duplicated(dc[, 1, drop = T]) %>% table()
+ind <- (rowSums(dc[, -1]) == 0)
+dc <- dc[!ind, ]
+```
+
+
+id conversion  
+```{r}
+mmart <- useEnsembl(biomart = "ensembl", 
+                    dataset = "mmusculus_gene_ensembl", 
+                    mirror = "asia")
+```
+
+
+```{r}
+genes <- getBM(attributes = c("ensembl_gene_id", "entrezgene_id", "mgi_symbol"),
+               filters = "mgi_symbol",
+               values = dc[, 1, drop = T],
+               mart = mmart)
+```
+
+
+```{r}
+dc <- left_join(x = dc, y = genes, by = c("Symbol" = "mgi_symbol"))
+dc <- dc %>% 
+  as.data.frame() %>% 
+  dplyr::select(ensembl_gene_id, entrezgene_id, Symbol, `3um_atp`, `3um_atp-inhibitor`, `500um_atp`, control)
+```
+
+```{r}
+lib.size <- colSums(dc[, -c(1:3)])
+dc[, 4:7] <- apply(dc[, 4:7], 2, function(x){x*1e6 / lib.size})
+```
+
+
+```{r}
+dc_mutate <- dc %>% 
+  mutate(
+    three_control = `3um_atp` / control,
+    five_control = `500um_atp` / control,
+    three_three.inh = `3um_atp` / `3um_atp-inhibitor`,
+    three.inh_control = `3um_atp-inhibitor` / control
+  )
+```
+
+
+```{r}
+dc_mutate
+```
+
+
+```{r}
+three_control <- dc_mutate[, c(1:3, 8)]
+five_control <- dc_mutate[, c(1:3, 9)]
+three_three.inh <- dc_mutate[, c(1:3, 10)]
+three.inh_control <- dc_mutate[, c(1:3, 11)]
+```
+
+
+```{r}
+three_control_fc2 <- three_control %>% 
+  filter(three_control >= 2 | three_control <= 0.5)
+```
+
+```{r}
+five_control_fc2 <- five_control %>% 
+  filter(five_control >= 2 | five_control <= 0.5)
+```
+
+```{r}
+three_three.inh_fc2 <- three_three.inh %>% 
+  filter(three_three.inh >= 2 | three_three.inh <= 0.5)
+```
+
+
+```{r}
+three.inh_control_fc2 <- three.inh_control %>% 
+  filter(three.inh_control >= 2 | three.inh_control <= 0.5)
+```
+
+
+```{r}
+venn.diagram(x = list(`3um ATP-vs-ctl` = three_control_fc2[, 3], 
+                      `500um ATP-vs-ctl` = five_control_fc2[,3]),
+             filename = "3um-500um-ctl.tiff",
+             height = 6000, 
+             width = 6000, 
+             fill = brewer.pal(n = 4, name = "Set1")[1:2],
+             main = "3uM ATP v.s Control and 500 uM ATP v.s Control")
+```
+
+
+```{r}
+three_ctl_go <- goana(de = three_control_fc2[, 2],
+      FDR = 0.05,
+      species = "Mm")
+
+three_ctl_go %>% 
+  filter(Ont == "BP") %>% 
+  arrange(P.DE) 
+```
+
+
+```{r}
+kegga(de = three_control_fc2[, 2])
+```
+
+
+
+
+
+
+
