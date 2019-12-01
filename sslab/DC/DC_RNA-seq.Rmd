@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
+knitr::opts_chunk$set(echo = F, message = F, warning = F)
 ```
 
 
@@ -25,8 +25,9 @@ library(RColorBrewer)
 ```{r}
 dc <- read_xlsx(path = "reads-counts.xlsx")
 dc <- dc[, -1]
-colnames(dc) <- c("Symbol", "ATP_3um", "ATP_3um+inhibitor", "ATP_500um", "control")
+colnames(dc) <- c("Symbol", "ATP_3um", "ATP_3um+inh", "ATP_500um", "control")
 ```
+
 
 
 ```{r filtering}
@@ -45,12 +46,10 @@ dc
 ```
 
 
-
 id conversion  
 ```{r}
 mmart <- useEnsembl(biomart = "ensembl", 
-                    dataset = "mmusculus_gene_ensembl", 
-                    mirror = "asia")
+                    dataset = "mmusculus_gene_ensembl")
 ```
 
 
@@ -89,54 +88,66 @@ fviz_dend(x = hc.dc,
 dc_mutate <- dc %>% 
   mutate(
     atp.3_vs_control_fc = ATP_3um / control,
-    apt.500_vs_control_fc = ATP_500um / control,
-    atp.3.inh_vs_control_fc = `ATP_3um+inhibitor` / control,
+    atp.500_vs_control_fc = ATP_500um / control,
+    atp.3.inh_vs_control_fc = `ATP_3um+inh` / control,
     )
 ```
 
 
 ### 3uM ATP - Control  
 ```{r}
-atp.3.deg <- dc_mutate %>% 
+atp.3_ctl_deg <- dc_mutate %>% 
   filter(atp.3_vs_control_fc >= 2 | atp.3_vs_control_fc <= 0.5) %>% 
-  dplyr::select(Symbol, entrezgene_id,ATP_500um, control, atp.3_vs_control_fc) %>% 
+  dplyr::select(Symbol, entrezgene_id,  ATP_3um,control, atp.3_vs_control_fc) %>% 
   arrange(atp.3_vs_control_fc)
 
-atp.3.deg
+atp.3_ctl_deg
 ```
-
-```{r}
-index_3vs500 <- intersect(x = atp.3.deg$Symbol, y = atp.500.deg$Symbol) 
-
-dc_mutate[dc_mutate$Symbol %in% index_3vs500, ] %>% 
-  dplyr::select(Symbol, atp.3_vs_control_fc, apt.500_vs_control_fc) %>% 
-  mutate(ratio = apt.500_vs_control_fc / atp.3_vs_control_fc) %>% 
-  arrange(ratio)
-```
-
 
 
 ```{r}
-goana(de = dc_mutate %>% 
-        filter(atp.3_vs_control_fc >= 2 | atp.3_vs_control_fc <= 0.5) %>% 
-  dplyr::select(Symbol, entrezgene_id, ATP_3um, control, atp.3_vs_control_fc) %>% 
-  arrange(atp.3_vs_control_fc) %>% .[, 2, drop = T])
+atp.500_ctl_deg <- dc_mutate %>% 
+  filter(atp.500_vs_control_fc >= 2 | atp.500_vs_control_fc <= 0.5) %>% 
+  dplyr::select(Symbol, entrezgene_id, ATP_500um, control, atp.500_vs_control_fc)
+
+atp.500_ctl_deg
 ```
 
+##### Intersect of differential expresed genes  
+```{r}
+VennDiagram::venn.diagram(x = list(ATP.3um_Control_DEG = atp.3_ctl_deg$Symbol, ATP.500_Control_DEG = atp.500_ctl_deg$Symbol),
+                          filename = "ATP.3um_DEG_VS_ATP.500um_DEG.tiff",
+                          fill = brewer.pal(n = 4, name = "Set1")[1:2],
+                          height = 10000,
+                          width = 10000,
+                          main = "3uM ATP and 500uM ATP vs Control differential expressed genes",
+                          main.cex = 3)
+```
+![](./ATP.3um_DEG_VS_ATP.500um_DEG.tiff)
 
 
 ```{r}
-kegga(de = atp.500.deg$entrezgene_id, species = "Mm")
+go_atp.3 <- goana(de = atp.3_ctl_deg$entrezgene_id, species = "Mm")
 ```
 
 
+```{r}
+go_atp.3 %>% 
+  filter(Ont == "BP" & P.DE <= 0.05) %>% 
+  arrange(P.DE)
+```
+
+```{r}
+listAttributes(mmart, page = "feature_page")
+```
 
 
-
-
-
-
-
+```{r}
+go_atp.3 <- getBM(attributes = c("go_id", "name_1006", "definition_1006", "goslim_goa_accession", "goslim_goa_description", "mgi_symbol"), 
+                  filters = "mgi_symbol",
+                  values = atp.3_ctl_deg$Symbol,
+                  mart = mmart)
+```
 
 
 
