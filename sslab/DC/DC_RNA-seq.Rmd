@@ -97,11 +97,24 @@ dc_mutate <- dc %>%
 
 ### 3uM ATP - Control  
 ```{r}
-atp.500.deg <- dc_mutate %>% 
-  filter(apt.500_vs_control_fc >= 2 | apt.500_vs_control_fc <= 0.5) %>% 
-  dplyr::select(Symbol, entrezgene_id,ATP_500um, control, apt.500_vs_control_fc) %>% 
-  arrange(apt.500_vs_control_fc)
+atp.3.deg <- dc_mutate %>% 
+  filter(atp.3_vs_control_fc >= 2 | atp.3_vs_control_fc <= 0.5) %>% 
+  dplyr::select(Symbol, entrezgene_id,ATP_500um, control, atp.3_vs_control_fc) %>% 
+  arrange(atp.3_vs_control_fc)
+
+atp.3.deg
 ```
+
+```{r}
+index_3vs500 <- intersect(x = atp.3.deg$Symbol, y = atp.500.deg$Symbol) 
+
+dc_mutate[dc_mutate$Symbol %in% index_3vs500, ] %>% 
+  dplyr::select(Symbol, atp.3_vs_control_fc, apt.500_vs_control_fc) %>% 
+  mutate(ratio = apt.500_vs_control_fc / atp.3_vs_control_fc) %>% 
+  arrange(ratio)
+```
+
+
 
 ```{r}
 goana(de = dc_mutate %>% 
