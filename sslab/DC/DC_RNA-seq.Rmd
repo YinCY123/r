@@ -191,7 +191,7 @@ pathway.atp.3 <- rownames(kegg_atp.3[kegg_atp.3$P.DE <= 0.05, ])
 
 
 ```{r}
-gene.data.3 <- atp.3_ctl_deg$atp.3_vs_control_fc
+gene.data.3 <- ifelse(atp.3_ctl_deg$atp.3_vs_control_fc >= 2, atp.3_ctl_deg$atp.3_vs_control_fc, -atp.3_ctl_deg$atp.3_vs_control_fc)
 names(gene.data.3) <- atp.3_ctl_deg$Symbol
 ```
 
