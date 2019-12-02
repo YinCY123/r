@@ -2,7 +2,7 @@
 title: "DC_RNA-seq"
 author: "yincy"
 date: "11/30/2019"
-output: html_document
+output: word_document
 ---
 
 ```{r setup, include=FALSE}
@@ -16,7 +16,6 @@ library(magrittr)
 library(tidyverse)
 library(edgeR)
 library(biomaRt)
-library(pheatmap)
 library(factoextra)
 library(RColorBrewer)
 ```
@@ -29,7 +28,6 @@ colnames(dc) <- c("Symbol", "ATP_3um", "ATP_3um+inh", "ATP_500um", "control")
 ```
 
 
-
 ```{r filtering}
 dc[, 2:5] <- apply(dc[, 2:5], 2, FUN = function(x){(x * 1e6) / colSums(dc[, -1])})
 
@@ -37,23 +35,21 @@ index <- c()
 for(i in 1:dim(dc)[1]){
   index <- c(index, sum(dc[i, 2:5] >= 1) >= 2)
 }
-table(index)
 ```
+
 
 ```{r}
 dc <- dc[index, ]
-dc
 ```
 
 
-id conversion  
-```{r}
+```{r, cache=TRUE}
 mmart <- useEnsembl(biomart = "ensembl", 
                     dataset = "mmusculus_gene_ensembl")
 ```
 
 
-```{r}
+```{r, cache=TRUE}
 genes <- getBM(attributes = c("ensembl_gene_id", "entrezgene_id", "mgi_symbol"),
                filters = "mgi_symbol",
                values = dc[, 1, drop = T],
@@ -65,10 +61,10 @@ genes <- getBM(attributes = c("ensembl_gene_id", "entrezgene_id", "mgi_symbol"),
 dc <- left_join(dc, genes, by = c("Symbol" = "mgi_symbol"))
 dc <- dc %>% 
   dplyr::select(ensembl_gene_id, entrezgene_id, Symbol, starts_with('ATP'), control)
-dc
 ```
 
 
+#### Cluster   
 ```{r}
 hc.dc <- hclust(d = get_dist(x = t(dc[, 4:7]), method = "spearman"), method = "ward.D2")
   
@@ -82,8 +78,7 @@ fviz_dend(x = hc.dc,
 ```
 
 
-
-## DE genes  
+  
 ```{r}
 dc_mutate <- dc %>% 
   mutate(
@@ -94,14 +89,11 @@ dc_mutate <- dc %>%
 ```
 
 
-### 3uM ATP - Control  
 ```{r}
 atp.3_ctl_deg <- dc_mutate %>% 
   filter(atp.3_vs_control_fc >= 2 | atp.3_vs_control_fc <= 0.5) %>% 
   dplyr::select(Symbol, entrezgene_id,  ATP_3um,control, atp.3_vs_control_fc) %>% 
   arrange(atp.3_vs_control_fc)
-
-atp.3_ctl_deg
 ```
 
 
@@ -109,45 +101,116 @@ atp.3_ctl_deg
 atp.500_ctl_deg <- dc_mutate %>% 
   filter(atp.500_vs_control_fc >= 2 | atp.500_vs_control_fc <= 0.5) %>% 
   dplyr::select(Symbol, entrezgene_id, ATP_500um, control, atp.500_vs_control_fc)
-
-atp.500_ctl_deg
 ```
 
-##### Intersect of differential expresed genes  
-```{r}
+
+```{r, eval=FALSE}
 VennDiagram::venn.diagram(x = list(ATP.3um_Control_DEG = atp.3_ctl_deg$Symbol, ATP.500_Control_DEG = atp.500_ctl_deg$Symbol),
                           filename = "ATP.3um_DEG_VS_ATP.500um_DEG.tiff",
                           fill = brewer.pal(n = 4, name = "Set1")[1:2],
-                          height = 10000,
-                          width = 10000,
-                          main = "3uM ATP and 500uM ATP vs Control differential expressed genes",
-                          main.cex = 3)
+                          main = "differential expressed genes",
+                          main.cex = 3,
+                          resolution = 300,
+                          cat.cex = 1.2,
+                          cat.pos = 180, 
+                          cat.col = brewer.pal(n = 4, name = "Set1")[1:2],
+                          category.names = c("3uM ATP vs Control", "500uM ATP vs Control"))
 ```
+
+#### Intersect of differential expressed genes  
 ![](./ATP.3um_DEG_VS_ATP.500um_DEG.tiff)
 
 
 ```{r}
-go_atp.3 <- goana(de = atp.3_ctl_deg$entrezgene_id, species = "Mm")
+go_atp.3 <- goana(de = atp.3_ctl_deg$entrezgene_id,
+                  species = "Mm")
+```
+
+#### Top 20 enriched GO of 3uM ATP vs Control  
+```{r}
+go_atp.3 %>% 
+  filter(Ont == "BP", P.DE <= 0.05) %>% 
+  arrange(P.DE) %>% 
+  head(20) %>% 
+  ggplot(aes(x = reorder(Term, P.DE), y = -log2(P.DE))) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  scale_x_discrete(name = "") +
+  scale_y_continuous(name = "-log2(P.Value)") +
+  theme_classic() 
+```
+
+```{r}
+write.csv(x = go_atp.3 %>% filter(Ont == "BP", P.DE <= 0.05) %>% arrange(P.DE),
+          file = "GO 3uM vs Control.csv")
 ```
 
 
+#### Top 20 enriched GO of 500uM ATP vs Control  
 ```{r}
-go_atp.3 %>% 
-  filter(Ont == "BP" & P.DE <= 0.05) %>% 
+go_atp.500 <- goana(de = atp.500_ctl_deg$entrezgene_id, 
+                    species = "Mm")
+```
+
+```{r}
+write.csv(x = go_atp.500 %>% filter(Ont == "BP", P.DE <= 0.05) %>% arrange(P.DE),
+          file = "GO 500uM vs Control.csv")
+```
+
+
+
+```{r}
+go_atp.500 %>% 
+  filter(Ont == "BP", P.DE <= 0.05) %>% 
+  arrange(P.DE) %>% 
+  head(20) %>% 
+  ggplot(aes(x = reorder(Term, P.DE), y = -log2(P.DE)))+
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  scale_x_discrete(name = "") +
+  scale_y_continuous(name = "-log2(P.Value)") +
+  theme_classic()
+```
+
+
+
+```{r}
+kegg_atp.3 <- kegga(de = atp.3_ctl_deg$entrezgene_id,
+                    species = "Mm")
+```
+
+```{r}
+kegg_atp.3 %>% 
+  filter(P.DE <= 0.05) %>% 
   arrange(P.DE)
 ```
 
 ```{r}
-listAttributes(mmart, page = "feature_page")
+pathway.atp.3 <- rownames(kegg_atp.3[kegg_atp.3$P.DE <= 0.05, ])
 ```
 
 
 ```{r}
-go_atp.3 <- getBM(attributes = c("go_id", "name_1006", "definition_1006", "goslim_goa_accession", "goslim_goa_description", "mgi_symbol"), 
-                  filters = "mgi_symbol",
-                  values = atp.3_ctl_deg$Symbol,
-                  mart = mmart)
+gene.data.3 <- atp.3_ctl_deg$atp.3_vs_control_fc
+names(gene.data.3) <- atp.3_ctl_deg$Symbol
 ```
+
+
+```{r, eval=FALSE}
+pathview::pathview(gene.data = gene.data.3, 
+                   gene.idtype = "SYMBOL",
+                   species = "mmu",
+                   pathway.id = gsub("path:", "", pathway.atp.3),
+                   map.symbol = TRUE)
+```
+
+![](./mmu00982.pathview.png)
+
+
+```{r}
+
+```
+
 
 
 
