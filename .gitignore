@@ -9,3 +9,11 @@
 
 # ignore .zip file
 *.zip
+
+# ignore log file
+*.log
+
+# ignore figure
+*.png
+*.tiff
+*.xml
