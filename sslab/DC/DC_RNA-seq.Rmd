@@ -137,7 +137,8 @@ go_atp.3 %>%
   coord_flip() +
   scale_x_discrete(name = "") +
   scale_y_continuous(name = "-log2(P.Value)") +
-  theme_classic() 
+  theme_classic() +
+  ggtitle(label = "Top 20 GO")
 ```
 
 ```{r}
@@ -169,11 +170,12 @@ go_atp.500 %>%
   coord_flip() +
   scale_x_discrete(name = "") +
   scale_y_continuous(name = "-log2(P.Value)") +
-  theme_classic()
+  theme_classic() +
+  ggtitle(label = "Top 20 GO")
 ```
 
 
-
+#### KEGG pathway 3uM ATP vs Control  
 ```{r}
 kegg_atp.3 <- kegga(de = atp.3_ctl_deg$entrezgene_id,
                     species = "Mm")
@@ -194,24 +196,49 @@ pathway.atp.3 <- rownames(kegg_atp.3[kegg_atp.3$P.DE <= 0.05, ])
 gene.data.3 <- ifelse(atp.3_ctl_deg$atp.3_vs_control_fc >= 2, atp.3_ctl_deg$atp.3_vs_control_fc, -atp.3_ctl_deg$atp.3_vs_control_fc)
 names(gene.data.3) <- atp.3_ctl_deg$Symbol
 ```
-
+  
 
 ```{r, eval=FALSE}
 pathview::pathview(gene.data = gene.data.3, 
                    gene.idtype = "SYMBOL",
                    species = "mmu",
-                   pathway.id = gsub("path:", "", pathway.atp.3),
-                   map.symbol = TRUE)
+                   pathway.id = gsub("path:", "", pathway.atp.3)[7:9])
 ```
 
+mmu
 ![](./mmu00982.pathview.png)
 
 
+#### KEGG pathway 500uM ATP vs Control  
 ```{r}
+kegg.atp.500 <- kegga(de = atp.500_ctl_deg$entrezgene_id,
+                      species = "Mm")
+```
 
+```{r}
+kegg.atp.500 %>% 
+  filter(P.DE <= 0.05) %>% 
+  arrange(P.DE) %>% 
+  head(n = 10)
 ```
 
 
+```{r}
+pathway.atp.500 <- rownames(kegg.atp.500[kegg.atp.500$P.DE <= 0.05, ])
+```
 
+
+```{r}
+gene.data.500 <- ifelse(atp.500_ctl_deg$atp.500_vs_control_fc >= 2, atp.500_ctl_deg$atp.500_vs_control_fc, -atp.500_ctl_deg$atp.500_vs_control_fc)
+names(gene.data.500) <- atp.500_ctl_deg$Symbol
+```
+
+
+```{r}
+pathview(gene.data = gene.data.500, 
+         gene.idtype = "SYMBOL",
+         species = "mmu",
+         pathway.id = gsub("path:", "", pathway.atp.500))
+```
 
 
