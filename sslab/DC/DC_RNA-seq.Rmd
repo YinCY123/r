@@ -6,7 +6,7 @@ output: word_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = F, message = F, warning = F)
+knitr::opts_chunk$set(echo = F, message = F, warning = F, comment = "")
 ```
 
 
@@ -139,9 +139,10 @@ go_atp.3 %>%
   scale_y_continuous(name = "-log2(P.Value)") +
   theme_classic() +
   ggtitle(label = "Top 20 GO")
+ggsave(filename = "Top20enriched GO of 3uM ATP vs Control.tiff")
 ```
 
-```{r}
+```{r, eval=FALSE}
 write.csv(x = go_atp.3 %>% filter(Ont == "BP", P.DE <= 0.05) %>% arrange(P.DE),
           file = "GO 3uM vs Control.csv")
 ```
@@ -153,7 +154,7 @@ go_atp.500 <- goana(de = atp.500_ctl_deg$entrezgene_id,
                     species = "Mm")
 ```
 
-```{r}
+```{r, eval=FALSE}
 write.csv(x = go_atp.500 %>% filter(Ont == "BP", P.DE <= 0.05) %>% arrange(P.DE),
           file = "GO 500uM vs Control.csv")
 ```
@@ -181,6 +182,11 @@ kegg_atp.3 <- kegga(de = atp.3_ctl_deg$entrezgene_id,
                     species = "Mm")
 ```
 
+```{r, eval=FALSE}
+write.csv(x = kegg_atp.3, file = "KEGG pathway 3um vs Control.csv")
+```
+
+
 ```{r}
 kegg_atp.3 %>% 
   filter(P.DE <= 0.05) %>% 
@@ -199,14 +205,18 @@ names(gene.data.3) <- atp.3_ctl_deg$Symbol
   
 
 ```{r, eval=FALSE}
+dir.create(path = "F:/git/R-codes/sslab/DC/3uM-ATP/")
+setwd("F:/git/R-codes/sslab/DC/3uM-ATP/")
 pathview::pathview(gene.data = gene.data.3, 
                    gene.idtype = "SYMBOL",
                    species = "mmu",
-                   pathway.id = gsub("path:", "", pathway.atp.3)[7:9])
+                   pathway.id = gsub("path:", "", pathway.atp.3),
+                   map.symbol = TRUE)
+setwd("F:/git/R-codes/sslab/DC/")
 ```
 
-mmu
-![](./mmu00982.pathview.png)
+mmu05144
+![](./3uM-ATP pathway/mmu05144.pathview.png)
 
 
 #### KEGG pathway 500uM ATP vs Control  
@@ -214,6 +224,11 @@ mmu
 kegg.atp.500 <- kegga(de = atp.500_ctl_deg$entrezgene_id,
                       species = "Mm")
 ```
+
+```{r, eval=FALSE}
+write.csv(x = kegg.atp.500, file = "KEGG pathway 500uM vs Control.csv")
+```
+
 
 ```{r}
 kegg.atp.500 %>% 
@@ -234,11 +249,17 @@ names(gene.data.500) <- atp.500_ctl_deg$Symbol
 ```
 
 
-```{r}
+```{r, eval=FALSE}
+dir.create(path = "F:/git/R-codes/sslab/DC/500uM-ATP/")
+setwd(dir = dir.create(path = "F:/git/R-codes/sslab/DC/500uM-ATP/"))
 pathview(gene.data = gene.data.500, 
          gene.idtype = "SYMBOL",
          species = "mmu",
-         pathway.id = gsub("path:", "", pathway.atp.500))
+         pathway.id = gsub("path:", "", pathway.atp.500),
+         map.symbol = TRUE)
 ```
+
+mmu04060
+![](./500uM-ATP pathway/mmu04060.pathview.png)
 
 
