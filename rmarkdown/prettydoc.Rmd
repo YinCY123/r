@@ -21,7 +21,13 @@ knitr::opts_chunk$set(echo = TRUE)
 H~3~PO~4~  
 Cu^2+^
 
-![alt text or image title](C:/Users/YinCY/Pictures/Saved Pictures/11.gif)
+![alt text or image title](./figures/11.gif)
+
+
+```{r, out.width="50%", fig.align="center", fig.cap="figure caption"}
+knitr::include_graphics(path = "./figures/11.gif")
+```
+
 
 - one item  
 - one item  
@@ -97,23 +103,57 @@ c & d
 
 
 ```{r}
-# execute code if the date is later than s specified day  
+# execute code if the date is later than a specified day  
 do_it = Sys.Date() > "2018-12-04"
 ```
+
 
 ```{r, eval=do_it}
 x = rnorm(100)
 ```
 
 
+## Tables  
+```{r tables-mtcars}
+knitr::kable(x = iris[1:5, ], caption = "table caption")
+```
 
 
 
+## Other language engines  
+```{r}
+names(knitr::knit_engines$get())
+```
+
+
+```{python}
+x = "hello, python world!"
+print(x.split(" "))
+```
+
+
+```{python}
+import sys
+print(sys.version)
+```
+
+
+## Interactive documents  
+There two types of interactive R Markdown documents: HTML Widgets framework and the Shiny framework.  
+
+
+### HTML widgets  
+```{r}
+library(leaflet)
+leaflet() %>% addTiles() %>% 
+    setView(lng = -93.65, lat = 42.0285, zoom = 17) %>% 
+    addPopups(lng = -93.65, lat = 42.0285, popup = "Here is the <b>Department of Statistics</b>, ISU")
+```
 
 
 
-
-
+# Part II Output Formats  
+## HTML document  
 
 
 

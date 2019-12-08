@@ -1,0 +1,30 @@
+---
+title: "Output-formats"
+author: "yincy"
+date: "12/7/2019"
+output: 
+    html_document:
+        toc: true
+        toc_float: false
+        number_sections: true
+        collapsed: false
+        smooth_scroll: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+knitr::kable(x = iris)
+```
+
+```{r}
+## Auarterly Results {.tabset}
+(tab content)
+
+(tab content)
+```
+
+
