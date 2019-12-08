@@ -152,17 +152,6 @@ leaflet() %>% addTiles() %>%
 
 
 
-# Part II Output Formats  
-## HTML document  
-
-
-
-
-
-
-
-
-
 
 
 
