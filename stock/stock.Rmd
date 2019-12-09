@@ -18,7 +18,7 @@ library(readxl)
 
 ```{r}
 guess_encoding(file = "stock_codes.csv")
-stock_codes <- read.csv(file = "stock_codes.csv", skip = 1, encoding = "unknown")
+stock_codes <- readr::read_csv(file = "stock_codes.csv")
 ```
 
 
