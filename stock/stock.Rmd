@@ -1,0 +1,24 @@
+---
+title: "stock"
+author: "yincy"
+date: "12/9/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = F, warning = F, error = F)
+```
+
+```{r}
+library(magrittr)
+library(tidyverse)
+library(readxl)
+```
+
+
+```{r}
+guess_encoding(file = "stock_codes.csv")
+stock_codes <- read.csv(file = "stock_codes.csv", skip = 1, encoding = "unknown")
+```
+
+
