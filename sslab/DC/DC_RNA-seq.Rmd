@@ -71,8 +71,8 @@ hc.dc <- hclust(d = get_dist(x = t(dc[, 4:7]), method = "spearman"), method = "w
 fviz_dend(x = hc.dc,
           horiz = T,
           ggtheme = theme_classic(),
-          lwd = 1,
-          cex = 0.8,
+          lwd = 0.7,
+          cex = 0.7,
           main = "Cluster Distance",
           ylab = "distance")
 ```
@@ -118,7 +118,10 @@ VennDiagram::venn.diagram(x = list(ATP.3um_Control_DEG = atp.3_ctl_deg$Symbol, A
 ```
 
 #### Intersect of differential expressed genes  
-![](./ATP.3um_DEG_VS_ATP.500um_DEG.tiff)
+```{r}
+knitr::include_graphics(path = "./ATP.3um_DEG_VS_ATP.500um_DEG.tiff")
+```
+
 
 
 ```{r}
@@ -139,8 +142,8 @@ go_atp.3 %>%
   scale_y_continuous(name = "-log2(P.Value)") +
   theme_classic() +
   ggtitle(label = "Top 20 GO")
-ggsave(filename = "Top20enriched GO of 3uM ATP vs Control.tiff")
 ```
+
 
 ```{r, eval=FALSE}
 write.csv(x = go_atp.3 %>% filter(Ont == "BP", P.DE <= 0.05) %>% arrange(P.DE),

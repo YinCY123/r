@@ -217,6 +217,305 @@ visSave(graph = network, file = "network.html")
 ```
 
 
+## Nodes  
+### Individual configuration  
+```{r}
+nodes <- data.frame(
+    id = 1:10,
+    label = paste("Node", 1:10, sep = ""),
+    group = c("GrA", "GrB"),
+    value = 1:10,
+    shape = c("square", "triangle", "box", "circle", "dot", "star", "ellipse", "database", "text", "diamond"),
+    title = paste0("<p><b>", 1:10, "</b><br>Node !</b>"),
+    color = c("darkred", "grey", "orange", "darkblue", "purple"),
+    shadow = c(F, T, F, T, T)
+)
+
+head(nodes)
+```
+
+
+```{r}
+edges <- data.frame(
+    from = c(1, 2, 5, 7, 8, 10),
+    to = c(9, 3, 1, 6, 4, 7)
+)
+
+visNetwork(nodes, edges, width = "100%", height = "300px")
+```
+
+
+### Global configuration  
+If you want to set some configuration for all nodes, it's possible in a simple way, using the **visNodes** function directly.  
+```{r}
+nodes <- data.frame(id = 1:4)
+edges <- data.frame(from = c(2, 4, 3, 3), to = c(1, 2, 4, 2))
+
+visNetwork(nodes, edges, width = "100%") %>% 
+    visNodes(shape = "square", color = list(background = "lightblue", 
+                                            border = "darkblue",
+                                            highlight = "yellow"),
+             shadow = list(enable = T, size = 10)) %>% 
+    visLayout(randomSeed = 12)
+```
+
+Combine individual and global options  
+```{r}
+nodes <- data.frame(
+    id = 1:4, 
+    shape = c("circle", "square"),
+    label = LETTERS[1:4]
+)
+
+
+edges <- data.frame(from = c(2, 4, 3, 3), to = c(1, 2, 4, 2))
+
+visNetwork(nodes, edges, width = "100%") %>% 
+    visNodes(color = list(background = "lightblue",
+                          border = "darkblue",
+                          highlight = "yellow"),
+             shadow = list(enable = T, size = 10)) %>% 
+    visLayout(randomSeed = 12)
+```
+
+
+### Use complex configuration individually  
+When options are available using a list, you can use it in a data.frame with specific notation like this (a dot per level)  
+```{r}
+nodes <- data.frame(id = 1:3,
+                    color.background = c("red", "blue", "green"),
+                    color.highlight.background = c("red", NA, "red"),
+                    shadow.size = c(5, 10, 15))
+
+edges <- data.frame(from = c(1, 2), 
+                    to = c(1, 3),
+                    label = LETTERS[1:2],
+                    font.size = c(10, 20),
+                    font.color = c("red", "blue"))
+
+visNetwork(nodes, edges)
+```
+
+
+## Edges 
+### Individual configuration  
+*edge* must be a data.frame , with at least from and to columns, which make the link with id of nodes. You can add properties simply by adding variables on data.frame.   
+```{r}
+edges <- data.frame(
+    from = sample(1:10, 8),
+    to = sample(1:10, 8),
+    label = paste("Edge", 1:8, sep = ""),
+    length = c(100, 500),
+    width = c(4, 1),
+    arrows = c("to", "from", "middle", "middle;to"),
+    dashes = c(T, F),
+    title = paste("Edge", 1:8),
+    smooth = c(F, T),
+    shadow = c(F, T, F, T)
+)
+
+nodes <- data.frame(id = 1:10, group = c("A", "B"))
+
+head(edges)
+```
+
+
+```{r}
+visNetwork(nodes, edges, height = "400px", width = "100%")
+```
+
+### Global configuration  
+If you want to set some configuration for all edges, it's possible in simper way, using **visEdges** function directly.  
+```{r}
+nodes <- data.frame(id = 1:4)
+edges <- data.frame(from = c(2, 4, 3, 2), to = c(1,2,4,3))
+
+visNetwork(nodes, edges, width = "100%") %>% 
+    visEdges(shadow = T,
+             arrows = list(to = list(enabled = T, scaleFactor = 2)),
+             color = list(color = "lightblue", highlight = "red")) %>% 
+    visLayout(randomSeed = 12)
+```
+
+### Combine individual and global options  
+```{r}
+nodes <- data.frame(id = 1:4, label = 1:4)
+edges <- data.frame(
+    from = c(2, 4, 3, 2),
+    to = c(1, 2, 4, 3),
+    dashes = c(T, F)
+)
+
+visNetwork(nodes, edges, width = "100%") %>% 
+    visEdges(shadow = T,
+             arrows = list(to = list(enabled = T, scaleFactor = 2)),
+             color = list(color = "lightblue", highlight = "red")) %>% 
+    visLayout(randomSeed = 12) %>% 
+    visNodes(color = list(highlight = "dark"))
+```
+
+### Use complex configuration individually  
+```{r}
+nodes <- data.frame(
+    id = 1:3,
+    color = list(background = c("red", "blue", "green"), hightlight = c("red", NA, "red")),
+    shadow = list(size = 5, 10, 15)
+)
+
+edges <- data.frame(
+    from = c(1, 2),
+    to = c(1, 3),
+    label = LETTERS[1:2],
+    font = list(color = c("red", "blue"),
+                size = c(10, 20))
+)
+
+visNetwork(nodes, edges)
+```
+
+
+## Group  
+You can affect group to a node using `group` column in the node data.frame, and then add a configuration per group using the **visGroups** function.  
+```{r}
+nodes <- data.frame(id = 1:5, group = c(rep("A", 2), rep("B", 3)))
+edges <- data.frame(from = c(2, 5, 3, 3), to = c(1, 2, 4, 2))
+
+visNetwork(nodes, edges, width = "100%") %>% 
+    visGroups(groupname = "A", color = 'darkblue', shape = "square", shadow = list(enabled = T)) %>% 
+    visGroups(groupname = "B", color = "red", shape = "triangle")
+```
+
+## Legend and Title  
+### Title  
+```{r}
+nodes <- data.frame(id = 1:3, group = c("B", "A", "B"))
+edges <- data.frame(from = c(1, 2), to = c(2, 3))
+
+visNetwork(nodes, edges, main = "A really simple example", width = "100%")
+```
+
+### Legend based on groups  
+We can simply add a legend, based on the definition of groups, using **visLegend**  
+```{r}
+visNetwork(nodes, edges, width = "100%") %>% 
+    visGroups(groupname = "A", color = "red") %>% 
+    visGroups(groupname = "B", color = "lightblue") %>% 
+    visLegend()
+```
+
+### Placement and title  
+It's also possible to adjust `position` (left or right), and `width`, and add a title (`main`)  
+```{r}
+visNetwork(nodes, edges, width = "100%") %>% 
+    visGroups(groupname = "A", color = "red") %>% 
+    visGroups(groupname = "B", color = "lightblue") %>% 
+    visLegend(width = 0.1, position = "right", main = "Group")
+```
+
+
+### Custom nodes/edges  
+you can add custom nodes(`addNodes`) and/or edges(`addEdges`) on the legend  
+```{r}
+lnodes <- data.frame(
+    label = c("Group A", "Group B"),
+    shape = c("ellipse")，
+    color = c("red", "lightblue"),
+    title = "Informations",
+    id = 1:2
+)
+
+ledges <- data.frame(color = c("lightblue", "red"),
+                     label = c("reverse", "depends"),
+                     arrows = c("to", "from"))
+
+visNetwork(nodes, edges, width = "100%") %>% 
+    visGroups(groupname = "A", 
+              color = "red") %>% 
+    visGroups(groupname = "B", 
+              color = "lightblue") %>% 
+    visLegend(addEdges = ledges, 
+              addNodes = lnodes, 
+              useGroups = F,
+              width = 0.2)
+```
+
+
+It's possible to use the definition of the groups(`useGroups = TRUE`) with custom nodes (`addNodes`) and/or edges(`addEdges`)  
+```{r}
+ledges <- data.frame(color = c("lightblue", "red"),
+                     label = c("reverse", "depends"),
+                     arrows = c("to", "from"))
+
+visNetwork(nodes, 
+           edges, 
+           width = "100%") %>% 
+    visGroups(groupname = "A", 
+              color = "red") %>% 
+    visGroups(groupname = "B", 
+              color = "lightblue") %>% 
+    visLegend(addEdges = ledges, 
+              useGroups = T)
+```
+
+For more complex elements, if you prefer, you can use a **list** instead of **data.frame**  
+```{r}
+nodes <- data.frame(id = 1:3, group = c("B", "A", "B"))
+edges <- data.frame(from = c(1, 2), to = c(2, 3))
+
+visNetwork(nodes, edges) %>% 
+    visGroups(groupname = "A", shape = "icon", icon = list(code = "f0c0", size = 75)) %>% 
+    visGroups(groupname = "B", shape = "icon", icon = list(code = "f007", color = "red")) %>% 
+    addFontAwesome() %>% 
+    visLegend(addNodes = list(list(label = "Group", shape = "icon", icon = list(code = "f0c0", size = 25)),
+                              list(label = "User", shape = "icon", icon = list(code = "f007", size = 50, color = "red"))),
+              useGroups = F)
+```
+
+
+### Use image and icon  
+#### Images  
+- to use images in nodes, you first have to set `shape` to **image** or **circularImage**.  
+- Then, set the relative or absolute path on `image` value  
+- An option is available in case of wrong path: `brokenImage`  
+- And you can use borders with `shapeProperties` and `useBorderWithImage`  
+
+```{r}
+path_to_images <- "https://raw.githubusercontent.com/datastorm-open/datastorm-open.github.io/master/visNetwork/data/img/indonesia/"
+
+nodes <- data.frame(
+    id = 1:4, 
+    shape = c("image", "circularImage"),
+    image = paste0(path_to_images, 1:4, ".png"),
+    label = "I'm an image"
+)
+
+edges <- data.frame(from = c(2, 4, 3, 3), to = c(1, 2, 4, 2))
+
+visNetwork(nodes, edges, width = "100%") %>% 
+    visNodes(shapeProperties = list(useBorderWithImage = T)) %>% 
+    visLayout(randomSeed = 2)
+```
+
+
+### fontAwesome icons  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
