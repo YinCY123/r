@@ -17,3 +17,5 @@
 *.png
 *.tiff
 *.xml
+
+.RData
