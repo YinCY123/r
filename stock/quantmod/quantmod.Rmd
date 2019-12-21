@@ -15,3 +15,9 @@ Here's a neat way to download stock data from Yahoo, perhaps into a spreadsheet 
 http://finance.yahoo.com/d/quotes.csv?s= a BUNCH of STOCK SYMBOLS separated by "+" &f=a bunch of special tags
 for example: http://finance.yahoo.com/d/quotes.csv?s=XOM+BBDb.TO+JNJ+MSFT&f=snd1l1yr
 
+
+```{r}
+download.file(url = "http://finance.yahoo.com/d/quotes.csv?s=XOM+BBDb.TO+JNJ+MSFT&f=snd1l1yr", 
+              destfile = "fin.csv")
+```
+
