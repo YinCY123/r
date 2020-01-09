@@ -1,0 +1,220 @@
+---
+title: "Statistics"
+author: "yincy"
+date: "1/7/2020"
+output: 
+    prettydoc::html_pretty:
+        toc: true 
+        toc_depth: 2
+        display_code: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Chapter 2
+
+**Course data package**: ISLR
+
+## Histry of Statistical Learning  
+
+- linear regression  
+- linear discriminant analysis  
+- logistic regression  
+- generalized linear models  
+- classification and regression trees  
+- generalized additive models  
+
+
+## Why Estimate f?  
+
+- Prediction  
+- Inference  
+
+
+## How Do we Estimate f?  
+
+- Parametric Methods  
+- Non-parametric Methods  
+
+
+## The Trad-Off Between Prediction Accuracy and Model Interpretability  
+```{r}
+knitr::include_graphics(path = "./images/Flexibility - Interpretability.PNG")
+```
+
+
+## The Bias-Variance Trad-Off   
+**Variance**: refers to the amount by which f would change if we estimated it using a different training data set. In general, more flexible statistical methods have higher variance.  
+
+**Bias**: refers to the error that is introduced by approximating a real-life problem, which may be extremely complicated, by a much simpler model. For example, linear regression assumes that there is a linear relationship between Y and X~1~, X~2~, ..., X~p~. It is unlikely that any real-life problem truly has such a simple linear relationship, and so performing linear regression will undoubtedly result in some bias in the estimate of f.  
+
+Generally, more flexible methods result in less bias.  
+
+As a general rule, as we use more flexible methods, the variance will increase and the bias will decrease. The relative rate of change of these two quantities determines whether the test MSE increase or decreases.  
+
+```{r}
+knitr::include_graphics(path = "./images/Squared bias - variance - MSE.PNG")
+```
+
+
+The challenge lies in finding a method for which both the variance and the squared bias are low. This trad-off is one of the most important recurring themes in Statistics.  
+
+
+In both the regression and classification settings, choosing the correct level of flexibility is critical to the success of any statistical learning method.  
+
+
+##### Chapter 2 exercises  
+
+```{r, message=FALSE}
+library(ISLR)
+library(tidyverse)
+library(magrittr)
+```
+
+
+```{r}
+data("College")
+str(College)
+```
+
+
+```{r}
+College[1:5, 1:5]
+```
+
+```{r}
+summary(College)
+```
+
+```{r}
+pairs(College[, 1:10])
+boxplot(College$Outstate, College$Private, names = c('Outstate', "Private"))
+```
+
+```{r}
+College %>% 
+    mutate(Elite = Top10perc > 50) %>% 
+    summary()
+```
+
+
+
+```{r}
+data("Auto")
+Auto <- na.omit(Auto)
+```
+
+
+```{r}
+str(Auto)
+```
+
+```{r}
+apply(Auto[, -9], 2, range)
+```
+
+
+```{r}
+apply(Auto[, -9], 2, mean)
+apply(Auto[, -9], 2, var)
+
+apply(Auto[-c(10:85), -9], 2, mean)
+apply(Auto[-c(10:85), -9], 2, var)
+```
+
+
+```{r}
+dim(Auto)
+```
+
+
+```{r}
+auto_cor <- cor(Auto[, -9])
+pheatmap::pheatmap(auto_cor)
+```
+
+
+```{r}
+par(mfrow = c(2, 2))
+plot(Auto$weight, Auto$horsepower)
+plot(Auto$weight, Auto$displacement)
+plot(Auto$weight, Auto$mpg)
+plot(Auto$weight, Auto$year)
+```
+
+```{r, message=FALSE}
+library(MASS)
+```
+
+
+```{r}
+data("Boston")
+Boston
+```
+
+```{r}
+dim(Boston)
+```
+
+
+```{r}
+pairs(Boston[, 1:4])
+```
+
+```{r}
+b_cor <- cor(Boston)
+pheatmap::pheatmap(b_cor)
+```
+
+```{r}
+par(mfrow = c(1, 2))
+plot(Boston$crim, Boston$rad)
+plot(Boston$crim, Boston$tax)
+```
+
+
+```{r}
+table(Boston$chas)
+```
+
+
+```{r}
+median(Boston$ptratio)
+```
+
+
+
+
+# Chapter 3 Linear Regression  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
