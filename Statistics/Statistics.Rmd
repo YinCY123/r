@@ -188,6 +188,15 @@ median(Boston$ptratio)
 
 
 # Chapter 3 Linear Regression  
+```{r}
+data("Credit")
+
+Credit_dum <- Credit
+Credit_dum$gender_dum <- ifelse(Credit$Gender == "Female", 1, -1)
+
+log_reg <- lm(Credit_dum$Balance ~ Credit_dum$gender_dum)
+```
+
 
 
 
