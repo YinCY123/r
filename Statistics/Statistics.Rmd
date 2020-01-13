@@ -198,11 +198,179 @@ log_reg <- lm(Credit_dum$Balance ~ Credit_dum$gender_dum)
 ```
 
 
+```{r}
+data("Auto")
+colnames(Auto)
+mix_reg <- lm(Auto$acceleration ~ Auto$cylinders + Auto$horsepower + Auto$weight)
+summary(mix_reg)
+```
+
+
+### Simple Linear Regression  
+
+```{r}
+library(MASS)
+library(ISLR)
+```
+
+
+```{r}
+data("Boston")
+colnames(Boston)
+```
+
+
+```{r}
+lm.fit <- lm(medv ~ lstat, data = Boston)
+```
+
+```{r}
+summary(lm.fit)
+```
+
+```{r}
+names(lm.fit)
+```
+
+
+```{r}
+predict(lm.fit, data.frame(lstat = c(5, 10, 15)), interval = "confidence") # or prediction
+```
+
+
+```{r}
+attach(Boston)
+plot(lstat, medv)
+abline(lm.fit, col = "red")
+detach(Boston)
+```
+
+```{r}
+par(mfrow = c(2, 2))
+plot(lm.fit)
+```
+
+
+```{r}
+par(mfrow = c(1,2))
+plot(predict(lm.fit), residuals(lm.fit))
+plot(predict(lm.fit), rstudent(lm.fit))
+```
+
+leverage statistics can be computed for any number of predictors using the `hatvalues()` function.  
+```{r}
+plot(hatvalues(lm.fit), main = "top 10 leverages")
+points(order(hatvalues(lm.fit), decreasing = T)[1:10], 
+       hatvalues(lm.fit)[order(hatvalues(lm.fit), decreasing = T)[1:10]], 
+       col = "red", pch = 19)
+```
 
 
 
+### Multiple Linear Regression  
+```{r}
+lm.fit <- lm(medv ~ lstat + age, data = Boston)
+summary(lm.fit)
+```
+
+```{r}
+lm.fit <- lm(medv ~ ., data = Boston)
+summary(lm.fit)
+```
+
+```{r}
+names(lm.fit)
+summary(lm.fit) %>% names()
+summary(lm.fit)$r.squared
+summary(lm.fit)$sigma
+```
 
 
+```{r}
+library(car)
+vif(lm.fit) %>% sort(decreasing = T)
+```
+
+
+regression on all variables but age  
+```{r}
+lm.fit <- lm(medv ~ . - age, data = Boston)
+summary(lm.fit)
+```
+
+alternatively `update()` function can be used  
+```{r}
+lm.fit1 <- update(lm.fit, ~. - age)
+summary(lm.fit1)
+```
+
+
+
+### Interaction Terms  
+The syntax `lstat:black` tells R to include an interaction term between `lstat` and `black`.  
+
+The syntax `lstat*age` simultaneously includes `lstat`, `age` and the interaction term `lstat X age` as predictors, it is a shorthand for `lstat + age + lstat:age`.  
+
+```{r}
+summary(lm(medv ~ lstat*age, data = Boston))
+```
+
+
+
+### Non-linear Transformations of the Predictors  
+The `lm()` function can also accommodate non-linear transformations of the predictors.  
+
+```{r}
+lm.fit2 <- lm(medv ~ lstat +I(lstat ^ 2), data = Boston)
+summary(lm.fit2)
+```
+
+```{r}
+par(mfrow = c(2,2))
+plot(lm.fit2)
+```
+
+
+```{r}
+lm.fit <- lm(medv ~ lstat)
+anova(lm.fit, lm.fit2)
+```
+
+
+```{r}
+lm.fit5 <- lm(medv ~ poly(lstat, 5))
+summary(lm.fit5)
+```
+
+```{r}
+par(mfrow = c(2,2))
+plot(lm.fit5)
+```
+
+
+
+### Qualitative Predictors  
+```{r}
+data("Carseats")
+colnames(Carseats)
+```
+
+```{r}
+lm.fit <- lm(Sales ~ . + Income:Advertising + Price:Age, data = Carseats)
+summary(lm.fit)
+```
+
+
+```{r}
+contrasts(Carseats$ShelveLoc)
+```
+```{r}
+unique(Carseats$ShelveLoc)
+```
+
+
+
+#### Exercises  
 
 
 
