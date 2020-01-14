@@ -371,6 +371,145 @@ unique(Carseats$ShelveLoc)
 
 
 #### Exercises  
+```{r}
+library(ISLR)
+data("Auto")
+```
+
+```{r}
+lm.fit <- lm(mpg ~ horsepower, data = Auto)
+```
+
+```{r}
+summary(lm.fit)
+```
+
+
+
+```{r}
+predict(lm.fit, data.frame(horsepower = c(98)), interval = "confidence")
+predict(lm.fit, data.frame(horsepower = c(98)), interval = "prediction")
+```
+
+
+```{r}
+plot(Auto$horsepower, Auto$mpg)
+abline(lm.fit, col = "red")
+```
+
+
+```{r}
+par(mfrow = c(2, 2))
+plot(lm.fit)
+```
+
+
+```{r}
+plot(Auto)
+```
+
+
+```{r}
+auto_cor <- cor(Auto[, -9])
+```
+
+
+```{r}
+lm.fit <- lm(mpg ~ . - name, data = Auto)
+summary(lm.fit)
+```
+
+```{r}
+par(mfrow = c(2, 2), mar = c(4, 4.5, 2, 2))
+plot(lm.fit)
+```
+
+
+```{r}
+lm.fit <- lm(mpg ~ displacement + weight + year + origin + year:origin + displacement:horsepower, data = Auto)
+```
+
+```{r}
+summary(lm.fit)
+```
+
+
+```{r}
+lm.fit <- lm(mpg ~ displacement + log(weight) + sqrt(year) + origin + year:origin, data = Auto)
+summary(lm.fit)
+```
+
+
+```{r}
+data("Carseats")
+Carseats
+```
+
+
+
+```{r}
+lm.fit <- lm(Sales ~ Price + Urban + US, data = Carseats)
+```
+
+```{r}
+summary(lm.fit)
+```
+
+
+```{r}
+contrasts(Carseats$Urban)
+contrasts(Carseats$US)
+```
+
+The equation form 
+```
+sales = (-0.054459) * Price + (-0.021916) * UrbanYes + (1.200573) * USYes
+sales = (-0.054459) * Price + (-0.021916) * UrbanYes
+sales = (-0.054459) * Price + (1.200573) * USYes
+sales = (-0.054459) * Price
+```
+
+
+```{r}
+lm.fit <- lm(Sales ~ Price + US, data = Carseats)
+summary(lm.fit)
+```
+
+```{r}
+par(mfrow = c(2,2))
+plot(lm.fit)
+```
+
+
+```{r}
+set.seed(1)
+x <- rnorm(100)
+y <- 2*x + rnorm(100)
+
+# linear model without intercept
+lm.fit <- lm(y ~ 0 + x)
+summary(lm.fit)
+```
+
+
+```{r}
+lm.fit <- lm(x ~ 0 + y)
+summary(lm.fit)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
