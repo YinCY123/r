@@ -498,30 +498,206 @@ summary(lm.fit)
 ```
 
 
+```{r}
+x <- rnorm(n = 100)
+y <- log(x + 0.25)
+
+lm.fit <- lm(y ~ x)
+summary(lm.fit)
+```
+
+```{r}
+lm.fit <- lm(x ~ y)
+summary(lm.fit)
+```
 
 
 
+```{r}
+x <- rnorm(n = 100, mean = 0, sd = 1)
+eps <- rnorm(n = 100, mean = 0, sd = 0.25)
+
+y <- -1 + 0.5*x + eps
+plot(x, y)
+```
+
+
+```{r}
+lm.fit <- lm(y ~ x)
+summary(lm.fit)
+```
+
+```{r}
+plot(x, y)
+abline(a = -1, b = 0.5, col = "blue")
+abline(lm.fit)
+legend("topleft", legend = c("model", "estimate"), lty = 1 , bty = "n", col = c("blue", "black"))
+```
+
+
+```{r}
+lm.fit <- lm(y ~ poly(x, degree = 2))
+summary(lm.fit)
+```
+
+```{r}
+plot(x, y)
+pred_y <- predict(lm.fit)
+lines(x, pre_y)
+abline(a = -1, b = 0.5, col = "red")
+```
+
+
+```{r}
+x1 <- runif(100)
+x2 <- 0.5 * x1 + rnorm(100)/10
+y <- 2 + 2 * x1 + 0.3 * x2 + rnorm(100)
+```
+
+
+```{r}
+lm.fit <- lm(y ~ x1 + x2)
+summary(lm.fit)
+```
+
+```{r}
+par(mfrow = c(2, 2))
+plot(lm.fit)
+```
+
+
+```{r}
+lm.fit <- lm(y ~ x1)
+summary(lm.fit)
+```
+
+```{r}
+par(mfrow = c(2, 2))
+plot(lm.fit)
+```
 
 
 
+```{r}
+lm.fit <- lm(y ~ x2)
+summary(lm.fit)
+```
+
+```{r}
+par(mfrow = c(2, 2))
+plot(lm.fit)
+```
 
 
 
+```{r}
+x1 <- c(x1, 0.1)
+x2 <- c(x2, 0.8)
+y <- c(y, 6)
+
+lm.fit <- lm(y ~ x1 + x2)
+summary(lm.fit)
+```
+
+```{r}
+par(mfrow = c(2, 2))
+plot(lm.fit)
+```
+
+
+```{r}
+lm.fit <- lm(y ~ x1)
+summary(lm.fit)
+```
+
+```{r}
+par(mfrow = c(2, 2))
+plot(lm.fit)
+```
+
+
+```{r}
+lm.fit <- lm(y ~ x2)
+summary(lm.fit)
+```
+
+```{r}
+par(mfrow = c(2, 2))
+plot(lm.fit)
+```
+
+
+```{r}
+library(ISLR)
+data("Boston")
+```
+
+
+```{r}
+coef_zn <- coef(lm(crim ~ zn, data = Boston))[2]
+coef_indus <- coef(lm(crim ~ indus, data = Boston))[2]
+coef_chas <- coef(lm(crim ~ chas, data = Boston))[2]
+coef_nox <- coef(lm(crim ~ nox, data = Boston))[2]
+coef_rm <- coef(lm(crim ~ rm, data = Boston))[2]
+coef_age <- coef(lm(crim ~ age, data = Boston))[2]
+coef_dis <- coef(lm(crim ~ dis, data = Boston))[2]
+coef_rad <- coef(lm(crim ~ rad, data = Boston))[2]
+coef_tax <- coef(lm(crim ~ tax, data = Boston))[2]
+coef_ptratio <- coef(lm(crim ~ ptratio, data = Boston))[2]
+coef_black <- coef(lm(crim ~ black, data = Boston))[2]
+coef_lstat <- coef(lm(crim ~ lstat, data = Boston))[2]
+coef_medv <- coef(lm(crim ~ medv, data = Boston))[2]
+
+u_coef <- c(coef_zn, coef_indus, coef_chas, coef_nox, 
+            coef_rm, coef_age, coef_dis, coef_rad, 
+            coef_tax, coef_ptratio, coef_black, 
+            coef_lstat, coef_medv)
+names(u_coef) <- colnames(Boston)[-1]
+```
 
 
 
+```{r}
+colnames(Boston)
+lm.fit <- lm(crim ~ ., data = Boston)
+summary(lm.fit)
+```
+
+
+```{r}
+fit_coef <- coef(lm.fit)[-1]
+```
+
+```{r}
+plot(u_coef, fit_coef, xlim = c(-3, 40), ylim = c(-11, 2), pch = "")
+text(x = u_coef, y = fit_coef, labels = names(u_coef))
+abline(a = 0, b = -1)
+```
 
 
 
+```{r}
+lm.fit <- lm(crim ~ poly(nox, 3), data = Boston)
+summary(lm.fit)
+```
 
 
 
+# Chapter 4 Classification  
+Predicting a qualitative response for an observation can be referred to as classifying that observation, since it involves assigning the observation to a category, or class.  
+
+On the other hand, often the methods used for classification first predict the probability of each of the categories of a qualitative variable, as the basis for making the classi- fication. In this sense they also behave like regression methods.  
+
+```{r}
+library(ISLR)
+data("Default")
+```
 
 
+## Logistic Regression  
+```{r}
 
-
-
-
+```
 
 
 
