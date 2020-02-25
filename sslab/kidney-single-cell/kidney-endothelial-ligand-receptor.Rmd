@@ -1,0 +1,131 @@
+---
+title: "kidney-endothelial-ligand-receptor"
+author: "yincy"
+date: "2/23/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## load packages  
+```{r, message=FALSE}
+library(Seurat)
+library(tidyverse)
+library(nichenetr)
+```
+
+
+## load ligand-receptor model  
+```{r}
+ligand_target_matrix <- readRDS(file = "hsa-ligand-receptor-model/ligand_target_matrix.rds")
+ligand_target_matrix %>% .[1:5, 1:5]
+# ligand in columns, receptor in rows
+```
+
+
+## convert human ligand target model to mouse
+```{r}
+colnames(ligand_target_matrix) <- ligand_target_matrix %>% 
+    colnames() %>% 
+    convert_human_to_mouse_symbols()
+
+rownames(ligand_target_matrix) <- ligand_target_matrix %>% 
+    rownames() %>% 
+    convert_human_to_mouse_symbols()
+
+# remove NAs
+ligand_target_matrix <- ligand_target_matrix[!is.na(rownames(ligand_target_matrix)), !is.na(colnames(ligand_target_matrix))]
+ligand_target_matrix %>% dim()
+```
+
+
+## process expression data  
+Single-cell data from GSE107585  
+```{r}
+cluster_id <- read.table(file = "GSE107585_Mouse_kidney_single_cell_datamatrix.txt.gz", nrows = 2) %>% 
+    .[1, , drop = T] %>% as.numeric()
+```
+
+
+```{r}
+reads_table <- read.table(file = "GSE107585_Mouse_kidney_single_cell_datamatrix.txt.gz", 
+                          header = FALSE,
+                          skip = 2,
+                          row.names = 1)
+
+reads_table_pt <- reads_table[, cluster_id == 3]
+reads_table_dct <- reads_table[, cluster_id == 5]
+
+reads_table_pt %>% .[1:10, 1:5]
+reads_table_dct %>% .[1:5, 1:5]
+```
+
+define genes that expressed in a cell type when there are more than 5% of the cells have more than one reads  
+```{r}
+expressed_genes_pt_id <- apply(reads_table_pt, 1, function(x){mean(x > 0) > 0.05})
+table(expressed_genes_pt_id)
+expressed_genes_pt <- reads_table_pt[expressed_genes_pt_id, ]
+```
+
+```{r}
+expressed_genes_dct_id <- apply(reads_table_dct, 1, function(x){mean(x > 0) > 0.05})
+table(expressed_genes_dct_id)
+expressed_gene_dct <- reads_table_dct[expressed_genes_dct_id, ]
+```
+
+
+Bulk-seq macrophage  
+```{r}
+reads_table_macro <- read_csv(file = "../macrophage/20191217_M_T_frame_tagcount.csv", ) %>% 
+    select(geneid:M_1029_T2_Positive)
+
+reads_table_macro %>% .[1:5, ]
+```
+
+remove duplicated genes id that have fewer reads  
+```{r}
+reads_table_macro_sorted <- reads_table_macro %>% 
+    mutate(rs = rowSums(reads_table_macro[, 2:5])) %>% 
+    arrange(desc(rs)) %>% 
+    dplyr::select(geneid:M_1029_T2_Positive)
+
+reads_table_macro_sorted <- reads_table_macro_sorted[!duplicated(reads_table_macro_sorted$geneid), ]
+```
+
+
+```{r}
+cs <- colSums(reads_table_macro_sorted[, 2:5])
+reads_table_macro_tpm <- apply(reads_table_macro_sorted[, 2:5], 2, function(x){(x / cs) * 1e6}) %>% as.data.frame()
+reads_table_macro_tpm$geneid <- reads_table_macro_sorted$geneid
+reads_table_macro_tpm <- reads_table_macro_tpm %>% 
+    dplyr::select(geneid, M_1029_T1_Negative:M_1029_T2_Positive)
+```
+
+```{r}
+rownames(reads_table_macro_tpm) <- reads_table_macro_tpm$geneid
+reads_table_macro_tpm <- reads_table_macro_tpm[, -1]
+```
+
+
+```{r}
+expressed_genes_macro <- reads_table_macro_tpm %>% 
+    apply(1, function(x){log2(mean(x) + 1) > 4}) %>% 
+    .[. == TRUE] %>% 
+    names()
+
+length(expressed_genes_macro)
+```
+
+
+## define genes of interest and background genes  
+```{r}
+background_genes <- expressed_genes_macro[expressed_genes_macro %in% rownames(ligand_target_matrix)]
+
+genes_oi 
+```
+
+
+
+
