@@ -1,0 +1,660 @@
+---
+title: "R-Objected-oriented-Programming"
+author: "yincy"
+date: "2/24/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Chapter 1 Data Types  
+The `<-` operator for the assignment will work in any context while the `=` operator only works for complete expressions.  
+
+Another option is to use the `<<-` operator. The advantage of the `<<-` operator is that it instructs the R environment to search parent environments to see whether the variable already exists. In some contexts, within a function for example, the `<-` operator will create a new variable; however, the `<<-` operator will make use of an existing variable outside of the function if it is found.   
+
+
+reverse assignment: -> or ->>  
+
+The `save` and `save.image` commands can be used to save the current workspace.  
+
+The `save` command allows you to save a particular variable, and the `save.image` command allows you to save the entire workspace.  
+
+You can save your history using the `savehistory` command, The history can be displayed using the `histry` command, and the ``loadhistory` command can be used to replay the commands in a file.  
+
+Note that there are two ways to access an element in the vector: **single versus double braces**. For a vector, the two methods are nearly the same, but when we explore the use of lists as opposed to vectors, the meaning will change. In short, the double braces return objects of the same type as the elements within the vector, and the single braces return values of the same type as the variable itself.  
+
+
+The `typeof` command indicates how R stores the object and is different from the class command, which is an attribute that you can change or query.  
+
+A single `&` is used to perform an and operation on each pairwise element of two vectors, while the double `&&` returns a single logical result using only the first elements of the vectors.  
+
+
+## Chapter 2 Organizing Data  
+**apply**  
+```{r}
+A <- matrix(1:12, nrow = 3, byrow = T)
+A
+```
+
+```{r}
+apply(A, 1, sum)
+```
+
+```{r}
+apply(A, 2, sum)
+```
+
+
+**lapply** and **sapply**  
+```{r}
+theList <- list(one = c(1, 2, 3), two  =c(T, F, T, T))
+sumList <- lapply(theList, sum)
+sumList
+```
+
+```{r}
+typeof(sumList)
+```
+
+```{r}
+meanResult <- sapply(X = theList, FUN = mean)
+meanResult
+```
+
+```{r}
+typeof(meanResult)
+```
+
+
+**tapply**  
+```{r}
+diameters <- c(28.8, 27.3, 45.8, 34.8, 25.3)
+three <- as.factor(c('pine', 'pine', 'oak', 'pine', 'oak'))
+tapply(X = diameters, INDEX = three, FUN = sd)
+```
+
+**mapply**  
+The `mapply` command takes a function to apply and a list of arrays. The function takes the first elements of each array and applies the function to that list. It then takes the second elements of each array and applies the function. This is repeated until it goes through every element.  
+```{r}
+a <- c(1, 2, 3)
+b <- c(1, 2, 3)
+mapply(FUN = sum, a, b)
+```
+
+
+## Chapter 3 Saving Data and Printing Results  
+```{r}
+dir(path = "../../", pattern = "r", full.names = T)
+```
+
+```{r}
+list.files(path = "../../", pattern = 'r')
+```
+
+```{r}
+list.dirs(path = "../../", full.names = T, recursive = F)
+```
+
+
+```{r}
+x <- scan(file = 'data/diameter.csv')
+x
+```
+
+```{r}
+x <- scan(file = 'data/trees.csv', what = list('character', 'double'), sep = ',')
+x
+```
+
+```{r}
+three <- exp(1)
+nice <- format(x = three, digits = 2)
+nice
+```
+
+```{r}
+nice <- format(x = three, digits = 3, width = 5, justify = 'right')
+nice
+```
+
+```{r}
+nice <- format(x = three, digits = 3, justify = "right", decimal.mark = "#")
+nice
+```
+
+```{r}
+fileConnector <- file(description = "data/twoBinaryValues.dat", open = 'wb')
+theNumber <- as.double(x = 2.72)
+writeBin(object = theNumber, con = fileConnector, size = 4)
+
+note <- "hello three!"
+nchar(note)
+writeBin(object = note, con = fileConnector, size = nchar(note))
+close(fileConnector)
+```
+
+
+```{r}
+fileConnector <- file(description = "data/twoBinaryValues.dat", open = 'rb')
+
+value <- readBin(con = fileConnector, what = double(), n = 1, size = 4)
+value
+note <- readBin(con = fileConnector, what = character(), n = 12, size = 1)
+note
+close(fileConnector)
+```
+
+
+## Chapter 4 Calculating Probabilities and Random Numbers  
+distribution prefix:  
+
+- `d`: This determines the value of the distribution function, for example, dnorm is the height of the normal's probability distribution function.  
+
+- `p`: This determines the cumulative distribution, for example, pnorm is the cumulative distribution function for the normal distribution.  
+
+- `q`: This determines the inverse cumulative distribution, for example, qnorm is the inverse cumulative distribution function for the normal distribution.  
+
+- `r`: This generates random numbers according to the distribution, for example, rnorm calculates random numbers that follow a normal distribution.  
+
+
+The distribution   
+
+
+Discrete         |                |  Continuous  |
+-----------------|----------------|--------------|-----------------
+Name             | Suffix         | Name         | Suffix
+-----------------|----------------|--------------|-----------------
+Beta             | beta           | X^2          | chisq
+Binomial         | binom          | Exponential  | exp
+Cauchy           | cauchy         | F            | f
+Geometric        | geom           | Gamma        | gamma
+Hypergeometric   | hyper          | Log Normal   | lnorm
+Multinomial      | mutlinom       | Normal       | norm
+Negative Binomail| nbinom         | Student t    | t
+Poisson          | pois           | Uniform      | unif
+                 |                | Weibull      | weibull
+
+
+```{r}
+x <- 1:100
+probabilities <- dpois(x = x, lambda = 50.0)
+barplot(height = probabilities, names.arg = x,  
+        xlab = 'x', ylab = "p", 
+        main = "Poission Distribution, lambda = 50.0",
+        density = 5,
+        angle = 135,
+        col = 'grey')
+```
+
+
+```{r}
+x <- seq(0.0, 100, 0.1)
+prob <- dchisq(x = x, df = 30)
+plot(x = x, 
+     y = prob, 
+     main = "Chi Squared Distribution",
+     xlab = "x",
+     ylab = "p",
+     col = 2, 
+     type = 'l')
+
+probTwo <- dchisq(x = x, df = 35)
+points(x = x, y = probTwo, 
+       col = 3,
+       type = 'l')
+
+abline(v = c(30, 35) - 2, lty = 2, col = "blue")
+```
+
+
+```{r}
+x <- seq(0, 20, by = 1)
+cdf <- ppois(q = x, lambda = 10.0)
+barplot(cdf, names.arg = "", 
+        border = "grey", 
+        col = "grey",
+        ylim = c(0, 1))
+```
+
+
+```{r}
+x <- seq(-5, 5, 0.01)
+cdf <- pnorm(q = x)
+plot(x, cdf, type = "l", col = "blue")
+points(x = x[401:600], y = cdf[401:600], type = "h", col = "red")
+abline(v = 0)
+```
+
+```{r}
+x <- seq(0, 100.0, by = 0.1)
+cdf <- pchisq(q = x, df = 30)
+
+plot(x = x, y = cdf, 
+     main = "Chi Squared Distribution",
+     xlab = "x", 
+     ylab = "p",
+     col = "red", 
+     type = "l", 
+     xlim = c(0, 100))
+
+cdfTwo <- pchisq(q = x, df = 35)
+points(x = x, y = cdfTwo, col = "blue", type = "l")
+
+legend("topleft", legend = c("df = 30", "df = 35"), 
+       lty = 1, 
+       col = c("red", "blue"),
+       bty = "n")
+
+points(x = seq(0, qchisq(p = 0.3, df = 30), 0.01), 
+       y = pchisq(q = seq(0, qchisq(p = 0.3, df = 30), 0.01), df = 30), 
+       type = "h", 
+       col = "red")
+
+points(x = seq(0, qchisq(p = 0.3, df = 35), 0.01), 
+       y = pchisq(q = seq(0, qchisq(p = 0.3, df = 35), 0.01), df = 35), 
+       type = "h", 
+       col = "blue")
+```
+
+
+```{r}
+a <- qchisq(p = 0.5, df = 30)
+a
+```
+
+
+
+```{r}
+numbers <- rpois(n = 100, lambda = 10.0)
+hist(numbers, 
+     main = "100 Samples of a Poisson Distribution", 
+     xlab = "x")
+```
+
+
+```{r}
+numbers <- rchisq(n = 100, df = 30)
+hist(numbers, 
+     main = "100 Samples from a Chi-Squared Distribution", 
+     xlab = "x")
+```
+
+
+```{r}
+sample(3)
+```
+
+```{r}
+sample(5)
+```
+
+```{r}
+sample(5.6)
+```
+
+```{r}
+x <- c(1, 3, 5, 7)
+sample(x)
+```
+
+```{r}
+x <- c(1, 3, 5, 7)
+sample(x, size = 2)
+```
+
+```{r}
+sample(x, size = 3)
+```
+
+```{r}
+sample(x, size = 7, replace = T)
+```
+
+
+```{r}
+sample(x, size = 8, replace = T, prob = c(0.05, 0.1, 0.15, 0.7))
+```
+
+
+## Chapter 5: Character and String Operations  
+```{r}
+urls <- c("https://duckduckgo.com?q=Johann+Carl+Friedrich+Gauss",
+          "https://search.yahoo.com/search?p=Jean+Baptiste+Joseph+Fourier", 
+          "http://www.bing.com/search?q=Isaac+Newton", 
+          "http://www.google.com/search?q=Brahmagupta")
+```
+
+**Six string manipulation operations**:  
+
+- determine the length of a string  
+- location of a substring  
+- extract or replace a substring  
+- change the case of a string  
+- split a string into separate parts  
+- express a comnination of objects as a single string  
+
+
+```{r}
+nchar(urls)
+```
+
+```{r}
+nchar(c("one", NA, 1234))
+```
+
+```{r}
+nchar(as.factor(c("a","b","a","a","b","c")))
+```
+
+```{r}
+nzchar(c("one", NA, 1234, ""))
+```
+
+```{r}
+c("one", NA, 1234, "")[nzchar(c("one", NA, 1234, ""))]
+```
+
+```{r}
+colons <- regexpr(pattern = ":", text = urls)
+```
+
+
+```{r}
+substr(x = urls, start = 1, stop = colons - 1)
+```
+
+```{r}
+colons <- regexpr(pattern = ":", text = urls)
+mailto <- urls
+substr(mailto, 1, colons - 1) <- c("mailto", "mailto", "mailto", "mailto")
+mailto
+```
+
+
+```{r}
+tolower(urls[1])
+```
+
+
+```{r}
+toupper(urls[2])
+```
+
+```{r}
+chartr(old = "=+", new = "# ", x = urls)
+```
+
+
+```{r}
+splitURL <- strsplit(x = urls, split = ":")
+splitURL
+```
+
+
+```{r}
+splitURL[[1]][2]
+```
+
+
+```{r}
+n <- 1
+calculation <- 123.0
+theTitle <- sprintf(fmt = "URL: %s, Count = %d", urls[n], calculation)
+theTitle
+```
+
+
+**Regular expressions**  
+```{r}
+loc <- gregexpr(pattern = "=", urls)
+loc
+```
+
+```{r}
+mapply(c, loc)
+```
+
+```{r}
+sub(pattern = "\\?.*$", replacement = "", x = urls)
+```
+
+
+## Chapter 6 Converting and Defining Time Variables  
+### Converting strings to time data types  
+```{r}
+theTime <- c("08:30:00 1867-07-01","18:15:00 1864-10-27")
+converted <- strptime(x = theTime, format = "%H:%M:%S %Y-%m-%d")
+converted
+```
+
+```{r}
+typeof(converted[[1]])
+```
+
+```{r}
+converted[[1]] - converted[[2]]
+```
+
+
+```{r}
+theTime <- c("08:30:00 1867-07-01","18:15:00 1864-10-27")
+converted <- strptime(x = theTime, format = "%H:%M:%S %Y-%m-%d", tz = "Canada/Eastern")
+converted
+```
+
+```{r}
+converted[[1]] - converted[[2]]
+```
+
+```{r}
+otherTime <- as.POSIXct(converted)
+otherTime
+```
+
+```{r}
+typeof(otherTime)
+```
+
+```{r}
+otherTime[[1]]
+```
+
+
+### Converting time data types to strings  
+A date and time variable can be converted to a string using the `strftime` command.  
+```{r}
+theTime <- c("08:30:00 1867-07-01","18:15:00 1864-10-27")
+converted <- strptime(x = theTime, format = "%H:%M:%S %Y-%m-%d", tz = "Canada/Eastern")
+converted
+```
+
+```{r}
+typeof(converted)
+```
+
+```{r}
+backagain <- strftime(x = converted, format = "%j - %B")
+backagain
+```
+
+```{r}
+typeof(backagain)
+```
+
+
+### Operations on time data types  
+```{r}
+earlier <- strptime("2014-01-01 00:00:00","%Y-%m-%d %H:%M:%S")
+later <- strptime("2014-01-02 00:00:00","%Y-%m-%d %H:%M:%S")
+later - earlier
+```
+
+
+```{r}
+timeDiff <- later - earlier
+timeDiff
+```
+
+```{r}
+as.double(timeDiff)
+```
+
+```{r}
+earlier + timeDiff
+```
+
+```{r}
+earlier <- strptime("2014-01-01 00:00:00","%Y-%m-%d %H:%M:%S")
+later <- strptime("2014-01-01 12:00:00","%Y-%m-%d %H:%M:%S")
+later - earlier
+```
+
+```{r}
+timeDiff <- later - earlier
+timeDiff
+```
+
+```{r}
+as.double(timeDiff)
+```
+
+```{r}
+attributes(timeDiff)
+```
+
+
+```{r}
+attr(timeDiff, "units")
+```
+
+
+```{r}
+earlier <- strptime("2014-01-01 00:00:00","%Y-%m-%d %H:%M:%S")
+later <- strptime("2014-01-01 12:00:00","%Y-%m-%d %H:%M:%S")
+
+timeDiff <- later - earlier
+as.numeric(timeDiff, units = "weeks")
+```
+
+```{r}
+as.numeric(timeDiff, units = "mins")
+```
+
+```{r}
+earlier <- strptime("2014-01-01 00:00:00","%Y-%m-%d %H:%M:%S")
+later <- strptime("2014-01-01 12:00:00","%Y-%m-%d %H:%M:%S")
+timeDiff <- difftime(time1 = later, time2 = earlier, units = "day")
+timeDiff
+```
+
+```{r}
+later <- strptime("2014-01-01 12:00:00","%Y-%m-%d %H:%M:%S")
+oneHour <- as.difftime(tim = 1, units = "hours")
+oneHour
+```
+
+
+## Chapter 7: Basic Programming
+### Conditional execution  
+```{r}
+if(1 > 2){
+        cat("One is the most biggest number\n")
+} else{
+        cat("One is the loneliest number\n")
+}
+```
+
+
+```{r}
+if(0){
+        cat("Yes, that is FALSE.\n")
+}else if(1){
+        cat("Yes that is TRUE\n")
+}else{
+        cat("Whatever")
+}
+```
+
+
+```{r}
+x <- c(1, 2)
+if(x < 2){
+        cat("Oh yes it is \n")
+}
+```
+
+```{r}
+x <- c(FALSE,FALSE,TRUE)
+y <- c(FALSE,TRUE,TRUE)
+x|y
+```
+
+```{r}
+x||y
+```
+
+
+```{r}
+for(lupe in seq(1, 2, by = 0.33)){
+        cat("The value of lupe is ", lupe, "\n")
+}
+```
+
+
+```{r}
+lupe <- 1.0
+while(lupe <= 2.0){
+        cat("The value of lupe is ", lupe, "\n")
+        lupe = lupe + 0.33
+}
+```
+
+
+```{r}
+positions <- complex(0)
+currentPos <- 0.0 + 0.0i
+numberSteps <- 100
+angle <- 0.0
+stdDev <- 1.0
+
+step <- as.integer(0)
+repeat {
+        step <- step + as.integer(1)
+        
+        if(step > numberSteps)
+                break
+        
+        angle <- angle + rnorm(1, 0, stdDev)
+        currentPos <- currentPos + exp(angle * 1.0i)
+        positions <- c(positions, currentPos)
+}
+
+plot(Re(positions), Im(positions), type = "l")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
