@@ -346,7 +346,7 @@ nchar(c("one", NA, 1234))
 ```
 
 ```{r}
-nchar(as.factor(c("a","b","a","a","b","c")))
+# nchar(as.factor(c("a","b","a","a","b","c")))
 ```
 
 ```{r}
@@ -634,6 +634,1194 @@ repeat {
 
 plot(Re(positions), Im(positions), type = "l")
 ```
+
+
+#### Functions  
+
+```{r}
+updatePosition = function(currentPos){
+        newDirection <- exp(1i*runif(1, 0.0, 2.0*pi))
+        currentPos + newDirection
+}
+updatePosition(currentPos = 0.0)
+```
+
+```{r}
+updatePosition
+```
+
+One oddity associated with functions is that the value it returns is the last expression evaluated within the code block.  
+
+
+```{r}
+updatePosition <- function(currentPos, angle, stdDev){
+        angle <- angle + rnorm(1, 0, stdDev)
+        list(newPos = currentPos + exp(angle * 1.0i),
+             newAngle = angle)
+}
+
+pos <- updatePosition(2.0, 0.0, 1.0)
+pos
+```
+
+
+```{r}
+updatePosition <- function(currentPos, angle, stdDev){
+        angle <- angle + sample(x = seq(-1, 1, 0.01), size = 1)
+        newStep <- exp(angle * 1.0i)
+        if(Re(currentPos + newStep) < 0.0){
+                return(list(newPos = currentPos - newPos,
+                            newAngle = angle + pi))
+        }
+        return(list(newPos = currentPos + newStep,
+                    angle = angle))
+}
+
+pos = updatePosition(currentPos = -0.1 + 2i, angle = 0, stdDev = 1)
+pos
+```
+
+
+
+```{r}
+updatePosition <- function(currentPos, angle, stdDev){
+        angle = angle + rnorm(1, 0, stdDev)
+        currentPos + exp(angle * 1i)
+}
+
+angle <- 0.0
+updatePosition(currentPos = 1 + 2i, angle, 1.0)
+angle # outside angle do not affected, pass value not reference
+```
+
+
+```{r}
+updatePosition <- function(currentPos, angle = 0.0){
+        print(noquote(paste("Angle is ", angle)))
+        angle <- angle + runif(1, 0, 2*pi)
+        currentPos + exp(1i * angle)
+}
+
+updatePosition(currentPos = 1 + 2i)
+```
+
+```{r}
+updatePosition(currentPos = 1 + 2i, angle = pi)
+```
+
+
+```{r}
+updatePosition <- function(currentPos, angle = 0){
+        if(missing(angle)){
+                warning("Using the default drift: ", angle, "\n\n")
+        }
+        angle <- angle + runif(1, 0, 2*pi)
+        currentPos + exp(1i * angle)
+}
+
+updatePosition(1 + 2i)
+```
+
+```{r}
+updatePosition(1+2i, pi)
+```
+
+
+```{r}
+updatePosition <- function(currentPos, angle = 0){
+        if(abs(angle) > 2.0*pi){
+                stop("I arbitrarily do not like angles tjat big") # stop the function, and exit
+        }
+        angle <- angle + runif(1, 0, 2*pi)
+        currentPos + exp(1i * angle)
+}
+
+pos1 <- updatePosition(1 + 2i)
+pos1
+```
+
+```{r}
+# pos2 <- updatePosition(1+2i, 3.0*pi)
+```
+
+
+```{r}
+matching <- function(argOne, argTwo){
+        return(paste("I got this: ", argOne, " ", argTwo))
+}
+
+matching(argTwo = "second", argOne = "First")
+```
+
+
+```{r}
+matching(argT = "two", argO = "one") # partial matching
+```
+
+```{r}
+matching(argT = "two", argO = "one") # multiple partial matching
+```
+
+
+
+```{r}
+updatePosition <- function(currentPos, angle = 0, dist = c("uniform", "normal")){
+        dist = match.arg(dist)
+        print(dist)
+        # Update position code would go below
+}
+
+updatePosition(0, 0)
+```
+
+```{r}
+updatePosition(0, 0, "uniform")
+```
+
+```{r}
+# updatePosition(0, 0, "neither")
+```
+
+
+```{r}
+envOne <- new.env()
+typeof(envOne)
+```
+
+```{r}
+ls(envOne)
+```
+
+```{r}
+assign(x = "bubaa", value = 12, envir = envOne)
+ls(envir = envOne)
+```
+
+
+```{r}
+get(x = "bubaa", envir = envOne)
+```
+
+
+```{r}
+# bubaa
+```
+
+```{r}
+ls()
+one <- 2
+ls()
+```
+
+```{r}
+envTwo <- new.env()
+assign(x = "two", value = 3, envir = envTwo)
+```
+
+
+```{r}
+attach(what = envTwo)
+ls()
+```
+
+```{r}
+two
+```
+
+```{r}
+detach(envTwo)
+# two
+```
+
+
+```{r}
+one <- 2
+
+changeOne <- function(a){
+        one <- a
+        return(one)
+}
+changeOne(3)
+one
+```
+
+
+```{r}
+realyChangeOne <- function(a){
+        one <<- a
+        return(one)
+}
+
+realyChangeOne(3)
+one
+```
+
+```{r}
+market <- function(rutabagas){
+        money <- 0
+        return(list(
+                numberRutabagas = function(){
+                        return(rutabagas)
+                },
+                revernue = function(){
+                        return(money)
+                },
+                harvestRutabagas = function(amount){
+                        rutabagas <<- rutabagas + amount
+                },
+                sellRutabagas = function(amount){
+                        if(rutabagas >= amount){
+                                rutabagas <<- rutabagas - amount
+                                money <<- money + amount * 0.5
+                        }else{
+                                warning("We do not have that many rutabagas")
+                        }
+                        return(rutabagas)
+                }
+        ))
+}
+
+farmerJoe <- market(rutabagas = 20)
+farmerJoe$numberRutabagas()
+farmerJoe$revernue()
+farmerJoe$harvestRutabagas(amount = 10)
+farmerJoe$sellRutabagas(10)
+```
+
+
+## Chapter 8: S3 Classes  
+### Defining classes and methods  
+The `class` command is similar to other attribute commands, and it can be used to either set or get information about an object's class.  
+
+An object's class is a vector, and each item in the vector is the name of a class. The first element in the class vector is the object's base class, and it inherits from the other classes as you read from left to right.  
+
+```{r}
+oneDie <- list(trials = character(0))
+class(oneDie) <- "Die"
+```
+
+```{r}
+oneCoin <- list(trials = character(0))
+class(oneCoin) <- "Coin"
+```
+
+```{r}
+reset <- function(theObject){
+        UseMethod(generic = "reset", object = theObject)
+        print("Reset the Trials")
+}
+
+reset.default <- function(theObject){
+        print("Uh oh, not sure what to do here!")
+        return(theObject)
+}
+
+reset.Die <- function(theObject){
+        theObject$trials <- character(0)
+        print("Reset the die.")
+        return(theObject)
+}
+
+reset.Coin <- function(theObject){
+        theObject$trials <- character(0)
+        print("Reset the coin.")
+        return(theObject)
+}
+```
+
+
+
+```{r}
+oneDie$trials <- c("3", "4", "1")
+oneDie$trials
+```
+
+
+```{r}
+oneDie <- reset(theObject = oneDie)
+oneDie
+```
+
+
+```{r}
+oneCoin$trials <- c("H", "T", "T")
+oneCoin <- reset(theObject = oneCoin)
+```
+
+```{r}
+oneCoin
+```
+ 
+
+```{r}
+v <- c(1, 2, 3)
+v <- reset(theObject = v)
+v
+```
+
+
+### Defining objects and inheritance  
+define class function and inheritance  
+```{r}
+GeometricTrial <- function(){
+        # Create the basic data structure - a list that keeps track of a set of trials.  
+        
+        # Create the basic methods as part of a list to be returned.
+        me = list(
+                # define the history to keep track of the trials. 
+                history = character(0)
+        )
+        # define my class identifier and return the list. 
+        class(me) <- append(x = class(me), values = "GeometricTrial")
+        return(me)
+}
+```
+
+```{r}
+Die <- function(){
+        # Define the object by first calling the constructor for the base class
+        me <- GeometricTrial()
+        
+        # Add the class name to the end of the list of class names
+        class(me) <- append(x = class(me), values = "Die")
+        return(me)
+}
+```
+
+```{r}
+Coin <- function(){
+        # define the object by calling the constructor for the base class
+        me = GeometricTrial()
+        
+        # add the class name to the end of the list of cass names
+        class(me) <- append(x = class(me), values = "Coin")
+        return(me)
+}
+```
+
+define methods  
+```{r}
+simulation <- function(theObject){
+        UseMethod(generic = "simulation", object = theObject)
+}
+
+simulation.default <- function(theObject){
+        warning("Default simulation method called on unrecognized object.")
+        return(theObject)
+}
+
+# define a method to run a simulation of a geometric trial  
+simulation.GeometricTrial <- function(theObject){
+        theObject <- reset(theObject) # reset the history
+        repeat{
+                # perform a single trial and add it to the history
+                thisTrial <- singleTrial(theObject)
+                theObject$history <- append(x = theObject$history, values = thisTrial$result)
+                if(thisTrial$success){
+                        break # the trial resulted in a success. Time to stop!
+                }
+        } # The trial was not a success. keep going.
+        return(theObject)
+}
+```
+
+```{r}
+singleTrial <- function(theObject){
+        UseMethod(generic = "singleTrial", object = theObject)
+}
+
+singleTrial.default <- function(theObject){
+        # just generate a default success
+        warning("Unrecognized object found for the singleTrial method")
+        return(list(result = "1", success = TRUE))
+}
+
+singleTrial.GeometricTrial <- function(theObject){
+        NextMethod(generic = "singleTrial", object = theObject)
+}
+
+singleTrial.Coin <- function(theObject){
+        # perform a single coin flip
+        value <- as.integer(
+                cut(as.integer(1 + trunc(runif(1, 0, 2))),  # cut numeric to factor
+                    breaks = c(0, 1, 2), 
+                    labels = c("H", "T")) # label the result level, two levels 1 for H, 2 for T
+        )
+        return(list(result = value, success = (value == 1)))
+}
+
+singleTrial.Die <- function(theObject){
+        # perform a single die roll
+        value <- as.integer(1 + trunc(runif(1, 0, 100)))
+        return(list(result = value, success = (value == 1)))
+}
+```
+
+```{r}
+coin <- Coin() # create instance
+coin <- simulation(coin) # generic function performed on the instance
+coin
+```
+
+```{r}
+aDie <- Die()
+aDie <- simulation(aDie)
+aDie
+```
+
+
+### Encapsulation  
+```{r}
+getHistory <- function(theObject){
+        UseMethod(generic = "getHistory", object = theObject)
+}
+
+getHistory.default <- function(theObject){
+        return(factor()) # just return an empty vector of factors
+}
+
+getHistory.GeometricTrial <- function(theObject){
+        return(as.factor(theObject$history))
+}
+
+getHistory.Coin <- function(theObject){
+        return(as.factor(theObject$history))
+}
+
+getHistory.Die <- function(theObject){
+        return(as.factor(theObject$history))
+}
+```
+
+```{r}
+getHistory(coin)
+```
+
+```{r}
+getHistory(aDie)
+```
+
+
+define two new plot function  
+```{r}
+plot.Die <- function(theDie, theTitle){
+        plot(getHistory(theDie), 
+             xlab = "Value after a Die roll", 
+             ylab = "Frequency",
+             main = theTitle)
+}
+
+plot.Coin <- function(theCoin, theTitle){
+        plot(getHistory(theCoin),
+             xlab = "Value after A coin Flip", 
+             ylab = "Frequency",
+             main = theTitle)
+}
+```
+
+```{r}
+plot(theCoin = coin, theTitle = "This Here Trial")
+```
+
+
+```{r}
+plot(aDie, "A more better Trial")
+```
+ 
+
+## Chapter 9: S4 Classes  
+### Defining an S4 class  
+define the base Ant class
+```{r}
+Ant <- setClass(Class = "Ant", 
+                slots = c(Len = "numeric",             # the length (size) of this ant
+                          Position = "numeric",        # the position of this ant (a 3 vector)
+                          pA = "numeric",              # Probability that an ant will transition from inactive to active
+                          pI = "numeric",              # Probability that an ant will transition from inactive to active.
+                          ActivityLevel = "numeric"),  # The ant's current activity level.
+                
+                # set the default values for the slots (optional). 
+                prototype = list(
+                        Len = 4.0,
+                        Position = c(0.0, 0.0, 0.0),
+                        pA = 0.05,
+                        pI = 0.1,
+                        ActivityLevel = 0.5
+                ),
+                
+                # Make a function that can test to see if the data is consistent.
+                validity = function(object){
+                        # check to see if the activity level and length is non-negative.
+                        if(object@ActivityLevel < 0.0){
+                                return("Error: The activity level is negative")
+                        }else if(object@Len < 0.0){
+                                return("Error: The length is negative")
+                        }
+                        return(TRUE)
+                })
+```
+
+Create an Ant object:  
+
+- using `new` command  
+- using Ant generator  
+
+```{r}
+ant1 <- new(Class = "Ant")
+ant1
+```
+
+
+```{r}
+ant2 <- new(Class = 'Ant', Len = 4.5)
+ant2
+```
+
+```{r}
+ant3 <- Ant(Len = 5.0, Position = c(3, 2, 1))
+ant3
+```
+
+
+```{r}
+getClass(ant3)
+```
+
+```{r}
+slotNames(ant3)
+```
+
+```
+ant4 <- Ant(Len = -1, Position = c(3, 2, 1)) # pass an invalid value cause an error
+```
+
+
+```{r}
+adomAnt <- Ant(Len = 5, Position = c(3, 2, 1))
+adomAnt@Len
+```
+
+```{r}
+adomAnt@Position
+```
+
+modify the value in place do not triger the validity function  
+```{r}
+adomAnt@ActivityLevel <- -5.0
+adomAnt@ActivityLevel
+```
+
+
+### Defining methods for S4 class  
+#### Defining new methods  
+```{r}
+setGeneric(name = "GetLength", 
+           def = function(antie){
+                   standardGeneric(f = "GetLength")
+           })
+
+setMethod(f = "GetLength", 
+          signature = "Ant", 
+          definition = function(antie){
+                  return(antie@Len)
+          })
+```
+
+```{r}
+ant2 <- new(Class = "Ant", Len = 4.5)
+GetLength(ant2)
+```
+
+```{r}
+setGeneric(name = "SetLength", 
+           def = function(antie, NewLength){
+                   standardGeneric(f = "SetLength")
+           })
+
+setMethod(f = "SetLength", 
+          signature = "Ant", 
+          definition = function(antie, NewLength){
+                  if(NewLength > 0){
+                          antie@Len <- NewLength
+                  }else{
+                          warning("Error: invalid length passed")
+                  }
+                  return(antie)
+          })
+```
+
+
+```{r}
+ant2 <- new(Class = "Ant", Len = 4.5)
+ant2@Len
+```
+
+```{r}
+ant2 <- SetLength(antie = ant2, NewLength = 6.25)
+ant2@Len
+```
+
+
+#### Polymorphism  
+```{r}
+setGeneric(name = "SetActivityLevel", 
+           def = function(antie, activity){
+                   standardGeneric(f = "SetActivityLevel")
+           })
+
+setMethod(f = "SetActivityLevel", 
+          signature = c("Ant", "logical"), 
+          definition = function(antie, activity){
+                  if(activity){
+                          antie@ActivityLevel = 1
+                  }else{
+                          antie@ActivityLevel = 0.0
+                  }
+                  return(antie)
+          })
+
+setMethod(f = "SetActivityLevel", 
+          signature = c("Ant", "numeric"), 
+          definition = function(antie, activity){
+                  if(activity > 0.0){
+                          antie@ActivityLevel = activity
+                  }else{
+                          warning("The activity level cannot be negative")
+                  }
+                  return(antie)
+          })
+```
+
+
+```{r}
+ant2 <- SetActivityLevel(antie = ant2, activity = 0.1)
+ant2
+```
+
+```{r}
+ant2 <- SetActivityLevel(antie = ant2, activity = F)
+ant2
+```
+
+Once the two methods are defined, R will use the class names of the arguments to determine which function to call in a given context.  
+
+There are two more additional data types recognized by the `signature` option: `ANY` and `missing`. These can be used to match any data type or a missing value.  
+
+The `…` argument must be the last argument and is used to indicate that any remaining parameters are passed as they appear in the original call to the function. Ellipses can make the use of the overloaded functions in a more flexible way than indicated. `help(dotsMethods)` for more information.  
+
+
+#### Extending the existing methods  
+```{r}
+Coordinate <- setClass(Class = "Coordinate", 
+                       slots = c(
+                               x = "numeric", 
+                               y = "numeric"
+                       ), 
+                       prototype = list(
+                               x = 0.0, 
+                               y = 0.0
+                       ), 
+                       # check if the coordinate is outside of a circle of radius 100
+                       validity = function(object){
+                               print("Checking the validity of the point")
+                               if(object@x*object@x + object@y * object@y > 100.0 * 100.0){
+                                       return(paste("Error: the point is too far away from the origin."))
+                               }
+                               return(TRUE)
+                       })
+
+setGeneric(name = "SetPoint", 
+           def = function(Coord, x, y){
+                   standardGeneric(f = "SetPoint")
+           })
+
+setMethod(f = "SetPoint", 
+          signature = "Coordinate", 
+          definition = function(Coord, x, y){
+                  print("Setting the point")
+                  Coord@x = x
+                  Coord@y = y
+                  return(Coord)
+          })
+```
+
+extend the show already exist method  
+show: display the object, by printing, plotting or whatever suits its class.  
+```{r}
+setMethod(f = "show", 
+          signature = "Coordinate", 
+          definition = function(object){
+                  cat("The coordinate is X: ", object@x, " Y: ", object@y, "\n")
+          })
+```
+
+
+```{r}
+point <- Coordinate(x = 1, y = 5)
+print(point)
+```
+
+```{r}
+point
+```
+
+```{r}
+point <- SetPoint(point, x = 10, y = 10)
+point
+```
+
+```{r}
+setMethod(f = "initialize", 
+          signature = "Coordinate", 
+          def = function(.Object, x = 0.0, y = 0.0){
+                  print("Checking the point")
+                  .Object = SetPoint(.Object, x, y)
+                  validObject(.Object)
+                  return(.Object)
+          })
+```
+
+
+```{r}
+point <- Coordinate(x = 2, y = 3)
+```
+
+```{r}
+point
+```
+
+
+#### Inheritance  
+define the female ant class  
+```{r}
+FemaleAnt <- setClass(Class = "FemaleAnt", 
+                      slots = c(Food = "numeric"),
+                      prototype = list(Food = 0), 
+                      validity = function(object){
+                              print("Validity: FemaleAnt")
+                              if(object@Food < 0){
+                                      return("Error: The number of food units is negative")
+                              }
+                              return(TRUE)
+                      },
+                      contains = c("Ant", "VIRTUAL"))
+
+
+WorkerAnt <- setClass(Class = "WorkerAnt", 
+                      slots = c(
+                              Foraging = "logical",
+                              Alarm = "logical"
+                      ), 
+                      prototype = list(
+                              Foraging = FALSE,
+                              Alarm = FALSE
+                      ), 
+                      validity = function(object){
+                              print("Validity: WorkerAnt")
+                              if(!(is.logical(object@Foraging) & is.logical(object@Alarm))){
+                                      warning("One or Both of Foraging and Alarm is not logical")
+                              }
+                              return(TRUE)
+                      }, 
+                      contains = "FemaleAnt")
+```
+
+
+```{r}
+worker <- WorkerAnt(Position = c(-1, 3, 5), Len = 2.5)
+worker
+```
+
+```{r}
+worker <- SetLength(worker, 3.5)
+```
+
+```{r}
+GetLength(worker)
+```
+
+The `callNextMethod` command is used to request that R searches for and executes a method of the same name that is a member of a parent class.  
+```{r}
+setMethod(f = "initialize", 
+          def = function(.Object, Len = 4, Position = c(0, 0, 0)){
+                  print("Ant initialize")
+                  .Object = SetLength(.Object, Length)
+                  .Object = SetPosition(.Object, Position)
+                  validObject(.Object)
+                  return(.Object)
+          })
+```
+
+```{r}
+setMethod(f = "initialize", 
+          signature = "WorkerAnt", 
+          def = function(.Object, Len = 4, Position = c(0, 0, 0)){
+                  print("WorkerAnt initialize")
+                  .Object <- callNextMethod(.Object, Len, Position)
+                  .Object = SetLength(.Object, Length)
+                  .Object = SetPoint(.Object, Position)
+                  validObject(.Object)
+                  return(.Object)
+          })
+```
+
+```{r}
+worker <- WorkerAnt(Position = c(-1, 3, 5), Len = 2.5)
+```
+
+
+Four usefull command:  
+
+- `slotNames`: pass an instance of an class to the function.     
+- `getSlots`: pass an class to the function.  
+- `getClass`: can ba instance class or class itself.  
+- `slot`: pass an instance of an class and an slot name while retrive the content of the slot.  
+
+
+## Chapter 10: Case Study  
+### The Course class  
+```{r}
+Course <- setClass(Class = "Course", 
+                   slots = c(
+                           GradesFile = "character", 
+                           GradeTypes = "character", 
+                           Grades = "list"
+                   ), 
+                   prototype = list(
+                           GradesFile = "", 
+                           GradeTypes = c("test", "hw", "quiz", "project"),
+                           Grades = list()
+                   ), 
+                   validity = function(object){
+                           return(TRUE)
+                   })
+```
+
+define the methods used to retrieve or set the values within a Course object.  
+```{r}
+setGeneric(name = "GetFileName", 
+           def = function(course){
+                   standardGeneric(f = "GetFileName")
+           })
+
+setMethod(f = "GetFileName", 
+          signature = "Course", 
+          definition = function(course){
+                  return(course@GradesFile)
+          })
+
+setGeneric(name = "SetFileName", 
+           def = function(course, filename){
+                   standardGeneric(f = "SetFileName")
+           })
+
+setMethod(f = "SetFileName", 
+          signature = "Course", 
+          definition = function(course, filename){
+                  course@GradesFile <- filename
+                  return(course)
+          })
+```
+
+```{r}
+setGeneric(name = "GetGrades", 
+           def = function(course){
+                   standardGeneric(f = "GetGrades")
+           })
+
+setMethod(f = "GetGrades", 
+          signature = "Course", 
+          definition = function(course){
+                  return(course@Grades)
+          })
+
+setGeneric(name = "SetGrades", 
+           def = function(course, grades){
+                   standardGeneric(f = "SetGrades")
+           })
+
+setMethod(f = "SetGrades", 
+          signature = "Course", 
+          definition = function(course, grades){
+                  course@Grades = grades
+                  return(course)
+          })
+```
+
+```{r}
+setGeneric(name = "GetGradeTypes", 
+           def = function(course){
+                   standardGeneric(f = "GetGradeTypes")
+           })
+
+setMethod(f = "GetGradeTypes", 
+          signature = "Course", 
+          definition = function(course){
+                  return(course@GradeTypes)
+          })
+
+setGeneric(name = "SetGradeTypes", 
+           def = function(course, gradetypes){
+                   standardGeneric(f = "SetGradeTypes")
+           })
+
+setMethod(f = "SetGradeTypes", 
+          signature = "Course", 
+          definition = function(course, gradetypes){
+                  course@GradeTypes = gradetypes
+                  return(course)
+          })
+```
+
+```{r}
+setGeneric(name = "ReadGrades", 
+           def = function(course){
+                   standardGeneric(f = "ReadGrades")
+           })
+
+setMethod(f = "ReadGrades", 
+          signature = "Course", 
+          definition = function(course){
+                  grades <- read.csv(GetFileName(course))
+                  convertedGrade <- list()
+                  courseTypes <- GetGradeTypes(course)
+                  for(gradeItem in names(grades)){ # names(data.frame) == colnames(data.frame)
+                          for(type in courseTypes){
+                                  if(length(grep(type, gradeItem)) > 0){
+                                          if((class(grades[[gradeItem]]) == "numeric") || (class(grades[[gradeItem]]) == "integer")){
+                                                  thisItem <- NumericGrade()
+                                          }else{
+                                                  thisItem <- LetterGrade()
+                                          }
+                                  }
+                                  thisItem <- SetValue(thisItem, grades[[gradeItem]])
+                                  convertedGrade[gradeItem] <- thisItem
+                          }
+                  }
+                  return(setGrades(course, convertedGrade))
+          })
+```
+
+
+### The assignment classes  
+```{r}
+Assignment <- setClass(Class = "Assignment", 
+                       slots = c(
+                               Name = "character", 
+                               Number = "numeric"
+                       ), 
+                       prototype = list(
+                               Name = "Test", 
+                               Number = as.integer(1)
+                       ), 
+                       validity = function(object){
+                               if(object@Number < 0){
+                                       object@Number <- 0
+                                       warning("A negative number for the assignment", 
+                                               "number is passed. It is set to zero.")
+                               }
+                               return(TRUE)
+                       })
+```
+The primary purpose of the Assignment class is to act as the base class for other types of assignments.  
+
+```{r}
+setGeneric(name = "GetName", 
+           def = function(assignment){
+                   standardGeneric(f = "GetName")
+           })
+
+setMethod(f = "GetName", 
+          signature = "Assignment", 
+          definition = function(assignment){
+                  return(assignment@Name)
+          })
+```
+
+
+### The NumericGrade class  
+```{r}
+NumericGrade <- setClass(Class = "NumericGrade", 
+                         slots = c(
+                                 Value = "numeric"
+                         ), 
+                         prototype = list(
+                                 Value = 0.0
+                         ), 
+                         validity = function(object){
+                                 if(object@Value < 0){
+                                         object@Value <- 0
+                                         warning(paste("A negative number for the assignment value\n is passed. It is set to zero."))
+                                 }
+                                 return(TRUE)
+                         }, 
+                         contains = "Assignment")
+```
+
+
+methods for this class  
+```{r}
+setGeneric(name = "GetValue", 
+           def = function(assignment){
+                   standardGeneric(f = "GetValue")
+           })
+
+setMethod(f = "GetValue", 
+          signature = "NumericGrade", 
+          definition = function(assignment){
+                  return(assignment@Value)
+          })
+
+setGeneric(name = "SetValue", 
+           def = function(assignment, value){
+                   standardGeneric(f = "SetValue")
+           })
+
+setMethod(f = "SetValue", 
+          signature = "NumericGrade", 
+          definition = function(assignment, value){
+                  assignment@Value = value
+                  return(assignment)
+          })
+```
+
+
+```{r}
+setGeneric(name = "GradeReport", 
+           def = function(assignment, maxGrade = NA, div = 10){
+                   standardGeneric(f = "GradeReport")
+           })
+
+setMethod(f = "GradeReport", 
+          signature = "Assignment", 
+          definition = function(assignment, maxGrade = NA, div = 10){
+                  print(noquote(paste("Grade report for", GetName(assignment))))
+                  print(noquote(""))
+                  print(summary(assignment))
+                  values <- GetValue(assignment)
+                  if(is.na(maxGrade)){
+                          maxGrade <- max(values)
+                          warning(paste("The max grade is not set, and it is assumed to be ", maxGrade))
+                  }
+                  skip <- maxGrade * div / 100
+                  while(maxGrade <= max(values)){
+                          maxGrade <- maxGrade + skip
+                  }
+                  numLower <- ceiling((maxGrade - min(values))/ skip)
+                  bins <- c(seq(maxGrade - numLower*skip), max(c(values, maxGrade)), by = skip)
+                  levs <- cut(values, breaks = bins, right = FALSE)
+                  gradeFreqs <- table(levs)
+                          print(noquote(''))
+                          print(noquote("Stem leaf plot of grades: "))
+                          print(stem(values))
+                          print(noquote(''))
+                          
+                          print(noquote("Grade Frequencies: "))
+                          print(gradeFreqs)
+                          print(noquote(""))
+                          
+                          print(noquote("Sorted Grades: "))
+                          print(sort(values))
+          })
+```
+
+
+### The LetterGrade class  
+```{r}
+LetterGrade <- setClass(Class = "LetterGrade", 
+                        slots = c(
+                                Value = "character", 
+                                Scale = "list"
+                        ), 
+                        prototype = list(
+                                Value = "F",
+                                Scale = list(
+                                        "A+" = 98, "A" = 95, "A-" = 92, 
+                                        "B+" = 88, "B" = 85, "B-" = 83,
+                                        "C+" = 78, "C" = 75, "C-" = 73,
+                                        "D+" = 68, "D" = 65, "D-" = 63,
+                                        "F+" = 58, "F" = 55, "F-" = 53, 
+                                        "NA" = 0
+                                )
+                        ), 
+                        validity = function(object){
+                                pos <- grep(paste(object@Value, "$", sep = ""), names(object@Scale))
+                                if(length(pos) != 1){
+                                        object@Value <- "F-"
+                                        warning("The garde is not recognized.")
+                                }
+                                return(TRUE)
+                        },
+                        contains = "Assignment")
+```
+
+```{r}
+setGeneric(name = "GetScale", 
+           def = function(lettergrade){
+                   standardGeneric(f = "GetScale")
+           })
+
+setMethod(f = "GetScale", 
+          signature = "Assignment", 
+          definition = function(lettergrade){
+                  return(lettergrade@Scale)
+          })
+```
+
+```{r}
+setMethod(f = "SetValue", 
+          signature = "LetterGrade", 
+          definition = function(assignment, value){
+                  lupe <- 1
+                  value <- as.character(value)
+                  theScale <- GetScale(assignment)
+                  theNames <- name(theScale)
+                  while(lupe <= length(value)){
+                          thePattern <- paste("^", sub("\\+", "\\\\+", value[lupe]), "$", sep = "")
+                          pos <- grep(thePattern, theName)
+                          if(value[lupe] == ''){
+                                  value[lupe] <- "NA"
+                          }else if(length(pos) != 1){
+                                  warning(paste("The grade \"", value[lupe], "\" is not recognized. It is set to NA."))
+                                  value[lupe] <- "NA"
+                          }
+                          lupe <- lupe + 1
+                  }
+                  assignment@Value <- value
+                  return(assignment)
+          })
+```
+
+```{r}
+setMethod(f = "GradeReport", 
+          signature = "LetterGrade", 
+          definition = function(assignment, maxGrade = NA, div = 10){
+                  print(noquote(""))
+                  print(noquote(paste("Grade report for", GetName(assignment))))
+                  print(noquote(""))
+                  print(summary(assignment))
+          })
+```
+
+
+### reading grades from a file  
+```{r}
+course <- Course()
+course <- SetGradeTypes(course, gradetypes = c("test", "hw", "quiz", "project", "final"))
+course <- SetFileName(course, "shortList.csv")
+course <- ReadGrades(course)
+```
+
+
+
+
+
+## Chapter 11: Case Study - Simulation  
+
+
+
+
+
 
 
 
