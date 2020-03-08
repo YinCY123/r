@@ -5,7 +5,7 @@
 *.html
 
 # ignore auto saved R data
-.RData
+*.RData
 
 # ignore .zip file
 *.zip
