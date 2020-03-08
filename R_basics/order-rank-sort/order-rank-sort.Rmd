@@ -1,0 +1,38 @@
+---
+title: "order rank sort"
+author: "yincy"
+date: "3/8/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+`sort` sorts the vector in an ascending order  
+
+`rank` gives the respective rank of the numbers present in the vector, the smallest number receiving the rank 1.  
+
+`order` returns the indices of the vector in a sorted order.  
+
+```{r}
+x <- c(3, 1, 2, 5, 4)
+sort(x) # will give c(1, 2, 3, 4, 5)
+
+rank(x) # will give c(3, 1, 2, 5, 4)
+
+order(x) # will give c(2, 3, 1, 5, 4).
+# if you put these indices in this order, you will get the sorted vector. 
+# x[2] = 1, x[3] = 2, x[1] = 3, x[5] = 5, x[4] = 5
+```
+
+
+
+
+
+
+
+
+
+
+
