@@ -12,9 +12,3 @@
 
 # ignore log file
 *.log
-
-# ignore figure
-*.png
-*.tiff
-*.xml
-*.tif
