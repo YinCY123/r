@@ -1,0 +1,154 @@
+---
+title: "Advanced-Object-oriented-Programming-in-R"
+author: "yincy"
+date: "3/8/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Chapter 1 Classes and Generic Functions  
+R’s approach to object-oriented programming is through `generic functions` and `classes`.  
+
+## Generic Functions  
+The term generic functions refers to functions that can be used on more than one data type.  
+
+Generic functions are functions that work differently on different types of objects. They are therefore also known as `polymorphic functions`.  
+
+```{r}
+top <- function(stack)UseMethod(generic = "top")
+pop <- function(stack)UseMethod(generic = "pop")
+push <- function(stack, element)UseMethod(generic = "push")
+is_empty <- function(stack)UseMethod(generic = "is_empty")
+```
+
+default method  
+```{r}
+top.default <- function(stack) .NotYetImplemented()
+pop.default <- function(stack) .NotYetImplemented()
+push.default <- function(stack, element) .NotYetImplemented()
+is_empty.default <- function(stack).NotYetImplemented()
+```
+
+
+## Classes  
+In the S3 system, you create a class, and assign a class to an object, just by setting an attribute on the object. The name of the class is all that defines it, so there is no real type checking involved. **Any object can have an attribute called “class” and any string can be the name of a class**.  
+
+```{r}
+empty_vector_stack <- function(){
+    stack <- numeric()
+    class(stack) <- "vector_stack"
+    return(stack)
+}
+```
+
+
+```{r}
+stack <- empty_vector_stack()
+stack
+```
+
+```{r}
+attributes(stack)
+```
+
+```{r}
+class(stack)
+```
+
+```{r}
+top.vector_stack <- function(stack)stack[1]
+
+pop.vector_stack <- function(stack){
+    new_satck <- stack[-1]
+    class(new_stack) <- "vector_stack"
+    return(new_satck)
+}
+
+push.vector_stack <- function(element, stack){
+    new_stack <- c(element, stack)
+    class(new_stack) <- "vector_stack"
+    return(new_stack)
+}
+
+is_empty.vector_stack <- function(stack){
+    return(length(stack) == 0)
+}
+```
+
+```{r}
+stack <- push(stack, 1)
+stack <- push(stack, 2)
+stack <- push(stack, 3)
+stack
+```
+
+```{r}
+while(is_empty(stack)){
+    stack <- pop(stack)
+}
+stack
+```
+
+
+```{r}
+make_vector_stack <- function(elements){
+    structure(elements, class = "vector_stack")
+}
+
+empty_vector_stack <- function(){
+    make_vector_stack(vector("numeric"))
+}
+
+top.vector_stack <- function(stack){
+    stack[1]
+}
+
+pop.vector_stack <- function(stack){
+    make_vector_stack(stack[-1])
+}
+
+push.vector_stack <- function(stack, element){
+    make_vector_stack(c(element, stack))
+}
+
+is_empty.vector_stack <- function(stack) length(stack) == 0
+```
+
+
+## Polymorphism in Action  
+```{r}
+make_list_node <- function(head, tail){
+    list(head = head, tail = tail)
+}
+
+make_list_stack <- function(elements){
+    structure(list(elements = elements), class = "list_stack")
+}
+empty_list_stack <- function()make_list_stack(NULL)
+
+top.list_stack <- function(stack)stack$element$head
+pop.list_stack <- function(stack) make_list_stack(stack$element$tail)
+push.list_stack <- function(stack, element){
+    make_list_stack(make_list_node(element, stack$elements))
+}
+is_empty.list_stack <- function(stack) is.null(stack$elements)
+```
+
+
+```{r}
+stack <- empty_list_stack()
+stack <- push(stack, 1)
+stack <- push(stack, 2)
+stack <- push(stack, 3)
+stack
+```
+
+
+
+
+
+
