@@ -26,7 +26,7 @@ set.seed(10)
 
 ```{r}
 data <- matrix(sample(x = 0:2, size = 25, replace = T), nrow = 5)
-rownames(data) <- LETTERS[1:5];colnames(data) <- LETTERS[1:5]
+rownames(data) <- LETTERS[1:5]; colnames(data) <- LETTERS[1:5]
 ```
 
 ```{r}
@@ -51,7 +51,7 @@ colnames(data) <- letters[1:5]; rownames(data) <- LETTERS[1:3]
 ```
 
 ```{r}
-network <- graph_from_incidence_matrix(incidence = data)
+network <- graph_from_incidence_matrix(incidence = data, directed = T, mode = "out")
 
 plot(network)
 ```

@@ -5,16 +5,10 @@
 *.html
 
 # ignore auto saved R data
-.RData
+*.RData
 
 # ignore .zip file
 *.zip
 
 # ignore log file
 *.log
-
-# ignore figure
-*.png
-*.tiff
-*.xml
-*.tif

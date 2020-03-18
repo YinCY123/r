@@ -1,0 +1,54 @@
+---
+title: "ggmap"
+author: "yincy"
+date: "2/29/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggmap)
+```
+
+```{r}
+us <- c(left = -125, bottom = 25.75, right  =-67, top = 49)
+get_stamenmap(us, zoom = 5, maptype = "toner-lite") %>% 
+    ggmap()
+```
+
+
+```{r}
+library(dplyr)
+library(forcats)
+```
+
+```{r}
+`%notin%` <- function(lhs, rhs) !(lhs %in% rhs)
+
+violent_crime <- crime %>% 
+    filter(offense %notin% c("auto theft", "theft", 'burglary'), 
+           -95.39681 <= lon & lon <= -95.34188, 
+           29.73631 <= lat & lat <= 29.78400) %>% 
+    mutate(offense = fct_drop(offense),
+           offense = fct_relevel(offense, c("robbery", "aggravated assault", "rape", "murder")))
+
+qmplot(lon, lat, data = violent_crime, maptype = "toner-lite", color = I("red"))
+```
+
+
+```{r}
+qmplot(lon, lat, data = violent_crime, maptype = "toner-lite", color = I("red"), geom = "density2d")
+```
+
+
+
+
+
+
+
+
+
+
