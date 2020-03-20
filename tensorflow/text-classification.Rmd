@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-```{r load package}
+```{r load package, message=FALSE}
 library(keras)
 library(dplyr)
 library(ggplot2)
@@ -21,6 +21,9 @@ library(purrr)
 ## download the IMDB dataset  
 ```{r download IMDB dataset, cache=TRUE}
 imdb <- dataset_imdb(num_words = 10000)
+imdb %>% class()
+imdb %>% length()
+imdb %>% names()
 
 c(train_data, train_labels) %<-% imdb$train
 c(test_data, test_labels) %<-% imdb$test 
@@ -29,6 +32,8 @@ c(test_data, test_labels) %<-% imdb$test
 
 ```{r}
 word_index <- dataset_imdb_word_index()
+word_index %>% class()
+word_index[1]
 ```
 
 
