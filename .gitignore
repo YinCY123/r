@@ -12,3 +12,4 @@
 
 # ignore log file
 *.log
+.Rproj.user
