@@ -173,8 +173,3 @@ y <- array(5, dim = c(32, 10))
 sweep(x = x, MARGIN = c(3, 4), STATS = y, pmax)
 ```
 
-
-
-
-
-
