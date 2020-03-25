@@ -1,0 +1,192 @@
+---
+title: "linear regression"
+author: "yincy"
+date: "3/23/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Linear regression requires 5 cases per independent variable in the analysis.  
+
+
+### Assumptions of Linear Regression Analysis   
+
+- **Linear Relationship** : Linear regression needs a linear relationship between the dependent and independent variables.  
+
+- **Normality of Residual** : Linear regression requires residuals should be normally distributed.  
+
+- **Homoscedasticity** :  Linear regression assumes that residuals are approximately equal for all predicted dependent variable values. In other words, it means constant variance of errors.  
+
+- No Outlier Problem  
+
+- Multicollinearity : It means there is a high correlation between independent variables. The linear regression model MUST NOT be faced with problem of multicollinearity.  
+
+- Independence of error terms - No Autocorrelation.  
+
+
+```{r, message=FALSE}
+library(ggplot2)
+library(car)
+library(caret)
+library(corrplot)
+library(magrittr)
+library(MASS)
+```
+
+```{r}
+data(mtcars)
+str(mtcars)
+```
+
+```{r}
+head(mtcars)
+```
+
+```{r}
+summary(mtcars)
+```
+
+```{r}
+mtcars$am <- as.factor(mtcars$am)
+mtcars$cyl <- as.factor(mtcars$cyl)
+mtcars$vs <- as.factor(mtcars$vs)
+mtcars$gear <- as.factor(mtcars$gear)
+```
+
+
+### Identifying and Correcting Collinearity  
+```{r}
+mtcars_a <- subset(mtcars, select = -c(mpg))
+
+numericData <- mtcars_a[, sapply(mtcars_a, is.numeric)]
+descCor <- cor(numericData)
+descCor
+```
+
+```{r}
+corrplot(corr = descCor, 
+         order = "FPC", 
+         method = "color", 
+         type = "lower", 
+         tl.cex = 0.7, 
+         tl.col = rgb(0, 0, 0))
+```
+
+find variables that are highly correlated  
+```{r}
+highlyCorrelated <- findCorrelation(x = descCor, cutoff = 0.7)
+```
+
+identifying Variable names of highly correlated variables  
+```{r}
+highlyCorCol <- colnames(numericData)[highlyCorrelated]
+```
+
+remove highly correlated variables and create a new dataset  
+```{r}
+dat3 <- mtcars[, -which(colnames(mtcars) %in% highlyCorCol)]
+```
+
+```{r}
+dim(dat3)
+```
+
+### Developing regression model  
+```{r}
+fit <- lm(mpg ~ ., data = dat3)
+```
+
+check model performance  
+```{r}
+summary(fit)
+```
+
+```{r}
+coef(fit)
+```
+
+```{r}
+anova(fit)
+```
+
+```{r}
+par(mfrow = c(2,2))
+plot(fit)
+```
+
+```{r}
+AIC(fit); BIC(fit)
+```
+
+Higher R-Squared and Adjusted R-Squared value, better the model. Whereas, lower the AIC and BIC score, better the model.  
+
+#### Understand AIC and BIC  
+AIC and BIC are measures of goodness of fit. They penalize complex models. In other words, it penalize the higher number of estimated parameters. It believes in a concept that a model with fewer parameters is to be preferred to one with more. In general, BIC penalizes models more for free parameters than does AIC.  Both criteria depend on the maximized value of the likelihood function L for the estimated model.  
+
+> AIC value roughly equals the number of parameters minus the likelihood of the overall model. Suppose you have two models, the model with the lower AIC and BIC score is better.  
+
+
+### Variable selection methods  
+There are three variable selection methods - Forward, Backward, Stepwise.  
+
+1. Starts with a single variable, then adds variables one at a time based on AIC ('Forward')  
+
+2. Starts with all variables, iteratively removing those of low importance based on AIC ('Backward')  
+
+3. Run in both directions ('Stepwise')  
+
+stepwise selection based i=on AIC  
+```{r}
+step <- stepAIC(fit, direction = "both")
+summary(step)
+```
+
+backward selection based on AIC  
+```{r}
+step <- stepAIC(fit, direction = "backward")
+summary(step)
+```
+
+forward selection based on AIC  
+```{r}
+step <- stepAIC(fit, direction = "forward")
+summary(step)
+```
+
+stepwise selection with BIC  
+```{r}
+n <- dim(dat3)[1]
+stepBIC <- stepAIC(fit, k = log(n))
+summary(step)
+```
+
+```{r}
+AIC(stepBIC);BIC(stepBIC)
+```
+
+## Calculate Standardized Coefficients  
+Standardized Coefficients helps to rank predictors based on absolute value of standardized estimates. Higher the value, more important the variable.  
+
+```{r standardize coefficients}
+stdz_coff <- function(regmodel){
+  b <- summary(regmodel) %>% coef() %>% .[-1, 1]
+  sx <- apply(regmodel$model[, -1], 2, sd, na.rm = T)
+  sy <- apply(regmodel$model[, 1, drop  =F], 2, sd, na.rm = T)
+  beta <- b * sx / sy
+  return(beta)
+}
+std.Coef <- data.frame(Standardized.Coef = stdz_coff(stepBIC))
+std.Coef = cbind(Variable = row.names(std.Coef), std.Coef)
+rownames(std.Coef) <- NULL
+```
+
+## Calculating Variance inflation Factor (VIF)  
+Variance inflation factor measure how much the variance of the coefficients are inflated as compared to when independent variables are not highly non-correlated. It should be less than 5.  
+```{r}
+vif(stepBIC)
+```
+
+
