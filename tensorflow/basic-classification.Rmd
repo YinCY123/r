@@ -158,9 +158,3 @@ table(pred_class, test_labels) %>% diag() %>% sum()/length(test_labels)
 
 
 
-
-
-
-
-
-

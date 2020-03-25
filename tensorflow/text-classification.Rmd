@@ -29,12 +29,12 @@ c(test_data, test_labels) %<-% imdb$test
 
 ```{r}
 word_index <- dataset_imdb_word_index()
+word_index %>% class()
+word_index[1]
 ```
 
 
 ## explore the data  
-
-
 ```{r}
 paste0("Training entries: ", length(train_data), ", labels: ", length(train_labels))
 ```
@@ -44,7 +44,8 @@ train_data[[1]]
 ```
 
 ```{r}
-length(train_data[[1]]); length(train_data[[2]])
+sapply(train_data, length) %>% head()
+sapply(train_data, max) %>% max()
 ```
 movie reviews may be different length, but the inputs to neural network must be the same length, we will need to resolve this later.  
 
@@ -55,6 +56,9 @@ word_index_df <- data.frame(
   idx = unlist(word_index, use.names = FALSE),
   stringsAsFactors = FALSE
 )
+
+word_index_df %>% 
+  arrange(idx)
 ```
 
 the first indices are reserved   
@@ -117,7 +121,7 @@ test_data <- pad_sequences(
 ```
 
 ```{r}
-length(train_data[1, ]); length(train_data[2, ])
+train_data %>% dim()
 ```
 
 
