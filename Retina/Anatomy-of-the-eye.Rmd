@@ -1,0 +1,168 @@
+---
+title: "Anatomy-of-the-eye"
+author: "yincy"
+date: "3/27/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, fig.cap="skull anatomy"}
+knitr::include_graphics(path = "f:/git/R-codes/Retina/figures/anatomy-eye/anatomical-plane-reference.PNG")
+```
+
+```{r, fig.cap="human eye}
+knitr::include_graphics(path = "f:/git/R-codes/Retina/figures/anatomy-eye/human-eye.PNG")
+```
+
+**Cornea**  
+- The surface of the cornea (air–tissue interface) and associated tear film is responsible for most of the refraction of the eye.  
+
+- Corneal transparency is the result of a number of related factors: its avascularity; the regularity and smoothness of the covering epithelium; and the regular arrangement of the extracellular and cellular components in the stroma, which is dependent on the state of hydration, metabolism and nutrition of the stromal elements.  
+
+- The cornea is thicker at the periphery (0.67 mm) than in the centre (0.52 mm).
+
+- cornea is composed of five layers  
+```{r}
+knitr::include_graphics(path = "f:/git/R-codes/Retina/figures/anatomy-eye/sturcture-of-cornea.PNG")
+```
+
+- The corneal epithelium is a stratified (possessing five or six layers) squamous non-keratinized epithelium (the superficial cells are flattened, nucleated and non-keratinized).   
+
+- The anterior surface of the corneal epithelium is characterized by numerous microvilli and microplicae (ridges) whose glycocalyx coat interacts with, and helps stabilize, the precorneal tear film. New cells are derived from mitotic activity in the limbal basal cell layer and these displace existing cells both superficially and centripetally.  
+
+- **The cornea epithelium responds rapidly to repair disruptions in its integrity by amoeboid sliding movements of cells on the wound margin followed by cell replication**.  
+
+- The cornea epithelium is devoid of melanocytes.  
+
+- Myeloid-derived major histocompatibility complex (MHC) class II antigen-positive dendritic cells (Langerhans cells) are present in the limbus and peripheral cornea but decline sharply in density in a centripetal gradient, and are rare in the central cornea.  
+
+- However, MHC class II-negative dendritic cells have been identified in the mouse central cornea and recent in vivo confocal microscopy (IVCM) (Fig. 1-13) suggests that the normal human central corneal epithelium contains dendritic cells although their immunophenotype cannot be ascertained from IVCM.  
+
+- The comparative paucity of potential antigen-presenting cells, such as dendritic cells, and the avascular nature of the cornea are considered factors crucial to the success of corneal grafting  
+
+**Anterior limiting lamina (Bowman's layer)**  
+- Bowman's layer (a modified acellular region of the stroma) consists of fine, randmoly arranged, collagen fibrils.  
+
+- The anterior surface is well delineated and is separated from the epithelium by the thin basal lamina, while the posterior boundary merges with the stroma. Bowman's layer terminates abruptly at the limbus.  
+
+**cornea stroma**  
+- The cornea stroma is a dense connnective tissue of remarkable regularity.  
+
+- It makes up the vast majority of the cornea and consists predominantly of 2 μm thick, flattened, *collagenous lamellae* (200–250 layers) oriented parallel to the corneal surface and continuous with the sclera at the limbus.  
+
+- Between the lamellae lie extremely flattened, modified fibroblasts known as `keratocytes`. These cells are stellate in shape with thin cytoplasmic extensions containing conspicuously few distinctive organelles.  
+
+- The density of keratoctyes in the anterior stroma is 20000 - 24000 cells/mm^2^ and the density decrease poteriorly before increasing agin near Descemet's membrane.  
+
+- Keratocytes are connected by gap junctions to their neighbouring cells and arranged in a corkscrew pattern spiralling from the epithelium to the endothelium.  
+
+- The corneal stroma normally contains no blood or lymphatic vessels, but sensory nerve fibres are present in the anterior layers en route to the epithelium.  
+
+- **extensive populations of resident tissue macrophages throughout the corneal stroma, some of which have recently described membrane nanotube cell–cell communications**.  
+
+
+**Posterior limitating lamina (Descemet's membrane)**  
+- This is a thin, homogeneous, discrete, periodic acid-Schiff-positive layer between the posterior stroma and the endothelium, from which it can become detached.  
+
+- It is rich in basement membrane glycoproteins, laminin and type IV collagen.  
+
+
+**corneal endothelium**  
+- The corneal endothelium, a simple squamous epithelium on the posterior surface of the cornea, has a critical role in maintaining corneal hydration and thus transparency.  
+
+- crucial role in active fluid transport.  
+
+- In the normal human cornea endothelial cells are generally considered to have low regenerative capacity and lost cells are quickly replaced by spreading of adjacent cells. However, there is some evidence that putative endothelial stem cells are located in centripetally arranged ‘niches’ or columns in the extreme peripheral cornea.  
+
+- Damage to corneal endothelial cells and density below 800 cells/mm2 leads rapidly to oedema and swelling of the stroma, with resultant loss of transparency.  
+
+- There are approximately 350 000 endothelial cells per cornea (3000–4000 cells/mm2 at birth, falling to 2500 cells/mm2 in middle age and 2000 cells/mm2 in old age). Consequently, with age, the dense, regular hexagonal arrangement typical of the young cornea is replaced by fewer cells of more heterogeneous size and shape.  
+
+**Nerve supply of the cornea**  
+- The cornea is richly supplied by sensory fibres derived from the ophthalmic division of the trigeminal nerve, mainly via the long ciliary nerves. Occasionally the inferior cornea receives some branches from the maxillary division of the trigeminal.  
+
+- Nerve bundles enter the peripheral cornea in a radial manner and as they travel centrally below the anterior one-third of the stroma and approximately 1 mm from the limbus they lose their perineurium and myelin sheaths. This alteration in myelination is thought to be related to the importance for transparency.  
+
+**The sclera**  
+- The sclera forms the principal part of the outer fibrous coat of the eye and functions both to protect the intraocular contents and to maintain the shape of the globe when distended by intrinsic intraocular pressure.  
+
+- The sclera is relatively avascular and in adults appears white externally.  
+
+- The viscoelastic nature of the sclera (great tensile strength, extensibility and flexibility) allows only limited distension and contraction to accommodate minor variations in intraocular pressure.  
+
+- The sclera consists of dense irregular connective tissue comprising extracellular matrix and matrix-secreting fibroblasts. The matrix consists principally of collagen type I, although types III, IV, V, VI VIII, XII and XIII have been identified. Unlike cornea, the sclera collagenous lamellae are irregularly arranged and are interspersed with elastic fibres, each consisting of an elastin core surrounded by longitudinally arranged microfibrils composed of number of glycoproteins including fibrillin.  
+
+- The sclera extends anteriorly from the limbus to the lamina cribrosa posteriorly (Fig. 1-17A and Fig. 1-42). The scleral collagen fibrils are arranged in circles or figure-of-eight patterns at the lamina cribrosa.  
+
+- **Histologically the sclera has three layers: the lamina fusca, stroma and episclera**.  
+
+
+**limbus and aqueous outflow pathways**  
+- It is becoming increasingly appreciated that the limbus is more than the border zone between the cornea and sclera; it has multiple functions including nourishment of the peripheral cornea, corneal wound healing, immunosurveillance of the ocular surface and hypersensitivity responses; it contains the pathways of aqueous humour outflow and is thus involved in the control of intraocular pressure.  
+
+- Several important transitions take place at the limbus  
++ The regularly arranged corneal lamellae give way to the more random array of lamellae in the sclera. The corneal termination is V-shaped.  
+
++ The stratified squamous non-keratinized corneal epithelium with its parallel internal and external surfaces gives way to conjunctival epithelium, characterized by a folded basal surface and interdigitating subepithelial connective tissue (sometimes forming distinct papillae).  
+
++ The stratified squamous non-keratinized corneal epithelium with its parallel internal and external surfaces gives way to conjunctival epithelium, characterized by a folded basal surface and interdigitating subepithelial connective tissue (sometimes forming distinct papillae).  
+
++ The conjunctival epithelium contains goblet cells and a rich network of MHC class II+ CD11c+ dendritic (Langerhans) cells.  
+
++ Loops or arcades of conjunctival capillaries (derived from the anterior ciliary arteries) and lymphatic capillaries terminate at the limbus. The smaller vessels are not under neuronal control and are particularly susceptible to the effects of vasoactive amines (e.g. histamine, leukotrienes,
+prostaglandins) released by local immune cells.  
+
++ Desçemet’s membrane and Bowman’s layer terminate in this region.  
+
++ The loose conjunctival subepithelial vascularized connective tissue (substantia propria), containing immunocompetent cell types such as mast cells, plasma cells and lymphocytes, tapers off at the limbus and is absent in the cornea.  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
