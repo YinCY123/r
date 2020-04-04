@@ -1,0 +1,21 @@
+---
+title: "renal-experiment"
+author: "yincy"
+date: "4/4/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Macrophage and bacterial control  
+- Is there penetration of macrophages into the lining of epithelial cells? Does this penetration prevail by one population of macrophages?  
+
+- Are there macrophages sampling bacteria across epithelial monolayer? ( Inject E.coli and collect urine and test macrophage number and the bacterail-swallowing  macrophages.)  
+
+- Measure phagocytosis of macrophages of labeled E.coli in kidney.(*To support both (2) and (3) Confocal microscopy monitoring of E.coli take-up by macrophages in live kidney slides.)  
+
+- After CCR2 blocker or using iDTR model to deplete monocyte-derived macrophage or the self-mainaining macrophages, respectively, measure the severity of E.coli infection.  
+
+- Making OVA-expressing E.coli and test what cells presenting OVA antigens.  
