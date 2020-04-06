@@ -1,0 +1,52 @@
+---
+title: "Times in R"
+author: "yincy"
+date: "4/6/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+- POSIXct is just a very large integer under the hood; it use a useful class when you want to store times in something like a data frame.  
+
+- POSIXlt is a list underneath and it stores a bunch of other useful information like the day of the week, day of the year, month, day of the month.  
+
+
+There are a number of generic fnctions that work on dates and times  
+
+- `weekdays`: gives the day of the week  
+- `months`: give the month name  
+- `quarters`: give the quater number ("Q1", "Q2", "Q3" or "Q4")  
+
+
+```{r}
+x <- Sys.time()
+x
+```
+
+```{r}
+p <- as.POSIXlt(x)
+names(unclass(p))
+p$sec
+p$min
+p$hour
+p$mday
+p$mon
+p$year
+p$wday
+p$yday
+p$isdst
+p$zone
+p$gmtoff
+```
+
+```{r}
+unclass(x) # seconds since 1900
+```
+
+
+
+
+
