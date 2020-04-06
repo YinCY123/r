@@ -432,26 +432,19 @@ converted
 
 ```{r}
 typeof(converted[[1]])
+class(converted)
 ```
 
 ```{r}
 converted[[1]] - converted[[2]]
 ```
 
-
-```{r}
-theTime <- c("08:30:00 1867-07-01","18:15:00 1864-10-27")
-converted <- strptime(x = theTime, format = "%H:%M:%S %Y-%m-%d", tz = "Canada/Eastern")
-converted
-```
-
-```{r}
-converted[[1]] - converted[[2]]
-```
 
 ```{r}
 otherTime <- as.POSIXct(converted)
 otherTime
+otherTime %>% class()
+otherTime %>% unclass()
 ```
 
 ```{r}
@@ -612,11 +605,17 @@ while(lupe <= 2.0){
 }
 ```
 
+The `break` and `next` statements are used to influence which part of the code in the current loop will be executed.   
+
+The `break` statement will move to the very end of the current block and it will stop the execution of the loop.  
+
+The `next` statement will act as if the end of the code block was reached and start over at the begining of the code block to begin the next iteration.  
+
 
 ```{r}
 positions <- complex(0)
 currentPos <- 0.0 + 0.0i
-numberSteps <- 100
+numberSteps <- 500
 angle <- 0.0
 stdDev <- 1.0
 
@@ -636,8 +635,35 @@ plot(Re(positions), Im(positions), type = "l")
 ```
 
 
-#### Functions  
+```{r}
+positions <- complex(0)
+currentPos <- 0.0 + 0.0i
+numberSteps <- 100
+angleFacing <- 0.0
+stdDev <- 1.0
 
+step <- as.integer(0)
+repeat{
+        newAngle <- angle + rnorm(1, 0, stdDev)
+        proposedStep <- currentPos + exp(newAngle * 1.0i)
+        if(Re(proposedStep) < 0.0) # check if to skip this loop
+                next
+        
+        angle <- newAngle
+        currentPos <- proposedStep
+        positions <- c(positions, currentPos)
+        
+        step <- step + as.integer(1)
+        if(step > numberSteps) # check if to stop this loop
+                break
+}
+
+plot(Re(positions), Im(positions), type = "l")
+```
+
+
+
+#### Functions  
 ```{r}
 updatePosition = function(currentPos){
         newDirection <- exp(1i*runif(1, 0.0, 2.0*pi))
@@ -730,7 +756,7 @@ updatePosition(1+2i, pi)
 ```{r}
 updatePosition <- function(currentPos, angle = 0){
         if(abs(angle) > 2.0*pi){
-                stop("I arbitrarily do not like angles tjat big") # stop the function, and exit
+                stop("I arbitrarily do not like angles that big") # stop the function, and exit
         }
         angle <- angle + runif(1, 0, 2*pi)
         currentPos + exp(1i * angle)
@@ -740,8 +766,8 @@ pos1 <- updatePosition(1 + 2i)
 pos1
 ```
 
-```{r}
-# pos2 <- updatePosition(1+2i, 3.0*pi)
+```
+pos2 <- updatePosition(1+2i, 3.0*pi)
 ```
 
 
@@ -778,8 +804,8 @@ updatePosition(0, 0)
 updatePosition(0, 0, "uniform")
 ```
 
-```{r}
-# updatePosition(0, 0, "neither")
+```
+updatePosition(0, 0, "neither")
 ```
 
 
