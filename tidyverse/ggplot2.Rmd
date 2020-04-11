@@ -1,0 +1,50 @@
+---
+title: "ggplot2"
+author: "yincy"
+date: "3/22/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+every geom has a default stat; and every stat has a default geom  
+```{r}
+ggplot(data = diamonds) +
+  stat_count(aes(x = cut), geom = "bar")
+
+ggplot(data = diamonds) +
+  stat_summary(aes(x = cut, y = depth), 
+               fun.min = min,
+               fun = median, 
+               fun.max = max)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

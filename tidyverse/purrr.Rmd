@@ -1,0 +1,122 @@
+---
+title: "purrr"
+author: "yincy"
+date: "3/20/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(tidyverse)
+```
+
+## Loops  
+
+```{r}
+df <- tibble(
+  a = rnorm(10),
+  b = rnorm(10), 
+  c = rnorm(10), 
+  d = rnorm(10)
+)
+```
+
+```{r}
+output <- vector(mode = "double", length = ncol(df))
+
+for(i in seq_along(df)){
+  output[[i]] <- median(df[[i]])
+}
+output
+```
+
+
+## The Map functions  
+
+```{r}
+map_dfc(c(-10, 0, 10, 100), rnorm, n = 10)
+
+map2_dfc(10, c(-10, 0, 10, 100), rnorm)
+
+do.call(what = "rnorm", 
+        args = list(n = rep(rep(10, 4), 10), mean = rep(c(-10, 0, 10, 100), each = 10))) %>% 
+  matrix(nrow = 10, ncol = 4, byrow = F) 
+```
+
+```{r}
+map_lgl(df, is.factor)
+```
+
+
+```{r}
+map(1:5, runif)
+```
+
+```{r}
+map_dfc(-2:2, rnorm, n = 5)
+```
+
+
+### Invoking Different Functions  
+```{r}
+f <- c("runif", "rnorm", "rpois")
+param <- list(
+  list(min = -1, max = 1), 
+  list(sd = 5), 
+  list(lambda = 10)
+)
+
+invoke_map(f, param, n = 5)
+```
+
+```{r}
+sim <- tibble(
+  f = c("runif", "rnorm", "rpois"),
+  param = list(list(min = -1, max = 1), list(sd = 5), list(lambda = 10))
+)
+
+
+x <- sim %>% mutate(sim = invoke_map(f, param, n = 10))
+```
+
+## Walk  
+```{r}
+x <- list(1, "a", 3)
+x %>% walk(print)
+```
+
+```{r}
+plots <- mtcars %>% 
+  split(f = .$cyl) %>% 
+  map(~ggplot(., aes(mpg, wt)) + geom_point())
+
+paths <- str_c(names(plots), ".pdf")
+pwalk(list(paths, plots), ggsave, path = tempdir())
+
+# pwalk just like mapply
+mapply(ggsave, paths, plots, path = tempdir())
+```
+
+
+```{r}
+iris %>% 
+  keep(is.factor) %>% 
+  str()
+```
+
+```{r}
+iris %>% 
+  discard(is.factor) %>% 
+  str()
+```
+
+
+
+
+
+
+
