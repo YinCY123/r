@@ -15,7 +15,14 @@ library(GEOquery)
 ```
 
 
+```{r}
+gse135922 <- getGEO(GEO = "GSE135922")
+pData(gse135922[[1]]) 
+```
 
+```{r}
+saveRDS(object = gse135922[[1]], file = "retina-amd/gse135922_single-cell_sample_info.rds")
+```
 
 
 
