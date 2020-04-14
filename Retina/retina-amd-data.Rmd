@@ -18,14 +18,14 @@ library(tidyverse)
 
 ## for single cell expression of choroid endothelial  
 ```{r}
-# donor 5，6，7
+# donor 4
 gse135922 <- getGEO(GEO = "GSE135922")
 pData(gse135922[[1]]) %>% 
     filter(grepl("cd31-", title, ignore.case = F), grepl("macula", characteristics_ch1.3, ignore.case = F))
 ```
 
 ```{r}
-saveRDS(object = gse135922[[1]], file = "retina-amd/gse135922_single-cell_sample_info.rds")
+donor_4 %>% colnames() %>% .[5:25]
 ```
 
 
@@ -67,7 +67,6 @@ gse135092[[1]] %>% pData() %>%
 gse135092[[1]] %>% pData() %>% 
     pull(`amd_status:ch1`) %>% table()
 ```
-
 
 
 ```
