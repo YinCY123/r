@@ -10,19 +10,74 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 library(GEOquery)
+library(tidyverse)
 ```
 
 
+## for single cell expression of choroid endothelial  
 ```{r}
+# donor 5，6，7
 gse135922 <- getGEO(GEO = "GSE135922")
-pData(gse135922[[1]]) 
+pData(gse135922[[1]]) %>% 
+    filter(grepl("cd31-", title, ignore.case = F), grepl("macula", characteristics_ch1.3, ignore.case = F))
 ```
 
 ```{r}
 saveRDS(object = gse135922[[1]], file = "retina-amd/gse135922_single-cell_sample_info.rds")
 ```
+
+
+
+## for bulk seq of early and late AMD macular RPE  
+```{r}
+gse99287 <- getGEO(GEO = "GSE99287")
+
+# bulk-seq sample info
+early_and_late_amd_samples <- gse99287[[1]] %>% pData() %>% pull(geo_accession)
+```
+
+
+```{r}
+for(i in early_and_late_amd_samples){
+    do.call(
+        what = "getGEOSuppFiles", 
+        args = list(GEO = i)
+    )
+}
+```
+
+
+ATAC-seq sample info  
+```{r}
+gse99287[[2]] %>% pData() %>% 
+    filter(characteristics_ch1.6 == "tissue: RPE", characteristics_ch1.7 == "location: Macula")
+```
+
+## bulk-seq for normal macular RPE  
+```{r}
+gse135092 <- getGEO(GEO = "GSE135092")
+gse135092[[1]] %>% pData() %>% 
+    filter(characteristics_ch1 == "tissue: RPE, Macula", `tissue:ch1` == "RPE, Macula", `amd_status:ch1` == "Control")
+```
+
+
+```{r}
+gse135092[[1]] %>% pData() %>% 
+    pull(`amd_status:ch1`) %>% table()
+```
+
+
+
+```
+Using gse135092 data set for normal and AMD macula RPE 
+Using gse135922 for endothelial expressed ligand
+
+Using metabolomics from this paper <Human Plasma Metabolomics in Age-Related Macular Degeneration: Meta-Analysis of Two Cohorts>
+```
+
+
 
 
 
