@@ -1,0 +1,196 @@
+---
+title: "Control-AMD-bulk-analysis"
+author: "yincy"
+date: "4/23/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# load package  
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(edgeR)
+library(limma)
+library(biomaRt)
+library(GEOquery)
+library(EnsDb.Hsapiens.v86)
+```
+
+
+# get sample metadata  
+```{r, cache=TRUE, cache.path="."}
+GSE135092 <- getGEO(GEO = "GSE135092")
+RPE_AMD_sample_info <- GSE135092[[1]] %>% pData() %>% 
+    dplyr::filter(`tissue:ch1` == "RPE, Macula", `amd_status:ch1` == 'AMD') %>% 
+    dplyr::select(title, geo_accession, `tissue:ch1`, organism_ch1, characteristics_ch1, characteristics_ch1.1, `amd_status:ch1`)
+
+RPE_Control_sample_info <- GSE135092[[1]] %>% pData() %>% 
+    dplyr::filter(`tissue:ch1` == "RPE, Macula", `amd_status:ch1` == "Control") %>% 
+    dplyr::select(title, geo_accession, `tissue:ch1`, organism_ch1, characteristics_ch1, characteristics_ch1.1, `amd_status:ch1`)
+```
+
+
+# load data  
+```{r}
+amd_geo_accession <- readRDS(file = "AMD_geo_accession.rds")
+control_geo_accession <- readRDS(file = "Control_geo_accession.rds")
+
+amd_ctl_reads <- readRDS(file = "normal_amd_reads_count_table.rds")
+amd_ctl_reads %>% dim()
+amd_ctl_reads %>% .[1:5, 1:5]
+```
+
+```{r}
+quantile(x = amd_ctl_reads, probs = seq(0, 1, 0.1))
+```
+
+
+```{r}
+identical(x = colnames(amd_ctl_reads), 
+          y = c(RPE_Control_sample_info$geo_accession, RPE_AMD_sample_info$geo_accession))
+```
+
+## filtering low expressed genes  
+```{r library size plot}
+colSums(amd_ctl_reads) %>% barplot(names.arg = NA)
+abline(h = colSums(amd_ctl_reads) %>% median(), col = "blue")
+```
+
+
+```{r}
+cpm_reads <- edgeR::cpm(y = amd_ctl_reads)
+cpm_reads %>% .[1:5, 1:5]
+keep <- rowSums(cpm_reads > 0.5) > 50
+table(keep)
+table(rowSums(cpm_reads > 0.5)) %>% barplot()
+```
+
+
+# gene id conversion  
+```{r}
+columns(EnsDb.Hsapiens.v86)
+```
+
+```{r}
+genes <- select(x = EnsDb.Hsapiens.v86, 
+       keys = rownames(amd_ctl_reads), 
+       keytype = "GENEID", 
+       columns = c("GENEID", "ENTREZID"))
+
+genes <- genes %>% 
+    distinct(GENEID, .keep_all = T)
+```
+
+
+```{r}
+plot(cpm_reads[, 2], amd_ctl_reads[, 2], pch = 19)
+abline(h = 10, v = 0.5)
+```
+
+
+# Convert counts to DGEList  
+```{r}
+sample_info <- rbind(RPE_Control_sample_info, RPE_AMD_sample_info)
+group <- rep(c("Control", "AMD"), c(105, 26))
+y <- DGEList(counts = amd_ctl_reads[keep, ], 
+             samples = sample_info, group = group)
+```
+
+
+```{r}
+y$counts %>% .[1:5, 1:5]
+```
+
+```{r}
+y$samples
+```
+
+```{r}
+plotMDS(y, pch = c(1, 4)[y$samples$group], col = RColorBrewer::brewer.pal(n = 3, name = "Set1")[1:2][y$samples$group])W
+legend("topleft", legend = y$samples$group %>% unique(), 
+       fill = RColorBrewer::brewer.pal(n = 3, name = "Set1")[1:2][y$samples$group %>% unique()])
+```
+
+
+# Normalization for composition bias  
+```{r}
+y <- calcNormFactors(object = y)
+y$samples
+```
+
+```{r}
+barplot(y$samples$norm.factors)
+```
+
+
+# differential expression analysis 
+```{r}
+design <- model.matrix( ~ 0 + group)
+colnames(design) <- gsub("group", "", colnames(design))
+```
+
+
+```{r}
+v <- voom(counts = y, design = design, plot = T)
+```
+
+```{r}
+par(mfrow = c(1, 2))
+boxplot(y$counts)
+boxplot(v$E)
+```
+
+```{r}
+fit <- lmFit(object = v)
+names(v)
+```
+
+
+```{r}
+cont_mat <- makeContrasts(AMD.vs.Control = AMD - Control, levels = design)
+fit_cont <- contrasts.fit(fit = fit, contrasts = cont_mat)
+fit_cont <- eBayes(fit = fit_cont)
+dim(fit_cont)
+summ_fit <- decideTests(object = fit_cont)
+summary(summ_fit)
+```
+
+```{r}
+degs <- fit_cont %>% as.data.frame() %>% subset(F.p.value < 0.05) %>% rownames()
+```
+
+
+```{r}
+degs_genes <- select(x = EnsDb.Hsapiens.v86, 
+       keys = degs, 
+       column = c("SYMBOL", "GENEID", "ENTREZID"), 
+       keytype = "GENEID")
+```
+
+```{r}
+go <- goana(de = degs_genes$ENTREZID, species = "Hs")
+go %>% arrange(P.DE)
+```
+
+
+```{r}
+ke <- kegga(de = degs_genes$ENTREZID)
+ke %>% arrange(P.DE)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
