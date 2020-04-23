@@ -15,6 +15,7 @@ library(GEOquery)
 library(tidyverse)
 library(KEGGREST)
 library(KEGG.db)
+library(biomaRt)
 ```
 
 ```
@@ -170,7 +171,33 @@ saveRDS(object = list(table1 = table1, table2 = table2, table3 = table3, table5 
 
 ## Human protein interactome map  
 ```{r}
-hu_union <- read.table(file = "/home/yincy/git/Data/human-protein-interactome-map/HI-union.tsv", stringsAsFactors = F)
+hi_union <- read.table(file = "f:/git/Data/Human-Reference-Protein-Interactome-map/HI-union.tsv", 
+                       stringsAsFactors = F, 
+                       sep = "\t")
+
+huri <- read.table(file = "f:/git/Data/Human-Reference-Protein-Interactome-map/HuRI.tsv", 
+                   stringsAsFactors = F, 
+                   sep = "\t")
 ```
 
+
+```{r}
+hsa_mart <- useEnsembl(biomart = "ensembl", 
+                       dataset = "hsapiens_gene_ensembl", 
+                       mirror = "asia")
+```
+
+ID conversion 
+```{r}
+library(EnsDb.Hsapiens.v86)
+columns(EnsDb.Hsapiens.v86)
+```
+
+```{r}
+mapIds(x = EnsDb.Hsapiens.v86, 
+       keys = huri$V1, 
+       keytype = "GENEID", 
+       column = "SYMBOL") %>% 
+    head(n = 10)
+```
 
