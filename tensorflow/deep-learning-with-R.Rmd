@@ -566,6 +566,9 @@ all_scores; mean(all_scores)
 
 
 # Chapter 4 Fundamentals of machine learning  
+```{r}
+library(keras)
+```
 
 
 
