@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 - a nodes data.frame, with *id* column  
 - a edges data.frame, with *from* and *to* columns  
 
+# Minimal example  
 ```{r}
 require(visNetwork, quietly = TRUE)
 nodes <- data.frame(id = 1:3)
@@ -63,7 +64,6 @@ visNetwork(nodes = nodes,
 
 ## Global nodes/edges configuration  
 - Set global optiona for nodes and edges using **visNodes** and **visEdges**, and use options per group using **visGroups**.  
-
 ```{r}
 nodes <- data.frame(id = 1:5,
                     group = c(rep("A", 2), rep("B", 3)))
@@ -104,14 +104,17 @@ edges <- data.frame(from = trunc(runif(nb)*(nb - 1)) + 1,
 New feature in **visNetwork**: you can now add more custom legend on nodes/edges!  
 ```{r}
 visNetwork(nodes, edges, width = "100%") %>% 
-    visLegend()
+    visLegend(width = 0.03, 
+              position = "right")
 ```
 
 Or passing data  
 ```{r}
 visNetwork(nodes, edges, width = "100%") %>% 
-    visLegend(useGroups = T, addNodes = data.frame(label = "Nodes", shape = "circle"),
-              addEdges = data.frame(label = "link", color = "black"))
+    visLegend(useGroups = T, 
+              addNodes = data.frame(label = "Nodes", shape = "circle"),
+              addEdges = data.frame(label = "link", color = "black"), 
+              position = "right")
 ```
 
 
@@ -201,6 +204,7 @@ data("solder")
 res <- rpart(formula = Opening~., data = solder, control = rpart.control(cp = 0.00005))
 visTree(object = res, height = "800px", nodesPopSize = T, minNodeSize = 10, maxNodeSize = 30)
 ```
+
 
 
 ## Use DOT language data  
@@ -472,8 +476,8 @@ visNetwork(nodes, edges) %>%
 ```
 
 
-### Use image and icon  
-#### Images  
+## Use image and icon  
+### Images  
 - to use images in nodes, you first have to set `shape` to **image** or **circularImage**.  
 - Then, set the relative or absolute path on `image` value  
 - An option is available in case of wrong path: `brokenImage`  
@@ -497,7 +501,8 @@ visNetwork(nodes, edges, width = "100%") %>%
 ```
 
 
-### fontAwesome icons  
+## Options  
+
 
 
 
