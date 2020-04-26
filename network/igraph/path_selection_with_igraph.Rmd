@@ -1,0 +1,59 @@
+---
+title: "path_selection_with_igraph"
+author: "yincy"
+date: "4/26/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+nodes <- read.csv(file = "Dataset1-Media-Example-NODES.csv", header = TRUE, as.is = TRUE)
+# the first column is the vertex id, other column trited as vertex attributes
+
+links <- read.csv(file = "Dataset1-Media-Example-EDGES.csv", header = TRUE, as.is = TRUE)
+# the first two columns are the vertex ids that this edge between, and the other columns are the edge attributes
+```
+
+
+```{r}
+links <- aggregate(x = links[, 3], by = links[, -3], FUN = sum)
+```
+
+
+```{r}
+net <- graph_from_data_frame(d = links, 
+                             directed = T, 
+                             vertices = nodes)
+```
+
+```{r}
+net
+```
+
+```{r}
+dist_s07_all <- distances(graph = net, v = V(net)$name == "s07", to = V(net))
+```
+
+```{r}
+nodes_dist_3_s07 <- V(net)[dist_s07_all == 3]
+```
+
+
+
+```{r}
+plot(net, edge.arrow.size = 0.5)
+```
+
+
+
+
+
+
+
+
+
+
