@@ -502,38 +502,397 @@ visNetwork(nodes, edges, width = "100%") %>%
 
 
 ## Options  
+```{r}
+nb <- 10
+nodes <- data.frame(id = 1:nb, 
+                    label = paste("Label", 1:nb), 
+                    group = sample(LETTERS[1:3], nb, replace = T), 
+                    value = 1:nb, 
+                    title = paste0("<p>", 1:nb, "<br>Tooltip !</p>"), 
+                    stringsAsFactors = F)
+
+edges <- data.frame(from = c(8,2,7,6,1,8,9,4,6,2), 
+                    to = c(3,7,2,7,9,1,5,3,2,9), 
+                    value = rnorm(nb, 10), 
+                    label = paste0("Edge", 1:nb), 
+                    title = paste0("<p>", 1:nb, "<br>Edge Tooltip !</p>"))
+```
 
 
+### highlight nearest  
+You can highlight nearest nodes and edges by clicking on a node with `highlightNearest`. Just click everywhere except on nodes to reset the network.  
+```{r}
+visNetwork(nodes = nodes, 
+           edges = edges, 
+           height = "500px", 
+           width = "100%") %>% 
+    visOptions(highlightNearest = T) %>% 
+    visLayout(randomSeed = 123)
+```
 
 
+It's now possible to control the `degree` of depth, and to enable this option also hovering nodes (`hover`). Using `hover`, you can still use `click` to set a view.  
+```{r}
+visNetwork(nodes = nodes, 
+           edges = edges, 
+           height = "500px", 
+           width = "100%") %>% 
+    visOptions(highlightNearest =  list(enabled = T, degree = 2, hover = T)) %>% 
+    visLayout(randomSeed = 123)
+```
+
+```{r}
+visNetwork(nodes = nodes, 
+           edges = edges, 
+           height = "500px", 
+           width = "100%") %>% 
+    visGroups(groupname = "A", shape = "icon", icon = list(code = "foco", size = 75)) %>% 
+    visGroups(groupname = "B", shape = "icon", icon = list(code = "f007", color = "red")) %>% 
+    visGroups(groupname = "C", shape = "icon", icon = list(code = "f1b9", color = "black")) %>% 
+    visOptions(highlightNearest = list(enabled = T, degree = 2, hover = T)) %>% 
+    addFontAwesome() %>% 
+    visLayout(randomSeed = 123)
+```
+
+### select by node id  
+You can also seelct a node by id/label with a list using `nodesIdSelection`  
+```{r}
+visNetwork(nodes = nodes, 
+           edges = edges, 
+           height = "500px", 
+           width = "100%") %>% 
+    visOptions(highlightNearest = T, nodesIdSelection = T) %>% 
+    visLayout(randomSeed = 123)
+```
 
 
+### Select by a column  
+```{r}
+visNetwork(nodes = nodes, 
+           edges = edges, 
+           height = "500px", 
+           width = "100%") %>% 
+    visOptions(selectedBy = "group") %>% 
+    visLayout(randomSeed = 123)
+```
 
 
+```{r}
+# or new column, with multiple groups  
+nodes$sample <- paste(sample(LETTERS[1:3], nrow(nodes), replace = T), 
+                      sample(LETTERS[1:3], nrow(nodes), replace = T), 
+                      sep = ",")
+
+nodes$label = nodes$sample # for see groups  
+visNetwork(nodes = nodes, 
+           edges = edges, 
+           height = "500px", 
+           width = "100%") %>% 
+    visOptions(selectedBy = list(variable = "sample", multiple = T)) %>% 
+    visLayout(randomSeed = 123)
+```
+
+### Customize options  
+New features are available in `visNetwork` to customize `selectBy` and `nodesIdSelection`.  
+
+- `values`: control the available values in the list  
+- `selected`: initialize a selection  
+- `style`: customize `css` of list  
+
+```{r}
+visNetwork(nodes = nodes, 
+           edges = edges, 
+           height = "500px", 
+           width = "100%") %>% 
+    visOptions(highlightNearest = T, 
+               nodesIdSelection = list(enabled = T, 
+                                       selected = "8", 
+                                       values = c(5:10), 
+                                       style = 'width: 200px; height: 26px; 
+                                       background: #f8f8f8; 
+                                       color: darkblue; 
+                                       outline: none;
+                                       border: none')) %>% 
+    visLayout(randomSeed = 123)
+```
+
+### Collapse/Uncollapse Nodes  
+```{r}
+nodes <- data.frame(id = 1:15, 
+                    label = paste("Label", 1:15), 
+                    group = sample(LETTERS[1:3], 15, replace = T))
+
+edges <- data.frame(from = trunc(runif(15) * (15-1)) + 1, 
+                    to = trunc(runif(15)*(15-1)) + 1)
+
+visNetwork(nodes = nodes, 
+           edges = edges) %>% 
+    visEdges(arrows = "to") %>% 
+    visOptions(collapse = T)
+```
+
+### Data Manipulation  
+Using `manipulation`, you can edit your network  
+
+- Add/delete nodes/edges  
+- Change links   
+
+```{r}
+visNetwork(nodes = nodes, 
+           edges = edges, 
+           height = "500px", 
+           width = "100%") %>% 
+    visLayout(randomSeed = 123) %>% 
+    visOptions(manipulation = T)
+```
 
 
+### “Les miserables” example  
+```{r}
+nodes <- jsonlite::fromJSON("https://raw.githubusercontent.com/datastorm-open/datastorm-open.github.io/master/visNetwork/data/nodes_miserables.json")
+
+edges <- edges <- jsonlite::fromJSON("https://raw.githubusercontent.com/datastorm-open/datastorm-open.github.io/master/visNetwork/data/edges_miserables.json")
+
+visNetwork(nodes = nodes, 
+           edges = edges, 
+           height = "700px", 
+           width = "100%") %>% 
+    visOptions(selectedBy = "group", 
+               highlightNearest = T, 
+               nodesIdSelection = T, 
+               collapse = T) %>% 
+    visPhysics(stabilization = F)
+```
 
 
+## Layout  
+The layout is configurable with `visLayout()` and `visHierarchicalLayout()` functions.  
+
+### Set seed  
+The nodes are randomly positioned initially. This means that the settled result is different every time. If you provide a random seed manually (`randomSeed`), then the layout will be the same every time.  
 
 
+### Hierarchical Layout  
+You can use and control hierarchical layout with some options  
+
+- `levelSeparation`, the distance between the different levels  
+- `direction`, the direction of the hierarchical layout  
+- `sortMethod`, the algorithm used to ascertain the levels of the nodes based on the data  
+```{r}
+nodes <- data.frame(id = 1:7)
+edges <- data.frame(from = c(1, 2, 2, 2, 3, 3), 
+                    to = c(2, 3, 4, 5, 6, 7))
+visNetwork(nodes = nodes, 
+           edges = edges,
+           width = "100%") %>% 
+    visHierarchicalLayout() %>% 
+    visEdges(arrows = "from")
+```
+
+```{r}
+visNetwork(nodes = nodes, 
+           edges = edges, 
+           width = "100%") %>% 
+    visEdges(arrows = "from") %>% 
+    visHierarchicalLayout(direction = "LR", levelSeparation = 500)
+```
+
+It's also possible to define the `level` of each node  
+```{r}
+#with level 
+nodes <- data.frame(id = 1:4, level = c(2, 1, 1, 1))
+edges <- data.frame(from = c(1, 1, 1), 
+                    to = c(2, 3, 4))
+
+visNetwork(nodes = nodes, 
+           edges = edges, 
+           width = "100%") %>% 
+    visEdges(arrows = "from") %>% 
+    visHierarchicalLayout()
+```
+
+```{r}
+# without level 
+nodes$level <- NULL
+visNetwork(nodes = nodes, 
+           edges = edges, 
+           width = "100%") %>% 
+    visEdges(arrows = "from") %>% 
+    visHierarchicalLayout()
+```
+
+## igraph  
+It's possible to make the link between the features of package igraph and those of visNetwork  
+
+- Use igraph layout to compute coordinates for fast rendering with `visIgraphLayout()`  
+- Transform igraph network to visNetwork network using `visIgraph()` or `toVisNetworkData()`   
+
+### Use igraph layout  
+With `visIgraphLayout()`, you can use all available layouts in igraph and calculate coordinates before the sending to vis.js.  
+```{r}
+nnodes <- 100
+nedges <- 100
+
+nodes <- data.frame(id = 1:nnodes)
+edges <- data.frame(from = sample(1:nnodes, nedges, replace = T), 
+                    to = sample(1:nnodes, nedges, replace = T))
+
+visNetwork(nodes = nodes, 
+           edges = edges, 
+           height = "500px") %>% 
+    visIgraphLayout(layout = "layout_with_fr") %>% 
+    visNodes(size = 10)
+```
+
+```{r}
+visNetwork(nodes = nodes, 
+           edges = edges, 
+           height = "500px") %>% 
+    visIgraphLayout(layout = "layout_in_circle") %>% 
+    visOptions(highlightNearest = list(enabled = T, hover = T), 
+               nodesIdSelection = T)
+```
 
 
+### Use igraph network  
+`visIgraph` directly transforms an `igraph` network into a **visNetwork**. It's a little bit experiemntal. You can also use `toVisNetworkData` to just get data into **visNetwork** format.  
+```{r}
+library(igraph)
+igraph_network <- graph.famous(name = "Walther")
+plot(igraph_network)
+```
 
 
+get data and plot  
+```{r}
+data <- toVisNetworkData(igraph_network)
+visNetwork(nodes = data$nodes, edges = data$edges, height = "500px")
+```
+
+or plot directly  
+```{r}
+visIgraph(igraph_network)
+```
 
 
+## CART  
+you can visualize Classification and Regression Trees from the output of the **rpart** package, simply using **visTree**.  
+
+### Classification Tree  
+```{r}
+library(rpart)
+
+# basic classification tree 
+res <- rpart(Species ~., data = iris)
+visTree(res, main = "Iris classification tree", width = "100%")
+```
+
+### Regression tree  
+```{r}
+res <- rpart(Petal.Length ~., data = iris)
+visTree(object = res, edgesFontSize = 14, nodesFontSize = 16, width = "100%")
+```
 
 
+```{r}
+data("solder")
+res <- rpart(Opening ~., data = solder, control = rpart.control(cp = 0.00005))
+visTree(res, height = "800px", width = "100%", nodesPopSize = T, minNodeSize = 10, maxNodeSize = 30)
+```
 
 
+## Interactions  
+It's possible to control the interactions of the network with **visInteractions()**  
+
+### Frozen network  
+
+- `dragNodes`: enable or not the selection and movement of nodes (click on a node, and move your mouse)?  
+- `dragView`: enable or not the movement of the full network (click everywhere except node, and move your mouse)?  
+- `zoomView`: enable or not the zoom (use mouse scroll)?  
+```{r}
+visNetwork(nodes = nodes, 
+           edges = edges, 
+           height = "500px", 
+           width = "100%") %>% 
+    visInteraction(dragNodes = F, 
+                   dragView = F, 
+                   zoomView = F) %>% 
+    visLayout(randomSeed = 123)
+```
 
 
+### Hide edges/nodes on drag  
+Can increase the performance  
+
+- `hideEdgesOnDrag`: hide edges when dragging the view  
+- `hideNodesOnDrag`: hide nodes when dragging the view  
+```{r}
+visNetwork(nodes = nodes, 
+           edges = edges, 
+           height = "500px", 
+           width = "100%") %>% 
+    visInteraction(hideEdgesOnDrag = T) %>% 
+    visLayout(randomSeed = 123)
+```
 
 
+### Navigation buttons  
+We can show navigation buttons with `navigationButtons`  
+```{r}
+visNetwork(nodes = nodes, 
+           edges = edges, 
+           height = "500px", 
+           width = "100%") %>% 
+    visInteraction(navigationButtons = T, 
+                   keyboard = T, 
+                   tooltipDelay = 1)
+```
 
 
+## Physics  
+The physics of the network is highly configurable  
+Using **visPhysics()** function, you can play with the physics of the network:  
+
+- choose the `solver` ('barnesHut', 'repulsion', 'hierarchicalRepulsion', 'forceAtlas2Based'), and set options.  
+
+- control the `stabilization` processus.  
+
++ play with `maxVelocity` and `minVelocity`  
++ disable stabilization for rendering initial network and see stabilization processes  
+
+```{r}
+nodes <- data.frame(id = 1:10)
+
+edges <- data.frame(from = round(runif(8)*10), 
+                    to = round(runif(8)*10))
+
+visNetwork(nodes = nodes, 
+           edges = edges, 
+           height = "500px", 
+           width = "100%") %>% 
+    visPhysics(solver = "forceAtlas2Based", 
+               forceAtlas2Based = list(gravitationalConstant = -500))
+```
 
 
+```{r}
+visNetwork(nodes = nodes, 
+           edges = edges, 
+           height = "500px", 
+           width = "100%") %>% 
+    visPhysics(solver = "barnesHut")
+```
+
+
+## Configure tools  
+Use **visConfigure()** to configure and view options directly on your network   
+Don't show here. Test and open the network in a web browser. Can be usefull to configure your network as wanted.  
+```{r}
+nodes <- data.frame(id = 1:3, label = LETTERS[1:3])
+edges <- data.frame(from = c(1, 2), to  = c(1, 3))
+visNetwork(nodes, edges, width = "100%") %>% 
+    visConfigure(enabled = T)
+```
 
 
 
