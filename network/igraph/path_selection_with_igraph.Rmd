@@ -35,17 +35,39 @@ net
 ```
 
 ```{r}
-dist_s07_all <- distances(graph = net, v = V(net)$name == "s07", to = V(net))
+dis_to_s07 <- distances(graph = net, 
+                        to = V(net), 
+                        v = V(net)$name == "s07", 
+                        mode = "out")
+dis_to_s07
 ```
 
 ```{r}
-nodes_dist_3_s07 <- V(net)[dist_s07_all == 3]
+all_path_to_s07 <- all_simple_paths(graph = net, 
+                                    from = V(net)$name == "s07", 
+                                    to = dis_to_s07[1, ][dis_to_s07 == 3] %>% names())
 ```
 
 
+```{r}
+all_path_to_s07 %>% class()
+all_path_to_s07_3 <- all_path_to_s07[sapply(all_path_to_s07, length) == 4]
+```
 
 ```{r}
-plot(net, edge.arrow.size = 0.5)
+epath <- E(net)[V(net)[name == "s07"] %->% V(net)[name %in% c("s02", "s06", "s15", "s17")]]
+```
+
+```{r}
+vcol <- rep("grey", vcount(net))
+vcol[V(net)$name %in% (all_path_to_s07_3[[1]] %>% names())] <- "tomato"
+
+ecol <- rep("grey", ecount(net))
+ecol[epath] <- "blue"
+
+plot(net, vertex.color = vcol, 
+     edge.color = ecol, 
+     edge.arrow.size = 0.3)
 ```
 
 

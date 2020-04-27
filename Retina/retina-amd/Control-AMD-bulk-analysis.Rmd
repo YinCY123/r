@@ -33,7 +33,7 @@ RPE_Control_sample_info <- GSE135092[[1]] %>% pData() %>%
     dplyr::filter(`tissue:ch1` == "RPE, Macula", `amd_status:ch1` == "Control") %>% 
     dplyr::select(title, geo_accession, `tissue:ch1`, organism_ch1, characteristics_ch1, characteristics_ch1.1, `amd_status:ch1`)
 ```
- 
+
 
 # load data  
 ```{r}
@@ -78,6 +78,7 @@ y <- DGEList(counts = amd_ctl_reads,
 y$counts %>% .[1:5, 1:5]
 ```
 
+
 ```{r}
 y$samples
 ```
@@ -99,12 +100,10 @@ cpm_reads <- edgeR::cpm(y = y,
                 normalized.lib.size = T)
 ```
 
-
 ```{r}
 keep <- rowSums(cpm_reads > 0.5) > length(c(RPE_AMD_sample_info$geo_accession, RPE_Control_sample_info)) * 0.4
 y_keep <- y[keep, ]
 ```
-
 
 ```{r}
 plotMDS(y_keep, pch = c(1, 4)[y$samples$group], col = RColorBrewer::brewer.pal(n = 3, name = "Set1")[1:2][y$samples$group])
