@@ -1,0 +1,27 @@
+---
+title: "project"
+author: "yincy"
+date: "4/28/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# part 1  
+- NicheNet to find singling pathway  
+- trajectory analysis of endothelial transition find drive genes  
+- link those drive genes with metabolites  
+
+
+
+
+
+
+
+
+
+
+
