@@ -251,7 +251,554 @@ knitr::include_graphics("/home/yincy/git/R-codes/circlize/figures/Sector-directi
 ```
 
 ## Graphic parameters  
+Some basic parameters for the circular layout can be set by `circos.par()`. These parameters are listed as follows. Note **some parameters can only be modified before the initialization of the circular layout**.  
 
++ `start.degree`: The starting degree where the first sector is put. Note this degree is measured in the standard polar coordinate system which means it is always reverse clockwise. E.g. if it is set to 90, sector start from the top of the circle.  
+
++ `gap.degree`: Gap between two neighbor sectors. It can be a single value which means all gaps share same degree, or a vector which has same number as sectors. **Note the first gap is after the first sector**.  
+
++ `gap.after`: Same as gap.degree, but more understandable. Modifying values of gap.after will also modify gap.degree and vice versa.  
+
++ `track.margin`: Like margin in Cascading Style Sheets (CSS), it is the blank area out of the plotting region, also outside of the borders. Since left and right margin are controlled by gap.after, only bottom and top margin need to be set. The value for `track.margin` is the percentage to the radius of the unit circle. The value can also be set by `convert_height()` or the short version `uh()` function with absolute units.  
+
++ `cell.padding`: Padding of the cell. Like padding in Cascading Style Sheets (CSS), it is the blank area around the plotting regions, but within the borders. The parameter has four values, which control the bottom, left, top and right padding respectively. The first and the third padding values are the percentages to the radius of the unit circle, and the second and fourth values are the degrees. The first and the third value can be set by uh() with absolute units.  
+
++ `unit.circle.segments`: Since curves are simulated by a series of straight lines, this parameter controls the amount of segments to represent a curve. The minimal length of the line segment is the length of the unit circle (2π) divided by `unit.circle.segments`. More segments means better approximation for the curves, while generate larger file size if figures are in PDF format.
+
++ `track.height`: The default height of tracks. It is the percentage to the radius of the unit circle. The height includes the top and bottom cell paddings but not the margins. The value can be set by `uh()` with absolute units.  
+
++ `points.overflow.warning`: Since each cell is in fact not a real plotting region but only an ordinary rectangle (or more precisely, a circular rectangle), it does not remove points that are plotted outside of the region. So if some points (or lines, text) are out of the plotting region, by default, the package would continue drawing the points but with warning messages. However, in some circumstances, drawing something out of the plotting region is useful, such as adding some text annotations (like the first track in Figure 1.2). Set this value to FALSE to turn off the warnings.  
+
++ `canvas.xlim`: The ranges in the canvas coordinate in x direction. **circlize** is forced to put everything inside the unit circle, so `canvas.xlim` and `canvas.ylim` is `c(-1, 1)` by default. However, you can set it to a more broad interval if you want to leave more spaces out of the circle. By choosing proper canvas.xlim and canvas.ylim, actually you can customize the circle. E.g. setting `canvas.xlim` to `c(0, 1)` and `canvas.ylim` to `c(0, 1)` would only draw 1/4 of the circle.  
+
++ clock.wise: The order for drawing sectors. Default is TRUE which means clockwise. **Note that inside each cell, the direction of x-axis is always clockwise and direction of y-axis is always from inside to outside in the circle**.   
+
+```{r, fig.align='center'}
+knitr::include_graphics("figures/regions-in-a-cell.PNG")
+```
+
+Default values for graphic parameters are listed in following table.  
+
+`start.degree`              | 0
+`gap.degree`/`gap.after`    | 1
+`track.margin`              | c(0.01, 0.01)
+`cell.padding`              | c(0.02, 1.00, 0.02, 1.00)
+`unit.circle.segments`      | 500
+`track.heigth`              | 0.2 
+`points.overflow.warning`   | TRUE
+`canvas.xlim`               | c(-1, 1)
+`canvas.ylim`               | c(-1, 1)
+`clock.wise`                | TRUE  
+
+Parameters related to the allocation of sectors cannot be changed after the initialization of the circular layout. Thus, `start.degree`, `gap.degree`/`gap.after`, `canvas.xlim`, `canvas.ylim` and `clock.wise` can only be modified before `circos.initialize()`. The second and the fourth values of `cell.padding` (left and right paddings) can not be modified neither (or will be ignored).  
+
+Similar reason, since some of the parameters are defined before the initialization of the circular layout, after making each plot, you need to call `circos.clear()` to manually reset all the parameters.  
+
+
+## Create plotting regions  
+As described above, only after creating the plotting region can you add low- level graphics on it. The minimal set of arguments for `circos.track()` is to set either `y` or `ylim` which assigns range of y values for this track. `circos.track()` creates tracks for all sectors although in some case only parts of them are visible.  
+
+If `factors` is not specified, all cells in the track will be created with the same settings.If `factors`, `x` and `y` are set, they need to be vectors with the same length. Proper values of `x` and `y` that correspond to current cell will be passed to `panel.fun` by subsetting `factors` internally.  
+
+Graphic arguments such as `bg.border` and `bg.col` can either be a scalar or a vector. If it is a vector, the length must be equal to the number of sectors and the order corresponds to the order of sectors. Thus, you can create plot regions with different styles of borders and background colors.  
+
+If you are confused with the factors orders, you can also customize the borders and background colors inside `panel.fun`. `get.cell.meta.data("cell.xlim")` and `get.cell.meta.data("cell.ylim")` give you dimensions of the plotting region and you can customize plot regions directly by e.g. `circos.rect(col = "#FF000040", border = 1)`.  
+
+`circos.track()` provides track.margin and cell.padding arguments that they only control track margins and cell paddings for the current track. Of course the second and fourth value in cell.padding are ignored.  
+
+
+## Update plotting regions  
+circos.track() creates new tracks, however, if track.index argument is set to a track which already exists, `circos.track()` actually `re-creates` this track. In this case, coordinates on y directions can be re-defined, but settings related to the positions of the track such as the height of the track can not be modified.  
+
+```{r, eval=FALSE}
+circos.track(factors, ylim = c(0,1), track.index = 1, ...)
+```
+
+For a single cell, `circos.update()` can be used to erase all graphics that have been already added in the cell. However, the data coordinate in the cell keeps unchanged.  
+
+```{r, eval=FALSE}
+circos.update(sector.index, track.index)
+circos.points(x, y, sector.index, track.index)
+```
+
+
+## `panel.fun` argument  
+```{r, eval=FALSE}
+factors <- c("a", "a", "a", "b", "b")
+x = 1:5
+y = 5:1
+
+circos.track(factors = factors, 
+             x = x, 
+             y = y, 
+             panel.fun = function(x, y){
+               circos.points(x, y)
+             })
+```
+
+In `panel.fun`, one thing important is that if you use any low-level graphic functions, you don’t need to specify `sector.index` and `track.index` explicitly. Remember that when applying `circos.track()`, cells in the track are created one after one. When a cell is created, **circlize** would set the sector index and track index of the cell as the ‘current’ index. When the cell is created, panel.fun is executed immediately. Without specifying `sector.index` and `track.index`, the ‘current’ ones are used and that’s exactly what you need.  
+
+The advantage of `panel.fun` is that it makes you feel you are using graphic functions in the base graphic engine (You can see it is almost the same of using `circos.points(x, y)` and `points(x, y)`). It will be much easier for users to understand and customize new graphics.  
+
+Inside `panel.fun`, information of the ‘current’ cell can be obtained through `get.cell.meta.data()`. Also this function takes the ‘current’ sector and ‘current’ track by default.  
+```{r, eval=FALSE}
+get.cell.meta.data(name)
+get.cell.meta.data(name, sector.index, track.index)
+```
+
+Information that can be extracted by get.cell.meta.data() are:  
+
++ `sector.index`: The name for the sector.  
++ `sector.numeric.index`: Numeric index for the sector.  
++ `track.index`: Numeric index for the track.  
++ `xlim`: Minimal and maximal values on the x-axis.  
++ `ylim`: Minimal and maximal values on the y-axis.  
++ `xcenter`: mean of xlim.  
++ `ycenter`: mean of ylim.  
++ `xrange`: defined as xlim[2] - xlim[1].  
++ `yrange`: defined as ylim[2] - ylim[1].  
++ `cell.xlim`: Minimal and maximal values on the x-axis extended by cell paddings.  
++ `cell.ylim`: Minimal and maximal values on the y-axis extended by cell paddings.  
++ `xplot`: Degree of right and left borders in the plotting region. The first element corresponds to the start point of values on x-axis and the second element corresponds to the end point of values on x-axis Since x-axis in data coordinate in cells are always clockwise, xplot[1] is larger than xplot[2].  
++ `yplot`: Radius of bottom and top radius in the plotting region.  
++ `cell.start.degree`: Same as xplot[1].  
++ `cell.end.degree`: Same as xplot[2].  
++ `cell.bottom.radius`: Same as yplot[1].  
++ `cell.top.radius`: Same as yplot[2]. 
++ `track.margin`: Margins of the cell.  
++ `cell.padding`: Paddings of the cell.  
+
+Following example code uses `get.cell.meta.data()` to add sector index in the center of each cell.  
+
+```{r, eval=FALSE}
+circos.track(ylim = ylim, panel.fun = function(x, y){
+  sector.index = get.cell.meta.data(name = "sector.index")
+  xcenter = get.cell.meta.data(name = "xcenter")
+  ycenter = get.cell.meta.data(name = "ycenter")
+  circos.text(xcenter, ycenter, sector.index = sector.index)
+})
+```
+
+`get.cell.meta.data()` can also be used outside `panel.fun`, but you need to explictly specify `sector.index` and `track.index` arguments unless the current index is what you want.   
+
+There is a companion variable `CELL_META` which is identical to `get.cell.meta.data()`to get cell meta information, but easier and shorter to write. Actually, the value of `CELL_META` itself is meaningless, but e.g. `CELL_META$sector.index` is automatically redirected to get.cell.meta.data("`sector.index`"). Following code rewrites above example code with `CELL_META`.  
+
+```{r, eval=FALSE}
+circos.track(ylim = yim, panel.fun = function(x, y){
+  circos.text(x = CELL_META$xcenter, y = CELL_META$ycenter, 
+              labels = CELL_META$sector.index)
+})
+```
+
+Please note `CELL_META` only extracts information for the “current” cell, thus, it is recommended to use only in `panel.fun`.  
+
+Nevertheless, if you have several lines of code which need to be executed out of `panel.fun`, you can flag the specified cell as the 'current' cell by `set.current.cell()`, which can save you from typing too many `sector.index = ..., track.index = ...,`. E.g. following code  
+
+```{r}
+circos.text(get.cell.meta.data(name = "xcenter", sector.index, track.index), 
+            get.cell.meta.data(name = "ycenter", sector.index, track.index), 
+            get.cell.meta.data(name = "sector.index", sector.index, track.index), 
+            sector.index, track.index)
+```
+
+can be simplified to  
+```{r, eval=FALSE}
+set.current.cell(sector.index, track.index)
+circos.text(x = get.cell.meta.data(name = "xcenter"), 
+            y = get.cell.meta.data(name = "ycenter"), 
+            labels = get.cell.meta.data(name = "sector.index"))
+
+# or more simple 
+circos.text(x = CELL_META$xcenter, 
+            y = CELL_META$ycenter, 
+            labels = CELL_META$sector.index)
+```
+
+
+## Other utilities  
+**circlize** transform data points in several coordinate systems and it is basically done by the core function `circlize()`. The function transforms from data coordinate (coordinate in the cell) to the polar coordinate and its companion `reverse.circlize()` transforms from polar coordinate to a specified data coordinate. The default transformation is applied in the `current` cell.  
+
+```{r}
+factors = c("a", "b")
+circos.initialize(factors, xlim = c(0, 1))
+circos.track(ylim = c(0, 1))
+```
+
+```{r}
+# x = 0.5, y = 0.5 in sector a and track 1
+circlize(x = 0.5, y = 0.5, sector.index = "a", track.index = 1)
+```
+
+
+```{r}
+# theta = 90, rou = 0.9 in the polar coordinate  
+reverse.circlize(x = 90, y = 0.9, sector.index = "a", track.index = 1)
+```
+
+`circlize()` and `reverse.circlize()` can be used to connect two circular plots if they are drawn on a same page. This provides a way to build more complex plots. Basically, the two circular plots share a same polar coordiante, then, the manipulation of `circlize->reverse.circlize->circlize` can transform coordinate for data points from the first circular plot to the second.  
+
+The transformation between polar coordinate and canvas coordinate is simple. **circlize** has a `circlize:::polar2Cartesian()` function but this function is not exported.  
+
+Following example (Figure 2.7) adds raster image to the circular plot. The raster image is added by `rasterImage()` which is applied in the canvas coordinate. Note how we change coordinate from data coordinate to canvas coordinate by using `circlize()` and `circlize:::polar2Cartesian()`.  
+
+
+### The convert functions  
+For the functions in circlize package, they needs arguments which are lengths measured either in the canvas coordinate or in the data coordinate. E.g. track.height argument in circos.track() corresponds to percent of radius of the unit circle. circlize package is built in the R base graphic system which is not straightforward to define a length with absolute units (e.g. a line of length 2 cm). To solve this problem, circlize provides three functions which convert absolute units to the canvas coordinate or the data coordinate accordingly.  
+
+`convert_length()` converts absolute units to the canvas coordinate. Since the aspect ratio for canvas coordinate is always set to 1, it doesn’t matter whether to convert units in the x direction or in the y direction. The usage of `convert_length()` is straightforward, supported units are `mm`, `cm` and `inches`. If users want to convert a string height or width to the canvas coordinate, directly use `strheight()` or `strwidth()` functions.  
+
+```{r}
+convert_length(x = 2, unit = "mm")
+```
+
+Since `convert_length()` is mostly used to define heights on the radical direction, e.g. track height or height of track margins, the function has another name `convert_height()`, or the short name `uh()` (stands for unit height).  
+
+`convert_x()` and `convert_y()`, or the short version `ux()` and `uy()` (unit x and unit y), convert absolute units to the data coordinate.  
+
+By default, the conversion is applied in the “current” cell, but it can still be used in other cells by specifying `sector.index` and `track.index` arguments. Since the width of the cell is not identical from the top to the bottom in the cell, for `convert_x()` or `ux()` function, the position on y direction where the convert is applied needs to be specified. By default it is at the middle point on y-axis.  
+
+```{r}
+fa = letters[1:10]
+circos.par(cell.padding = c(0, 0, 0, 0), track.margin = c(0, 0))
+circos.initialize(fa, xlim = cbind(rep(0, 10), runif(10, 0.5, 1.5)))
+circos.track(ylim = c(0, 1), track.height = uh(5, "mm"),
+    panel.fun = function(x, y) {
+        circos.lines(c(0, 0 + ux(5, "mm")), c(0.5, 0.5), col = "blue")
+    })
+circos.track(ylim = c(0, 1), track.height = uh(1, "cm"),
+    track.margin = c(0, uh(2, "mm")),
+    panel.fun = function(x, y) {
+        xcenter = get.cell.meta.data("xcenter")
+        circos.lines(c(xcenter, xcenter), c(0, uy(1, "cm")), col = "red")
+    })
+circos.track(ylim = c(0, 1), track.height = uh(1, "inches"),
+    track.margin = c(0, uh(5, "mm")),
+    panel.fun = function(x, y) {
+        line_length_on_x = ux(1*sqrt(2)/2, "cm")
+        line_length_on_y = uy(1*sqrt(2)/2, "cm")
+        circos.lines(c(0, line_length_on_x), c(0, line_length_on_y), col = "orange")
+    })
+```
+
+```{r}
+circos.clear()
+```
+
+
+
+### `circos.info()` and `circos.clear()`  
+You can ge basic information of your current circular plot by `circos.info()`. The function can be called at any time.  
+```{r}
+factors = letters[1:3]
+circos.initialize(factors = factors, xlim = c(1, 2))
+circos.info()
+```
+
+```{r}
+circos.track(ylim = c(0, 1))
+circos.info(sector.index = "a", track.index = 1)
+```
+
+```{r}
+circos.clear()
+```
+
+It can also add labels to all cells by `circos.info(plot = TRUE`  
+
+
+# Chapter 3 Graphics 
+All low-level functions accept sector.index and track.index arguments which indicate which cell the graphics are added in. By default the graphics are added in the “current” sector and “current” track, so it is recommended to use them directly inside panel.fun function.  
+
+```{r, eval=FALSE}
+circos.track(..., panel.fun = function(x, y){
+  circos.points(x, y)
+})
+
+circos.points(x, y, sector.index, track.index)
+```
+
+
+## Points  
+`circos.points()` is similar as `points()` function  
+```{r}
+circos.points(x, y)
+circos.points(x, y, sector.index, track.index)
+circos.points(x, y, pch, col, cex)
+```
+
+There is a companion function circos.trackPoints() which adds points to all sectors in a same track simultaneously.  
+
+The input of `circos.trackPoints()` must contain a vector of categorical factors, a vector of x values and a vector of y values. X values and y values are split by the categorical variable and corresponding subset of x and y values are internally sent to `circos.points()`.  
+
+`circos.trackPoints()` adds points to the “current” track by default which is the most recently created track. Other tracks can also be selected by explictly setting `track.index` argument.  
+
+```{r, eval=FALSE}
+circos.track(...)
+circos.trackPoints(fa, x, y)
+```
+
+`circos.trackPoints()` is simply implemented by `circos.points()` with a for loop. However, it is more recommended to directly use `circos.points()` and `panel.fun` which provides great more flexibility.  
+```{r, eval=FALSE}
+circos.track(fa, x, y, panel.fun = function(x, y){
+  circos.points(x, y)
+})
+```
+
+Other low-level functions also have their companion `circos.track*()` function. The usage is same as `circos.trackPoints()` and they will not be further discussed in following sections.  
+
+
+## Lines  
+Adding lines by · is similar as `lines()` function. One additional feature is that the areas under or above the lines can be filled by specifing `area` argument to TRUE. Position of the baseline can be set to a pre-defined string of `bottom` or `top`, or a numeric value which is the position on y-axis. When `area` is set to TRUE, `col` controls the filled color and `border` controls the color for the borders.  
+
+`baseline` argument is also workable when `lty` is set to "h". Note when `lty` is set to "h", graphic parameters such as `col` can be set as a vector with same length as `x`.  
+
+```{r, fig.align='center'}
+knitr::include_graphics("figures/Line-styles-and-areas-supported.PNG")
+```
+
+```{r, eval=FALSE}
+circos.lines(x, y)
+circos.lines(x, y, sector.index, track.index)
+circos.lines(x, y, col, lwd, lty, type, straight)
+circos.lines(x, y, col, area, baseline, border)
+```
+
+
+## Segments  
+Line segments can be added by `circos.segments()` function. The usage is simiar as `segments()`. Radical segments can be added by setting `straight` to `TRUE`.  
+```{r, eval=FALSE}
+circos.segments(x0, y0, x1, y1)
+circos.segments(x0, y0, x1, y1, straight)
+```
+
+
+## Text  
+Adding text by `circos.text()` is similar as `text()` function. Text is added on the plot for human reading, thus, when putting the text on the circle, the facing of text is very important. `circos.text()` supports seven facing options which are `inside`, `outside`, `clockwise`, `reverse.clockwise`, `downward`, `bending.inside` and `bending.outside`. Please note for `bending.inside` and `bending.outside`, currently, single line text is only supported. If you want to put bended text into two lines, you need to split text into two lines and add each line by `circos.text()` separately.  
+
+```{r, fig.align='center'}
+knitr::include_graphics("figures/Text-facing.PNG")
+```
+
+```{r}
+circos.text(x, y, labels)
+circos.text(x, y, labels, sector.index, track.index)
+circos.text(x, y, labels, facing, niceFacing, adj, cex, col, font)
+```
+
+If, e.g., `facing` is set to `inside`, text which is on the bottom half of the circle is still facing to the top and hard to read. To make text more easy to read and not to hurt readers’ neck too much, `circos.text()` provides niceFacing option which automatically adjust text facing according to their positions in the circle. niceFacing only works for facing value of `inside`, `outside`, `clockwise`, `reverse.clockwise`, `bending.inside` and `bending.outside`.  
+
+`adj` is internally passed to `text()`, thus, it actually adjusts text positions either horizontally or vertically (in the canvas coordinate).  
+
+```{r, eval=FALSE}
+circos.text(x, y, labels, adj = c(0, degree(5)), facing = "clockwise")
+```
+
+As `circos.text()` is applied in the data coordiante, offset can be directly added to x or/and y as a value measured in the data coordinate. An absolute offset can be set by using `ux()` (in x direction) and `uy()` (in y direction).  
+
+```{r, eval=FALSE}
+circos.text(x + ux(2, "mm"), y + uy(2, "mm"), labels)
+```
+
+
+## Rectangles and polygons  
+Theoretically, circular rectangles and polygons are all polygons. If you imagine the plotting region in a cell as Cartesian coordinate, then `circos.rect()` draws rectangles. In the circle, the up and bottom edge become two arcs. Note this function can be vectorized.  
+```{r, eval=FALSE}
+circos.rect(xlef, ybottom, xright, ytop)
+circos.rect(xleft, ybottom, xright, ytop, sector.index, track.index)
+circos.rect(xleft, ybottom, xright, ytop, col, border, lty, lwd)
+```
+
+`circos.polygon()` draws a polygon through a series of points in a cell. Please note the first data point must overlap to the last data point.  
+
+```{r, eval=FALSE}
+circos.polygon(x, y)
+circos.polygon(x, y, col, border, lty, lwd)
+```
+
+
+## Axes  
+Mostly, we only draw x-axes on the circle. `circos.axis()` or `circos.xaxis()` privides options to customize x-axes which are on the circular direction. It supports basic functionalities as `axis()` such as defining the breaks and corresponding labels. Besides that, the function also supports to put x-axes to a specified position on y direction, to position the x-axes facing the center of the circle or outside of the circle, and to customize the axes ticks. The `at` and `labels` arguments can be set to a long vector that the parts which exceed the maximal value in the corresponding cell are removed automatically. The facing of labels text can be optimized by `labels.niceFacing` (by default it is `TRUE`).  
+
+a: Major ticks are calculated automatically, other settings are defaults.  
+b: Ticks are pointing to inside of the circle, facing of tick labels is set to outside.  
+c: Position of x-axis is bottom in the cell.  
+d: Ticks are pointing to the inside of the circle, facing of tick labels is set to reverse.clockwise.  
+e: manually set major ticks and also set the position of x-axis.  
+f: replace numeric labels to characters, with no minor ticks.  
+g: No ticks for both major and minor, facing of tick labels is set to reverse.clockwise.  
+h: Number of minor ticks between two major ticks is set to 2. Length of ticks is longer. Facing of tick labels is set to clockwise.  
+
+```{r, fig.align='center'}
+knitr::include_graphics("figures/x-axis.PNG")
+```
+
+As you may notice in the above figure, when the first and last axis labels exceed data ranges on x-axis in the corresponding cell, their positions are automatically adjusted to be shifted inwards in the cell.  
+
+Possible usage of `circos.axis()` is as follows. Note `h` can be `bottom`, `top` or a numeric value.  
+```{r, eval=FALSE}
+circos.axis(h)
+circos.axis(h, sector.index, track.index)
+circos.axis(h, major.at, labels, major.tick, direction)
+circos.axis(h, major.at, labels, major.tick, labels.font, labels.cex, labels.facing, labels.niceFacing)
+circos.axis(h, major.at, labels, major.tick, minor.tick, major.tick.length, lwd)
+```
+
+Y-axis is also supported by `circos.yaxis()`. The usage is similar as `circos.axis()` One thing that needs to be note is users need to manually adjust `gap.degree` in `circos.par()` to make sure there are enough spaces for y-axes.  
+```{r, eval=FALSE}
+circos.yaxis(side)
+circos.yaxis(at, labels, sector.index, track.index)
+```
+
+
+## Circular arrows  
+Circular arrows can be used to represent stages in a circle. `circos.arrow()` draws circular arrows parallel to the circle. Since the arrow is always parallel to the circle, on x-direction, the start and end position of the arrow need to be defined while on the y-direction, only the position of the center of arrow needs to be defined. Also `width` controls the width of the arrow and the length is defined by `x2 - x1`. `arrow.head.width` and `arrow.head.length` control the size of the arrow head, and values are measured in the data coordinate in corresponding cell. `tail` controls the shape of the arrow tail. Note for `width`, `arrow.head.width` and `arrow.head.length`, the value can be set by `ux()`, `uy()` with absolute units.  
+
+```{r}
+circos.initialize(factors = letters[1:4], xlim = c(0, 1))
+col = rand_color(4)
+tail = c("point", "normal", "point", "normal")
+circos.track(ylim = c(0, 1), panel.fun = function(x, y) {
+    circos.arrow(x1 = 0, x2 = 1, y = 0.5, width = 0.4, 
+        arrow.head.width = 0.6, arrow.head.length = ux(1, "cm"), 
+        col = col[CELL_META$sector.numeric.index], 
+        tail = tail[CELL_META$sector.numeric.index])
+}, bg.border = NA, track.height = 0.4)
+```
+
+```{r}
+circos.clear()
+```
+
+
+```{r}
+cell_cycle <- data.frame(phase = factor(c("G1", "S", "G2", "M"), levels = c("G1", "S", "G2", "M")), 
+                         hour = c(11, 8, 4, 1))
+color = c("#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3")
+circos.par(start.degree = 90)
+circos.initialize(factors = cell_cycle$phase, xlim = cbind(rep(0, 4), cell_cycle$hour))
+circos.track(ylim = c(0, 1), panel.fun = function(x, y){
+  circos.arrow(x1 = CELL_META$xlim[1], x2 = CELL_META$xlim[2], 
+               arrow.head.width = CELL_META$yrange*0.8, 
+               arrow.head.length = ux(0.5, "cm"), 
+               col = color[CELL_META$sector.numeric.index])
+  
+  circos.text(x = CELL_META$xcenter, y = CELL_META$ycenter, 
+              labels = CELL_META$sector.index, 
+              facing = "downward")
+  
+  circos.axis(h = 1, 
+              major.at = seq(0, round(CELL_META$xlim[2])), 
+              minor.ticks = 1, 
+              labels.cex = 0.6)
+}, bg.border = NA, track.height = 0.3)
+
+circos.clear()
+```
+
+
+## Raster image  
+`circos.raster()` is used to add a raster image at a certain position in the circle with proper rotation. The first input variable should be a `raster` object or an object that can be converted by `as.raster()`.  
+
+Facing of the image is controlled by `facing` and `niceFacing` arguments which are similar as in `circos.text()`. When value of facing is one of `inside`, `outside`, `reverse.clockwise`, `clockwise` and `downward`, the size of raster image should have absolute values which should be specified in the form of `number- unit` such as `"20mm"`, `"1.2cm"` or `"0.5inche"`. If only one of `width` and `height` is specified, the other one is automatically calculated by using the aspect ratio of the original image.  
+```{r}
+library(png)
+
+image <- system.file("extdata", "Rlogo.png", package = "circlize")
+image <- as.raster(readPNG(image))
+circos.par(start.degree = 90)
+circos.initialize(factors = letters[1:5], 
+                  xlim = c(0, 1))
+
+all_facing_option <- c("inside", "outside", "reverse.clockwise", "clockwise", "downward")
+
+circos.track(ylim = c(-1, 1), panel.fun = function(x, y){
+  circos.raster(image = image, 
+                x = CELL_META$xcenter, 
+                y = CELL_META$ycenter, 
+                width = "1cm", 
+                facing = all_facing_option[CELL_META$sector.numeric.index])
+  
+  circos.text(x = CELL_META$xcenter, 
+              y = CELL_META$ycenter, 
+              labels = all_facing_option[CELL_META$sector.numeric.index], 
+              facing = "inside", 
+              niceFacing = TRUE)
+})
+
+circos.clear()
+```
+
+Also `facing` can be set to `bending.inside` and `bending.outside` that the image is filled to a circular rectangle. The strategy is to plot each original pixel as a small circular rectangle by `circos.rect()`, thus, the plotting is quite slow. If the original image is too huge, `scaling` argument can be set to reduce the size of the original image.  
+
+```{r}
+load(system.file("extdata", "doodle.RData", package = "circlize"))
+circos.par("cell.padding" = c(0, 0, 0, 0))
+circos.initialize(factors = letters[1:5], xlim = c(0, 1))
+circos.track(ylim = c(0, 1), panel.fun = function(x, y){
+  img = img_list[[CELL_META$sector.numeric.index]]
+  circos.raster(image = img, x = CELL_META$xcenter, y = CELL_META$ycenter, 
+                width = CELL_META$xrange, height = CELL_META$yrange, 
+                facing = "bending.inside")
+}, track.height = 0.25, bg.border = NA)
+
+circos.track(ylim = c(0, 1), panel.fun = function(x, y){
+  img = img_list[[CELL_META$sector.numeric.index + 16]]
+  circos.raster(image = img, 
+                x = CELL_META$xcenter, 
+                y = CELL_META$ycenter, 
+                width = CELL_META$xrange, 
+                height = CELL_META$yrange, 
+                facing = "bending.inside")
+}, track.height = 0.25, bg.border = NA)
+
+circos.clear()
+```
+
+
+## Links  
+Links or ribbons are important part for the circular visualization. They are used to represent relations or interactions between sectors. In **circlize**, `circos.link()` draws links between single points and intervals. There are four mandatory arguments which are index for the first sector, positions on the first sector, index for the second sector and positions on the second sector. If the positions on the two sectors are all single points, the link represents as a line. If the positions on the two sectors are intervals, the link represents as a robbon.  
+
+```{r, eval=FALSE}
+circos.link(sector.index1, 0, sector.index2, 0)
+circos.link(sector.index1, c(0,1), sector.index2, 0)
+circos.link(sector.index1, c(0, 1), sector.index2, c(1, 2))
+circos.link(sector.index1, c(0, 1), sector.index2, 0, col, lwd, lty, border)
+```
+
+The position of link end is controlled by rou. By default, it is the bottom of the most inside track and normally, you don’t need to care about this setting. The two ends of the link are located in a same circle by default. The positions of two ends can be adjusted with different values for rou1 and rou2 arguments.  
+
+```{r, eval=FALSE}
+circos.link(sector.index1, 0, sector.index2, 0, rou)
+circos.link(sector.index1, 0, sector.index2, 0, rou1, rou2)
+```
+
+The height of the link is controlled by h argument. In most cases, you don’t need to care about the value of h because they are internally calculated based on the width of each link. However, when the link represents as a ribbon (i.e. link from point to interval or from interval to interval), It can not always ensure that one border is always below or above the other, which means, in some extreme cases, the two borders are intersected and the link would be messed up. It happens especially when position of the two ends are too close or the width of one end is extremely large while the width of the other end is too small. In that case, users can manually set height of the top and bottom border by h and h2.  
+
+```{r, eval=FALSE}
+circos.link(sector.index1, 0, sector.index2, 0, h)
+circos.link(sector.index1, 0, sector.index2, 0, h, h2)
+```
+
+When there are many links, the height of all links can be systematically adjusted by `h.ratio`. The value is between 0 and 1.  
+
+The border of link (if it is a ribbon) or the link itself (if it is a line) is in fact a quadratic Bezier curve, thus you can control the shape of the link by w and w2 (w2 controls the shape of bottom border).  
+```{r, eval=FALSE}
+circos.link(sector.index1, 0, sector.index2, 0, w)
+circos.link(sector.index1, 0, sector.index2, 0, w, w2)
+```
+
+When the links represent as ribbons and the two ends overlap, the links will be de-generated as a ‘hill’.  
+
+Links can have arrows to represent the directions. The `directional` argument controls how to add arrows. A value of 0 means there is no direction, `1` means the direction is from end 1 to end 2, `-1` means the direction is from end 2 to end 1, and `2` means bi-direction. If the link represents as a ribbon, a line with arrow will be added in the center of the link to represent directions.  
+
+Type of arrows is controlled by `arr.type` argument and it is actually passed to `Arrowhead()` defined in **shape** package. Besides the arrow types supported in shape package, there is an additional arrow type `big.arrow` which turns the robbon into a big arrow.  
+```{r, eval=FALSE}
+circos.link(sector.index1, 0, sector.index2, 0, directional = 1)
+circos.link(sector.index1, c(0, 1), sector.index2, c(0, 1), directional = -1)
+```
+
+
+## Highlight sector and tracks  
 
 
 
