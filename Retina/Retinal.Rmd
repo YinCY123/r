@@ -33,9 +33,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 
-
-
-
 ## anatomy  
 ```{r, fig.cap="human retinal}
 knitr::include_graphics(path = "/home/yincy/git/R-codes/Retina/figures/hsaretina.jpeg")
