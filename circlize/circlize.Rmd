@@ -799,6 +799,292 @@ circos.link(sector.index1, c(0, 1), sector.index2, c(0, 1), directional = -1)
 
 
 ## Highlight sector and tracks  
+`draw.sector()` draws sectors, rings or their parts. This function is useful if you want to highlight some parts of your circular plot. it needs arguments of the position of circle center (by default c(0, 0)), the start degree and the end degree for sectors, and radius for two edges (or one edge) which are up or bottom borders. `draw.sector()` is independent from the circular plot.  
+
+Possible usage of `draw.sector()` is as follows.  
+```{r, eval=FALSE}
+draw.sector(start.degree, end.degree, rou1)
+draw.sector(start.degree, end.degree, rou1, rou2, center)
+draw.sector(start.degree, end.degree, rou1, rou2, center, col, border, lwd, lty)
+```
+
+Directions from `start.degree` and `end.degree` is important for drawing sectors. By default, it is clock wise.  
+
+```{r, eval=FALSE}
+draw.sector(start.degree, end.degree, clock.wise = F)
+```
+
+Following code shows examples of `draw.sector()`.  
+
+```{r}
+par(mar = c(1, 1, 1, 1))
+plot(c(-1, 1), c(-1, 1), type = "n", axes = F, ann = F, asp = 1)
+draw.sector(start.degree = 20, end.degree = 0)
+draw.sector(start.degree = 30, end.degree = 90, rou1 = 0.8, rou2 = 0.5, clock.wise = F, col = "#FF0080")
+draw.sector(start.degree = 350, end.degree = 1000, col = "#00FF80", border = NA)
+draw.sector(start.degree = 0, end.degree = 180, rou1 = 0.25, center = c(-0.5, 0.5), border = 2, lwd = 2)
+draw.sector(start.degree = 0, end.degree = 360, rou1 = 0.7, rou2 = 0.6, col = "#0000FF80")
+```
+
+In order to highlight cells in the circular plot, we can use `get.cell.meta.data()` to get the information of positions of cells. E.g. the start degree and end degree can be obtained through `cell.start.degree` and `cell.end.degree`, and the position of the top border and bottom border can be obtained through `cell.top.radius` and `cell.bottom.radius`. Following code shows several examples to highlight sectors and tracks.  
+
+First we create a circular plot with eight sectors and three tracks.  
+```{r}
+factors <- letters[1:8]
+circos.initialize(factors = factors, xlim = c(0, 1))
+for(i in 1:3){
+  circos.track(ylim = c(0, 1))
+}
+circos.info(plot = TRUE)
+
+# highlight sector a 
+draw.sector(start.degree = get.cell.meta.data(name = "cell.start.degree", sector.index = "a"), 
+            end.degree = get.cell.meta.data(name = "cell.end.degree", sector.index = "a"), 
+            rou1 = get.cell.meta.data(name = "cell.top.radius", track.index = 1), 
+            rou2 = get.cell.meta.data(name = "cell.bottom.radius", track.index = 3),
+            col = "#FF000040")
+
+# highlight track 2 and 3 in sector e and f
+draw.sector(start.degree = get.cell.meta.data(name = "cell.start.degree", sector.index = "e"), 
+            end.degree = get.cell.meta.data(name = "cell.end.degree", sector.index = "f"), 
+            rou1 = get.cell.meta.data(name = "cell.top.radius", track.index = 2), 
+            rou2 = get.cell.meta.data(name = "cell.bottom.radius", track.index = 3), 
+            col = "#0000FF40")
+
+# highlight specific regions  
+pos <- circlize(x = c(0.2, 0.8), y = c(0.2, 0.8), 
+                sector.index = "h", 
+                track.index = 2)
+
+draw.sector(start.degree = pos[1, "theta"], 
+            end.degree = pos[2, "theta"], 
+            rou1 = pos[1, "rou"], 
+            rou2 = pos[2, "rou"], 
+            clock.wise = TRUE, 
+            col = "#00FFFF40")
+
+
+# highlight track 1
+draw.sector(start.degree = 0, end.degree = 360, 
+            rou1 = get.cell.meta.data(name = "cell.top.radius", track.index = 1), 
+            rou2 = get.cell.meta.data(name = "cell.bottom.radius", track.index = 1), 
+            col = "#00FF0030")
+
+circos.clear()
+```
+
+If the purpose is to simply highlight complete cells, there is a helper function `highlight.sector()` for which you only need to specify index for sectors and tracks that you want to to highlight. Paddings of the highligted regions can be set by `padding` argument which should contain four values representing ratios of the width or height of the highlighted region.  
+
+One advantage of `highlight.sector()` is that it supports to add text in the highlighted regions. By default, the text is drawn at that center of the highlighted region. The position on the radical direction can be set by `text.vjust` argument either by a numeric value or a string in form of "2 inches"`` or“-1.2cm”`.   
+
+```{r}
+factors <- letters[1:8]
+circos.initialize(factors = factors, xlim = c(0, 1))
+for(i in 1:4){
+  circos.track(ylim = c(0, 1))
+}
+
+circos.info(plot = T)
+
+# highlight sector a and h in track 1
+highlight.sector(sector.index = c("a", "h"), 
+                 track.index = 1, 
+                 text = "a and h belong to a same group", 
+                 facing = "bending.inside", 
+                 niceFacing = TRUE, 
+                 text.vjust = "6mm", 
+                 cex = 0.8)
+
+# highlight sector 1
+highlight.sector(sector.index = "c", 
+                 col = "#0000FF40")
+
+# highlight sector d 
+highlight.sector(sector.index = "d", 
+                 col = NA, 
+                 border = "red", 
+                 lwd = 2)
+
+# highlight sector e  
+highlight.sector(sector.index = "e", 
+                 col = "#0000FF40", 
+                 track.index = c(2, 3))
+
+# highlight sector f and g
+highlight.sector(sector.index = c("f", "g"), 
+                 col = NA, 
+                 border = "green", 
+                 lwd = 2, 
+                 track.index = c(2, 3), 
+                 padding = c(0.1, 0.1, 0.1, 0.1))
+
+# highlight track 4  
+highlight.sector(sector.index = factors, 
+                 col = "#FFFF0040", 
+                 track.index = 4)
+
+circos.clear()
+```
+
+
+## Work together with the base graphic system  
+**circlize** is built on the base R graphic system, then, of course the base graphic functions can be used in combination with circlize functions. On the other hand, `circlize()` converts data points from the data coordinates to the canvas coordinates where the base graphic function can be directly applied.  
+
+Normally, the base functions such as `title()`, `text()`, `legend()` can be used to add extra information on the plot.  
+
+Sometimes, when the text or other graphics are far from the circle, you may set · so that the plotting is not clipped.  
+
+```{r}
+factors <- letters[1:4]
+circos.initialize(factors = factors, 
+                  xlim = c(0, 1))
+
+circos.track(ylim = c(0, 1), panel.fun = function(x, y){
+  circos.points(x = 1:20/20, y = 1:20/20)
+})
+
+text(x = 0, y = 0, labels = "This is\nthe center", cex = 1.5)
+legend("bottomleft", pch = 1, legend = "This is the legend", bty = "n")
+title(main = "This is the title")
+
+circos.clear()
+```
+
+
+# Chapter 4 Legends  
+**circlize** provides complete freedom for users to design their own graphics by implementing the self-defined function `panel.fun`. However one drawback arises that **circlize** is completely blind to users’ data so that one important thing is missing for the visualization which is the legend.  
+
+```{r}
+library(circlize)
+
+col_fun <- colorRamp2(breaks = c(-2, 0, 2), c("green", "yellow", "red"))
+circlize_plot <- function(){
+  set.seed(12345)
+  fa <- letters[1:10]
+  circos.initialize(factors = fa, xlim = c(0, 1))
+  circos.track(ylim = c(0, 1), panel.fun = function(x, y){
+    circos.points(x = runif(20), y = runif(20), cex = 0.5, pch = 16, col = 2)
+    circos.points(x = runif(20), y = runif(20), cex = 0.5, col = 3)
+  })
+  
+  circos.track(ylim = c(0, 1), panel.fun = function(x, y){
+    circos.lines(x = sort(runif(20)), y = runif(20), col = 4)
+    circos.lines(x = sort(runif(20)), runif(20), col = 5)
+  })
+  
+  for(i in 1:10){
+    circos.link(sector.index1 = sample(fa, 1), point1 = sort(runif(10))[1:2], 
+                sector.index2 = sample(fa, 1), point2 = sort(runif(10))[1:2], 
+                col = add_transparency(col_fun(rnorm(1))))
+  }
+  circos.clear()
+}
+```
+
+```{r}
+library(ComplexHeatmap)
+
+# discrete  
+lgd_points <- Legend(at = c("label1", "label2"), type = "points", 
+                     legend_gp = gpar(col = 2:3), title_position = "topleft", 
+                     title = "Track1")
+
+# discrete 
+lgd_lines <- Legend(at = c("label3", "label4"), 
+                    type = "lines", 
+                    legend_gp = gpar(col = 4:5, lwd = 2), 
+                    title_position = "topleft", 
+                    title = "Track2")
+
+# continuous  
+lgd_links <- Legend(at = c(-2, -1, 0, 1, 2), 
+                    col_fun = col_fun, 
+                    title_position = "topleft",
+                    title = "Links")
+
+lgd_list_vertical <- packLegend(lgd_points, lgd_lines, lgd_links)
+                                #, direction = c("vertical", "horizontal")
+lgd_list_vertical
+```
+
+`lgd_points`, `lgd_lines`, `lgd_links` and `lgd_list_vertical` are all grob objects (graphical objects) defined by **grid** package, which you can think as boxes which contain all graphical elements for legends and they can be added to the plot by `grid.draw()`.  
+
+**circlize** is implemented in the base graphic system while **ComplexHeatmap** is implemented by **grid** graphic system. However, these two systems can be mixed somehow. We can directly add grid graphics to the base graphics. (Actually they are two independent layers but drawn on a same graphic device.)  
+
+```{r}
+circlize_plot()
+draw(object = lgd_list_vertical, 
+     x = unit(4, "mm"), 
+     y = unit(4, "mm"), 
+     just = c("left", "bottom"))
+```
+
+
+# Chapter 5 Implement high-level circular plots  
+## Circular barplots  
+```{r}
+category <- paste0("category", "_", 1:9)
+percent <- sort(sample(40:80, 9))
+color <- rev(rainbow(length(percent)))
+
+library(circlize)
+circos.par("start.degree" = 90, cell.padding = c(0, 0, 0, 0))
+circos.initialize(factors = "a", xlim = c(0, 100))
+# there is only one sector  
+
+circos.track(ylim = c(0.5, length(percent) + 0.5), 
+             track.height = 0.8, 
+             bg.border = NA, 
+             panel.fun = function(x, y){
+               xlim = CELL_META$xlim 
+               circos.segments(x0 = rep(xlim[1], 9), y0 = 1:9, 
+                               x1 = rep(xlim[2], 9), y1 = 1:9, 
+                               col = "#CCCCCC")
+               
+               circos.rect(xleft = rep(0, 9), ybottom = 1:9 - 0.45, 
+                           xright = percent, 1:9 + 0.45, 
+                           col = color, 
+                           border = "white")
+               
+               circos.text(x = rep(xlim[1], 9), 1:9, 
+                           labels = paste(category, " - ", percent, "%"), 
+                           facing = "downward", 
+                           adj = c(1.05, 0.5), 
+                           cex = 0.8)
+               breaks = seq(0, 85, by = 5)
+               
+               circos.axis(h = "top", 
+                           major.at = breaks, 
+                           labels = paste0(breaks, "%"), 
+                           labels.cex = 0.6)
+             })
+circos.clear()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
