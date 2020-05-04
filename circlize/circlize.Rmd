@@ -210,7 +210,7 @@ circos.initialize(factors, xlim = xlim)
 
 After the initialization of the layout, you may not see anything drawn or only an empty graphical device is opened. That is because no track has been created yet, however, the layout has already been recorded internally.  
 
-In the initialization step, not only the width of each sector is assigned, but also the order of sectors on the circle is determined. **Order of the sectors are determined by the order of levels of the input factor**. If the value for `factors` is not a factor, the order of sectors is `unique(factors)`. Thus, if you want to change the order of sectors, you can just change of the level of `factors` variable. The following code generates plots with different sector orders.  
+**In the initialization step, not only the width of each sector is assigned, but also the order of sectors on the circle is determined**. **Order of the sectors are determined by the order of levels of the input factor**. If the value for `factors` is not a factor, the order of sectors is `unique(factors)`. Thus, if you want to change the order of sectors, you can just change of the level of `factors` variable. The following code generates plots with different sector orders.  
 ```
 fa <- c('d', 'f', 'e', 'c', 'g', 'b', 'a')
 f1 <- factor(fa)
@@ -222,7 +222,7 @@ circos.initialize(factors = f2, xlim = c(0, 1))
 knitr::include_graphics("/home/yincy/git/R-codes/circlize/figures/sector-orders.png")
 ```
 
-**In different tracks, cells in the same sector share the same data range on x-axes**. Then, for each track, we only need to specify the data range on y direction (or the radical direction) for cells. Similar as `circos.initialize()`, `circos.track()` also receives either `y` or `ylim` argument to specify the range of y-values. Since all cells in a same track shares a same `y` range, `ylim` is just a vector of length two if it is specified.  
+**In different tracks, cells in the same sector share the same data range on x-axes**. Then, **for each track, we only need to specify the data range on y direction (or the radical direction) for cells**. Similar as `circos.initialize()`, `circos.track()` also receives either `y` or `ylim` argument to specify the range of y-values. Since all cells in a same track shares a same `y` range, `ylim` is just a vector of length two if it is specified.  
 
 `x` can also be specified in `circos.track()`, but it is only used to send to panel.fun. In Section 2.7, we will introduce how `x` and `y` are sent to each cell and how the graphics are added.  
 
@@ -298,7 +298,7 @@ Similar reason, since some of the parameters are defined before the initializati
 ## Create plotting regions  
 As described above, only after creating the plotting region can you add low- level graphics on it. The minimal set of arguments for `circos.track()` is to set either `y` or `ylim` which assigns range of y values for this track. `circos.track()` creates tracks for all sectors although in some case only parts of them are visible.  
 
-If `factors` is not specified, all cells in the track will be created with the same settings.If `factors`, `x` and `y` are set, they need to be vectors with the same length. Proper values of `x` and `y` that correspond to current cell will be passed to `panel.fun` by subsetting `factors` internally.  
+If `factors` is not specified, all cells in the track will be created with the same settings.If `factors`, `x` and `y` are set, they need to be vectors with the same length. **Proper values of `x` and `y` that correspond to current cell will be passed to `panel.fun` by subsetting `factors` internally**.  
 
 Graphic arguments such as `bg.border` and `bg.col` can either be a scalar or a vector. If it is a vector, the length must be equal to the number of sectors and the order corresponds to the order of sectors. Thus, you can create plot regions with different styles of borders and background colors.  
 
@@ -1085,30 +1085,25 @@ Circular dendrograms have many applications, one of which is to visualize phylog
 
 The `bird.orders` data we are using here is from **ape** package. This data set is related to species of birds.  
 
-```{r}
-library(ape)
-data(bird.orders)
-
-hc <- as.hclust(bird.orders)
-```
-
-We split the tree into six sub trees by `cutree()` and convert the data into a `dendrogram` object.  
-
-```{r}
-labels <- hc$labels # name of birds  
-ct <- cutree(tree = hc, k = 6) # cut tree into 6 pieces  
-n = length(labels)
-dend <- as.dendrogram(object = hc)
-```
-
 As we mentioned before, the x-value for the phylogenetic tree is in fact index. Thus, the x-lim is just the minimum and maximum index of labels in the tree. Since there is only one phylogenetic tree, we only need one “big” sector.  
 
 In the first track, we plot the name of each bird, with different colors to represent different sub trees.  
 
 In the above code, setting `xlim` to `c(0, n)` is very important because the leaves of the dendrogram are drawn at `x = seq(0.5, n - 0.5)`.  
 
-In the second track, we plot the circular dendrogram by `circos.dendrogram()`. You can render the dendrogram by **dendextend** package.  
+In the second track, we plot the circular dendrogram by `circos.dendrogram()`. You can render the dendrogram by **dendextend** package.    
+
+We split the tree into six sub trees by `cutree()` and convert the data into a `dendrogram` object.    
 ```{r}
+library(ape)
+data(bird.orders)
+
+hc <- as.hclust(bird.orders)
+labels <- hc$labels # name of birds  
+ct <- cutree(tree = hc, k = 6) # cut tree into 6 pieces  
+n = length(labels)
+dend <- as.dendrogram(object = hc)
+
 circos.par(cell.padding = c(0, 0, 0, 0))
 circos.initialize(factors = "a", xlim = c(0, n))
 
@@ -1144,13 +1139,345 @@ circos.clear()
 ```
 
 
+## Heatmaps  
+Heatmaps, and sometimes combined with dendrograms are frequently used to visualize e.g. gene expression. Heatmaps are basically composed by rectangles, thus, they can be implemented by `circos.rect()`.  
+
+In following example, we make a circular plot with two heatmaps. First we generate the two matrix and perform clustring on the two matrix.  
+
+```{r}
+mat <- matrix(data = rnorm(100*10), nrow = 10, ncol = 100)
+col_fun <- colorRamp2(breaks = c(-2, 0, 2), 
+                      colors = c("green", "black", "red"))
+factors <- rep(x = letters[1:2], times = c(30, 70))
+mat_list <- list(a = mat[, factors == "a"], 
+                 b = mat[, factors == "b"])
+dend_list <- list(a = as.dendrogram(hclust(d = dist(x = t(mat_list[["a"]])))), 
+                  b = as.dendrogram(hclust(d = dist(x = t(mat_list[["b"]])))))
+
+circos.par(cell.padding = c(0, 0, 0, 0), gap.degree = 2)
+circos.initialize(factors = factors, xlim = cbind(c(0, 0), table(factors)))
+circos.track(ylim = c(0, 10), bg.border = NA, panel.fun = function(x, y){
+  sector.index = CELL_META$sector.index
+  m <- mat_list[[sector.index]]
+  dend <- dend_list[[sector.index]]
+  
+  m2 <- m[, order.dendrogram(dend)]
+  col_mat <- col_fun(m2)
+  nr <- nrow(m2)
+  nc <- ncol(m2)
+  for(i in 1:nr){
+    circos.rect(xleft = 1:nc - 1, ybottom = rep(nr - i, nc),
+                xright = 1:nc, ytop = rep(nr - i + 1, nc), 
+                border = col_mat[i, ], 
+                col = col_mat[i, ])
+  }
+})
+
+max_height <- max(sapply(dend_list, function(x) attr(x, "height")))
+circos.track(ylim = c(0, max_height), 
+             bg.border = NA, 
+             track.height = 0.3, 
+             panel.fun = function(x, y){
+               sector.index = get.cell.meta.data(name = "sector.index")
+               dend <- dend_list[[sector.index]]
+               circos.dendrogram(dend = dend, max_height = max_height)
+             })
+
+circos.clear()
+```
 
 
+# Chapter 6 Advanced layout  
+## Zooming of sectors  
+In this section, we will introduce how to zoom sectors and put the zoomed sectors at the same track as the original sectors.  
+
+Under the default settings, width of sectors are calculated according to the data range in corresponding categories. Normally it is not a good idea to manually modify the default sector width since it reflects useful information of your data. However, sometimes manually modifying the width of sectors can make more advanced plots, e.g. zoomings.  
+
+The basic idea for zooming is to put original sectors on part of the circle and put the zoomed sectors on the other part, so that in the original sectors, widths are still proportional to their data ranges, and in the zoomed sectors, the widths are also proportional to the data ranges in the zoomed sectors.  
+
+This type of zooming is rather simple to implement. All we need to do is to copy the data which corresponds to the zoomed sectors, assign new category names to them and append to the original data. The good thing is since the data in the zoomed sectors is exactly the same as the original sectors, if you treat them as normal categories, the graphics will be exactly the same as in the original sectors, but with x direction zoomed.  
+
+Following example shows more clearly the basic idea of this “horizontal” zooming.  
+
+We first generate a data frame with six categories.  
+
+```{r}
+set.seed(123)
+df <- data.frame(
+  factors = sample(letters[1:6], 400, replace = TRUE), 
+  x = rnorm(400),
+  y = rnorm(400),
+  stringsAsFactors = FALSE
+)
+
+# We want to zoom sector a and the first 10 points in sector b. First we extract these data and format as a new data frame.  
+zoom_df_a <- df[df$factors == "a", ]
+zoom_df_b <- df[df$factors == "b", ]
+zoom_df_b <- zoom_df_b[order(zoom_df_b[, 2])[1:10], ]
+zoom_df <- rbind(zoom_df_a, zoom_df_b)
+
+# change the sector names in the zoomed data frame  
+zoom_df$factors <- paste0("zoom_", zoom_df$factors)
+df2 <- rbind(df, zoom_df)
+```
+
+```{r}
+tapply(df2$x, df2$factors %>% as.factor, length)
+```
+
+You may notice the sum of the sector.width is not idential to 1. This is fine, they will be further normalized to 1 internally.
+
+Strictly speaking, since the gaps between sectors are not taken into consideration, the width of the original sectors are not exactly 180 degree, but the real value is quite close to it.
+
+```{r}
+xrange <- tapply(df2$x, df2$factors, function(x) max(x) - min(x))
+normal_sector_index <- unique(df$factors)
+zoomed_sector_index <- unique(zoom_df$factors)
+sector.width <- c(xrange[normal_sector_index] / sum(xrange[normal_sector_index]), 
+                  xrange[zoomed_sector_index] / sum(xrange[zoomed_sector_index]))
+sector.width
+```
+
+What to do next is just to make the circular plot in the normal way. All the graphics in sector a and b will be automatically zoomed to sector “zoom_a” and “zoom_b”.  
+
+In following code, since the sector names are added outside the first track, `points.overflow.warning` is set to `FALSE` to turn off the warning messages.  
+
+```{r}
+circos.par(start.degree = 90, points.overflow.warning = FALSE)
+circos.initialize(factors = df2$factors, x = df2$x, sector.width = sector.width)
+circos.track(factors = df2$factors, x = df2$x, y = df2$y, 
+             panel.fun = function(x, y){
+  circos.points(x, y, col = "red", pch = 16, cex = 0.5)
+  circos.text(x = CELL_META$xcenter, y = CELL_META$cell.ylim[2] + uy(2, 'mm'), 
+              labels = CELL_META$sector.index, 
+              sector.index = CELL_META$sector.index, 
+              niceFacing = TRUE)
+})
+
+circos.link(sector.index1 = "a", point1 = get.cell.meta.data(nam = "cell.xlim", sector.index = "a"), 
+            sector.index2 = "zoom_a", point2 = get.cell.meta.data(name = "cell.xlim", sector.index = "zoom_a"), 
+            border = "NA", 
+            col = "#00000020")
+
+circos.link(sector.index1 = "b", point1 = c(zoom_df_a[1, 2], zoom_df_b[10, 2]), 
+            sector.index2 = "zoom_b", point2 = get.cell.meta.data(name = "cell.xlim", sector.index = "zoom_b"), 
+            rou1 = get.cell.meta.data(name = "cell.top.radius", sector.index = "b"), 
+            border = NA, 
+            col = "#00000020")
+
+circos.clear()
+```
 
 
+## Visualize part of the circle  
+`canvas.xlim` and `canvas.ylim` parameters in `circos.par()` are useful to generate plots only in part of the circle. As mentioned in previews chapters, the circular plot is always drawn in a canvas where x values range from -1 to 1 and y values range from -1 to 1. Thus, if `canvas.xlim` and `canvas.ylim` are all set to `c(0, 1)`, which means, the canvas is restricted to the right top part, then only sectors between 0 to 90 degree are visible.  
+
+```{r}
+df <- data.frame(
+  factors = "a", 
+  x = runif(100), 
+  y = runif(100)
+)
+
+circos.par("canvas.xlim" = c(0, 1), "canvas.ylim" = c(0, 1), 
+           "start.degree" = 90, "gap.after" = 270)
+
+factors <- "a"
+circos.initialize(factors = df$factors, x = df$x)
+circos.track(factors = df$factors, y = df$y, panel.fun = function(x, y){
+  circos.points(x = df$x, y = df$y, col = "red", pch = 19, cex = 0.3)
+})
+
+circos.track(factors = df$factors, x = df$x, y = df$y, 
+             panel.fun = function(x, y){
+               circos.lines(x = df$x, df$y, type = "h")
+             })
+
+circos.clear()
+```
+
+```{r}
+factors <- letters[1:4]
+
+df <- data.frame(
+  factors = rep("a", 100), 
+  x = runif(n = 100), 
+  y = runif(n = 100)
+) 
+
+# track 1
+circos.initialize(factors = factors, xlim = range(df$x))
+circos.track(factors = factors, ylim = range(df$y), panel.fun  = function(x, y){
+  circos.points(x = df$x, y = df$y, pch = 16, cex = 0.5, sector.index = "a")
+})
+
+# track 2
+circos.track(ylim = range(df$y), bg.border = NA)
+circos.update(sector.index = "a", bg.border = "black")
+circos.points(x = df$x, y = df$y, pch = 16, cex = 0.5)
+
+# track 3 and 4
+circos.track(factors = factors, ylim = range(df$y))
+circos.track(factors = factors, ylim = range(df$y))
+
+circos.clear()
+```
+
+**draw circular in circlize package**  
+```{r}
+circos.par(gap.degree = 0)
+circos.initialize(factors = "a", xlim = c(0, 1))
+circos.track(factors = "a", ylim = c(0, 1), track.height = 0.05, bg.col = "black", bg.border = "black")
+circos.clear()
+```
+
+**circlize** finally makes the circular plot in the base R graphic system. Seperated circular plots actually can be put in a same page by some tricks from the base graphic system. Here the key is `par(new = TRUE)` which allows to draw a new figure as a new layer directly on the previous canvas region. By setting different `canvas.xlim` and `canvas.ylim`, it allows to make more complex plots which include more than one circular plots.  
+
+Folowing code shows how the two independent circualr plots are added and nested. Figure 6.4 illustrates the invisible canvas coordinate and how the two circular plots overlap.  
+
+```{r}
+factors <- letters[1:4]
+circos.initialize(factors = factors, xlim =  c(0, 1))
+circos.track(ylim = c(0, 1), panel.fun = function(x, y){
+  circos.text(x = 0.5, y = 0.5, labels = "outer circos", niceFacing = TRUE)
+})
+
+circos.clear()
+
+par(new = TRUE) # magic 
+circos.par("canvas.xlim" = c(-2, 2), "canvas.ylim" = c(-2, 2))
+factors <- letters[1:3]
+circos.initialize(factors = factors, xlim = c(0, 1))
+circos.track(ylim = c(0, 1), panel.fun = function(x, y){
+  circos.text(x = 0.5, y = 0.5, labels = "inner circos", niceFacing = T)
+})
+
+circos.clear()
+```
 
 
+```{r}
+par(mar= rep(0, 4))
+circos.par(start.degree = 45, "canvas.xlim" = c(-2, 2), "canvas.ylim" = c(-2, 2))
+circos.initialize(factors = letters[1:4], xlim = c(0, 1))
+circos.track(factors = letters[1:4], ylim = c(0, 1), bg.border = NA,
+             panel.fun = function(x, y){
+})
+circos.update(sector.index = "d", track.index = 1, bg.col = NA, bg.border = "black")
+circos.text(x = CELL_META$xcenter, 
+            y = CELL_META$ycenter, 
+            labels = "first", 
+            niceFacing = T)
+circos.update(sector.index = "a", track.index = 1, bg.col = NA, bg.border = "black")
+circos.text(x = CELL_META$xcenter, 
+            y = CELL_META$ycenter, 
+            labels = "first", 
+            niceFacing = T)
 
+circos.clear()
+
+par(new = TRUE)
+
+circos.par("canvas.xlim" = c(-1.5, 2.5), "canvas.ylim" = c(-1.5, 2.5), start.degree = 45)
+circos.initialize(factors = letters[1:4], xlim = c(0, 1))
+circos.track(factors = letters[1:4], ylim = c(0, 1), bg.border = NA,
+             panel.fun = function(x, y){
+})
+
+circos.update(sector.index = "b", track.index = 1, bg.border = "black")
+circos.text(x = CELL_META$xcenter, 
+            y = CELL_META$ycenter, 
+            labels = "second", 
+            niceFacing = T)
+circos.update(sector.index = "c", track.index = 1, bg.border = "black")
+circos.text(x = CELL_META$xcenter, 
+            y = CELL_META$ycenter, 
+            labels = "second", 
+            niceFacing = T)
+
+circos.clear()
+```
+
+
+```{r}
+factors <- letters[1:4]
+lim = c(1, 1.1, 1.2, 1.3)
+
+for(i in 1:4){
+  circos.par("canvas.xlim" = c(-lim[i], lim[i]), "canvas.ylim" = c(-lim[i], lim[i]))
+  circos.initialize(factors = factors, xlim = c(0, 1))
+  circos.track(ylim = c(0, 1), bg.border = NA)
+  circos.update(sector.index = factors[i], bg.border = "black")
+  circos.points(x = runif(10), 
+                y = runif(10), 
+                pch = 16, 
+                cex = 0.5)
+  circos.clear()
+  par(new = TRUE)
+}
+```
+
+
+## Arrange multiple plots  
+**circlize** is implemented in the base R graphic system, thus, you can use `layout()` or `par(mforw, mfcol)` to arrange multiple circular plots in one page.  
+```{r}
+layout(mat = matrix(1:9, 3, 3))
+for(i in 1:9){
+  factors = 1:8
+  par(mar = rep(0.5, 4))
+  circos.par(cell.padding = rep(0, 4))
+  circos.initialize(factors = factors, xlim = c(0, 1))
+  circos.track(ylim = c(0, 1), track.height = 0.05, bg.col = rand_color(8), bg.border = NA)
+  for(i in 1:10){
+    se = sample(1:8, 2)
+    circos.link(sector.index1 = se[1], point1 = runif(2), 
+                sector.index2 = se[2], point2 = runif(2), 
+                col = rand_color(1, transparency = 0.4), border = NA)
+  }
+  circos.clear()
+}
+```
+ 
+
+# Chapter 7 Introduction  
+Circular visualization is popular in Genomics and related omics fields. It is efficient in revealing associations in high dimensional genomic data. In genomic plots, categories are usually chromosomes and data on x axes are genomic positions, but it can also be any kind of general genomic categories.  
+
+To make is easy for Genomics analysis, circlize package particularly provides functions which focus on genomic plots. These functions are synonymous to the basic graphic functions but expect special format of input data.  
+
++ `circos.genomicTrack()`: create a new track and add graphics.  
++ `circos.genomicPoints()`: low-level function, add points.  
++ `circos.genomicLines()`: low-level function, add lines or segments.  
++ `circos.genomicRect()`: low-level function, add rectangles.  
++ `circos.genomicText()`: low-level function, add text.  
++ `circos.genomicLink()`: add links.  
+
+The genomic functions are implemented by basic circlize functions (e.g. `circos.track()`, `circos.points()`), thus, the use of genomic functions can be mixed with the basic circlize functions.  
+
+## Input data  
+Genomic data is usually stored as a table where the first three columns define the genomic regions and following columns are values associated with the corresponding regions. Each genomic region is composed by three elements: genomic category (in most case, it is the chromosome), start position on the genomic category and the end position. Such data structure is known as BED format and is broadly used in genomic research.  
+
+**circlize** provides a simple function `generateRandomBed()` which generates random genomic data. Positions are uniformly generated from human genome and the number of regions on chromosomes approximately proportional to the length of chromosomes. In the function, `nr` and `nc` control the number of rows and numeric columns that users need. Please note `nr` are not exactly the same as the number of rows which are returned by the function. `fun` argument is a self-defined function to generate random values.  
+
+```{r}
+set.seed(999)
+bed <- generateRandomBed()
+head(bed)
+```
+
+```{r}
+bed <- generateRandomBed(nr = 200, nc = 4)
+nrow(bed)
+```
+
+```{r}
+bed <- generateRandomBed(nc = 2, fun = function(k)sample(letters, k, replace = TRUE))
+head(bed)
+```
+
+All genomic functions in **circlize** expect input variable as a data frame which contains genomic data or a list of data frames which contains genomic data in different conditions.  
+
+
+# Chapter 8 Initialize with genomic data  
 
 
 
