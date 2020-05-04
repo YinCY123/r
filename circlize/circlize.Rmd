@@ -279,6 +279,7 @@ knitr::include_graphics("figures/regions-in-a-cell.PNG")
 
 Default values for graphic parameters are listed in following table.  
 
+**Parameters**--------------|-**Values**------------------
 `start.degree`              | 0
 `gap.degree`/`gap.after`    | 1
 `track.margin`              | c(0.01, 0.01)
@@ -478,9 +479,7 @@ circos.track(ylim = c(0, 1), track.height = uh(1, "inches"),
         line_length_on_y = uy(1*sqrt(2)/2, "cm")
         circos.lines(c(0, line_length_on_x), c(0, line_length_on_y), col = "orange")
     })
-```
 
-```{r}
 circos.clear()
 ```
 
