@@ -2307,6 +2307,440 @@ genomicDensity(DMR_hyper, window.size = 1e6) %>% head()
 
 # Chapter 12 Nested zooming  
 ## Basic idea  
+In Section 6.1 we introduced how to zoom sectors to the same circle in the same track. This works fine if there are only a few regions that need to be zoomed. However, when the regions that need to be zoomed is too many, the method will not work efficiently. In this chapter, we introduce another zooming method which puts zoomed regions in a different circular plot.  
+
+To illustrate the basic idea, we first generate a random data set.  
+```{r}
+set.seed(123)
+df <- data.frame(
+  cate = sample(letters[1:8], 400, replace = T), 
+  x = runif(400), 
+  y = runif(400), 
+  stringsAsFactors = F
+)
+
+df <- df[order(df[[1]], df[[2]]), ]
+rownames(df) <- NULL
+
+df$interval_x <- as.character(cut(df$x, c(0, 0.2, 0.4, 0.6, 0.8, 1.0)))
+df$name <- paste(df$cate, df$interval_x, sep = ":")
+df$start <- as.numeric(gsub("^\\((\\d(\\.\\d)?).*(\\d(\\.\\d)?)]", "\\1", df$interval_x))
+df$end = as.numeric(gsub("^\\((\\d(\\.\\d)?),(\\d(\\.\\d)?)]$", "\\3", df$interval_x))
+nm <- sample(unique(df$name), 20)
+df2 <- df[df$name %in% nm, ]
+
+correspondance <- unique(df2[, c("cate", "start", "end", "name", "start", "end")])
+zoom_sector <- unique(df2[, c("name", "start", "end", "cate")])
+zoom_data <- df2[, c("name", "x", "y")]
+
+data <- df[, 1:3]
+sector <- data.frame(cate = letters[1:8], start = 0, end = 1, stringsAsFactors = F)
+sector_col <- structure(rand_color(8, transparency = 0.5), names = letters[1:8])
+```
+
+
+```{r}
+f1 <- function(){
+  circos.par(gap.degree = 10)
+  circos.initialize(sector[, 1], xlim = sector[, 2:3])
+  circos.track(factors = data[[1]], x = data[[2]], y = data[[3]], ylim = c(0, 1), 
+               panel.fun = function(x, y){
+                 circos.points(x, y, pch = 16, cex = 0.5, col = "red")
+               })
+}
+
+f2 <- function(){
+  circos.par(gap.degree = 2, cell.padding = c(0, 0, 0, 0))
+  circos.initialize(factors = zoom_sector[[1]], xlim = as.matrix(zoom_sector[, 2:3]))
+  circos.track(factors = zoom_data[[1]], x = zoom_data[[2]], y = zoom_data[[3]], 
+               panel.fun = function(x, y){
+                 circos.points(x, y, pch = 16, cex = 0.5)
+               })
+}
+```
+
+`f1` is the code for generating the original plot and `f2` is the code for generating the zoomed plot. They can be executed independently.   
+
+To combine the two plots, simply put `f1`, `f2` and `corresponance` to `circos.nested()`.  
+
+```{r}
+circos.nested(f1, f2, correspondance)
+```
+
+In the plot, the zoomed circle is put inside the original circle and the start degree for the second plot is automatically adjusted.  
+
+Zoomed circle can also be put outside by swtiching `f1()` and `f2()`. Actually, for `circos.nested()`, It doesn’t care which one is zoomed or not, they are just two circular plots and a correspondance.  
+
+```{r}
+circos.nested(f2, f1, correspondance[, c(4:6, 1:3)])
+```
+
+
+There are some points that need to be noted while doing nested zoomings:  
+
+1. It can only be applied to the full circle.  
+2. If `canvas.xlim` and `canvas.ylim` are adjusted in the first plot, same value should be set to the second plot.  
+3. By default the start degree of the second plot is automatically adjusted to make the difference between the original positions and zoomed sectors to a minimal. However, users can also manually adjusted the start degree for the second plot by setting `circos.par("start.degree" = ...)` and `adjust_start_degree` must be set to TRUE in `circos.nested()`.  
+4. Since the function needs to know some information for the two circular plots, do not put `circos.clear()` at the end of each plot. They will be added internally.  
+
+`f1` and `f2` are just normal code fro implementing circular plot. There is no problem to make it more complex.  
+
+```{r}
+sector_col <- structure(rand_color(n = 8, transparency = 0.5), names = letters[1:8])
+
+f1 = function() {
+    circos.par(gap.degree = 10)
+    circos.initialize(sector[, 1], xlim = sector[, 2:3])
+    circos.track(data[[1]], x = data[[2]], y = data[[3]], ylim = c(0, 1), 
+        panel.fun = function(x, y) {
+            l = correspondance[[1]] == CELL_META$sector.index
+            if(sum(l)) {
+                for(i in which(l)) {
+                    circos.rect(correspondance[i, 2], CELL_META$cell.ylim[1],
+                                correspondance[i, 3], CELL_META$cell.ylim[2],
+                                col = sector_col[CELL_META$sector.index],
+                                border = sector_col[CELL_META$sector.index])
+                }
+            }
+            circos.points(x, y, pch = 16, cex = 0.5)
+            circos.text(CELL_META$xcenter, CELL_META$ylim[2] + uy(2, "mm"), 
+                CELL_META$sector.index, niceFacing = TRUE, adj = c(0.5, 0))
+    })
+}
+
+f2 = function() {
+    circos.par(gap.degree = 2, cell.padding = c(0, 0, 0, 0))
+    circos.initialize(zoom_sector[[1]], xlim = as.matrix(zoom_sector[, 2:3]))
+    circos.track(zoom_data[[1]], x = zoom_data[[2]], y = zoom_data[[3]], 
+        panel.fun = function(x, y) {
+            circos.points(x, y, pch = 16, cex = 0.5)
+        }, bg.col = sector_col[zoom_sector$cate],
+        track.margin = c(0, 0))
+}
+
+circos.nested(f1, f2, correspondance, connection_col = sector_col[correspondance[[1]]])
+```
+
+## Visualization of DMRs from tagmentation-based WGBS  
+Tagmentation-based whole-genome bisulfite sequencing (T-WGBS) is a technology which can examine only a minor fraction of methylome of interest. In this section, we demonstrate how to visualize DMRs which are detected from T-WGBS data in a circular plot by circlize package.  
+
+In the example data loaded, `tagments` contains regions which are sequenced, `DMR1` contains DMRs for one patient detectd in tagment regions. Correspondance between tagment regions and original genome is stored in `correspondance`.  
+
+```{r}
+load(system.file(package = "circlize", "extdata", "tagments_WGBS_DMR.RData"))
+head(tagments)
+```
+
+```{r}
+head(DMR1)
+```
+
+```{r}
+head(correspondance)
+```
+
+In following code, `f1()` only makes a circular plot with whole genome and `f2()` makes circular plot for the tagment regions.  
+```{r}
+chr_bg_color <- rand_color(n = 22, transparency = 0.8)
+names(chr_bg_color) <- paste0("chr", 1:22)
+
+f1 <- function(){
+  circos.par(gap.after = 2, start.degree = 90)
+  circos.initializeWithIdeogram(chromosome.index = paste0("chr", 1:22),
+                                plotType = c("ideogram", "labels"), 
+                                ideogram.height = 0.03)
+}
+
+f2 <- function(){
+  circos.par(cell.padding = c(0, 0, 0, 0), gap.after = c(rep(1, nrow(tagments) - 1), 10))
+  circos.genomicInitialize(data = tagments, plotType = NULL)
+  circos.genomicTrack(DMR1, ylim = c(-0.6, 0.6), 
+                      panel.fun = function(region, value, ...){
+                        for(h in seq(-0.6, 0.6, by = 0.2)){
+                          circos.lines(x = CELL_META$cell.xlim, 
+                                       y = c(0, 0), 
+                                       lty = 3, 
+                                       col = "#AAAAAA")}
+                        
+                        circos.lines(x = CELL_META$cell.xlim, 
+                                     y = c(0, 0), 
+                                     lty = 3, 
+                                     col = "#888888")
+                          
+                        circos.genomicPoints(region, value, 
+                                               col = ifelse(value[[1]] > 0, "#E41A1C", "#377EB8"), 
+                                               pch = 16, 
+                                             cex = 0.5)
+                      }, bg.col = chr_bg_color[tagments$chr], track.margin = c(0.02, 0))
+  
+  circos.yaxis(side = "left", at = seq(-0.6, 0.6, by = 0.3), 
+               sector.index = get.all.sector.index()[1], labels.cex = 0.4)
+  
+  circos.track(ylim = c(0, 1), track.height = uh(2, "mm"), 
+               bg.col = add_transparency(chr_bg_color[tagments$chr], 0))
+}
+```
+
+```{r}
+circos.nested(f1, f2, correspondance, connection_col = chr_bg_color[correspondance[[1]]])
+```
+
+
+# Chapter 13 The `chordDiagram()` function  
+One unique feature of circular layout is the circular visualization of relations between objects by links. See examples in [this site](http://circos.ca/intro/tabular_visualization/). The name of such plot is called `Chord diagram`. In **circlize**, it is easy to plot Chord diagram in a straightforward or in a highly customized way.  
+
+There are two data formats that represent relations, either adjacency matrix or adjacency list. In adjacency matrix, value in i^th^ row and j^th^ column represents the relation from object in the i^th^ row and the object in the j^th^ column where the absolute value measures the strength of the relation. In adjacency list, relations are represented as a three-column data frame in which relations come from the first column and to the second column, and the third column represents the strength of the relation.  
+
+Following code shows an example of an adjacency matrix.  
+```{r}
+mat <- matrix(1:9, 3)
+rownames(mat) <- letters[1:3]
+colnames(mat) <- LETTERS[1:3]
+mat
+```
+
+And the code in below is an example of a adjacency list.  
+```{r}
+df <- data.frame(from = letters[1:3], to = LETTERS[1:3], value = 1:3)
+df
+```
+
+Actually, it is not difficult to convert between these two formats. There are also R packages and functions do the conversion such as in **reshape2** package, `melt()` converts a matrix to a data frame and `dcast()` converts the data frame back to the matrix.  
+
+Chord diagram shows the information of the relation from several levels.  
+
+1. the links are straightforward to show the relations between objects.  
+2. width of links are proportional to the strength of the relation which is more illustrative than other graphic mappings.  
+3. colors of links can be another graphic mapping for relations.  
+4. width of sectors represents total strength for an object which connects to other objects or is connected from other objects.  
+
+In **circlize** package, there is a chordDiagram() function that supports both adjacency matrix and adjacency list. For different formats of input, the corresponding format of graphic parameters will be different either. E.g. when the input is a matrix, since information of the links in the Chord diagram is stored in the matrix, corresponding graphics for the links sometimes should also be specified as a matrix, while if the input is a data frame, the graphic parameters for links only need to be specified as an additional column to the data frame. However, in many cases, adjacency matrix is directly generated from upstream analysis and converting it into a adjacency list does not make sense, e.g. converting a correlation matrix to a adjacency list is obviously a bad idea. Thus, in this chapter, we will show usage for both adjacency matrix and list.  
+
+Since the usage for the two types of inputs are highly similar, in this chapter, we mainly show figures generated from matrix, but still keep the code which uses adjacency list runable.  
+
+## Basic usage  
+First let's generate a random matrix and the corresponding adjacency list.  
+```{r}
+set.seed(999)
+mat <- matrix(sample(18, 18), 3, 6)
+rownames(mat) <- paste0("S", 1:3)
+colnames(mat) <- paste0("E", 1:6)
+mat
+```
+
+```{r}
+df <- data.frame(from = rep(rownames(mat), times = ncol(mat)), 
+                 to = rep(colnames(mat), times = ncol(mat)), 
+                 value = as.vector(mat), 
+                 stringsAsFactors = F)
+df
+```
+
+```{r}
+chordDiagram(mat)
+
+# or 
+chordDiagram(df)
+```
+
+The default Chord Diagram consists of a track of labels, a track of grids (or you call it lines) with axes, and links. Sectors which correspond to rows in the matrix locate at the bottom half of the circle. The order of sectors is the order of `union(rownames(mat), colnames(mat))` or `union(df[[1]], df[[2]])` if input is a data frame. The order of sectors can be controlled by `order` argument (Figure 13.2). Of course, the length of order vector should be same as the number of sectors.  
+
+In following code, `S1`, `S2` and `S3` should better be put together since they belong to a same group, which is same for `E*` sectors. Of course, you can give a order which mix `S*` and `E*`, but it is not recommended because it is bad for reading the plot.  
+
+```{r}
+chordDiagram(mat, order = c("S2", "S1", "S3", "E4", "E1", "E5", "E2", "E6", "E3"))
+circos.clear()
+```
+
+Under default settings, the grid colors which represent sectors are randomly generated, and the link colors are same as grid colors which correspond to rows (or the first column if the input is an adjacency list) but with 50% transparency.  
+
+
+## Adjust by `circos.par()`  
+Since Chord Diagram is implemented by basic circlize functions, like normal circular plot, the layout can be customized by `circos.par()`.  
+
+The gaps between sectors can be set by `circos.par(gap.after = ...)` (Figure 13.3). It is useful when you want to distinguish sectors between rows and columns. Please note since you change default graphical settings, you need to use `circos.clear()` in the end of the plot to reset it.  
+
+```{r}
+circos.par(gap.after = c(rep(5, nrow(mat) - 1), 15, rep(5, ncol(mat) - 1), 15))
+chordDiagram(mat)
+```
+
+if the input is a data frame  
+```{r}
+circos.par(gap.after = c(rep(5, length(unique(df[[1]])) - 1), 15, 
+                         rep(5, length(unique(df[[2]])) - 1), 15))
+
+chordDiagram(df)
+circos.clear()
+```
+
+To make it simple, users can directly set `big.gap` in `chordDiagram()` (Figure 13.4). The value of `big.gap` corresponds to the gap between row sectors and column sectors (or first-column sectors and second-column sectors in the input is a data frame). Internally a proper `gap.after` is assigned to `circos.par()`. Note it will only work when there is no overlap between row sectors and column sectors.  
+
+```{r}
+chordDiagram(mat, big.gap = 10)
+circos.clear()
+```
+
+small.gap argument controls the gap between sectors corresponding to either matrix rows or columns. The default value is 1 degree and normally you don’t need to set it.  
+
+For Chord diagrams of which row sectors and column sectors have no overlap, by default the big.gap is set to 10 degrees unless you set `circos.par(gap.after = ...)` beforehand.  
+
+Similar to a normal circular plot, the first sector (which is the first row in the adjacency matrix or the first row in the adjacency list) starts from right center of the circle and sectors are arranged clock-wisely. The start degree for the first sector can be set by `circos.par(start.degree = ...)` and the direction can be set by `circos.par(clock.wise = ...)`.  
+
+```{r}
+circos.par(start.degree = 90, clock.wise = F)
+chordDiagram(mat)
+
+circos.clear()
+```
+
+
+## Colors  
+### Set grid colors  
+Grids have different colors to represent different sectors. Generally, sectors are divided into two groups. One contains sectors defined in rows of the matrix or the first column in the data frame, and the other contains sectors defined in columns of the matrix or the second column in the data frame. Thus, links connect objects in the two groups. By default, link colors are same as the color for the corresponding sectors in the first group.  
+
+Changing colors of grids may change the colors of links as well. Colors for grids can be set through `grid.col` argument. Values of `grid.col` better be a named vector of which names correspond to sector names. If it is has no name index, the order of `grid.col` is assumed to have the same order as sectors.  
+
+```{r}
+par(mfrow = c(1, 2))
+grid.col <- c(S1 = "red", S2 = "green", S3 = "blue", 
+              E1 = "grey", E2 = "grey", E3 = "grey", E4 = "grey", E5 = "grey", E6 = "grey")
+
+chordDiagram(mat, grid.col = grid.col)
+chordDiagram(t(mat), grid.col = grid.col)
+```
+
+### Set link colors  
+Transparency of link colors can be set by `transparency` argument (Figure 13.7). The value should between 0 to 1 in which 0 means no transparency and 1 means full transparency. Default transparency is 0.5.  
+
+```{r}
+chordDiagram(mat, grid.col = grid.col, transparency = 0)
+circos.clear()
+```
+
+For adjacecy matrix, colors for links can be customized by providing a matrix of colors. In the following example, we use `rand_color()` to generate a random color matrix. Note since `col_mat` already contains transparency, `transparency` will be ignored if it is set.  
+
+```{r}
+col_mat <- rand_color(n = length(mat), transparency = 0.5)
+dim(col_mat) = dim(mat)
+chordDiagram(mat, grid.col = grid.col, col = col_mat)
+```
+
+
+When the strength of the relation (e.g. correlations) represents as continuous values, `col` can also be specified as a self-defined color mapping function. `chordDiagram()` accepts a color mapping generated by `colorRamp2()`.  
+
+```{r}
+col_fun <- colorRamp2(breaks = range(mat), colors = c("#FFEEEE", "#FF0000"), transparency = 0.5)
+chordDiagram(mat, grid.col = grid.col, col = col_fun)
+```
+
+The color mapping function also works for adjacency list, but it will be applied to the third column in the data frame, so you need to make sure the third column has the proper values.  
+
+```{r}
+chordDiagram(df, grid.col = grid.col, col = col_fun)
+```
+
+When the input is a matrix, sometimes you don’t need to generate the whole color matrix. You can just provide colors which correspond to rows or columns so that links from a same row/column will have the same color. Here note values of colors can be set as numbers, color names or hex code, same as in the base R graphics.  
+
+```{r}
+par(mfrow = c(1, 2))
+chordDiagram(mat, grid.col = grid.col, row.col = 1:3)
+chordDiagram(mat, grid.col = grid.col, column.col = 1:6)
+```
+
+`row.col` and `column.col` is specifically designed for matrix. There is no similar settings for ajacency list.  
+
+To emphasize again, transparency of links can be included in `col`, `row.col` or `column.col`, if transparency is already set there, `transparency` argument will be ignored.  
+
+## Link border  
+`link.lwd`, `link.lty` and `link.border` control the line width, the line style and the color of the link border. All these three parameters can be set either a single scalar or a matrix if the input is adjacency matrix.  
+
+If it is set as a single scalar, it means all links share the same style.  
+```{r}
+chordDiagram(mat, grid.col = grid.col, link.lwd = 2, link.lty = 2, link.border = "red")
+```
+
+If it is set as a matrix, it should have same dimension as mat.  
+```{r}
+lwd_mat <- matrix(data = 1, nrow = nrow(mat), ncol = ncol(mat))
+lwd_mat[mat > 12] <- 2
+border_mat <- matrix(data = NA, nrow = nrow(mat), ncol = ncol(mat))
+border_mat[mat > 12] <- "red"
+chordDiagram(mat, grid.col = grid.col, link.lwd = lwd_mat, link.border = border_mat)
+```
+
+The matrix is not necessary to have same dimensions as in `mat`. It can also be a sub matrix. For rows or columns of which the corresponding values are not specified in the matrix, default values are filled in. It must have row names and column names so that the settings can be mapped to the correct links.  
+```{r}
+border_mat2 <- matrix(data = "black", nrow = 1, ncol = ncol(mat))
+rownames(border_mat2) <- rownames(mat)[2]
+colnames(border_mat2) <- colnames(mat)
+chordDiagram(mat, grid.col = grid.col, link.lwd = 2, link.border = border_mat2)
+```
+
+To be more convenient, graphic parameters can be set as a three-column data frame in which the first two columns correspond to row names and column names in the matrix, and the third column corresponds to the graphic parameters.  
+```{r}
+lty_df <- data.frame(c("S1", "S2", "S3"), c("E5", "E6", "E4"), c(1, 2, 3))
+lwd_df <- data.frame(c("S1", "S2", "S3"), c("E5", "E6", "E4"), c(2, 2, 2))
+border_df = data.frame(c("S1", "S2", "S3"), c("E5", "E6", "E4"), c(1, 1, 1))
+
+chordDiagram(mat, grid.col = grid.col, 
+             link.lty = lty_df, 
+             link.lwd = lwd_df, 
+             link.border = border_df)
+```
+
+It is much easier if the input is a data frame, you only need to set graphic settings as a vector.  
+
+```{r}
+chordDiagram(df, grid.col = grid.col, link.lty = sample(1:3, nrow(df), replace = T), 
+             link.lwd = runif(nrow(df) * 2), link.border = sample(0:1, nrow(df), replace = T))
+```
+
+## Highlight links  
+Sometimes we want to highlight some links to emphasize the importance of such relations. Highlighting by different border styles are introduced in Section 13.4 and here we focus on highlighting by colors.
+
+THere are two ways to highlight links, one is to set different transparency to different links and the other is to only draw links that needs to be highlighted. Based on this rule and ways to assign colors to links (introduced in Section 13.3.2), we can highlight links which come from a same sector by assigning colors with different transparency by `row.col` argument.  
+
+```{r}
+chordDiagram(mat, grid.col = grid.col, row.col = c("#FF000080", "#00FF0010", "#0000FF10"))
+```
+
+We can also highlight links with values larger than a cutoff. There are at least three ways to do it. First, construct a color matrix and set links with small values to full transparency.  
+
+Since link colors can be specified as a matrix, we can set the transparency of those links to a high value or even set to full transparency.  
+
+In following example, links with value less than 12 is set to `#00000000`.  
+
+```{r}
+col_mat <- rand_color(n = length(mat), transparency = 0.5)
+dim(col_mat) <- dim(mat)
+col_mat[mat < 12] <- "#00000000"
+chordDiagram(mat, grid.col = grid.col, col = col_mat)
+```
+
+```{r}
+col_fun = function(x) ifelse(x < 15, "#00000000", "#FF000080")
+chordDiagram(mat, grid.col = grid.col, col = col_fun)
+```
+
+Highlighting links is relatively simple for adjacency list that you only need to construct a vector of colors according to what links you want to highlight.  
+
+```{r}
+col <- rand_color(nrow(df))
+col[df[[3]] < 13] <- "#00000000"
+chordDiagram(df, grid.col = grid.col, col = col)
+```
+
+The `link.visible` argument is recently introduced to **circlize** package which may provide a simple to control the visibility of links. The value can be set as an logical matrix for adjacency matrix or a logical vector for adjacency list.  
+
+```{r}
+col <- rand_color(nrow(df))
+chordDiagram(df, grid.col = grid.col, link.visible = df[[3]] > 13)
+```
+
+## Orders of links  
+### Orders of positions on sectors  
+
 
 
 
