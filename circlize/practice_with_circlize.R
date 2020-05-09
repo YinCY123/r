@@ -1,0 +1,102 @@
+library(circlize)
+n = 100
+df <- data.frame(
+    fa = sample(letters[1:9], n, replace = T), 
+    x = rnorm(n), 
+    y = rnorm(n)
+)
+lty = c("l", "o", "h", "h", "s", "l", "l", "o", "s", "l")
+names(lty) = letters[1:9]
+bl <- rep(c("bottom", "top"), each = c(8, 1))
+names(bl) <- letters[1:9]
+
+circos.par(start.degree = 0, track.height = 0.5)
+circos.initialize(factors = df$fa, x = df$x)
+circos.track(factors = df$fa, x = df$x, y = df$y, 
+             panel.fun = function(x, y){
+                 od = order(x)
+                 circos.lines(x = x[od],
+                              y = y[od], 
+                              area = ifelse(get.current.sector.index() %in% letters[6:9], T, F),
+                              type = lty[get.cell.meta.data(name = "sector.numeric.index")], 
+                              baseline = bl[get.current.sector.index()])
+             })
+                 
+                 
+circos.update(sector.index = "d", track.index = 1)
+circos.lines(x = filter(df, df$fa == "d") %>% pull(x), 
+             y = filter(df, df$fa == "d") %>% pull(y), 
+             col = ifelse((filter(df, df$fa == "d") %>% pull(y)) > 0, "red", "green"), 
+             type = "h")
+
+
+
+circos.par(gap.degree = 0, track.margin = rep(0, 4), cell.padding = rep(0, 4), gap.after = 0)
+circos.initialize(factors = "a", xlim = c(1, 100))
+circos.track(factors = "a", ylim = c(-1, 1), 
+             panel.fun = function(x, y){
+                 circos.segments(
+                     x0 = seq(1, 100, 2)[1:49], 
+                     y0 = -1, 
+                     x1 = seq(1, 100, 2)[2:50], 
+                     y1 = 1,
+                     col = "blue"
+                 )
+             })
+
+
+circos.initialize(factors = letters[1:4], xlim = c(0, 1))
+circos.track(factors = letters[1:4], ylim = c(0, 1), 
+             circos.text(x = ))
+
+
+n = 1000
+df <- data.frame(fa = sample(letters[1:8], n, T), 
+                 x = rnorm(n), 
+                 y = rnorm(n))
+
+circos.par(track.height = 0.2)
+circos.initialize(factors = df$fa, x = df$x)
+circos.track(factors = df$fa, y = df$y, x = df$x, 
+             panel.fun = function(x, y){
+                 circos.points(x = x %>% quantile(probs = c(0.25, 0.75)), 
+                               y = y %>% mean, 
+                               col = "red", 
+                               cex = 1, 
+                               pch = 16)
+                 
+                 circos.text(x = x %>% quantile(probs = c(0.25, 0.75)), 
+                             y = y %>% mean(), 
+                             labels = c("rawTExt", "niceFacing"), 
+                             facing = "clockwise", 
+                             adj = c(0, 0))
+
+             })
+
+circos.track(factors = df$fa, x = df$x, y = df$y, 
+             panel.fun = function(x, y){
+                 circos.points(x = x %>% quantile(probs = c(0.25, 0.75)), 
+                               y = y %>% mean(), 
+                               col = "red", 
+                               cex = 1, 
+                               pch = 16)
+                 
+                 circos.text(x = x %>% quantile(probs = c(0.25, 0.75)), 
+                             y = y %>% mean(), 
+                             labels = c("rawText", "niceFacing"), 
+                             adj = c(1, 0), 
+                             facing = "clockwise")
+             })
+
+circos.clear()
+
+
+
+
+
+
+
+
+
+
+
