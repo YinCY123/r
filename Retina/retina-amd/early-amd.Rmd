@@ -1,0 +1,37 @@
+---
+title: "early-amd"
+author: "yincy"
+date: "4/29/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+library(GEOquery)
+library(magrittr)
+library(tidyverse)
+```
+
+
+```{r}
+GSE99287 <- getGEO(GEO = "GSE99287")
+```
+
+```{r}
+GSE99287[[1]] %>% pData()
+```
+
+```{r}
+GSE135092 <- getGEO(GEO = "GSE135092")
+```
+
+```{r}
+GSE135092[[1]] %>% pData() %>% 
+    filter(`tissue:ch1` == c("RPE, Macula")) %>% 
+    pull(`amd_status:ch1`) %>% table()
+```
+
