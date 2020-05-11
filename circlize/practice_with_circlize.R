@@ -121,8 +121,69 @@ circos.track(c("G1", "S", "G2", "M"), ylim = c(0, 1), x = time,
 circos.clear()
 
 
-# example 5 -----------------------------------------------------
+# example 5 circos arrow plot ------------------------------------------------
+cols <- RColorBrewer::brewer.pal(n = 4, name = "Set1")
+t <- rep(c("normal", "point"), 2)
 
+circos.par(start.degree = 90, track.height = 0.15)
+circos.initialize(factors = letters[1:4], xlim = c(0, 1))
+circos.track(factors = letters[1:4], ylim = c(0, 1), 
+             panel.fun = function(x, y){
+                 circos.arrow(x1 = 0, x2 = 1, y = CELL_META$ycenter, 
+                              width = 1, 
+                              arrow.head.length = 0.2, 
+                              arrow.head.width = 1.3, 
+                              tail = "point", 
+                              col = cols[get.cell.meta.data("sector.numeric.index")])
+                 
+                 circos.axis()
+             }, bg.border = NA)
+
+# example 6 circos bar plot ---------------------------------------------------
+degree <- round(runif(9, 40, 90), digits = 0)
+od <- order(degree, decreasing = T)
+degree <- degree[od]
+lab <- paste("degree", degree, sep = "_") %>% paste("%", sep = "")
+cols <- rainbow(n = 9)
+
+circos.par(start.degree = 90, track.height = 0.1, gap.after = 0, 
+           track.margin = rep(0, 4), cell.padding = rep(0, 4))
+circos.initialize(factors = "a", xlim = c(0, 100))
+
+for(i in 1:9){
+    circos.track(factors = "a", ylim = c(0, 1), bg.border = NA, 
+                 panel.fun = function(x, y){
+        circos.segments(x0 = 0, 
+                        y0 = 0.5, 
+                        x1 = 100, 
+                        y1 = 0.5, 
+                        col = "grey", 
+                        lty = 2)
+        
+        if(get.current.track.index() == 1){
+            circos.axis(h = "top", labels.cex = 0.6, 
+                        major.at = seq(0, degree[1] + 5, 5))
+        }
+        
+        circos.rect(xleft = 0, 
+                    ybottom = 0, 
+                    xright = degree[i], 
+                    ytop = 1,
+                    col = cols[i], 
+                    border = NA)
+        
+        circos.text(x = 0, 
+                    y = 0.5, 
+                    labels = lab[i], 
+                    adj = c(1.2, 0), 
+                    cex = 0.7, 
+                    col = "black")
+    })
+}
+
+circos.clear()
+
+# example 7 -------------------------------------------------
 
 
 
