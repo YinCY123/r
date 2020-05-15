@@ -1,0 +1,34 @@
+---
+title: "gene_of_interest_RPE"
+author: "yincy"
+date: "5/15/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# characters of choriocapillaris  
+
++ vascular endothelial growth factor-A level is negatively correlated with choriocapillaris vascular density  
+
++ choriocapillaris thining is accompanied by changes in the levels of protease inhibitors with increased collagen and decreased ground substance.  
+
++ subfoveal blood flow slower and decreased choroidal volume with progression of AMD   
+
++ MAC is major deposition at the choriocapillaris during aging and AMD  
+
++ choriodal thining is accompanied by a shift in protease inhibitos with increased serine protease inhibitor in thick choriods and increase matrix metalloprotease inhibitors in thin chorids  
+
++ alkaline phosphatase activity is a better marker than CD34 in aging and AMD choriocapillaris  
+
+
+
+
+
+
+
+
+
