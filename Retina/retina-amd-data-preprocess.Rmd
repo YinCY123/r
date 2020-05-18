@@ -1,0 +1,203 @@
+---
+title: "retina-amd-data-preprocess"
+author: "yincy"
+date: "4/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+library(GEOquery)
+library(tidyverse)
+library(KEGGREST)
+library(KEGG.db)
+library(biomaRt)
+```
+
+```
+Using gse135092 data set for normal and AMD macula RPE 
+Using gse135922 for endothelial expressed ligand
+
+Using metabolite data from this paper <Human Plasma Metabolomics in Age-Related Macular Degeneration: Meta-Analysis of Two Cohorts>
+```
+
+## for single cell expression of endothelial  
+donor 4, 5, 6, 7 cd31 enriched endothelial cells  
+feature counts for each cell are divided by the total counts then multiplied by the scale.factor 10000 then log1p transformed.  
+```{r}
+gse135922 <- getGEO(GEO = "   ")
+
+gse135922 <- getGEO(GEO = "GSE135922")
+
+pData(gse135922[[1]]) %>% 
+    filter(grepl("cd31-", title, ignore.case = F), grepl("macula", characteristics_ch1.3, ignore.case = F))
+```
+
+```{r}
+donor4_endothelial_cells <- read.table(file = "/home/yincy/git/Data/AMD-related/AMD-single-cell-choroid-endothelial/GSM4037987/GSM4037987_macula_donor_4_enriched_expression.tsv.gz", 
+                     sep = " ", 
+                     header = T) %>% 
+    .[, -1] %>% 
+    filter(final_cluster_labels %in% c(5, 6, 7, 8))
+
+
+donor5_endothelial_cells <- read.table(file = "/home/yincy/git/Data/AMD-related/AMD-single-cell-choroid-endothelial/GSM4037988/GSM4037988_macula_donor_5_enriched_expression.tsv.gz", 
+                     sep = " ", 
+                     header = T) %>% 
+    .[, -1] %>% 
+    filter(final_cluster_labels %in% c(5, 6, 7, 8))
+
+donor6_endothelial_cells <- read.table(file = "/home/yincy/git/Data/AMD-related/AMD-single-cell-choroid-endothelial/GSM4037989/GSM4037989_macula_donor_6_enriched_expression.tsv.gz") %>% 
+    filter(final_cluster_labels %in% c(5, 6, 7, 8))
+
+donor7_endothelial_cells <- read.table(file = "/home/yincy/git/Data/AMD-related/AMD-single-cell-choroid-endothelial/GSM4037990/GSM4037990_macula_donor_7_enriched_expression.tsv.gz") %>% 
+    filter(final_cluster_labels %in% c(5, 6, 7, 8))
+```
+
+```{r}
+saveRDS(object = list(donor4_endothelial_cells = donor4_endothelial_cells, 
+                      donor5_endothelial_cells = donor5_endothelial_cells, 
+                      donor6_endothelial_cells = donor6_endothelial_cells, 
+                      donor7_endothelial_cells = donor7_endothelial_cells), 
+        file = "/home/yincy/git/Data/AMD-related/AMD-single-cell-choroid-endothelial/donor4_7_endothelial_cells.rds")
+```
+
+
+## bulk-seq for normal and AMD macular RPE  
+```{r}
+gse135092 <- getGEO(GEO = "GSE135092")
+
+Control_samples_geo_accession <- gse135092[[1]] %>% pData() %>% 
+    filter(!grepl("non-Macula", `tissue:ch1`, ignore.case = F), !grepl("Retina", `tissue:ch1`, ignore.case = F), `amd_status:ch1` == "Control") %>% 
+    pull(geo_accession)
+
+AMD_samples_geo_accession <- gse135092[[1]] %>% pData() %>% 
+    filter(!grepl("non-Macula", `tissue:ch1`, ignore.case = F), !grepl("Retina", `tissue:ch1`, ignore.case = F), `amd_status:ch1` == "AMD") %>% 
+    pull(geo_accession)
+```
+
+```{r}
+Control_sample1 <- read_tsv(file = "/home/yincy/git/Data/AMD-related/normal-and-AMD-bulk/GSE135092/GSE135092/GSM3985262_sample1.tsv.gz", 
+                            comment = "#")
+Control_sample1
+```
+
+```{r}
+control_files <- list.files(path = "/home/yincy/git/Data/AMD-related/normal-and-AMD-bulk/GSE135092/GSE135092/", 
+                            pattern = str_c(Control_samples_geo_accession, collapse = "|"))
+
+amd_files <- list.files(path = "/home/yincy/git/Data/AMD-related/normal-and-AMD-bulk/GSE135092/GSE135092/", 
+                        pattern = str_c(AMD_samples_geo_accession, collapse = "|"))
+```
+
+Preprocess  
+```{r}
+df_list <- list() 
+for(i in c(control_files, amd_files)){
+    df <- read_tsv(file = paste("/home/yincy/git/Data/AMD-related/normal-and-AMD-bulk/GSE135092/GSE135092", i, sep = "/"), 
+                   comment = "#")
+    df_list[i] = df[, 3]
+}
+```
+
+```{r}
+count_table <- sapply(df_list, cbind)
+rownames(count_table) <- Control_sample1[, 1, drop = T]
+colnames(count_table) <- substr(colnames(count_table), 1, 10)
+saveRDS(object = count_table, file = "/home/yincy/git/Data/AMD-related/normal-and-AMD-bulk/normal_amd_reads_count_table.rds")
+saveRDS(object = Control_samples_geo_accession, file = "/home/yincy/git/Data/AMD-related/normal-and-AMD-bulk/Control_geo_accession.rds")
+saveRDS(object = AMD_samples_geo_accession, file = "/home/yincy/git/Data/AMD-related/normal-and-AMD-bulk/AMD_geo_accession.rds")
+```
+
+
+## metabolite data  
+```{r}
+table1 <- readxl::read_xlsx(path = "/home/yincy/git/Data/AMD-related/AMD-matebolites/Metabolites-differ-significantly-between-amd-and-control-Boston-samples-based-on-pval-of-AMD-vs-Control.xlsx")
+table1 <- type_convert(table1)
+```
+
+
+```{r}
+table2 <- readxl::read_xlsx(path = "/home/yincy/git/Data/AMD-related/AMD-matebolites/Metabolites-differing-significantly-between-patients-with-AMD-and-Control-using-Coimbra-samples-based-on-p-val-of-AMD-vs-Control-model.xlsx")
+table2 <- type_convert(table2)
+```
+
+
+```{r}
+table3 <- readxl::read_xlsx(path = "/home/yincy/git/Data/AMD-related/AMD-matebolites/Metabolites-differing-significantly-between-patients-with-AMD-and-controls-based-on-meta-analysis-of-AMD-vs-Control-model-from-the-2-study-cohorts.xlsx")
+table3 <- type_convert(table3)
+```
+
+
+```{r}
+table5 <- readxl::read_xlsx(path = "/home/yincy/git/Data/AMD-related/AMD-matebolites/Metabolites-differing-significantly-across-all-study-groups-using-Boston-samples-based-on-pval-from-stage+2eye-model.xlsx")
+table5 <- type_convert(table5)
+```
+
+
+```{r}
+table6 <- readxl::read_xlsx(path = "/home/yincy/git/Data/AMD-related/AMD-matebolites/Metabolites-differing-significantly-across-all-study-groups-using-Coimbra-samples-based-on-pval-from-stage+2eye-model.xlsx")
+table6 <- type_convert(table6)
+```
+
+
+```{r}
+table7 <- readxl::read_xlsx(path = "/home/yincy/git/Data/AMD-related/AMD-matebolites/Metabolites-differing-significantly-from-stage+2eye-model-identified-on-the-meta-analysis-of-the-2-cohorts.xlsx")
+
+table7 <- type_convert(table7)
+table7 %>% arrange(`Pval Meta`)
+```
+
+```{r}
+table_info <- list(
+    table1 = "Metabolites differing significantly between patients with AMD and Controls, using Boston (US) samples based on p-values of AMD/Control model", 
+    table2 = "Metabolites differing significantly between patients with AMD and Controls, using Coimbra (Portugal) samples based on p-values of AMD/Control model", 
+    table3 = "Metabolites differing significantly (p-value) between patients with AMD and controls, based on meta-analysis of AMD/Control model from the 2 study cohorts", 
+    table5 = "Metabolites differing significantly across all study groups using Boston (US) samples based on p-values from Stage + 2Eye model", 
+    table6 = "Metabolites differing significantly across all study groups using Coimbra (Portugal) samples based on p-values from Stage+2Eye model", 
+    table7 = "Metabolites differing significantly (p-value) from Stage+2Eye model identified on the meta-analysis of the 2 cohorts", 
+    legend = "OR - Odds Ratio; Pval - P-value; Qval - q-value; PT - Portugal; US - United States; Meta - Meta analysis; Qval_Sig - indicator for significance based on q-value"
+)
+
+saveRDS(object = table_info, file = "/home/yincy/git/Data/AMD-related/AMD-matebolites/table_info.rds")
+saveRDS(object = list(table1 = table1, table2 = table2, table3 = table3, table5 = table5, table6 = table6, table7 = table7), 
+        file = "/home/yincy/git/Data/AMD-related/AMD-matebolites/Metabolite-tables.rds")
+```
+
+
+## Human protein interactome map  
+```{r}
+hi_union <- read.table(file = "f:/git/Data/Human-Reference-Protein-Interactome-map/HI-union.tsv", 
+                       stringsAsFactors = F, 
+                       sep = "\t")
+
+huri <- read.table(file = "f:/git/Data/Human-Reference-Protein-Interactome-map/HuRI.tsv", 
+                   stringsAsFactors = F, 
+                   sep = "\t")
+```
+
+
+```{r}
+hsa_mart <- useEnsembl(biomart = "ensembl", 
+                       dataset = "hsapiens_gene_ensembl", 
+                       mirror = "asia")
+```
+
+ID conversion 
+```{r}
+library(EnsDb.Hsapiens.v86)
+columns(EnsDb.Hsapiens.v86)
+```
+
+```{r}
+mapIds(x = EnsDb.Hsapiens.v86, 
+       keys = huri$V1, 
+       keytype = "GENEID", 
+       column = "SYMBOL") %>% 
+    head(n = 10)
+```
+
