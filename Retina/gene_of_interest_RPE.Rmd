@@ -24,6 +24,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 + alkaline phosphatase activity is a better marker than CD34 in aging and AMD choriocapillaris  
 
+## gene of interest  
+
+# Compounts affact RPE papers  
+ + Artemisinin Protects Human Retinal Pigmented Epithelial Cells Against Hydrogen Peroxide-induced Oxidative Damage by Enhancing the Activation of AMP-active Protein Kinase  
++ Quercetin protect cigarette smoke extracts induced inflammation and apoptosis in RPE cells.  
+
++ N-Acetyl-L-cysteine Protects Human Retinal Pigment Epithelial Cells from Oxidative Damage: Implications for Age-Related Macular Degeneration  
 
 
 
