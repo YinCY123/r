@@ -19,6 +19,7 @@ library(biomaRt)
 library(GEOquery)
 library(EnsDb.Hsapiens.v86)
 library(RColorBrewer)
+library(pheatmap)
 ```
 
 
