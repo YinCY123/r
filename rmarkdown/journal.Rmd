@@ -1,0 +1,28 @@
+---
+title: "journal"
+author: 
+- yincy
+- yinch
+date: 2020-05-29
+output: 
+    html_document:
+        toc: false
+        highlight: tango
+        
+        
+bibliography: retina.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Abstract  
+Age-related macular degeneration (AMD) is a complex eye disease which charcaterized with the death of photoreceptors and degeneration of retina pigment epithelium (RPE) and choriocapillaris (CC). In the early stage of AMD choriocapillaris vascular density change has be identified by the spectral domain-optical coherence tomography (SD-OCT) and optical coherence tomography angiography (OCTA). 
+
+
+
+
+# Reference
+
