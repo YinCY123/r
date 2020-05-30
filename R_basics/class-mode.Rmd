@@ -1,0 +1,16 @@
+---
+title: "class-mode"
+author: "yincy"
+date: "5/25/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
++ `class` is a property assigned to an object that determines how generic functions operate with it. It is not a mutually exclusive classification.  
+
++ `mode` is a mutually exclusive classification of objects according to their basic structure. The 'atomic' modes are `numeric`, `complex`, `character` and `logical`.  
+
+
