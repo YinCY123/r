@@ -2,7 +2,7 @@
 title: "journal"
 author: 
 - yincy
-- yinch
+
 date: 2020-05-29
 output: 
     html_document:
@@ -11,6 +11,7 @@ output:
         
         
 bibliography: retina.bib
+csl: optometry-and-vision-science.csl
 ---
 
 ```{r setup, include=FALSE}
@@ -19,10 +20,16 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 # Abstract  
-Age-related macular degeneration (AMD) is a complex eye disease which charcaterized with the death of photoreceptors and degeneration of retina pigment epithelium (RPE) and choriocapillaris (CC). In the early stage of AMD choriocapillaris vascular density change has be identified by the spectral domain-optical coherence tomography (SD-OCT) and optical coherence tomography angiography (OCTA). 
+Age-related macular degeneration (AMD) is a complex eye disease, which charcaterized with the death of photoreceptors and degeneration of retina pigment epithelium (RPE) and choriocapillaris (CC) in the macular region. In the early stage of AMD, CC dropout has been identified. This implies that CC changes may be the eariest onset site in AMD pathogenesis. Exploring the role of CC in AMD progression will provide better understanding of AMD pathogenesis, and more valuable therapeutic targets.  
+
+
+
+# Introduction  
+To date, most of the research about the pathgenesis of AMD are focused on the retine pigment epithelium (RPE), more and more evidence have found that changes have taken place in the CC in the early stage of AMD, such as reduced blood flow and CC dropout, and the progression is positively correlated with the severity of AMD [@Sohn2019;@Chatziralli2018;@Chirco2017;@Seddon2016]. The well known function of choricapillaris (CC) is supplying oxygen and nutrients to the out retina and retina pigment epithelium (RPE) while removing waste especially in the macular region. These functions are critical in light of the substantial metabolic activity of the neural retina. 
 
 
 
 
-# Reference
+
+# References  
 
