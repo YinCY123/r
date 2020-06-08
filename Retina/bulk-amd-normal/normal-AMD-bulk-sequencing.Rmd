@@ -33,7 +33,7 @@ GSE135092 <- getGEO(GEO = "GSE135092")
 ```{r}
 # geo geo accession of each group
 amd_geo_accession <- GSE135092[[1]] %>% pData() %>% 
-    dplyr::filter(`tissue:ch1` == "RPE, Macula", `amd_status:ch1` == "AMD") %>% 
+    filter(`tissue:ch1` == "RPE, Macula", `amd_status:ch1` == "AMD") %>% 
     pull(geo_accession)
 
 control_geo_accession <- GSE135092[[1]] %>% pData() %>% 
@@ -124,7 +124,7 @@ cpm_reads <- edgeR::cpm(y = y,
 ```{r}
 filter_thresh <- (10/(colSums(reads_table) %>% quantile(probs = 0.5))) * 1e6
 
-keep <- rowSums(cpm_reads > filter_thresh) > length(c(y$samples$group)) * 0.2
+keep <- rowSums(cpm_reads > filter_thresh) > length(y$samples$group) * 0.2
 y_keep <- y[keep, ]
 ```
 
