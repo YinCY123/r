@@ -1,0 +1,96 @@
+---
+title: "Rosalind"
+author: "yincy"
+date: "6/5/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. Counting DNA Nucleotides  
+```{r}
+library(magrittr)
+library(stringr)
+
+x <- "AGCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGC"
+str_split(x, pattern = "") %>% table()
+```
+
+
+2. Transcribing DNA into RNA  
+```{r}
+dna <- "GATGGAACTTGACTACGTAAATT"
+rna <- "GAUGGAACUUGACUACGUAAAUU"
+
+identical(gsub("T", "U", dna), rna)
+```
+
+
+3. Complementing a Strand of DNA  
+```{r}
+snese <- "AAAACCCGGT"
+reverse_anti <- "ACCGGGTTTT"
+
+DNA_pairs <- c("A" = "T", "G" = 'C', "T" = 'A', "C" = "G")
+snese %>% 
+  str_split(pattern = "", simplify = T) %>% 
+  DNA_pairs[.] %>% 
+  .[length(.):1] %>% 
+  str_c(collapse = "") %>% 
+  identical(reverse_anti)
+
+
+reverse_complement <- function(seq){
+  require(magrittr)
+  require(stringr)
+  DNA_paris = c("A" = "T", "T" = "A", "G" = "C", "C" = "G")
+  RNA_pairs = c("A" = "U", "U" = "A", "G" = "C", "C" = "G")
+  if(!grepl("A|G|C|T|U", seq)){
+    message("Not an DNA or RNA sequence.")
+  }
+  if(grepl("T", seq)){
+    seq <- seq %>% 
+    str_split(pattern = "", simplify = T) %>% 
+    DNA_pairs[.] %>% 
+    .[length(.):1] %>% 
+    str_c(str_replace_na(., replacement = "*"), collapse = "")
+    
+    return(seq)
+  }else{
+    seq <- seq %>% 
+      str_split(pattern = "", simplify = T) %>% 
+      RNA_pairs[.] %>% 
+      .[length(.):1] %>% 
+      str_c(str_replace_na(., replacement = "*"), collapse = "")
+    
+    return(seq)
+  }
+}
+
+sense <- "ACGAUUACN"
+reverse_complement(seq = sense)
+```
+
+4. Rabbits and Recurrence Relations  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
