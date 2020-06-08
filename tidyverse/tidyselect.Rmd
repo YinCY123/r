@@ -1,0 +1,62 @@
+---
+title: "tidyselect"
+author: "yincy"
+date: "5/13/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyselect)
+library(magrittr)
+```
+
+tidyselect implements a specialised sublanguage of R for selecting variables from data frames and other data structures.  
+
+## Selections as dots or as named arguments  
+There are two major ways of designing a function that takes selections.  
+
++ Passing **dots** as in `dplyr::select`.  
+```{r}
+mtcars %>% dplyr::select(mpg, cyl)
+```
+
++ Interpolating **named arguments** as in `tidyr::pivot_longer()`. In this case, multiple inputs can be provided inside `c()` or by using boolean operators.  
+
+```{r}
+mtcars %>% tidyr::pivot_longer(c(mpg, cyl))
+mtcars %>% tidyr::pivot_longer(mpg | cyl)
+```
+
+
+Our general recommendation is to take dots when the main purpose of the function is to create a new data structure based on a selection. When the selection is accessory to the main purpose of the function, take it as a named argument. In doubt, we recommend using named arguments because it is easier to change a named argument to dots than the other way around.  
+
+## Do you need tidyselect?  
+The tools described in this vignette are rather low level. Depending on your use case, it may be easier to wrap dplyr::select(). You’ll get a data frame containing the columns selected by your user, which you can then handle in various ways.  
+
+The following examples illustrate how you could write a function that takes a selection of data and returns the corresponding data frame with capitalised names.  
+```{r}
+# pasing dots  
+toupper_dots <- function(data, ...){
+  sel <- dplyr::select(data, ...)
+  rlang::set_names(sel, toupper)
+}
+
+# Interpolating a named argument with {{ }}
+toupper_arg <- function(data, arg){
+  sel <- dplyr::select(data, {{arg}})
+  rlang::set_names(sel, toupper)
+}
+
+
+mtcars %>% toupper_dots(mpg:disp, vs)
+mtcars %>% toupper_arg(c(mpg:disp, vs))
+```
+
+The main advantage of the lower level tidyselect tools is that they offer a bit more information and flexibility. Instead of returning the selected data, they return the locations of selected elements inside the input data. If you don’t need the selected locations and can afford the dependency, you may consider wrapping dplyr instead.  
+
+
+
