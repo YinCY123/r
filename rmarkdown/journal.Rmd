@@ -9,7 +9,7 @@ output:
         highlight: tango
         
         
-bibliography: [retina.bib, Omic-science.bib]
+bibliography: library.bib
 csl: optometry-and-vision-science.csl
 ---
 
@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ### Abstract    
 Age-related macular degeneration (AMD) is a complex eye disease, which charcaterized with the death of photoreceptors and degeneration of retina pigment epithelium (RPE) and choriocapillaris (CC). In the early stage of AMD, CC dropout has been identified. This implies that CC changes ahead of most noticable sign of early stage AMD, such as drusen deposition. But the mechinism of how CC changes may affact retina degeneration is largely unknown. Exploring the role of CC in AMD progression will provide better understanding of AMD pathogenesis, while providing more valuable prevention and therapeutic targets. Here we find that TGFB1 expressed by CC endothelial cells might contribute to the progression of AMD.  
 
-> Keywords: choriocapillaris; age-related macular degeneration; retina pigment epithelial
+> Keywords: age-related macular degeneration; retina pigment epithelial; choriocapillaris  
 
 
 ### Introduction    
@@ -33,10 +33,14 @@ The well known function of CC is supplying oxygen and nutrients to the out retin
 
 
 ### Methods  
-Cells are influenced by extracellular signals produced by cells in their microenvironment. CC as an oxygen and nutrients supplier to RPE and out retina, communications bettween these cells should be exist, we explory how CC endothelial changes in the choroid might contribute to the onset of RPE degeneration. Based on prior knowlege on signaling and gene regulatory networks, we use network propagation methods on the integrated networks to infer active ligands expressed by CC endothelial cells and their gene regulatory effects on RPE using nichenetr[@Browaeys2019], an R package and Next Generation Sequencing data deposited on Gene Expression Omnibus database (GEO).  
+To explore how CC endothelial cells maight regulate age-related gene expression in retina pigment epithelial, first, we using the single cell RNA-seq data of neovascular AMD enriched by CD31 from chorid[@Voigt2019a]. 
+
+Cells are influenced by extracellular signals produced by cells in their microenvironment. CC as an oxygen and nutrients supplier to RPE and out retina, communications bettween these cells should be exists, here we explory how CC endothelial changes in the choroid might contribute to the onset of RPE degeneration. Based on prior knowlege on signaling and gene regulatory networks, we use network propagation methods on the integrated networks to infer active ligands expressed by CC endothelial cells and their gene regulatory effects on RPE using nichenetr[@Browaeys2019], an R package, and Next Generation Sequencing data deposited on Gene Expression Omnibus database (GEO).  
 
 
-### Results  
+### Results    
+
+
 
 
 
