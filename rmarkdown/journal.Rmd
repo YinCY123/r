@@ -9,7 +9,7 @@ output:
         highlight: tango
         
         
-bibliography: [retina.bib, Omic-science.bib]
+bibliography: library.bib  
 csl: optometry-and-vision-science.csl
 ---
 
@@ -19,15 +19,15 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ### Abstract    
-Age-related macular degeneration (AMD) is a complex eye disease, which charcaterized with the death of photoreceptors and degeneration of retina pigment epithelium (RPE) and choriocapillaris (CC). In the early stage of AMD, CC dropout has been identified. This implies that CC changes ahead of most noticable sign of early stage AMD, such as drusen deposition. But the mechinism of how CC changes may affact retina degeneration is largely unknown. Exploring the role of CC in AMD progression will provide better understanding of AMD pathogenesis, while providing more valuable prevention and therapeutic targets. Here we find that TGFB1 expressed by CC endothelial cells might contribute to the progression of AMD.  
+Age-related macular degeneration (AMD) is a complex eye disease, which charcaterized with the death of photoreceptors and degeneration of retina pigment epithelium (RPE) and choriocapillaris (CC). In the early stage of AMD CC dropout has been identified. This implies that CC changes ahead of most noticable sign of early stage AMD, such as drusen deposition, reduced blood flow. But the mechinism of how CC changes may affact retina degeneration is largely unknown. Exploring the role of CC in AMD progression will provide better understanding of AMD pathogenesis, while providing more valuable prevention and therapeutic targets. Here we find that TGFB1 expressed by CC endothelial cells might contribute to the progression of AMD.  
 
 > Keywords: choriocapillaris; age-related macular degeneration; retina pigment epithelial
 
 
 ### Introduction    
-Age-related macular degeneration (AMD) is a progressive, sight-threatening disease and the major cause of premerment blindness among patients aged 60 and over in the developed world[@Wong2014a]. Many risk factors have been identified associated with AMD, such as cigarette smoking, racial, Cardiovascular disease[@Wong2014a;@Fine1983;@Evans2001]and the most significant unmodifiable factor aging. Whole genome-wide association studies (GWAS) identified numerous significant sites associated with AMD[@Fritsche2013], but many of their's roles in AMD pathgenesis is still not well understand.  
+To date, most of the research about the pathgenesis of AMD are focused on the retine pigment epithelium (RPE). Recent Optical coherence tomography angiography (OCTA) and Histopathological studies have found that changes have taken place in the CC in the early stage of AMD, such as reduced blood flow and CC dropout, and the progression is positively correlated with the severity of AMD [@Sohn2019;@Chatziralli2018;@Chirco2017;@Seddon2016;@Parviz2017]. This imply that before noticable sign of early AMD and that CC might be the earliest changed tissue associated with AMD progression.  
 
-To date, most of the research about the pathgenesis of AMD are focused on the retine pigment epithelium (RPE), recent Optical coherence tomography angiography (OCTA) and Histopathological studies have found that changes have taken place in the CC in the early stage of AMD, such as reduced blood flow and CC dropout, and the progression is positively correlated with the severity of AMD [@Sohn2019;@Chatziralli2018;@Chirco2017;@Seddon2016;@Parviz2017]. This imply that before the noticable sign of early AMD CC has been changed and that CC might be the earliest changed tissue associated with AMD progression.  
+In the late stage, AMD can be divided into two classes, Geographic Atrophy (dry AMD) and neovascular AMD (wet AMD). Many risk factors have been identified associated with AMD, such as cigarette smoking, racial, Cardiovascular disease[@Wong2014a;@Fine1983;@Evans2001] and the most significant unmodifiable factor aging. Whole genome-wide association studies (GWAS) identified numerous significant sites associated with AMD[@Fritsche2013], but many of their's roles in AMD pathgenesis is still not well understand.  
 
 The well known function of CC is supplying oxygen and nutrients to the out retina and retina pigment epithelium (RPE) while removing waste[@Chirco2017;@Nickla2010]. These functions are critical in light of the substantial metabolic activity of the neural retina. In the light of above findings, here we trying to understand how CC might affact RPE in the progress of AMD, and we find that TGFB1 expressed by CC might affact the expression of AMD related gene COL10A1 in RPE and this might contribute to the progression of AMD.  
 
