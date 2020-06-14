@@ -1,13 +1,12 @@
 ---
 title: "journal"
 author: 
-- C.Y. Yin
+- Chunyou Yin
 date: 2020-05-29
 output: 
     html_document:
         toc: false
         highlight: tango
-        
         
 bibliography: library.bib  
 
@@ -15,12 +14,12 @@ csl: optometry-and-vision-science.csl
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = F, messages = F, warning = F)
 ```
 
 
 ### Abstract  
-The well known function of chroiocapillaris (CC) is the supplying oxygen and nutrients to the out retina and retina pigment epithelial (RPE) while remove waste. Besides oxygen and nutrients supplied by CC is important for RPE's survive, but signals come from CC should be also important for maintain RPE's homeostatsis. To date, most studies of the pathgenesis of age-related macular degeneration (AMD) are mainly focused on the RPE itself and largely ignored cells in RPE's microenvironment. Recently Optical coherence tomography angiography (OCTA) and Histopathological studies found that changes have taken place in the CC at the early stage of AMD. Understand how the changes take place at CC and it's impact on the RPE will contribute to the understand of pathgenesis of age-related macular degeneration. Here we find that TGFB1 expressed by choriocapillaris endothelail cells might contribute to the degeneration of the RPE.  
+The well known function of chroiocapillaris (CC) is the supplying oxygen and nutrients to the out retina and retina pigment epithelial (RPE) while remove waste. Besides oxygen and nutrients supplied by CC is important for RPE's survive, signals come from CC should also important for maintain RPE's homeostatsis. To date, most studies of the pathgenesis of age-related macular degeneration (AMD) are mainly focused on the RPE itself and largely ignored cells in RPE's microenvironment that might contribute to the progress of AMD. Recently Optical coherence tomography angiography (OCTA) and Histopathological studies found that changes have taken place in the CC at the early stage of AMD. Understand how the changes take place at CC and it's impact on the RPE will contribute to the understand of pathgenesis of age-related macular degeneration. Here we take the first attempt to explor how CC endothelial cells's change might contribute to the progress of AMD and find that TGFB1 expressed by choriocapillaris endothelail cells by regulate COL10A1 gene participate in the pregression of AMD.  
 
 > Key words: age-related macular degeneration; choriocapillaris ; retina pigment epithelial 
 
@@ -28,16 +27,22 @@ The well known function of chroiocapillaris (CC) is the supplying oxygen and nut
 ### Introduction   
 Age-related macular degeneration (AMD) is an leading cause of sever visual loss and blindness among the eldly population[@Wong2014a]. It's pathgenesis is poorly understood and it apears to involve a complex interaction of metabolic, functional, genetic and environment factors[@Evans2001;@Kaarniranta2019;@Kauppinen2016;@Wong2014a;@Fine1983;@Fritsche2013]. Genome-wide association studies (GWAS) conducted by The AMD Gene Consortium find numerous sites associated with AMD, which implies complement activity, lipid metabolism, extracellular matrix remodeling and angiogenesis is involved in the progress of AMD progression[@Fritsche2013].  
 
-The well known function of CC is supplying oxygen and nutrients to the out retina and retina pigment epithelium (RPE) while removing waste[@Chirco2017;@Nickla2010]. These functions are critical in light of the substantial metabolic activity of the neural retina. In light of the importance of RPE for the survive of photoreceptors, most of the research about the pathgenesis of AMD are focused on the retina-pigment epithelial. Histopathological and the recent development in imaging technology, such as Optical coherence tomography (OCT) have found that in the very early stage of AMD, notable changes have identified at the choriocapillaris, such as reduced blood flow, choriocapillaris dropout[@Sohn2019;@Chatziralli2018;@Seddon2016;@Parviz2017;@Wakatsuki2015]. This implies that the changes take place at CC might responsible for the onset of AMD. But the mechinism of how CC changes may affact retina degeneration is largely unexplored. In the light of above findings, here we trying to understand how CC might affact RPE in the progress of AMD, and find that TGFB1 expressed by CC endothelial cells might affact the expression of AMD related gene COL10A1 in RPE and this might contribute to the progression of AMD.  
+In light of the importance of RPE for the survive of photoreceptors, most of the research about the pathgenesis of AMD are focused on the retina-pigment epithelial (RPE), and ignored the importance of microenvirnment in which RPE might be affect by other cells. Histopathological and the recent advancement in imaging technology, Optical coherence tomography (OCT), have found that in the very early stage of AMD, notable changes have identified at the choriocapillaris, such as reduced blood flow, choriocapillaris dropout[@Sohn2019;@Chatziralli2018;@Seddon2016;@Parviz2017;@Wakatsuki2015]. This implies that the changes take place at CC is ahead of RPE and it might responsible for the onset of AMD. But the mechinism of how CC changes may affact retina degeneration is largely unexplored. In the light of above findings, here we trying to understand how CC might affact RPE in the progress of AMD, and find that TGFB1 expressed by CC endothelial cells affact the expression of AMD related gene COL10A1 in RPE and this might contribute to the progression of AMD.  
 
 
-### Methods  
-To explore how CC endothelial cells maight regulate age-related gene expression in retina pigment epithelial, first, we using the single cell RNA-seq data of neovascular AMD enriched by CD31 from chorid[@Voigt2019a]. 
+### Results  
+#### Samples  
+To find data suitable for our purpose, we searched the Gene Expression Omnibus database (GEO), and find the CD31 enriched single-cell RNA-seq of choriodal described by Voigt[@Voigt2019a], this data is used to define the potential ligands expressed by the choriocapillaris endothelial cells that might regulator macular degeneration related genes in RPE.   
 
-Cells are influenced by extracellular signals produced by cells in their microenvironment. CC as an oxygen and nutrients supplier to RPE and out retina, communications bettween these cells should be exists, here we explory how CC endothelial changes in the choroid might contribute to the onset of RPE degeneration. Based on prior knowlege on signaling and gene regulatory networks, we use network propagation methods on the integrated networks to infer active ligands expressed by CC endothelial cells and their gene regulatory effects on RPE using methods metioned by Browaeys[@Browaeys2019], and Next Generation Sequencing data deposited on Gene Expression Omnibus database (GEO).  
+For the RPE data we use the bulk RNA-seq data mentioned by Kim[@Kim2018a], which they describe the siginificant impact on the anti-sense transcripte between the normal and AMD patients, this data is used to define the background expressed genes and expressed age-related macular degeneration genes at early AMD.  
 
 
-### Results    
+#### genes affected by choriocapillaris  
+To infering AMD related genes that could be affected by the choriocapilaris endothelial cells, 
+
+
+CC as an oxygen and nutrients supplier to RPE and out retina, communications bettween these cells should be exists, here we explory how CC endothelial changes in the choroid might contribute to the onset of RPE degeneration. Based on prior knowlege on signaling and gene regulatory networks, we use network propagation methods on the integrated networks to infer active ligands expressed by CC endothelial cells and their gene regulatory effects on RPE using methods metioned by Browaeys[@Browaeys2019], and Next Generation Sequencing data deposited on Gene Expression Omnibus database (GEO).  
+
 
 
 
@@ -46,6 +51,10 @@ Cells are influenced by extracellular signals produced by cells in their microen
 ### Discussion  
 
 
+### Data and code  
+CD31 enriched choriocapillaris endothelial single-cell RNA-seq data: GSE139522.  
+bulk RNA-seq RPE data: GSE99248 
+code is available at GitHub: https://github.com/YinCY123/AMD
 
 ### Acknowledgements   
 
