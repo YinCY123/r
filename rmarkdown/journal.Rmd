@@ -31,7 +31,6 @@ Age-related macular degeneration (AMD) is an leading cause of sever visual loss 
 The well known function of CC is supplying oxygen and nutrients to the out retina and retina pigment epithelium (RPE) while removing waste[@Chirco2017;@Nickla2010]. These functions are critical in light of the substantial metabolic activity of the neural retina. In light of the importance of RPE for the survive of photoreceptors, most of the research about the pathgenesis of AMD are focused on the retina-pigment epithelial. Histopathological and the recent development in imaging technology, such as Optical coherence tomography (OCT) have found that in the very early stage of AMD, notable changes have identified at the choriocapillaris, such as reduced blood flow, choriocapillaris dropout[@Sohn2019;@Chatziralli2018;@Seddon2016;@Parviz2017;@Wakatsuki2015]. This implies that the changes take place at CC might responsible for the onset of AMD. But the mechinism of how CC changes may affact retina degeneration is largely unexplored. In the light of above findings, here we trying to understand how CC might affact RPE in the progress of AMD, and find that TGFB1 expressed by CC endothelial cells might affact the expression of AMD related gene COL10A1 in RPE and this might contribute to the progression of AMD.  
 
 
-
 ### Methods  
 To explore how CC endothelial cells maight regulate age-related gene expression in retina pigment epithelial, first, we using the single cell RNA-seq data of neovascular AMD enriched by CD31 from chorid[@Voigt2019a]. 
 
