@@ -17,6 +17,13 @@ csl: optometry-and-vision-science.csl
 knitr::opts_chunk$set(echo = F, messages = F, warning = F)
 ```
 
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(monocle3)
+library(nichenetr)
+library(cowplot)
+```
+
 
 ### Abstract  
 The well known function of chroiocapillaris (CC) is the supplying oxygen and nutrients to the out retina and retina pigment epithelial (RPE) while remove waste. Besides oxygen and nutrients supplied by CC is important for RPE's survive, signals come from CC should also important for maintain RPE's homeostatsis. To date, most studies of the pathgenesis of age-related macular degeneration (AMD) are mainly focused on the RPE itself and largely ignored cells in RPE's microenvironment that might contribute to the progress of AMD. Recently Optical coherence tomography angiography (OCTA) and Histopathological studies found that changes have taken place in the CC at the early stage of AMD. Understand how the changes take place at CC and it's impact on the RPE will contribute to the understand of pathgenesis of age-related macular degeneration. Here we take the first attempt to explor how CC endothelial cells's change might contribute to the progress of AMD and find that TGFB1 expressed by choriocapillaris endothelail cells by regulate COL10A1 gene participate in the pregression of AMD.  
@@ -32,16 +39,39 @@ In light of the importance of RPE for the survive of photoreceptors, most of the
 
 ### Results  
 #### Samples  
-To find data suitable for our purpose, we searched the Gene Expression Omnibus database (GEO), and find the CD31 enriched single-cell RNA-seq of choriodal described by Voigt[@Voigt2019a], this data is used to define the potential ligands expressed by the choriocapillaris endothelial cells that might regulator macular degeneration related genes in RPE.   
+To find data suitable for our purpose, we searched the Gene Expression Omnibus database (GEO), and find the CD31 enriched single-cell RNA-seq of choriodal described by Voigt[@Voigt2019a], this data is used to define the potential ligands expressed by the choriocapillaris endothelial cells that might regulator macular degeneration related genes expressed by RPE. Single cell trajectory were conducted on choriocaplaris endothelial cells among CD31 enriched macular samples to find the differentially expressed ligands along the trajectory.  
 
-For the RPE data we use the bulk RNA-seq data mentioned by Kim[@Kim2018a], which they describe the siginificant impact on the anti-sense transcripte between the normal and AMD patients, this data is used to define the background expressed genes and expressed age-related macular degeneration genes at early AMD.  
+For the RPE data, we use the bulk RNA-seq data mentioned by Kim[@Kim2018a], which they describe the siginificant impact on the anti-sense transcripte between the normal and AMD patients, this data is used to define the background expressed genes and expressed age-related macular degeneration genes at early AMD. Differential expression analysis of targets genes was carried out with edgeR-limma Bioconductor packages between normal and early AMD samples.  
+
+#### ligand target paris  
+Based on prior knowlege on signaling and gene regulatory networks, we use network propagation methods on the integrated networks to infer active ligands expressed by CC endothelial cells and their gene regulatory effects on RPE using methods metioned by Browaeys[@Browaeys2019], and we find numerous ligand-target paris 
+```{r, echo=FALSE, message=FALSE}
+ligand_target_heatmap <- readRDS(file = "../Retina/res/ligand_target_heatmap.rds")
+ligand_activity_heatmap <- readRDS(file = "../Retina/res/ligand_activity_heatmap.rds")
+
+plot_grid(
+  ligand_activity_heatmap +
+    ggtitle(label = "ligand activity") +
+    theme(plot.title = element_text(size = 9, face = "bold", hjust = "0.5"), 
+          legend.position = "right", 
+          legend.box.spacing = unit(0, "cm")),
+  ligand_target_heatmap +
+  theme(legend.position = "top", 
+        plot.title = element_text(size = 12, face = "bold", hjust = 0.5)), 
+  nrow = 1, 
+  rel_widths = c(1.8, 5))
+```
 
 
-#### genes affected by choriocapillaris  
-To infering AMD related genes that could be affected by the choriocapilaris endothelial cells, 
+#### Liagnds differentially expressed along trajectory  
 
 
-CC as an oxygen and nutrients supplier to RPE and out retina, communications bettween these cells should be exists, here we explory how CC endothelial changes in the choroid might contribute to the onset of RPE degeneration. Based on prior knowlege on signaling and gene regulatory networks, we use network propagation methods on the integrated networks to infer active ligands expressed by CC endothelial cells and their gene regulatory effects on RPE using methods metioned by Browaeys[@Browaeys2019], and Next Generation Sequencing data deposited on Gene Expression Omnibus database (GEO).  
+#### Targets differentially expressed among normal and early AMD patients  
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+expression_targets_RPE_boxplot <- readRDS(file = "../Retina/res/expression_targets_RPE_boxplot.rds")
+expression_targets_RPE_boxplot
+```
 
 
 
