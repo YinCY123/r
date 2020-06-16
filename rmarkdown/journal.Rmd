@@ -34,6 +34,8 @@ The well known function of chroiocapillaris (CC) is the supplying oxygen and nut
 ### Introduction   
 Age-related macular degeneration (AMD) is an leading cause of sever visual loss and blindness among the eldly population[@Wong2014a]. It's pathgenesis is poorly understood and it apears to involve a complex interaction of metabolic, functional, genetic and environment factors[@Evans2001;@Kaarniranta2019;@Kauppinen2016;@Wong2014a;@Fine1983;@Fritsche2013]. Genome-wide association studies (GWAS) conducted by The AMD Gene Consortium find numerous sites associated with AMD, which implies complement activity, lipid metabolism, extracellular matrix remodeling and angiogenesis is involved in the progress of AMD progression[@Fritsche2013].  
 
+Late-stage AMD can be divided into two forms: geographic atrophy (GA; or dry) AMD, and neovascular (wet) AMD. The wet form of AMD comprises approcimately 15% of the case, but because of its severity, accounts for the majority of servere visual loss due to AMD[@Gottlieb2020]. Although anti-vascular endothelial growth factor (anti-VEGF) therapy has revolutionized the treatment of neovascular age-related macular degeneration. Some drawbacks have been reported, such as the treatment is not durable and visual gain was lost after 2 years treatment[@CATT_Research_Group2016], significant proportion of patients developed into geograpic atrophy after anti-VEGF therapy[@Grunwald2014;@Chakravarthy2013]. 
+
 In light of the importance of RPE for the survive of photoreceptors, most of the research about the pathgenesis of AMD are focused on the retina-pigment epithelial (RPE), and ignored the importance of microenvirnment in which RPE might be affect by other cells. Histopathological and the recent advancement in imaging technology, Optical coherence tomography (OCT), have found that in the very early stage of AMD, notable changes have identified at the choriocapillaris, such as reduced blood flow, choriocapillaris dropout[@Sohn2019;@Chatziralli2018;@Seddon2016;@Parviz2017;@Wakatsuki2015]. This implies that the changes take place at CC is ahead of RPE and it might responsible for the onset of AMD. But the mechinism of how CC changes may affact retina degeneration is largely unexplored. In the light of above findings, here we trying to understand how CC might affact RPE in the progress of AMD, and find that TGFB1 expressed by CC endothelial cells affact the expression of AMD related gene COL10A1 in RPE and this might contribute to the progression of AMD.  
 
 
@@ -63,11 +65,10 @@ plot_grid(
 ```
 
 
-#### Liagnds differentially expressed along trajectory  
+#### TGFB1 differentially expressed along trajectory  
 
 
-#### Targets differentially expressed among normal and early AMD patients  
-
+#### COL10A1 differentially expressed among normal and early AMD patients  
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 expression_targets_RPE_boxplot <- readRDS(file = "../Retina/res/expression_targets_RPE_boxplot.rds")
 expression_targets_RPE_boxplot
