@@ -46,7 +46,7 @@ To find data suitable for our purpose, we searched the Gene Expression Omnibus d
 For the RPE data, we use the bulk RNA-seq data mentioned by Kim[@Kim2018a], which they describe the siginificant impact on the anti-sense transcripte between the normal and AMD patients, this data is used to define the background expressed genes and expressed age-related macular degeneration genes at early AMD. Differential expression analysis of targets genes was carried out with edgeR-limma Bioconductor packages between normal and early AMD samples.  
 
 #### ligand target paris  
-Based on prior knowlege on signaling and gene regulatory networks, we use network propagation methods on the integrated networks to infer active ligands expressed by CC endothelial cells and their gene regulatory effects on RPE using methods metioned by Browaeys[@Browaeys2019], and we find numerous ligand-target paris 
+Based on prior knowlege on signaling and gene regulatory networks, we use network propagation methods on the integrated networks to infer active ligands expressed by CC endothelial cells and their gene regulatory effects on RPE using methods metioned by Browaeys[@Browaeys2019], and we find few ligand-target paris, based on the high activty ligands.  
 ```{r, echo=FALSE, message=FALSE}
 ligand_target_heatmap <- readRDS(file = "../Retina/res/ligand_target_heatmap.rds")
 ligand_activity_heatmap <- readRDS(file = "../Retina/res/ligand_activity_heatmap.rds")
@@ -65,18 +65,52 @@ plot_grid(
 ```
 
 
-#### TGFB1 differentially expressed along trajectory  
-
-
 #### COL10A1 differentially expressed among normal and early AMD patients  
+To explore which targets genes were differentially expressed 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 expression_targets_RPE_boxplot <- readRDS(file = "../Retina/res/expression_targets_RPE_boxplot.rds")
 expression_targets_RPE_boxplot
 ```
 
 
+#### TGFB1 differentially expressed along trajectory  
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+load(file = "../../Data/AMD-related/AMD-single-cell/monocle3_amd_single_cell.RData")
+expression_ligands_ridges <- readRDS(file = "../Retina/res/expression_ligands_ridges.rds")
+```
 
 
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+pseudotime_p <- plot_cells(cds = cc, 
+           color_cells_by = "pseudotime", 
+           show_trajectory_graph = T, 
+           cell_size = 1.2, 
+           trajectory_graph_segment_size = 0.1)
+
+percent.mt_p <- plot_cells(cds = cc, 
+                           color_cells_by = "percent.mt", 
+                           cell_size = 1.2, 
+                           trajectory_graph_segment_size = 0.1, 
+                           show_trajectory_graph = T)
+
+expression_of_TGFB1 <- plot_cells(cds = cc, 
+                                  reduction_method = "UMAP", 
+                                  genes = "TGFB1", 
+                                  show_trajectory_graph = T, 
+                                  trajectory_graph_segment_size = 0.1, 
+                                  cell_size = 1.2, 
+                                  min_expr = 0) +
+  scale_color_gradient(name = "relative\nexpression", low = "green", high = "red")
+
+plot_grid(pseudotime_p, 
+          percent.mt_p)
+```
+
+
+```{r, echo=FALSE, message=FALSE, warning=F}
+plot_grid(expression_ligands_ridges, 
+          expression_of_TGFB1)
+```
 
 
 ### Discussion  
@@ -93,4 +127,7 @@ code is available at GitHub: https://github.com/YinCY123/AMD
 
 
 ### References  
+
+
+### Supplimentary Materials  
 
