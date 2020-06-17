@@ -8,7 +8,7 @@ output:
         toc: false
         highlight: tango
         
-bibliography: library.bib  
+bibliography: [library.bib;-mendeley.bib]  
 
 csl: optometry-and-vision-science.csl
 ---
@@ -40,13 +40,16 @@ In light of the importance of RPE for the survive of photoreceptors, most of the
 
 
 ### Results  
-#### Samples  
-To find data suitable for our purpose, we searched the Gene Expression Omnibus database (GEO), and find the CD31 enriched single-cell RNA-seq of choriodal described by Voigt[@Voigt2019a], this data is used to define the potential ligands expressed by the choriocapillaris endothelial cells that might regulator macular degeneration related genes expressed by RPE. Single cell trajectory were conducted on choriocaplaris endothelial cells among CD31 enriched macular samples to find the differentially expressed ligands along the trajectory.  
+#### Data and Statictic analysis  
+To find data suitable for our purpose, we searched the Gene Expression Omnibus database (GEO), and find the CD31 enriched single-cell RNA-seq of choriodal described by Voigt[@Voigt2019a], this data is used to define the potential ligands expressed by the choriocapillaris endothelial cells that might regulator macular degeneration related genes expressed by RPE. Single cell trajectory were conducted on choriocaplaris endothelial cells among CD31 enriched macular samples to find the differentially expressed ligands along the trajectory using monocle3[@Trapnell2014;@Qiu2017;@Qiu2017a], batch effects is removed using method described by Haghverdi[@Haghverdi2018].  
 
-For the RPE data, we use the bulk RNA-seq data mentioned by Kim[@Kim2018a], which they describe the siginificant impact on the anti-sense transcripte between the normal and AMD patients, this data is used to define the background expressed genes and expressed age-related macular degeneration genes at early AMD. Differential expression analysis of targets genes was carried out with edgeR-limma Bioconductor packages between normal and early AMD samples.  
+For the RPE data, we use the bulk RNA-seq data mentioned by Kim[@Kim2018a], which they describe the siginificant impact on the anti-sense transcripte between the normal and AMD patients. This data is used to define the background expressed genes and expressed age-related macular degeneration genes at early AMD. Differential expression analysis was carried out with edgeR-limma[@McCarthy2012;@Ritchie2015] R/Bioconductor packages between normal and early AMD samples.  
+
 
 #### ligand target paris  
-Based on prior knowlege on signaling and gene regulatory networks, we use network propagation methods on the integrated networks to infer active ligands expressed by CC endothelial cells and their gene regulatory effects on RPE using methods metioned by Browaeys[@Browaeys2019], and we find few ligand-target paris, based on the high activty ligands.  
+Before to infer ligand-target links, ligands activity needs to be performed on the age-related macular degeneration genes, in other words assess how well each CC endothelial cell expressed ligand can predict the RPE expressed age-related macular degeneration related genes compared to the background of expressed genes. The top 15 highly active ligands are show in fig1.  
+
+Based on prior knowlege on signaling and gene regulatory networks, by using network propagation methods on the integrated networks to infer active ligands expressed by CC endothelial cells and their gene regulatory effects on RPE using methods metioned by Browaeys[@Browaeys2019], we find few high potential ligand-target  regulatory paris, based on the top 15 highly active ligands and find that TGFB1 and COL10A1 among these high regulatory potential pairs.  
 ```{r, echo=FALSE, message=FALSE}
 ligand_target_heatmap <- readRDS(file = "../Retina/res/ligand_target_heatmap.rds")
 ligand_activity_heatmap <- readRDS(file = "../Retina/res/ligand_activity_heatmap.rds")
@@ -66,7 +69,10 @@ plot_grid(
 
 
 #### COL10A1 differentially expressed among normal and early AMD patients  
-To explore which targets genes were differentially expressed 
+Differential expression analysis between normal and early AMD patients was conducted following the standard pepline of edgeR-limma[@McCarthy2012;@Ritchie2015] R/Bioconductor package. TLR4 and COL10A1 were siginificantly differential expressed among early AMD and normal patients. TLR4 is participate in the activation of innate immune system which is consistent with previous study about the participate of immune system in the pathgenesis of AMD[@Fritsche2013;@Liao2019;@Whitmore2015].  
+
+COL10A1 has been identified associated with age-related degeneration[@Yu2011a;@Fritsche2013], 
+Bruch's membrane can be classified into five layers: the basement membrane of the RPE, the inner collagenous layer (ICL), the elasin layer (EL), the outer collagenous layer (OCL) and, the basement membrane of the choriocapillaris[@Hogan1961]. As Bruch's membrane is an highly dynamic acellular tissue[@Booij2010a], down regulation of COL10A1 might change the structure of Bruch's membrane, which will affect the oxygen and nutrient flow through it to RPE and contribute to the degeneration of RPE, and possibly responsible for the deposition of drusen at Bruch's membrane[@Crabb2002;@]. 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 expression_targets_RPE_boxplot <- readRDS(file = "../Retina/res/expression_targets_RPE_boxplot.rds")
 expression_targets_RPE_boxplot
@@ -74,6 +80,7 @@ expression_targets_RPE_boxplot
 
 
 #### TGFB1 differentially expressed along trajectory  
+
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 load(file = "../../Data/AMD-related/AMD-single-cell/monocle3_amd_single_cell.RData")
 expression_ligands_ridges <- readRDS(file = "../Retina/res/expression_ligands_ridges.rds")
@@ -120,6 +127,7 @@ plot_grid(expression_ligands_ridges,
 CD31 enriched choriocapillaris endothelial single-cell RNA-seq data: GSE139522.  
 bulk RNA-seq RPE data: GSE99248 
 code is available at GitHub: https://github.com/YinCY123/AMD
+
 
 ### Acknowledgements   
 
