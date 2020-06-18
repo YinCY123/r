@@ -69,10 +69,15 @@ plot_grid(
 
 
 #### COL10A1 differentially expressed among normal and early AMD patients  
-Differential expression analysis between normal and early AMD patients was conducted following the standard pepline of edgeR-limma[@McCarthy2012;@Ritchie2015] R/Bioconductor package. TLR4 and COL10A1 were siginificantly differential expressed among early AMD and normal patients. TLR4 is participate in the activation of innate immune system which is consistent with previous study about the participate of immune system in the pathgenesis of AMD[@Fritsche2013;@Liao2019;@Whitmore2015].  
+Differential expression analysis between normal and early AMD patients was conducted following the standard pepline of edgeR-limma[@McCarthy2012;@Ritchie2015] R/Bioconductor package, and we find that TLR4 and COL10A1 were siginificantly differential expressed among early AMD and normal patients. TLR4 is participate in the activation of innate immune system which is consistent with previous study about the participate of immune system in the pathgenesis of AMD[@Fritsche2013;@Liao2019;@Whitmore2015], although we didn't notice the difference of IL1B along the trajectory, but it might be the immune cells or pericyte in the choriodal secreted the IL1B that affect the expression of TLR4.  
 
-COL10A1 has been identified associated with age-related degeneration[@Yu2011a;@Fritsche2013], 
-Bruch's membrane can be classified into five layers: the basement membrane of the RPE, the inner collagenous layer (ICL), the elasin layer (EL), the outer collagenous layer (OCL) and, the basement membrane of the choriocapillaris[@Hogan1961]. As Bruch's membrane is an highly dynamic acellular tissue[@Booij2010a], down regulation of COL10A1 might change the structure of Bruch's membrane, which will affect the oxygen and nutrient flow through it to RPE and contribute to the degeneration of RPE, and possibly responsible for the deposition of drusen at Bruch's membrane[@Crabb2002;@]. 
+According to the classification of Hogan[@Hogan1961], Bruch's membrane consists of five layers: the basement membrane of the RPE, the inner collagenous layer (ICL), the elasin layer (EL), the outer collagenous layer (OCL) and, the basement membrane of the choriocapillaris. Although it is not exatly clear how Bruch's membrane is formed, gene expression data indicated that both the choriod and RPE cells are capable of synthesizing the major components of Bruch's membrane[@Booij2009;@Voigt2019a;@Orozco2020;@Kim2018a]. As Bruch's membrane is an dynamic tissue[@Booij2010a], down regulation of COL10A1 could change the microstructure of Bruch's membrane and that might contribute to the deposition of drusen in the Bruch's membrane.  
+
+Beside affect the structure of Bruch's membrane
+
+
+COL10A1 has been identified associated with age-related degeneration[@Yu2011a;@Fritsche2013], but how COL10A1 participate in the pathgenesis is unclear. 
+Bruch's membrane can be classified into five layers: the basement membrane of the RPE, the inner collagenous layer (ICL), the elasin layer (EL), the outer collagenous layer (OCL) and, the basement membrane of the choriocapillaris[@Hogan1961]. As Bruch's membrane is an highly dynamic acellular tissue[@Booij2010a], down regulation of COL10A1 might change the structure of Bruch's membrane, which will affect the oxygen and nutrient flow through it to RPE and contribute to the degeneration of RPE, and possibly responsible for the deposition of drusen at Bruch's membrane[@Crabb2002;@].  
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 expression_targets_RPE_boxplot <- readRDS(file = "../Retina/res/expression_targets_RPE_boxplot.rds")
 expression_targets_RPE_boxplot
@@ -80,7 +85,6 @@ expression_targets_RPE_boxplot
 
 
 #### TGFB1 differentially expressed along trajectory  
-
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 load(file = "../../Data/AMD-related/AMD-single-cell/monocle3_amd_single_cell.RData")
 expression_ligands_ridges <- readRDS(file = "../Retina/res/expression_ligands_ridges.rds")
