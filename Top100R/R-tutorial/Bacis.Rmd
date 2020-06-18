@@ -1,0 +1,97 @@
+---
+title: "Bacis-R"
+author: "yincy"
+date: "5/25/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+df1 <- data.frame(
+    Q1 = sample(1:6, 100, T),
+    Q2 = sample(1:6, 100, T),
+    Q3 = sample(1:6, 100, T),
+    Q4 = sample(1:6, 100, T),
+    Age = sample(1:3, 100, T)
+)
+
+tail(df1, n = -1) # not the first row
+```
+
+```{r}
+head(df1, n = -1) # not the last row
+```
+
+```{r}
+dplyr::sample_n(tbl = df1, size = 10, replace = T) # number of rows to sample
+```
+
+```{r}
+dplyr::sample_frac(df1, size = 0.1, replace = T) # fraction of rows to sample
+```
+
+```{r}
+colSums(df1)
+```
+
+```{r}
+df1$Q1 <- recode(df1$Q1, "1=6")
+df1
+```
+
+recoding a given range  
+```{r}
+df1$Q1 <- recode(df1$Q1, "1:4=0;5:6=1") # input=output
+df1
+```
+
+`else` statement in the recodes  
+```{r}
+df1$Q1 <- recode(df1$Q2, recodes = "2:4=0;5:6=1;else=3")
+df1
+```
+
+
+```{r}
+df1 <- rename(df1, var1 = Q1)
+```
+
+```{r}
+df2 <- data.frame(x = c(rep(1:10)), 
+                 y = round(rnorm(10)))
+
+df2 <- aggregate(x ~ y, df2, FUN = mean, na.rm = T)
+```
+
+
+```{r}
+merge(df1, df2, by.x = "var1", by.y = "y")
+```
+
+```{r}
+smartbind(df1, df2)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
