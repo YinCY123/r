@@ -1,23 +1,19 @@
 ---
-title: "journal"
-author: 
-- Chunyou Yin
-- Chunhui Yin
-- Xiao Shen
-
-date: 2020-05-29
-output: 
-    html_document:
-        toc: false
-        highlight: tango
-        
-bibliography: [library.bib;-mendeley.bib]  
-
+title: Choriocapillaris participate in the progress of age-related macular degeneration
+  by regulate COL10A1 expressed by retina pigment epithelial
+author: "Chunyou Yin^1^; Chunhui Yin^2^"
 csl: optometry-and-vision-science.csl
+output:
+  pdf_document
+
+bibliography:
+- /home/yincy/git/R-codes/rmarkdown/library.bib
+- /home/yincy/git/R-codes/rmarkdown/-mendeley.bib
 ---
 
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = F, messages = F, warning = F)
+knitr::opts_chunk$set(echo = F, messages = F, warning = F, fig.width = 7, fig.height = 7, fig.align = "center")
 ```
 
 ```{r load-required-packages, echo=FALSE, message=FALSE, warning=FALSE}
@@ -29,71 +25,69 @@ library(DT)
 ```
 
 
-### Abstract  
-The well known function of chroiocapillaris (CC) is the supplying oxygen and nutrients to the out retina and retina pigment epithelial (RPE) while remove waste. Besides oxygen and nutrients supplied by CC is important for RPE's survive, signals come from CC should also important for maintain RPE's homeostatsis. To date, most studies of the pathgenesis of age-related macular degeneration (AMD) are mainly focused on the RPE itself and largely ignored cells in RPE's microenvironment that might contribute to the progress of AMD. Recently Optical coherence tomography angiography (OCTA) and Histopathological studies found that changes have taken place in the CC at the early stage of AMD. Understand how the changes take place at CC and it's impact on the RPE will contribute to the understand of pathgenesis of age-related macular degeneration. Here we take the first attempt to explor how CC endothelial cells's change might contribute to the progress of AMD and find that TGFB1 expressed by choriocapillaris endothelail cells by regulate COL10A1 gene participate in the pregression of AMD.  
+## Abstract  
+The well known function of choriocapillaris (CC) is the supplying oxygen and nutrients to the out retina and retina pigment epithelial (RPE) while remove waste. Besides oxygen and nutrients supplied by CC is important for RPE's survive, signals come from CC should also important for maintain RPE's homeostasis. To date, most studies of the pathogenesis of age-related macular degeneration (AMD) are mainly focused on the RPE itself and largely ignored cells in RPE's micro-environment that might contribute to the progress of AMD. Recently Optical coherence tomography angiography (OCTA) and Histopathological studies found that changes have taken place at the CC at the early stage of AMD. Understand how the changes take place at CC and it's impact on the RPE will contribute to the understand of pathgenesis of age-related macular degeneration. Here we take the first attempt to explor how CC endothelial cells's change might contribute to the progress of neovascular AMD and find that TGFB1 expressed by choriocapillaris endothelail cells by regulate COL10A1 expressed by RPE participate in the progress of neovascular AMD.  
 
-> Key words: age-related macular degeneration; choriocapillaris ; retina pigment epithelial 
-
-
-### Introduction   
-Age-related macular degeneration (AMD) is an leading cause of sever visual loss and blindness among the eldly population[@Wong2014a]. It's pathgenesis is poorly understood and it apears to involve a complex interaction of metabolic, functional, genetic and environment factors[@Evans2001;@Kaarniranta2019;@Kauppinen2016;@Wong2014a;@Fine1983;@Fritsche2013]. Genome-wide association studies (GWAS) conducted by The AMD Gene Consortium find numerous sites associated with AMD, which implies complement activity, lipid metabolism, extracellular matrix remodeling and angiogenesis is involved in the progress of AMD progression[@Fritsche2013].  
-
-Late-stage AMD can be divided into two forms: geographic atrophy (GA; or dry) AMD, and neovascular (wet) AMD. The wet form of AMD comprises approcimately 15% of the case, but because of its severity, accounts for the majority of servere visual loss due to AMD[@Gottlieb2020]. Although anti-vascular endothelial growth factor (anti-VEGF) therapy has revolutionized the treatment of neovascular age-related macular degeneration. Some drawbacks have been reported, such as the treatment is not durable and visual gain was lost after 2 years treatment[@CATT_Research_Group2016], significant proportion of patients developed into geograpic atrophy after anti-VEGF therapy[@Grunwald2014;@Chakravarthy2013]. 
-
-In light of the importance of RPE for the survive of photoreceptors, most of the research about the pathgenesis of AMD are focused on the retina-pigment epithelial (RPE), and ignored the importance of microenvirnment in which RPE might be affect by other cells. Histopathological and the recent advancement in imaging technology, Optical coherence tomography (OCT), have found that in the very early stage of AMD, notable changes have identified at the choriocapillaris, such as reduced blood flow, choriocapillaris dropout[@Sohn2019;@Chatziralli2018;@Seddon2016;@Parviz2017;@Wakatsuki2015]. This implies that the changes take place at CC is ahead of RPE and it might responsible for the onset of AMD. But the mechinism of how CC changes may affact retina degeneration is largely unexplored. In the light of above findings, here we trying to understand how CC might affact RPE in the progress of AMD, and find that TGFB1 expressed by CC endothelial cells affact the expression of AMD related gene COL10A1 in RPE and this might contribute to the progression of AMD.  
+> Key words: age-related macular degeneration; choriocapillaris ; retina pigment epithelial; TGFB1; COL10A1  
 
 
-### Results  
-#### Data and Statictic analysis  
-To find data suitable for our purpose, we searched the Gene Expression Omnibus database (GEO), and find the CD31 enriched single-cell RNA-seq of choriodal described by Voigt[@Voigt2019a], this data is used to define the potential ligands expressed by the choriocapillaris endothelial cells that might regulator macular degeneration related genes expressed by RPE. Single cell trajectory were conducted on choriocaplaris endothelial cells among CD31 enriched patients to find the differentially expressed ligands along the trajectory using monocle3[@Trapnell2014;@Qiu2017;@Qiu2017a], batch effects was removed using method described by Haghverdi[@Haghverdi2018].  
+## Introduction   
+Age-related macular degeneration (AMD) is an leading cause of sever visual loss and blindness among the elderly population[@Wong2014a]. It's pathogenesis is poorly understood and it appears to involve of complex interaction of metabolic, functional, genetic and environment factors[@Evans2001;@Kaarniranta2019;@Kauppinen2016;@Wong2014a;@Fine1983;@Fritsche2013]. Late-stage AMD can be divided into two forms: geographic atrophy (GA; or dry) AMD, and neovascular (wet) AMD. The wet form of AMD comprises approximate 15% of the case, but because of its severity, accounts for the majority of severe visual loss due to AMD[@Gottlieb2020].   
 
-For the RPE data, we use the bulk RNA-seq data mentioned by Kim[@Kim2018a], which they describe the siginificant impact on the anti-sense transcripte between the normal and AMD patients. This data is used to define the background expressed genes and expressed age-related macular degeneration genes at early AMD. Differential expression analysis was carried out with edgeR-limma[@McCarthy2012;@Ritchie2015] R/Bioconductor packages between normal and early AMD patients.  
+Although anti-vascular endothelial growth factor (anti-VEGF) therapy has revolutionized the treatment of neovascular age-related macular degeneration. Some drawbacks have been reported, such as the treatment is not durable and visual gain was lost even after 2 years treatment[@CATT_Research_Group2016], significant proportion of patients developed into geograpic atrophy after anti-VEGF therapy[@Grunwald2014;@Chakravarthy2013]. Genome-Wide Association Studies (GWAS) find dozons of sites associated with AMD, which implies complement activity, lipid metabolism, extracellular matrix remodeling and angiogenesis is involved in the progress of AMD progression[@Fritsche2013;@Yu2011a], but the order which participate earlier in the progress of AMD is not determined and it is important for prevention and valuable for select therapeutic targets, but complement activity and angiogenesis doesn't seems to be ahead of lipid metabolism and extracellular remodeling. 
+
+In light of the importance of RPE for the survive of photoreceptors, most of the researches about the pathogenesis of AMD are focused on the retina-pigment epithelial (RPE), and ignored the importance of micro-envirnment in which RPE might be affected by nearby cells. Histopathological and the recent advancement in imaging technology, Optical coherence tomography (OCT), have found that in the very early stage of AMD, notable changes have identified at the choriocapillaris, such as reduced blood flow, choriocapillaris dropout[@Sohn2019;@Chatziralli2018;@Seddon2016;@Parviz2017;@Wakatsuki2015]. This implies that the changes take place at CC is ahead of RPE degeneration and it might responsible for the onset of AMD. But the mechanism of how CC changes might affact retina degeneration is unexplored to our knowledge. In the light of above findings, here we trying to understand how CC might affact RPE in the progress of AMD, and find that TGFB1 expressed by CC endothelial cells by affact the expression of AMD related gene COL10A1 in RPE and this might contribute to the progress of neovascular AMD.  
 
 
-#### ligand target paris  
-Before to infer ligand-target regulatory pairs, ligands activity needs to be performed on the age-related macular degeneration genes (Figure \@ligand-target-pairs A), in other words assess how well each CC endothelial cells expressed ligand can predict the RPE expressed age-related macular degeneration related genes compared to the background of expressed genes. The top 15 highly active ligands are used to infer ligand-target regulation potential pairs.  
+## Results  
+### Data and Statictic analysis  
+To find data suitable for our purpose, we searched the Gene Expression Omnibus database (GEO), and find the CD31 enriched single-cell RNA-seq of choriodal described by Voigt[@Voigt2019a], this data is used to define the potential ligands expressed by the choriocapillaris endothelial cells that might regulator macular degeneration related genes expressed by RPE. Single cell trajectory were conducted on choriocaplaris endothelial cells among CD31 enriched patients to find the differentially expressed ligands along the trajectory using monocle3[@Trapnell2014a;@Qiu2017;@Qiu2017a], batch effects was removed using method described by Haghverdi[@Haghverdi2018].  
 
-Based on prior knowlege on signaling and gene regulatory networks, by using network propagation method[@Browaeys2019] on the integrated networks to infer active ligands expressed by CC endothelial cells and their gene regulatory effects on RPE, we find few high potential ligand-target  regulatory paris, based on the top 15 highly active ligands and TGFB1 and COL10A1 among these high regulatory potential pairs.  
-```{r ligand-target-pairs, fig.align='center', fig.cap="Figure 1. (A) Top 15 Ligands activity, the darker of the color means the more active of the liagnd. \n(B) The ligand-target regulatory pairs identified by the network propagation method."}
+For the RPE data, we use the bulk RNA-seq data mentioned by Kim[@Kim2018a], which they describe the siginificant impact on the anti-sense transcripts between the normal and AMD patients compair to the sense transcripts. This data is used to define the background expressed genes and expressed age-related macular degeneration genes at early AMD. Differential expression analysis was carried out with edgeR-limma[@McCarthy2012;@Ritchie2015] R/Bioconductor packages between normal and early AMD patients.  
+
+
+### ligand target regulatory paris  
+Before to infer ligand-target regulatory pairs, ligands activity needs to be performed on the age-related macular degeneration genes, in other words assess how well each CC endothelial cells expressed ligand can predict the RPE expressed age-related macular degeneration related genes compared to the background of expressed genes. The top 15 highly active ligands are used to infer ligand-target regulation potential pairs (Figure \@ref(fig:ligand-target-pairs)).  
+
+Based on prior knowlege on signaling and gene regulatory networks, by using network propagation method[@Browaeys2019a] on the integrated networks to infer active ligands expressed by CC endothelial cells and their gene regulatory effects on RPE, we find few high potential ligand-target regulatory paris, based on the top 15 highly active ligands and TGFB1 and COL10A1 among these high regulatory potential pairs.
+```{r ligand-target-pairs, fig.align='center', fig.cap="(A) Top 15 Ligands activity, the darker of the color means the more active of the liagnd. \n(B) The ligand-target regulatory pairs identified by the network propagation method."}
 ligand_target_heatmap <- readRDS(file = "../Retina/res/ligand_target_heatmap.rds")
 ligand_activity_heatmap <- readRDS(file = "../Retina/res/ligand_activity_heatmap.rds")
 
 plot_grid(
   ligand_activity_heatmap +
-    ggtitle(label = "ligand activity", subtitle = "A") +
+    ggtitle(label = "ligand activity") +
     theme(plot.title = element_text(size = 9, face = "bold", hjust = "0.5"), 
-          legend.position = "right", 
-          legend.box.spacing = unit(0, "cm")),
+          legend.position = "top"),
   
   ligand_target_heatmap +
   theme(legend.position = "top", 
         plot.title = element_text(size = 12, face = "bold", hjust = 0.5)), 
   nrow = 1, 
-  rel_widths = c(1.8, 5))
+  rel_widths = c(1.8, 5.0), 
+  labels = c("A", "B"))
 ```
 
-
-#### TGFB1 differentially expressed along the trajectory  
-To find out which ligands are differentially expressed from normal to AMD state, first we use the author supplied data[@Voigt2019a] (filter and normalized) and find that TGFB1 expression higher in the early stage AMD patients compare to the normal. Then single cell trajectory analysis was conducted according to the standard precedure[@Trapnell2014;@Qiu2017;@Qiu2017a].  
-In order to confirm we result is solid, we also calculated the percentage of mitochandrial genes in each cells and the expression of TGFB1 along the trajectory. Indeed we find an elevated percentage of mitochandiral genes along the trajectory, this implies CC choriocapillaris endothelial cells in an more stress status or dying[@Ilicic2016] compare to the normal, this is consistent with previous reports that choriocapillaris is thining and dropout in the early stage of AMD[@Chirco2017;@Chatziralli2018;@Lengyel2004;@Sohn2014a].  
-```{r load-single-cell-image}
+### TGFB1 differentially expressed along the trajectory  
+To find out which ligands are differentially expressed from normal to AMD state, first we use the author supplied data[@Voigt2019a] (filter and normalized) and find that TGFB1 expression higher in the early stage AMD patients compare to the normal (Figure \@ref(fig:expression-of-ligands)). Then single cell trajectory analysis was conducted according to the standard precedure[@Trapnell2014a;@Qiu2017;@Qiu2017a], and we indeed find TGFB1 differentially expressed along the pseudotime trajectory (Figure \@ref(fig:expression-of-ligands)).
+```{r load-single-cell-image, message=FALSE, warning=FALSE}
 load(file = "../../Data/AMD-related/AMD-single-cell/monocle3_amd_single_cell.RData")
 expression_ligands_ridges <- readRDS(file = "../Retina/res/expression_ligands_ridges.rds")
 ```
 
-```{r single-cell-plot}
+```{r single-cell-plot, message=FALSE, warning=FALSE}
 pseudotime_p <- plot_cells(cds = cc, 
            color_cells_by = "pseudotime", 
            show_trajectory_graph = T, 
            cell_size = 1.2, 
-           trajectory_graph_segment_size = 0.1, 
+           trajectory_graph_segment_size = 0.2, 
            label_leaves = F, 
            label_roots = F)
 
 percent.mt_p <- plot_cells(cds = cc, 
                            color_cells_by = "percent.mt", 
                            cell_size = 1.2, 
-                           trajectory_graph_segment_size = 0.1, 
+                           trajectory_graph_segment_size = 0.2, 
                            show_trajectory_graph = T, 
                            label_roots = F, 
                            label_leaves = F)
@@ -102,7 +96,7 @@ expression_of_TGFB1 <- plot_cells(cds = cc,
                                   reduction_method = "UMAP", 
                                   genes = "TGFB1", 
                                   show_trajectory_graph = T, 
-                                  trajectory_graph_segment_size = 0.1, 
+                                  trajectory_graph_segment_size = 0.2, 
                                   cell_size = 1.2, 
                                   min_expr = 0, 
                                   label_leaves = F, 
@@ -110,50 +104,62 @@ expression_of_TGFB1 <- plot_cells(cds = cc,
   scale_color_gradient(name = "relative\nexpression", low = "green", high = "red")
 ```
 
-```{r pseudotime-and-percent.mt, fig.cap="Figure 2. (A) The status of the choriocapillaris endothelial cells changes along the pseudotime trajectory. \n(B) The percentage of mitochandrial genes expressed by the choriocapillaris endothelial cells along the pseudotime trajectory."}
-plot_grid(pseudotime_p, 
-          percent.mt_p)
-```
-
-```{r expression-of-ligands, Figure 3. (A) The expression of ligands based on the author provided filter and normalized data. \n(B) }
+```{r expression-of-ligands, message=FALSE, warning=FALSE, fig.align='center', fig.cap = "(A) The expression of ligands based on the author provided filter and normalized data. The more shift to the right the higher of expression. \n(B) The expression of TGFB1 along the trajectory, which is consistent with the author provided data."}
 plot_grid(expression_ligands_ridges, 
-          expression_of_TGFB1)
+          expression_of_TGFB1, 
+          labels = c("A", "B"))
 ```
 
+In order to confirm we result is solid, we calculated and plot the percentage of mitochandrial genes in each cells (Figure \@ref(fig:pseudotime-and-percent.mt)), indeed we find an elevated percentage of mitochandiral genes along the trajectory, this is consistent with previous reports that choriocapillaris is thining and dropout in the early stage of AMD[@Chirco2017;@Chatziralli2018;@Lengyel2004;@Sohn2014a] and the percentage of mitochandrial genes is eleveted in a more stress or dying cell[@Seurat2019;@Islam2014;@Ilicic2016].
+```{r pseudotime-and-percent.mt, message=FALSE, warning=FALSE, fig.align='center', fig.cap="(A) The status of the choriocapillaris endothelial cells changes along the pseudotime trajectory. \n(B) The percentage of mitochandrial genes expressed by the choriocapillaris endothelial cells along the pseudotime trajectory."}
+plot_grid(pseudotime_p, 
+          percent.mt_p, 
+          labels = c("A", "B"))
+```
 
-#### COL10A1 differentially expressed among normal and early AMD patients  
-Differential expression analysis between normal and early AMD patients was conducted following the standard pepline of edgeR-limma[@McCarthy2012;@Ritchie2015] R/Bioconductor package, and we find that TLR4 and COL10A1 were siginificantly differential expressed among early AMD and normal patients. TLR4 is participate in the activation of innate immune system which is consistent with previous study about the participate of immune system in the pathgenesis of AMD[@Fritsche2013;@Liao2019;@Whitmore2015], although we didn't notice the difference of IL1B along the trajectory, but it might be the immune cells or pericyte in the choriodal secreted the IL1B that affect the expression of TLR4.  
+### COL10A1 differentially expressed among normal and early AMD patients  
+Differential expression analysis between normal and early AMD patients was conducted following the standard pepline of edgeR-limma[@McCarthy2012;@Ritchie2015] R/Bioconductor package, and we find that TLR4 and COL10A1 were siginificantly differential expressed among early AMD and normal patients (Figure \@ref(fig:expression-of-target) and Table S2). TLR4 is participate in the activation of innate immune system which is consistent with previous Genome-Wide Association studies about the participate of immune system in the pathgenesis of AMD[@Fritsche2013;@Liao2019;@Whitmore2015], although we didn't notice the difference of IL1B along the trajectory, but it might be the immune cells or pericyte in the choriodal secreted the IL1B that affect the expression of TLR4.  
 
-According to the classification of Hogan[@Hogan1961], Bruch's membrane consists of five layers: the basement membrane of the RPE, the inner collagenous layer (ICL), the elasin layer (EL), the outer collagenous layer (OCL) and, the basement membrane of the choriocapillaris. Although it is not exatly clear how Bruch's membrane is formed, gene expression data indicated that both the choriod and RPE cells are capable of synthesizing the major components of Bruch's membrane[@Booij2009;@Voigt2019a;@Orozco2020;@Kim2018a]. As Bruch's membrane is an dynamic tissue[@Booij2010a], down regulation of COL10A1 could change the structure of Bruch's membrane and that might responsible for the deposition of drusen in the Bruch's membrane. Beside affect the structure of Bruch's membrane, serveral experiments have reported the proteolytic fragments cleaved from collagens exhibit anti-angiogenic and anti-tumor properties[@Su2004;@Oreilly1997], and this may disturbe the balance between inhibtor and stimulator of angiogenesis and cause the neovascularization, which is the character of wet AMD.  
-```{r expression-of-target}
+According to the classification of Hogan[@Hogan1961], Bruch's membrane consists of five layers: the basement membrane of the RPE, the inner collagenous layer (ICL), the elasin layer (EL), the outer collagenous layer (OCL) and, the basement membrane of the choriocapillaris. Although it is not exatly clear how Bruch's membrane is formed, gene expression data indicated that both the choriod and RPE cells are capable of synthesizing the major components of Bruch's membrane[@Booij2009;@Voigt2019a;@Orozco2020;@Kim2018a]. As Bruch's membrane is an dynamic tissue[@Booij2010a], down regulation of COL10A1 could change the structure of Bruch's membrane and that might responsible for the deposition of drusen in the Bruch's membrane. Beside affect the structure of Bruch's membrane, serveral experiments have reported the proteolytic fragments cleaved from collagens exhibit anti-angiogenic and anti-tumor properties[@Su2004;@Oreilly1997], and this may disturbeb the balance between inhibtor and stimulator of angiogenesis and cause the neovascularization, which is the character of wet AMD.
+```{r expression-of-target, message=FALSE, warning=FALSE, fig.align='center', fig.cap="The expression of target genes in early AMD. TLR4, COL10A1 were significantly differental expressed among normal and early AMD patients but VEGF, TIMP3 and TGFBR1 were not."}
 expression_targets_RPE_boxplot <- readRDS(file = "../Retina/res/expression_targets_RPE_boxplot.rds")
-expression_targets_RPE_boxplot +
-  labs(caption = "The expression among Early AMD and Normal AMD patients.")
+expression_targets_RPE_boxplot
 ```
 
 
-### Discussion  
-Genome-Wide Association Studies (GWAS) have identified dozens of sites associated with AMD, which implies the involvment of complement system, lipid metabolism, extracellular matrix remodeling and angiogenesis[@Fritsche2013;@Yu2011a]. Althougth anti-VEGF has revolutionized the treatment of neovascular AMD, some drawbacks have been reported, such as the therapy is not durable even after 2 years intensive treatment and most of the visual gain was lost after the cease of therapy[@Cheung2017;@CATT_Research_Group2016], significant proportion of neovascular AMD patients developed to macular atrophy[@Evans2001;@Chakravarthy2013].   
+## Discussion  
+Althougth anti-VEGF has revolutionized the treatment of neovascular AMD, some drawbacks have been reported[@CATT_Research_Group2016;@Grunwald2014;@Chakravarthy2013]. According to the Genome-Wide Association Studies[@Fritsche2013;@Yu2011a], complement activity, lipid metabolic, extracellular matrix remodeling and angiogenesis involved in the pathgenesis of AMD, but which factor onset ahead of others is not determined, and this is important for prevention and choose the best chandidate of therapeutic target. But angiogenesis dosen't seems to be ahead of others, this indicate inhibit the neovascularization may not the best choose for neovascular AMD. Here we find that COL10A1, an membre of collagen family, which participate extracellular matrix remodeling, might a better therapeutic target than anti-VEGF for neovascular AMD.  
+
+Besides the participate in extracellular remodeling, many studies have find number of proteolytic fragments cleaved from collagen have anti-angiogenesis and anti-tumor property[@Su2004;@Oreilly1997]. From this point of view, the neovascularization might be the imbalance of stimilate and inhibite of angiogenesis. 
+
+In light of these findings, we anticipate that the changed expression of COL10A1 in one aspect could changed the structure of Bruch's membrane, and cause the deposition of drusen in the Bruch's membrane, the other way it imbalanced the balance between stimulate and inhibite signals of angiogenesis that's responsable for the neovascularization.  
+
+Another siginificantly differentially expressed AMD related gene is TLR4, which participate in activate innate immune system, but we didn't seem the differental expression of it's regulator IL1B, perhapes it produced by other cells in the choroidal like macrophage, pericytes. As it is also siginificantly differental expressed at the early stage of AMD, this implies the innate immune system is very important for the pathogenesis of AMD and more researches needs to be done about how immune system participates in the progression of AMD.  
 
 
-### Data and code  
+## Data and code  
 CD31 enriched choriocapillaris endothelial single-cell RNA-seq data: GSE139522.  
 bulk RNA-seq normal and early stage AMD data: GSE99248.  
-code is available at GitHub: https://github.com/YinCY123/AMD  
+code and data is available at GitHub: https://github.com/YinCY123/AMD  
 
+
+## Author information  
+### Affiliations  
+1. Schoole of Medicine, Zhejiang University, Hangzhou, Zhejiang 310009, China    
+2. 51 Job, Shanghai Pudong New Area 201210, China  
 
 ### Author Contribution  
-Chunyou conceive, design and conducted the data analysis, Chunhui help build the computational environment and some help on dimention reduction algorithm, Xiao write the manuscript.  
+Chunyou conceive, design and conducted the data analysis, Chunhui help build the computational environment and some help about dimension reduction algorithm, Xiao write the manuscript.  
+
+### Corresponding authors  
+Correspondence to Chunyou Yin (yinchunyou@zju.edu.cn) or Xiao Shen (shenx@zju.edu.cn)
 
 
-### Acknowledgement  
+## Acknowledgement  
 
 
-### References  
-
-
-### Supplimentary Materials  
-##### Statistic of ligands expression along the trajectory  
+## Supplimentary Materials  
+### Statistic of ligands expression along the trajectory  
 ```{r statistic-result-ligands}
 cc_graph_test_res <- read.csv(file = "/home/yincy/git/R-codes/Retina/res/cc_graph_test_res.csv")
 
@@ -183,69 +189,38 @@ cc_graph_test_res %>%
 ```
 
 
-##### expression of COL18A1 and FGF2  
-```{r expression_COL18A1-FGF2}
-plot_grid(plot_cells(cds = cc, 
-           genes = "COL18A1", 
-           cell_size = 1.2, 
-           trajectory_graph_segment_size = 0.1) +
-  scale_color_gradient(name = "relative\nexpression", low = "green", high = "red"), 
-  
-  plot_cells(cds = cc, 
-           genes = "FGF2", 
-           cell_size = 1.2, 
-           trajectory_graph_segment_size = 0.1) +
-  scale_color_gradient(name = "relative\nexpression", low = "green", high = "red"))
-```
-
-
-##### Statistic of targets expression  
-```{r statistic-result-targets}
+### Statistic of targets expression  
+```{r statistic-result-targets, message=FALSE, warning=FALSE}
 statistic_significance_targets <- readRDS(file = "/home/yincy/git/R-codes/Retina/res/statistic_significance_targets.rds")
 statistic_significance_targets +
   theme_classic()
 ```
 
 
-##### Data source supporting TGFB1-COL10A1 regulation network  
-```{r datasource-support-table}
-data_supports <- read.csv(file = "/home/yincy/git/R-codes/Retina/res/supporting_datasource_TGFB1_COL10A1.csv", 
-                          header = T)
-DT::datatable(data = data_supports[, -1])
-```
+### Software and R packages  
+Name               | website 
+-------------------|---------------------------------------------------------------
+R                  | https://www.r-project.org
+RStudio            | https://rstudio.com/
+edgeR              | http://www.bioconductor.org/packages/release/bioc/html/edgeR.html
+limma              | http://www.bioconductor.org/packages/release/bioc/html/limma.html
+monocle3           | http://cole-trapnell-lab.github.io/monocle-release/
+tidyverse          | https://www.tidyverse.org/
+cowplot            | https://github.com/wilkelab/cowplot
+RColorBrewer       | https://CRAN.R-project.org/package=RColorBrewer
+nichenetr          | https://github.com/saeyslab/nichenetr
+GEOquery           | http://www.bioconductor.org/packages/release/bioc/html/GEOquery.html
+ggridges           | https://CRAN.R-project.org/package=ggridges
+EnsDb.Hsapiens.v86 | http://www.bioconductor.org/packages/release/data/annotation/html/EnsDb.Hsapiens.v86.html
+knitr              | https://yihui.org/knitr/
+rmarkdown          | https://bookdown.org/yihui/rmarkdown
 
 
-##### TGFB1-COL10A1 signaling network  
-```{r TGFB1-COL10A1-signaling-network}
-grid::grid.raster(image = tiff::readTIFF(source = "/home/yincy/git/R-codes/Retina/res/TGFB1-COL10A1-signaling-network.tiff"))
-```
-
-
-##### Software and R packages  
-Name               | source                 | website 
--------------------|------------------------|---------------------------------------------------------------
-R                  | [@R2020]               | https://www.r-project.org
-RStudio            |                        | https://rstudio.com/
-edgeR              | [@McCarthy2012]        | http://www.bioconductor.org/packages/release/bioc/html/edgeR.html
-limma              | [@Ritchie2015]         | http://www.bioconductor.org/packages/release/bioc/html/limma.html
-monocle3           | [@Trapnell2014a]       | http://cole-trapnell-lab.github.io/monocle-release/
-tidyverse          | [@Hadley2019]          | https://www.tidyverse.org/
-cowplot            | [@Wilke2019]           | https://github.com/wilkelab/cowplot
-RColorBrewer       | [@Neuwirth2014]        | https://CRAN.R-project.org/package=RColorBrewer
-nichenetr          | [@Browaeys2019a]       | https://github.com/saeyslab/nichenetr
-GEOquery           | [@Davis2007]           | http://www.bioconductor.org/packages/release/bioc/html/GEOquery.html
-DT                 | [@xie2020]             | https://CRAN.R-project.org/package=DT
-ggridges           | [@Wilke2020]           | https://CRAN.R-project.org/package=ggridges
-EnsDb.Hsapiens.v86 | [@Rainer2017]          | http://www.bioconductor.org/packages/release/data/annotation/html/EnsDb.Hsapiens.v86.html
-grid               | [@R-core-team2020]     | https://www.R-project.org/
-tiff               | [@Urbanek2013]         | https://CRAN.R-project.org/package=tiff
-
-
-##### sessionInfo
+### sessionInfo
 ```{r sessionInfo}
 sessionInfo <- readRDS(file = "/home/yincy/git/R-codes/Retina/res/sessionInfo.rds")
 sessionInfo
 ```
 
-
+## References  
 
