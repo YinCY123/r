@@ -1,0 +1,77 @@
+---
+title: "mouse kidney"
+author: "yincy"
+date: "6/29/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, message=FALSE, warning=FALSE}
+library(Seurat)
+library(tidyverse)
+```
+
+
+```{r}
+mouse_kidney <- Read10X(data.dir = "f:/RNA-seq/data/macrophage/mouse/outs/filtered_gene_bc_matrices/") %>% 
+    CreateSeuratObject(project = "mouse_kidney")
+
+mouse_kidney
+```
+
+```{r}
+mouse_kidney[["percent.mt"]] <- PercentageFeatureSet(object = mouse_kidney, pattern = "^mt-")
+
+mouse_kidney[[]] %>% pull(percent.mt) %>% range()
+```
+
+```{r}
+mouse_kidney[[]] %>% .[, -1] %>% 
+    gather(key = "type", value = "values") %>% 
+    ggplot(aes(type, values)) +
+    geom_violin(aes(group = type, fill = type)) +
+    geom_point(position = "jitter", size = 0.1) +
+    facet_wrap(~type, ncol = 3, scale = "free") +
+    scale_x_discrete(name = NULL) +
+    scale_y_continuous(name = NULL) +
+    scale_fill_discrete(name = NULL)
+```
+
+```{r}
+mouse_kidney_subset <- subset(mouse_kidney, percent.mt < 5 & nFeature_RNA > 200 & nFeature_RNA < 3500)
+
+mouse_kidney_subset
+```
+
+```{r}
+mouse_kidney_subset <- NormalizeData(object = mouse_kidney_subset, 
+                                     normalization.method = "LogNormalize", 
+                                     scale.factor = 10000) %>% 
+    FindVariableFeatures(selection.method = "vst", 
+                         nfeatures = 2000) %>% 
+    ScaleData(var.to.regress = "percent.mt") %>% 
+    RunPCA(npcs = 5) %>% 
+    FindNeighbors(dims = 1:5) %>% 
+    FindClusters(resolution = 0.5) %>% 
+    RunUMAP(dims = 1:5)
+```
+
+```{r}
+DimPlot(mouse_kidney_subset)
+```
+
+
+```{r}
+FeaturePlot(mouse_kidney_subset, features = c("Cd206", "Cd4", "Cd44", "Cd11b", "Vcam"))
+```
+
+
+```{r}
+rownames(mouse_kidney_subset)
+```
+
+
+
