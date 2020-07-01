@@ -9,25 +9,251 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Part I Getting Started  
+## Chapter 2 Getting Started with ggplot2  
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+mpg %>% 
+  select(manufacturer, model) %>%
+  distinct(manufacturer, model) %>% 
+  group_by(manufacturer) %>% 
+  summarise(n_model = n()) %>% 
+  arrange(-n_model) %>% 
+  ggplot(aes(reorder(manufacturer, n_model), n_model)) +
+  geom_bar(stat = "identity") + 
+  geom_text(aes(y = n_model + 0.2, label = n_model)) +
+  scale_x_discrete(name = NULL, expand = c(0, 0)) +
+  theme(axis.text.x = element_text(angle = -45, hjust = 0)) +
+  scale_y_continuous(limits = c(0, 6.5), expand = c(0, 0))
+```
 
-every geom has a default stat; and every stat has a default geom  
 ```{r}
-ggplot(data = diamonds) +
-  stat_count(aes(x = cut), geom = "bar")
+mpg %>% 
+  ggplot(aes(cty, hwy)) + 
+  geom_point(position = "jitter", aes(color = class))
+```
 
-ggplot(data = diamonds) +
-  stat_summary(aes(x = cut, y = depth), 
-               fun.min = min,
-               fun = median, 
-               fun.max = max)
+```{r}
+mpg %>% 
+  ggplot(aes(manufacturer, model)) +
+  geom_count() +
+  theme(axis.text.x = element_text(angle = -45, hjust = 0)) +
+  scale_x_discrete(name = NULL) +
+  scale_y_discrete(name = NULL, expand = c(0.03, 0.03))
+```
+
+```{r}
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point() +
+  facet_wrap(~class)
+```
+
+```{r}
+ggplot(mpg, aes(hwy)) + geom_histogram()
+```
+
+```{r}
+ggplot(mpg, aes(hwy)) + geom_freqpoly(aes(y = ..density..))
 ```
 
 
+```{r}
+ggplot(mpg, aes(displ, fill = drv)) +
+  geom_histogram(binwidth = 0.5) +
+  facet_wrap(~drv, ncol = 1)
+```
+
+```{r}
+ggplot(mpg, aes(displ)) +
+  geom_freqpoly(aes(color = drv), binwidth = 0.5) 
+```
+
+```{r}
+drugs <- data.frame(
+  drug = c("a", "b", "c"), 
+  effect = c(4.2, 9.7, 6.1)
+)
+drugs
+```
+
+```{r}
+ggplot(drugs, aes(drug, effect)) + 
+  geom_bar(stat = "identity")
+```
 
 
+```{r}
+ggplot(drugs, aes(drug)) + 
+  geom_linerange(aes(ymin = 0, ymax = effect), size = 60, color = "grey30")
+```
+
+```{r}
+df <- data.frame( x= c(3, 1, 5), 
+                  y= c(2, 4, 6), 
+                  label = c("a","b","c"))
+
+p <- ggplot(df, aes(x, y, label = label)) +
+  labs(x = NULL, y = NULL) +
+  theme(plot.title = element_text(size = 20))
+
+p + geom_point() + ggtitle(label = "point")
+p + geom_text() + ggtitle("text")
+p + geom_bar(stat = "identity") + ggtitle("bar")
+p + geom_tile() + ggtitle("raster")
+p + geom_line() + ggtitle("line")
+p + geom_path() + ggtitle("path")
+p + geom_area() + ggtitle("area")
+p + geom_polygon() + ggtitle("polygon")
+```
+
+```{r}
+df <- data.frame( x= c(1, 1, 2, 2, 1.5), 
+                  y= c(1, 2, 1, 2, 1.5), 
+                  text = c("bottom-left", "bottom-right", "top-left", "top-right", "center"))
+
+ggplot(df, aes(x, y)) +
+  geom_text(aes(label = text), hjust = "inward", vjust = "inward", angle = 0)
+```
+
+```{r}
+df <- data.frame(trt = c("a", "b", "c"), 
+                 resp = c(1.2, 3.4, 2.5))
+
+ggplot(df, aes(resp, trt)) +
+  geom_point() +
+  geom_text(aes(label = paste0("(", resp, ")")), nudge_y = -0.2) +
+  xlim(1, 3.6)
+```
 
 
+```{r}
+ggplot(mpg, aes(displ, hwy)) +
+  geom_text(aes(label = model), check_overlap = TRUE) + # check overlap labels
+  xlim(1, 8)
+```
 
+```{r}
+label <- data.frame(
+  waiting = c(55, 80), 
+  eruptions = c(2, 4.3), 
+  label = c("peak one", "peak two")
+)
+
+ggplot(faithfuld, aes(waiting, eruptions)) +
+  geom_tile(aes(fill = density)) +
+  geom_label(data = label, aes(label = label)) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0))
+```
+
+```{r}
+ggplot(mpg, aes(displ, hwy, color = class)) +
+  geom_point(show.legend = F) +
+  directlabels::geom_dl(aes(label = class), method = "smart.grid")
+```
+
+```{r}
+presidential <- subset(presidential, subset = start > economics$date[1])
+```
+
+```{r}
+ggplot(presidential) +
+  geom_rect(aes(xmin = start, xmax = end, ymin = -Inf, ymax = Inf, fill = party)) +
+  geom_line(data = economics, aes(date, unemploy)) +
+  geom_text(aes(x = start, y = 2500, label = name), data = presidential, nudge_x = 800) + 
+  geom_vline(aes(xintercept = start), data = presidential) +
+  scale_fill_manual(values = c("Republican" = "tomato", "Democratic" = "lightblue"))
+```
+
+```{r}
+mi_counties <- map_data("county", "michigan") %>% 
+  select(lon = long, lat, group, id = subregion)
+
+mi_cities <- maps::us.cities %>% 
+  as_tibble() %>% 
+  filter(country.etc == "MI") %>% 
+  select(-country.etc, lon = long) %>% 
+  arrange(-pop)
+
+mi_cities %>% head()
+```
+
+```{r}
+ggplot(mi_counties, aes(lon, lat)) +
+  geom_polygon(aes(group = group), fill = NA, color = "grey30") +
+  geom_point(aes(size = pop), color = "red", data = mi_cities) +
+  coord_quickmap() +
+  scale_size_area(max_size = 5)
+```
+
+```{r}
+y <- c(18, 11, 16)
+df <- data.frame(x = 1:3, y = y, se = c(1.2, 0.5, 1.0))
+
+base <- ggplot(df, aes(x, y, ymin = y -se, ymax = y + se)) 
+base + geom_crossbar()
+base + geom_pointrange()
+base + geom_smooth(stat = "identity")
+```
+
+```{r}
+base + geom_errorbar(size = 0.5)
+base + geom_linerange()
+base + geom_ribbon()
+```
+
+
+```{r}
+ggplot(midwest, aes(percwhite, percbelowpoverty)) +
+  geom_point(aes(size = poptotal / 1e6)) +
+  scale_size_area(name = "Population\n(millions)", breaks = c(0.5, 1, 2, 4))
+```
+
+```{r}
+ggplot(midwest, aes(percwhite, percbelowpoverty)) +
+  geom_point() +
+  geom_smooth(method = lm, size = 1)
+```
+
+```{r}
+ggplot(midwest, aes(percwhite, percbelowpoverty)) +
+  geom_point(aes(size = poptotal / 1e6)) +
+  geom_smooth(aes(weight = poptotal), method = lm, size = 1) +
+  scale_size_area(guide = "none")
+```
+
+```{r}
+ggplot(midwest, aes(percbelowpoverty)) +
+  geom_histogram(binwidth = 1) +
+  ylab("Counties")
+```
+
+
+When we weight a histogram or density plot by total population, we change from looking at the distribution of the number of counties, to the distribution of the number of people.  
+```{r}
+ggplot(midwest, aes(percbelowpoverty)) +
+  geom_histogram(aes(weight = poptotal), binwidth = 1) +
+  ylab("Population (1000s)")
+```
+
+
+# Part II The Grammar  
+```{r}
+ggplot() +
+  layer(geom = "point", 
+        stat = "identity", 
+        data = mpg, 
+        mapping = aes(hwy, displ, color = class), 
+        position = "identity", 
+        params = list(size = ))
+```
+
+```{r}
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point(aes(color = drv, shape = drv)) +
+  scale_color_discrete(name = "drive train", breaks = c("4", "f", "r"), labels = c("4d", "fd", "rd")) +
+  scale_shape_discrete(name = "drive train", breaks = c("4", "f", "r"), labels = c("4d", "fd", "rd"))
+```
 
 
 
