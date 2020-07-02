@@ -272,6 +272,34 @@ luv_colours %>%
   scale_color_identity()
 ```
 
+```{r}
+diamonds %>% 
+  ggplot(aes(price, carat)) +
+  geom_point(alpha = 1/10) +
+  geom_abline(slope = 1/10000, color = "blue", size = 1) +
+  facet_wrap(~color)
+```
+
+# Part III Data Analysis  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
