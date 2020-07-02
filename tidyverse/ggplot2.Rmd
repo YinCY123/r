@@ -255,8 +255,22 @@ ggplot(mpg, aes(displ, hwy)) +
   scale_shape_discrete(name = "drive train", breaks = c("4", "f", "r"), labels = c("4d", "fd", "rd"))
 ```
 
+```{r}
+msleep %>% 
+  ggplot(aes(brainwt, bodywt)) +
+  scale_x_log10() +
+  scale_y_log10() + 
+  geom_point(aes(color = vore)) +
+  scale_color_manual(values = c("red", "orange", "green", "blue"), na.value = "white")
+```
 
 
+```{r}
+luv_colours %>% 
+  ggplot(aes(u, v)) +
+  geom_point(aes(color = col), size = 3) +
+  scale_color_identity()
+```
 
 
 
