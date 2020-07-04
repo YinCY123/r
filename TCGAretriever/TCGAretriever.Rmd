@@ -1,0 +1,129 @@
+---
+title: "TCGAretriever"
+author: "yincy"
+date: "6/24/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+TCGAretriever is an R library aimed at downloading genomic data from cBioPortal (https://www.cbioportal.org/), including The Cancer Genome Atlas (TCGA) data (free-tier data). TCGA is a program aimed at improving our understanding of Cancer Biology. Several TCGA Datasets are available online. TCGAretriever helps accessing and downloading TCGA data in R via the cBioPortal API. Features of TCGAretriever are:  
+
+- it is simple and reliable  
+- it is tailored for downloading large volumes of data  
+
+### Cancer Study IDs  
+```{r, message=FALSE, warning=FALSE}
+library(TCGAretriever)
+library(magrittr)
+```
+
+
+obtain a list of cancer studies from cBio  
+```{r}
+all_studies <- get_cancer_studies()
+
+
+# find published TCGA datasets  
+keep <- grepl("tcga_pub$", all_studies[, 1])
+tcga_studies <- all_studies[keep, ]
+
+tcga_studies %>% head()
+```
+
+
+define the cancer study id: 'brca_tcga_pub'  
+```{r}
+my_csid <- "brca_tcga_pub"
+```
+
+
+Genetic Profiles (Assays) and Case Lists  
+```{r}
+# obtain genetic profiles 
+blca_pro <- get_genetic_profiles(csid = my_csid)
+blca_pro[, 1:2, drop = F] %>% head()
+```
+
+```{r}
+# obtain cases 
+blca_cas <- get_case_lists(csid = my_csid)
+
+blca_cas[, 1:2] %>% head()
+```
+
+
+Retrieve Genomic Data  
+```{r}
+# define a set of gene interest  
+q_genes <- c("TP53", "MDM2", "E2F1", "EZH2")
+q_cases <- "brca_tcga_pub_complete"
+rna_prf <- "brca_tcga_pub_mrna"
+mut_prf <- "brca_tcga_pub_mutations"
+
+# Download RNA
+brca_RNA <- TCGAretriever::get_profile_data(case_id = q_cases, gprofile_id = rna_prf, glist = q_genes)
+brca_RNA %>% dim()
+
+brca_RNA %>% .[, 1:5]
+```
+
+```{r}
+rownames(brca_RNA) <- brca_RNA$COMMON
+brca_RNA <- brca_RNA[, -c(1:2)]
+
+# Download mutations
+brca_MUT <- TCGAretriever::get_profile_data(case_id = q_case, 
+                                            gprofile_id = mut_prf, 
+                                            glist = q_genes)
+
+rownames(brca_MUT) <- brca_MUT$COMMON
+brca_MUT <- brca_MUT[, -c(1, 2)]
+brca_MUT %>% .[, 1:5]
+```
+
+**NOTE**: when using the same case_list_id to retrieve different types of data (genetic profiles) results have consistent structure. In other words, data.frames include info for the same list of cases (and hence, the resulting data.frames have the same number of columns, and identical column names).
+
+```{r}
+# Note that the columns are identical and have the same order in both data.frame  
+identical(colnames(brca_RNA), colnames(brca_MUT))
+```
+
+
+## Examples and visualizations  
+**relationships between E2F2 and EZH2 in BRCA**  
+```{r}
+df <- data.frame(brca_RNA %>% t(), stringsAsFactors = F)
+for(i in 1:ncol(df)){
+  df[, i] <- as.numeric(df[, i])
+}
+
+with(df, 
+     plot(E2F1, EZH2, pch = 19, cex = 0.5, main = "E2F1-EZF2 correlation in BRCA"))
+```
+
+
+**Relationship between MDM2 and P53, by P53 mutation status in BRCA**  
+```{r}
+df <- data.frame(t(brca_RNA), stringsAsFactors = FALSE)
+for(i in 1:ncol(df)) { df[, i] <- as.numeric(df[, i])}
+df$TP53.status <- as.factor(ifelse(brca_MUT["TP53",] == "NaN", "WT", "MUT"))
+
+# split data based on TP53.status  
+lst <- split(df, f = df$TP53.status)
+par(mfrow = c(1, 2))
+for(x in names(lst)){
+  with(lst[[x]], 
+       plot(TP53, MDM2, 
+            pch = 19, cex = 0.5, 
+            xlim = c(-2.6, 2.2), 
+            ylim = c(-1.6, 3.6), 
+            main = paste("MDM2-vs-TP53 in ", x, " P53 tumors")))
+}
+```
+
+
+
