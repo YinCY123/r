@@ -280,38 +280,60 @@ diamonds %>%
   facet_wrap(~color)
 ```
 
-# Part III Data Analysis  
+
+# Programming with ggplot2  
+```{r}
+bestfit <- geom_smooth(
+  method = "lm", 
+  se = F, 
+  color = alpha("steelblue", alpha = 0.5), 
+  size = 2
+)
+
+ggplot(mpg, aes(cty, hwy)) +
+  geom_point() +
+  bestfit
+```
+
+```{r}
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point() +
+  bestfit
+```
 
 
+```{r}
+geom_lm <- function(formula = y ~ x, color = alpha("steelblue", 0.5), size = 2, ...){
+  geom_smooth(formula = formula, se = F, method = "lm", color = color, size = size, ...)
+}
 
 
+ggplot(mpg, aes(displ, 1/hwy)) +
+  geom_point() +
+  geom_lm()
+
+ggplot(mpg, aes(displ, 1/hwy)) +
+  geom_point() +
+  geom_lm(y ~ poly(x, 2), size = 1, color = "red")
+```
 
 
+```{r}
+df <- data.frame(
+  x = rnorm(10000), 
+  y = rnorm(10000)
+)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+df %>% 
+  dplyr::mutate(x_i = cut_interval(x, 100)) %>% 
+  ggplot(aes(x_i)) +
+  geom_bar(aes(fill = ..count..)) +
+  theme(axis.text.x = element_blank(), 
+        axis.ticks.length.x = unit(0, "mm")) +
+  scale_x_discrete(NULL, expand = c(0, 0)) +
+  scale_y_continuous(NULL, expand = c(0, 0)) +
+  scale_fill_distiller(type = "seq", palette = "Blues")
+```
 
 
 
