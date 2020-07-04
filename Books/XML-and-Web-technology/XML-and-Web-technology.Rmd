@@ -1,0 +1,24 @@
+---
+title: "XML-and-Web-technology"
+author: "yincy"
+date: "7/2/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(XML)
+library(rjson)
+```
+
+
+# Chapter 1 Getting Started with XML and JSON  
+```{r}
+u <- "https://www.phb123.com/city/renkou/rk.html"
+tbls <- readHTMLTable(u)
+tbls
+```
+
