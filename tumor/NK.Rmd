@@ -1,0 +1,101 @@
+---
+title: "HIF regulators"
+author: "yincy"
+date: "7/2/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(nichenetr)
+library(tidyverse)
+```
+
+
+```{r}
+weighted_network <- readRDS(file = "/home/yincy/git/Data/NicheNet/data/weighted_networks.rds")
+ligand_tf_matrix <- readRDS(file = "/home/yincy/git/Data/NicheNet/data/ligand_tf_matrix.rds")
+
+lr_network <- readRDS(file = "/home/yincy/git/Data/NicheNet/data/lr_network.rds")
+sig_network <- readRDS(file = "/home/yincy/git/Data/NicheNet/data/signaling_network.rds")
+gr_network <- readRDS(file = "/home/yincy/git/Data/NicheNet/data/gr_network.rds")
+```
+
+
+```{r}
+ligands <- lr_network %>% pull(from) %>% unique()
+
+targets_all <- ligand_tf_matrix %>% rownames() %>% unique()
+
+targets <- grep("HIF", targets_all, value = T, ignore.case = T)
+
+active_signaling_network <- get_ligand_signaling_path(
+    ligand_tf_matrix = ligand_tf_matrix, 
+    ligands_all = ligands, 
+    targets_all = targets, 
+    weighted_networks = weighted_network
+)
+
+active_signaling_network_min_max <- active_signaling_network
+
+active_signaling_network_min_max$sig <- active_signaling_network_min_max$sig %>% 
+    mutate(weight = (weight - min(weight)) / (max(weight) - min(weight)) + 0.75)
+
+active_signaling_network_min_max$gr <- active_signaling_network_min_max$gr %>% 
+    mutate(weight = (weight - min(weight)) / (max(weight) - min(weight)) + 0.75)
+
+
+graph_min_max <- diagrammer_format_signaling_graph(
+    signaling_graph_list = active_signaling_network_min_max, 
+    ligands_all = ligands, 
+    targets_all = targets, 
+    gr_color = "steelblue", 
+    sig_color = "indianred"
+)
+
+DiagrammeR::render_graph(graph_min_max, layout = "tree")
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+library(igraph)
+
+net_HIF1A <- graph_from_data_frame(d = active_signaling_network_min_max$gr %>% 
+                                       filter(to == "HIF1A", weight > 1.2), 
+                                   directed = T, 
+                                   vertices = active_signaling_network_min_max$gr %>% 
+                                       filter(to == "HIF1A", weight > 1.2) %>% pull(to) %>% 
+                                       append(values = active_signaling_network_min_max$gr %>% 
+                                                  filter(to == "HIF1A", weight > 1.2) %>% pull(from)) %>% unique())
+net_HIF1A
+
+
+ll <- layout_with_fr(graph = net_HIF1A)
+l = 1
+ll <- igraph::norm_coords(layout = ll, xmin = -l, ymin = -l, xmax = l, ymax = l)
+```
+
+```{r}
+pdf(file = "/home/yincy/git/R-codes/tumor/HIF1A_gr.pdf")
+plot(net_HIF1A, 
+     vertex.size = 5, 
+     vertex.label.cex = 1, 
+     layout = ll, 
+     rescale = T, 
+     edge.width = E(net_HIF1A)$weight/min(E(net_HIF1A)$weight) * 2, 
+     vertex.shape = "none")
+dev.off()
+```
+
+
+```{r}
+active_signaling_network_min_max$gr %>% 
+    filter(to == "HIF1A") %>% 
+    arrange(-weight)
+```
+
+
+
