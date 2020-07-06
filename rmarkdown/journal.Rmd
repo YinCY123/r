@@ -21,12 +21,11 @@ library(tidyverse)
 library(monocle3)
 library(nichenetr)
 library(cowplot)
-library(DT)
 ```
 
 
 ## Abstract  
-The well known function of choriocapillaris (CC) is the supplying oxygen and nutrients to the out retina and retina pigment epithelial (RPE) while remove waste. Besides oxygen and nutrients supplied by CC is important for RPE's survive, signals come from CC should also important for maintain RPE's homeostasis. To date, most studies of the pathogenesis of age-related macular degeneration (AMD) are mainly focused on the RPE itself and largely ignored cells in RPE's micro-environment that might contribute to the progress of AMD. Recently Optical coherence tomography angiography (OCTA) and Histopathological studies found that changes have taken place at the CC at the early stage of AMD. Understand how the changes take place at CC and it's impact on the RPE will contribute to the understand of pathgenesis of age-related macular degeneration. Here we take the first attempt to explor how CC endothelial cells's change might contribute to the progress of neovascular AMD and find that TGFB1 expressed by choriocapillaris endothelail cells by regulate COL10A1 expressed by RPE participate in the progress of neovascular AMD.  
+The well known function of choriocapillaris (CC) is the supplying oxygen and nutrients to the out retina and retina pigment epithelial (RPE) while remove waste. Besides oxygen and nutrients supplied by CC is important for RPE's survive, signals come from CC should also important for maintain RPE's homeostasis. To date, most studies of the pathogenesis of age-related macular degeneration (AMD) are mainly focused on the RPE itself and largely ignored cells in RPE's micro-environment that might contribute to the progress of AMD. Recently Optical coherence tomography angiography (OCTA) and Histopathological studies found that changes have taken place at the CC at the early stage of AMD. Understand how the changes take place at CC and it's impact on the RPE will contribute to the understand of pathgenesis of age-related macular degeneration. Here we take the first attempt to explore how CC endothelial cells's change might contribute to the progress of neovascular AMD and find that TGFB1 expressed by choriocapillaris endothelail cells by regulate COL10A1 expressed by RPE participate in the progress of neovascular AMD.  
 
 > Key words: age-related macular degeneration; choriocapillaris ; retina pigment epithelial; TGFB1; COL10A1  
 
@@ -36,7 +35,7 @@ Age-related macular degeneration (AMD) is an leading cause of sever visual loss 
 
 Although anti-vascular endothelial growth factor (anti-VEGF) therapy has revolutionized the treatment of neovascular age-related macular degeneration. Some drawbacks have been reported, such as the treatment is not durable and visual gain was lost even after 2 years treatment[@CATT_Research_Group2016], significant proportion of patients developed into geograpic atrophy after anti-VEGF therapy[@Grunwald2014;@Chakravarthy2013]. Genome-Wide Association Studies (GWAS) find dozons of sites associated with AMD, which implies complement activity, lipid metabolism, extracellular matrix remodeling and angiogenesis is involved in the progress of AMD progression[@Fritsche2013;@Yu2011a], but the order which participate earlier in the progress of AMD is not determined and it is important for prevention and valuable for select therapeutic targets, but complement activity and angiogenesis doesn't seems to be ahead of lipid metabolism and extracellular remodeling. 
 
-In light of the importance of RPE for the survive of photoreceptors, most of the researches about the pathogenesis of AMD are focused on the retina-pigment epithelial (RPE), and ignored the importance of micro-envirnment in which RPE might be affected by nearby cells. Histopathological and the recent advancement in imaging technology, Optical coherence tomography (OCT), have found that in the very early stage of AMD, notable changes have identified at the choriocapillaris, such as reduced blood flow, choriocapillaris dropout[@Sohn2019;@Chatziralli2018;@Seddon2016;@Parviz2017;@Wakatsuki2015]. This implies that the changes take place at CC is ahead of RPE degeneration and it might responsible for the onset of AMD. But the mechanism of how CC changes might affact retina degeneration is unexplored to our knowledge. In the light of above findings, here we trying to understand how CC might affact RPE in the progress of AMD, and find that TGFB1 expressed by CC endothelial cells by affact the expression of AMD related gene COL10A1 in RPE and this might contribute to the progress of neovascular AMD.  
+In light of the importance of RPE for the survive of photoreceptors, most of the researches about the pathogenesis of AMD are focused on the retina-pigment epithelial (RPE), and ignored the importance of micro-environment in which RPE might be affected by nearby cells. Histopathological and the recent advancement in imaging technology, Optical coherence tomography (OCT), have found that in the very early stage of AMD, notable changes have identified at the choriocapillaris, such as reduced blood flow, choriocapillaris dropout[@Sohn2019;@Chatziralli2018;@Seddon2016;@Parviz2017;@Wakatsuki2015]. This implies that the changes take place at CC is ahead of RPE degeneration and it might responsible for the onset of AMD. But the mechanism of how CC changes might affact retina degeneration is unexplored to our knowledge. In the light of above findings, here we trying to understand how CC might affact RPE in the progress of AMD, and find that TGFB1 expressed by CC endothelial cells by affact the expression of AMD related gene COL10A1 in RPE and this might contribute to the progress of neovascular AMD.  
 
 
 ## Results  
@@ -152,10 +151,7 @@ code and data is available at GitHub: https://github.com/YinCY123/AMD
 Chunyou conceive, design and conducted the data analysis, Chunhui help build the computational environment and some help about dimension reduction algorithm, Xiao write the manuscript.  
 
 ### Corresponding authors  
-Correspondence to Chunyou Yin (yinchunyou@zju.edu.cn) or Xiao Shen (shenx@zju.edu.cn)
-
-
-## Acknowledgement  
+Correspondence to Chunyou Yin (yinchunyou@zju.edu.cn)
 
 
 ## Supplimentary Materials  
@@ -188,13 +184,18 @@ cc_graph_test_res %>%
   ggtitle(label = "significance of ligands along trajectory")
 ```
 
-
 ### Statistic of targets expression  
 ```{r statistic-result-targets, message=FALSE, warning=FALSE}
 statistic_significance_targets <- readRDS(file = "/home/yincy/git/R-codes/Retina/res/statistic_significance_targets.rds")
 statistic_significance_targets +
   theme_classic()
 ```
+
+### signal network of TGFB1 COL10A1  
+```{r}
+knitr::include_graphics(path = "/home/yincy/git/R-codes/Retina/res/TGFB1-COL10A1-signaling-network.png")
+```
+
 
 
 ### Software and R packages  
