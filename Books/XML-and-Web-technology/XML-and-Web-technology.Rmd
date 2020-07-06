@@ -9,16 +9,56 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 library(XML)
 library(rjson)
+library(tidyverse)
 ```
 
 
 # Chapter 1 Getting Started with XML and JSON  
+## Reading from HTMLTables  
 ```{r}
-u <- "https://www.phb123.com/city/renkou/rk.html"
-tbls <- readHTMLTable(u)
-tbls
+u <- "f:/List of countries and dependencies by population - Wikipedia.html"
+tbls <- readHTMLTable(doc = u)
+tbls %>% class()
 ```
+
+```{r}
+sapply(tbls, names)
+sapply(tbls, nrow) # the large table is the population table
+```
+
+```{r}
+pop <- readHTMLTable(doc = u, which = 1)
+colnames(pop) <- c("Rank", "Country", "Population", "Percentage", "Date", "Source")
+pop %>% head()
+```
+
+
+For each <table> node, `readHTMLTable()` loops over the row nodes (<tr>) and processes each cell in the row. These cells are either <th> or <td> elements for header or regular data, respectively.  
+
+The data are typically in <td> elements, and we simply extract the contents of each cell as string.  
+
+The <th> elements in a table typically indicate column header, and is used for variable names when approprite.  
+
+
+# Chapter 2 An Introduction to XML  
+XML is not itself a language for representing data. Rather, it is a very general structure with which we can define any number of new formats to represent arbitrary data.  
+
+
+## Essentials of XML  
+### Element Names  
+Each element begins with the start-tag, e.g., <title> or <article>, and must close with a corre- sponding end-tag, e.g., </title> or </article>, respectively.  
+
+
+
+
+
+
+
+
+
+
+
 
