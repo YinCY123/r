@@ -35,14 +35,14 @@ Age-related macular degeneration (AMD) is an leading cause of sever visual loss 
 
 Although anti-vascular endothelial growth factor (anti-VEGF) therapy has revolutionized the treatment of neovascular age-related macular degeneration. Some drawbacks have been reported, such as the treatment is not durable and visual gain was lost even after 2 years treatment[@CATT_Research_Group2016], significant proportion of patients developed into geograpic atrophy after anti-VEGF therapy[@Grunwald2014;@Chakravarthy2013]. Genome-Wide Association Studies (GWAS) find dozons of sites associated with AMD, which implies complement activity, lipid metabolism, extracellular matrix remodeling and angiogenesis is involved in the progress of AMD progression[@Fritsche2013;@Yu2011a], but the order which participate earlier in the progress of AMD is not determined and it is important for prevention and valuable for select therapeutic targets, but complement activity and angiogenesis doesn't seems to be ahead of lipid metabolism and extracellular remodeling. 
 
-In light of the importance of RPE for the survive of photoreceptors, most of the researches about the pathogenesis of AMD are focused on the retina-pigment epithelial (RPE), and ignored the importance of micro-environment in which RPE might be affected by nearby cells. Histopathological and the recent advancement in imaging technology, Optical coherence tomography (OCT), have found that in the very early stage of AMD, notable changes have identified at the choriocapillaris, such as reduced blood flow, choriocapillaris dropout[@Sohn2019;@Chatziralli2018;@Seddon2016;@Parviz2017;@Wakatsuki2015]. This implies that the changes take place at CC is ahead of RPE degeneration and it might responsible for the onset of AMD. But the mechanism of how CC changes might affact retina degeneration is unexplored to our knowledge. In the light of above findings, here we trying to understand how CC might affact RPE in the progress of AMD, and find that TGFB1 expressed by CC endothelial cells by affact the expression of AMD related gene COL10A1 in RPE and this might contribute to the progress of neovascular AMD.  
+In light of the importance of RPE for the survive of photoreceptors, most of the researches about the pathogenesis of AMD are focused on the retina-pigment epithelial (RPE), and ignored the importance of micro-environment in which RPE might be affected by nearby cells. Histopathological and the recent advancement in imaging technology, Optical coherence tomography (OCT), have found that in the very early stage of AMD, notable changes have identified at the choriocapillaris, such as reduced blood flow, choriocapillaris dropout[@Sohn2019;@Chatziralli2018;@Seddon2016;@Parviz2017;@Wakatsuki2015]. This implies that the changes take place at CC is ahead of RPE degeneration and it might responsible for the onset of AMD. But the mechanism of how CC changes might affect retina degeneration is unexplored to our knowledge. In the light of above findings, here we trying to understand how CC might affect RPE in the progress of AMD, and find that TGFB1 expressed by CC endothelial cells by affect the expression of AMD related gene COL10A1 in RPE and this might contribute to the progress of neovascular AMD.  
 
 
 ## Results  
 ### Data and Statictic analysis  
 To find data suitable for our purpose, we searched the Gene Expression Omnibus database (GEO), and find the CD31 enriched single-cell RNA-seq of choriodal described by Voigt[@Voigt2019a], this data is used to define the potential ligands expressed by the choriocapillaris endothelial cells that might regulator macular degeneration related genes expressed by RPE. Single cell trajectory were conducted on choriocaplaris endothelial cells among CD31 enriched patients to find the differentially expressed ligands along the trajectory using monocle3[@Trapnell2014a;@Qiu2017;@Qiu2017a], batch effects was removed using method described by Haghverdi[@Haghverdi2018].  
 
-For the RPE data, we use the bulk RNA-seq data mentioned by Kim[@Kim2018a], which they describe the siginificant impact on the anti-sense transcripts between the normal and AMD patients compair to the sense transcripts. This data is used to define the background expressed genes and expressed age-related macular degeneration genes at early AMD. Differential expression analysis was carried out with edgeR-limma[@McCarthy2012;@Ritchie2015] R/Bioconductor packages between normal and early AMD patients.  
+For the RPE data, we use the bulk RNA-seq data mentioned by Kim[@Kim2018a], which they describe the siginificant impact on the anti-sense transcripts between the normal and AMD patients compare to the sense transcripts. This data is used to define the background expressed genes and expressed age-related macular degeneration genes at early AMD. Differential expression analysis was carried out with edgeR-limma[@McCarthy2012;@Ritchie2015] R/Bioconductor packages between normal and early AMD patients.  
 
 
 ### ligand target regulatory paris  
@@ -119,7 +119,9 @@ plot_grid(pseudotime_p,
 ### COL10A1 differentially expressed among normal and early AMD patients  
 Differential expression analysis between normal and early AMD patients was conducted following the standard pepline of edgeR-limma[@McCarthy2012;@Ritchie2015] R/Bioconductor package, and we find that TLR4 and COL10A1 were siginificantly differential expressed among early AMD and normal patients (Figure \@ref(fig:expression-of-target) and Table S2). TLR4 is participate in the activation of innate immune system which is consistent with previous Genome-Wide Association studies about the participate of immune system in the pathgenesis of AMD[@Fritsche2013;@Liao2019;@Whitmore2015], although we didn't notice the difference of IL1B along the trajectory, but it might be the immune cells or pericyte in the choriodal secreted the IL1B that affect the expression of TLR4.  
 
-According to the classification of Hogan[@Hogan1961], Bruch's membrane consists of five layers: the basement membrane of the RPE, the inner collagenous layer (ICL), the elasin layer (EL), the outer collagenous layer (OCL) and, the basement membrane of the choriocapillaris. Although it is not exatly clear how Bruch's membrane is formed, gene expression data indicated that both the choriod and RPE cells are capable of synthesizing the major components of Bruch's membrane[@Booij2009;@Voigt2019a;@Orozco2020;@Kim2018a]. As Bruch's membrane is an dynamic tissue[@Booij2010a], down regulation of COL10A1 could change the structure of Bruch's membrane and that might responsible for the deposition of drusen in the Bruch's membrane. Beside affect the structure of Bruch's membrane, serveral experiments have reported the proteolytic fragments cleaved from collagens exhibit anti-angiogenic and anti-tumor properties[@Su2004;@Oreilly1997], and this may disturbeb the balance between inhibtor and stimulator of angiogenesis and cause the neovascularization, which is the character of wet AMD.
+According to the classification of Hogan[@Hogan1961], Bruch's membrane consists of five layers: the basement membrane of the RPE, the inner collagenous layer (ICL), the elasin layer (EL), the outer collagenous layer (OCL) and, the basement membrane of the choriocapillaris. Although it is not exatly clear how Bruch's membrane is formed, gene expression data indicated that both the choroid and RPE cells are capable of synthesizing the major components of Bruch's membrane[@Booij2009;@Voigt2019a;@Orozco2020;@Kim2018a]. As Bruch's membrane is an dynamic tissue[@Booij2010a], down regulation of COL10A1 could change the structure of Bruch's membrane and that might responsible for the deposition of drusen in the Bruch's membrane. Beside affect the structure of Bruch's membrane, several experiments have reported the proteolytic fragments cleaved from collages exhibit anti-angiogenic and anti-tumor properties[@Su2004;@Oreilly1997], and down regulation of COL10A1 may disturbed the balance between inhibitor and simulator of angiogenesis and cause the neovascularization, which is the character of wet AMD.  
+
+In order to find which transcription regulator might responsible for the down regulate of COL10A1, we integrated the TGFB1 and COL10A1 signaling network (fig \@ref(fig:TGFB1-COL10A1-signaling)) and find three regulators RUNX2, AR, and ESR1. Next we examined the expression of these regulators and find that only RUNX2 and ESR1 expressed after filtering, and RUNX2 was significantly down regulated between normal and early AMD patients (fig \ref(fig:expression-regulators)), this is consistent with the find of Li[@Li2011], which find that RUNX2 can upregulate the expression of COL10A1 in murine, and the lowered expression of RUNX2 might cuase the downregulated expression of COL10A1.  
 ```{r expression-of-target, message=FALSE, warning=FALSE, fig.align='center', fig.cap="The expression of target genes in early AMD. TLR4, COL10A1 were significantly differental expressed among normal and early AMD patients but VEGF, TIMP3 and TGFBR1 were not."}
 expression_targets_RPE_boxplot <- readRDS(file = "../Retina/res/expression_targets_RPE_boxplot.rds")
 expression_targets_RPE_boxplot
@@ -127,13 +129,13 @@ expression_targets_RPE_boxplot
 
 
 ## Discussion  
-Althougth anti-VEGF has revolutionized the treatment of neovascular AMD, some drawbacks have been reported[@CATT_Research_Group2016;@Grunwald2014;@Chakravarthy2013]. According to the Genome-Wide Association Studies[@Fritsche2013;@Yu2011a], complement activity, lipid metabolic, extracellular matrix remodeling and angiogenesis involved in the pathgenesis of AMD, but which factor onset ahead of others is not determined, and this is important for prevention and choose the best chandidate of therapeutic target. But angiogenesis dosen't seems to be ahead of others, this indicate inhibit the neovascularization may not the best choose for neovascular AMD. Here we find that COL10A1, an membre of collagen family, which participate extracellular matrix remodeling, might a better therapeutic target than anti-VEGF for neovascular AMD.  
+Althougth anti-VEGF has brought light for neovascular AMD patients, some side-effects have been reported[@CATT_Research_Group2016;@Grunwald2014;@Chakravarthy2013]. According to the Genome-Wide Association Studies[@Fritsche2013;@Yu2011a], complement activity, lipid metabolic, extracellular matrix remodeling and angiogenesis involved in the pathgenesis of AMD, but which factor onset ahead of others is not determined, and this is important for prevention and choose the optimal candidate of therapeutic targets. But angiogenesis doesn't seems to be ahead of others, this imply inhibit the neovascularization may not the best choose for neovascular AMD. Here we find that COL10A1, an member of collagen family, which participate extracellular matrix remodeling, might a better therapeutic target than anti-VEGF for neovascular AMD. Besides the participate in extracellular remodeling, many studies have find number of proteolytic fragments cleaved from collagen have anti-angiogenesis and anti-tumor property[@Su2004;@Oreilly1997]. From this point of view, the neovascularization might be the imbalance of stimulator and inhibitor of angiogenesis. 
 
-Besides the participate in extracellular remodeling, many studies have find number of proteolytic fragments cleaved from collagen have anti-angiogenesis and anti-tumor property[@Su2004;@Oreilly1997]. From this point of view, the neovascularization might be the imbalance of stimilate and inhibite of angiogenesis. 
-
-In light of these findings, we anticipate that the changed expression of COL10A1 in one aspect could changed the structure of Bruch's membrane, and cause the deposition of drusen in the Bruch's membrane, the other way it imbalanced the balance between stimulate and inhibite signals of angiogenesis that's responsable for the neovascularization.  
+In light of these findings, we anticipate that the changed expression of COL10A1 in one aspect could changed the structure of Bruch's membrane, and cause the deposition of drusen in the Bruch's membrane, the other way it imbalanced   stimulator and inhibitor signals of angiogenesis and that might responsible of the neovascularization.  
 
 Another siginificantly differentially expressed AMD related gene is TLR4, which participate in activate innate immune system, but we didn't seem the differental expression of it's regulator IL1B, perhapes it produced by other cells in the choroidal like macrophage, pericytes. As it is also siginificantly differental expressed at the early stage of AMD, this implies the innate immune system is very important for the pathogenesis of AMD and more researches needs to be done about how immune system participates in the progression of AMD.  
+
+Another important issue is to determine the sequential of complement activity, lipid metabolic, extracellular matrix remodeling and angiogenesis which has been identified by Genome-Width Association Studies that participate in the pathogenesis of AMD, this is important for choose the optimal therapeutic targets. With the advance of imaging technology , Next-generation Sequencing and Metabolomics/proteomics more works about this should be done.  
 
 
 ## Data and code  
@@ -148,7 +150,7 @@ code and data is available at GitHub: https://github.com/YinCY123/AMD
 2. 51 Job, Shanghai Pudong New Area 201210, China  
 
 ### Author Contribution  
-Chunyou conceive, design and conducted the data analysis, Chunhui help build the computational environment and some help about dimension reduction algorithm, Xiao write the manuscript.  
+Chunyou conceive, design and conducted the data analysis, Chunhui help build the computational environment and some help about dimension reduction algorithm.   
 
 ### Corresponding authors  
 Correspondence to Chunyou Yin (yinchunyou@zju.edu.cn)
@@ -187,15 +189,32 @@ cc_graph_test_res %>%
 ### Statistic of targets expression  
 ```{r statistic-result-targets, message=FALSE, warning=FALSE}
 statistic_significance_targets <- readRDS(file = "/home/yincy/git/R-codes/Retina/res/statistic_significance_targets.rds")
-statistic_significance_targets +
-  theme_classic()
+
+plot_grid(statistic_significance_targets + theme_classic(), 
+          nrow = 2, 
+          rel_heights = rep(1, 2)) 
 ```
 
 ### signal network of TGFB1 COL10A1  
-```{r}
+```{r TGFB1-COL10A1-signaling}
 knitr::include_graphics(path = "/home/yincy/git/R-codes/Retina/res/TGFB1-COL10A1-signaling-network.png")
 ```
 
+### expression of regulators  
+```{r expression-regulators}
+expression_regulators <- readRDS(file = "/home/yincy/git/R-codes/Retina/res/expression_regulators.rds")
+plot_grid(expression_regulators, 
+          ncol = 3, 
+          rel_widths = rep(1, 3))
+```
+
+### Statistic of targets expression
+```{r}
+statistic_significance_regulator <- readRDS(file = "/home/yincy/git/R-codes/Retina/res/statistic_significance_regulator.rds")
+plot_grid(statistic_significance_regulator, 
+          nrow = 2, 
+          rel_heights = rep(1, 2))
+```
 
 
 ### Software and R packages  
