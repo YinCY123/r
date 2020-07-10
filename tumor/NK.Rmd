@@ -91,11 +91,128 @@ dev.off()
 ```
 
 
+
 ```{r}
-active_signaling_network_min_max$gr %>% 
-    filter(to == "HIF1A") %>% 
-    arrange(-weight)
+active_signal_network$gr %>% pull(to) %>% unique()
 ```
 
+```{r}
+HIF1A_regulators <- active_signal_network$gr %>% 
+    filter(to == "HIF1A") %>% 
+    arrange(-weight) %>% 
+    pull(from) %>% 
+    unique()
+```
+
+
+```{r}
+HIF3A_regulators <- active_signal_network$gr %>% 
+    filter(to == "HIF3A") %>% 
+    arrange(-weight) %>% 
+    pull(from) %>% 
+    unique()
+```
+
+```{r}
+HIF1A_AS2_regulators <- active_signal_network$gr %>% 
+    filter(to == "HIF1A-AS2") %>% 
+    arrange(-weight) %>% 
+    pull(from) %>% 
+    unique()
+```
+
+
+```{r}
+HIF1AN_regulators <- active_signal_network$gr %>% 
+    filter(to == "HIF1AN") %>% 
+    arrange(-weight) %>% 
+    pull(from) %>% 
+    unique()
+```
+
+
+```{r}
+df <- data.frame(
+    HIF1A = HIF1A_regulators %>% head(n = 10), 
+    HIF3A = HIF3A_regulators %>% head(n = 10), 
+    HIF1AN = HIF1AN_regulators %>% head(n = 10), 
+    `HIF1A-AS2` = HIF1A_AS2_regulators %>% head(n = 10)
+)
+DT::datatable(df)
+```
+
+```{r}
+overlap <- calculate.overlap(x = list(HIF1A = HIF1A_regulators, 
+                                      HIF3A = HIF3A_regulators, 
+                                      HIF1AN = HIF1AN_regulators, 
+                                      HIF1A_AS2 = HIF1A_AS2_regulators))
+
+overlap[[1]] %>% matrix(nrow = 4, byrow = T) %>% DT::datatable()
+```
+
+```{r}
+venn.diagram(x = list(HIF1A = HIF1A_regulators, 
+                      HIF3A = HIF3A_regulators, 
+                      HIF1AN = HIF1AN_regulators, 
+                      HIF1A_AS2 = HIF1A_AS2_regulators), 
+             filename = "HIF_Venn.tiff")
+```
+
+
+```{r}
+listAttributes(mart = hmart)
+```
+
+
+```{r}
+gene_mart <- getBM(attributes = c("gene_biotype", "entrezgene_description", "hgnc_symbol"), 
+                   filters = "entrezgene_id", 
+                   values = genes_entrez, 
+                   mart = hmart)
+
+gene_mart
+```
+
+
+```
+hypoxia, anoxia; anoxic; oxygen deficit; oxygen deficiency; oxygen deprivation
+```
+
+```{r}
+hypoxia_index <- grepl(pattern = "hypoxia|anoxia|anoxic|oxygen deficiency|oxygen deprivation|oxygen deficit", 
+                       x = gene_mart$entrezgene_description, 
+                       ignore.case = T)
+gene_mart[hypoxia_index, ] %>% .[, 2:3] %>% DT::datatable()
+```
+
+
+
+## GO annotation  
+```{r}
+library(GO.db)
+
+GO.db %>% class()
+methods(class = "GODb")
+```
+  
+```{r}
+GO_term <- GO.db::GOTERM %>% as.data.frame()
+
+GO_term %>% 
+    filter(Definition %in% "hypoxia|anoxia|anoxic|oxygen deficiency|oxygen deprivation|oxygen deficit")
+
+hypoxia_go_id <- GO_term[grepl("hypoxia|anoxia|anoxic|oxygen deficiency|oxygen deprivation|oxygen deficit", GO_term$Definition), ] %>% 
+    .[, -1] %>% 
+    pull(go_id) %>% unique()
+
+getBM(attributes = c("hgnc_symbol"), 
+      filters = "go", 
+      values = hypoxia_go_id, 
+      mart = hmart)
+```
+
+```{r}
+listFilters(hmart)
+```
 
 
