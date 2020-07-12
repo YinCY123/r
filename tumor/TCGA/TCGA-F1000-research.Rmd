@@ -1,0 +1,71 @@
+---
+title: "TCGA F1000 Research"
+author: "yincy"
+date: "7/12/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Downloading data from TCGA data portal  
+```{r}
+library("TCGAbiolinks")
+```
+
+
+
+
+## Downloading data from Broad TCGA GDAC  
+```{r, message=FALSE, warning=FALSE}
+library(RTCGAToolbox)
+```
+
+The Bioconductor package `RTCGAToolbox` provides access to Firehose level 3 and 4 data through the function `getFirehoseData`.  
+
+- `dataset` - tumor to download. A complete list of possibilities can be viewed with `getFirehoseDatasets` function.  
+```{r}
+getFirehoseDatasets()
+```
+
+- `runDate` - Stddata run dates. Dates can be viewed with `getFirehoseRunningDates()` function.  
+```{r}
+getFirehoseRunningDates()
+```
+
+- `gistic2_Date` - Analyze run dates. Dates can be viewed with `getFirehoseAnalyzeDates()` function.  
+By default, `RTCGAToolbox` allows users to download up to 500 MB worth of data. To increase the size of the download, users are encouraged to use `fileSizeLimit` argument.   
+
+get the last run dates  
+```{r}
+lastRunDate <- getFirehoseRunningDates()[1]
+
+lastAnalyseDate <- getFirehoseAnalyzeDates(1)
+```
+
+get DNA methylation data, RNAseq2 and clinical data for LGG  
+```{r}
+lgg_data <- getFirehoseData(dataset = "GBM", 
+                            runDate = lastRunDate, 
+                            gistic2Date = getFirehoseAnalyzeDates(1), 
+                            Methylation = TRUE, 
+                            RNAseq2Norm = TRUE, 
+                            clinical = TRUE, 
+                            Mutation = TRUE, 
+                            fileSizeLimit = 10000)
+```
+
+
+get DNA methylation data, RNAseq2 and clinical data for GBM  
+```{r}
+gbm_data <- getFirehoseData(dataset = "GBM")
+```
+
+
+
+
+
+
+
