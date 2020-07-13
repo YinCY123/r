@@ -7,9 +7,14 @@
 # ignore auto saved R data
 *.RData
 
-# ignore .zip file
+# ignore .zip .gz .tar file
 *.zip
+*.gz
+*.tar
 
 # ignore log file
 *.log
 .Rproj.user
+
+# ignore .rds file
+*.rds
