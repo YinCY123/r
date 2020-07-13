@@ -1,0 +1,33 @@
+---
+title: "melanoma"
+author: "yincy"
+date: "7/10/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+library(GEOquery)
+library(tidyverse)
+```
+
+
+Single cell RNA-seq analysis of melanoma  
+```{r}
+GSE72056 <- getGEO(GEO = "GSE72056")
+GSE72056_sample_info <- GSE72056[[1]] %>% as.data.frame()
+saveRDS(object = GSE72056, 
+        file = "/home/yincy/git/R-codes/tumor/melanoma/GSE72056_sample_info.rds")
+```
+
+```{r}
+getGEOSuppFiles(GEO = "GSE72056")
+```
+
+
+
+
