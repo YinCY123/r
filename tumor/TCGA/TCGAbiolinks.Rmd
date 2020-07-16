@@ -37,8 +37,121 @@ Example:
 - Participant: TCGA-G4-6317  
 - Sample: TCGA-G4-6317-02  
 
+More information at [TCGA barcode](https://docs.gdc.cancer.gov/Encyclopedia/pages/TCGA_Barcode/) 
 
- 
+
+## Searching arguments  
+You can easily search GDC data using the `GDCquery` function.  
+
+Using a summary of filters as used in the TCGA portal, the function works with the following arguments:  
+
+project               | A list of valid project   
+----------------------|------------------------------------
+data.category         | A valid project (TCGAbiolinks::getProjectSummary(project))  
+data.type             | A data type to filter the files to download  
+workflow.type         | GDC workflow type  
+legacy                | Search in the legacy repository   
+access                | Filter by access type. Possible values: controlled, open  
+platform              | examples: IlluminaGA_RNASeqV2, IlluminaHiSeq_TotalRNASeqV2  
+file.type             | to be used in the legacy database for some platforms, to define which file types to be used.  
+barcode               | A list of barcodes to filter the files to download  
+experimental.strategy | Filter to experiment strategy. Harmonized: WXS, RNA-seq, miRNA-seq, Genotyping Arry. Legacy: WXS, RNA-seq, miRNA-seq, Genotyping Array, DNA-seq, Methylation array, Protein expression array ...,  
+sample.type           | A sample type to filter the files to download  
+
+
+## Harmonized database examples  
+### DNA methylation data: Recurrent tumor samples  
+In this example we will access the harmonized database (`legacy = FALSE`) and search for all DNA methylation data for recurrent glioblastoma multiform (GBM) and low grade gliomas (LGG) samples.  
+```{r}
+query <- GDCquery(project = c("TCGA-GBM", "TCGA-LGG"), 
+                  data.category = "DNA Methylation", 
+                  platform = c("Illumina Human Methylation 450"), 
+                  sample.type = "Recurrent Tumor")
+
+getResults(query)
+```
+
+
+
+### Samples with DNA methylation and gene expression data  
+In this example we will access the harmonized database (`legacy = FALSE`) and search fro all patients with DNA methylation (platform HumanMethylation450k) and gene expression data for Colon Adenocarcinoma tumor (TCGA-COAD).  
+```{r}
+query.met <- GDCquery(project = "TCGA-COAD", 
+                      data.category = "DNA Methylation", 
+                      legacy = FALSE, 
+                      platform = "Illumina Human Methylation 450")
+
+query.exp <- GDCquery(project = "TCGA-COAD", 
+                      data.category = "Transcriptome Profiling", 
+                      data.type = "Gene Expression Quantification", 
+                      workflow.type = "HTSeq - FPKM-UQ")
+
+
+# get all patients that have DNA methylation and gene expression  
+common.patients <- intersect(substr(getResults(query.met, cols = "cases"), 1, 12), 
+                             substr(getResults(query.exp, cols = "cases"), 1, 12))
+
+
+# only select the first 5 patients  
+query.met <- GDCquery(project = "TCGA-COAD", 
+                      data.category = "DNA Methylation", 
+                      legacy = F, 
+                      platform = "Illumina Human Methylation 450", 
+                      barcode = common.patients[1:5])
+
+query.exp <- GDCquery(project = "TCGA-COAD", 
+                      data.category = "Transcriptome Profiling", 
+                      data.type = "Gene Expression Quantification", 
+                      barcode = common.patients[1:5], 
+                      workflow.type = "HTSeq - FPKM-UQ")
+```
+
+```{r}
+getResults(query.met)
+```
+```{r}
+getResults(query.exp)
+```
+
+### Raw Sequencing Data: Finding the match between file names and barcode for Controlled data  
+This example shows how the user can search for breast cancer Raw Sequencing data ("controlled") and verify the name of the files and the barcodes associated with it.  
+```{r}
+query <- GDCquery(project = "TCGA-BRCA", 
+                  data.category = "Sequencing Reads", 
+                  sample.type = "Primary Tumor")
+
+# only first 100 to make render faster  
+getResults(query, rows = 1:100, cols = c("file_name", "cases"))
+```
+
+## Legacy archive example  
+### DNA methylation   
+#### Array-based assays  
+This example shows how the user can search for glioblastoma multiform (GBM) and low grade gliomas (LGG) DNA methylation data for platform Illumina Human Methylation 450 and Illumina Human Methylation 27.  
+```{r}
+query <- GDCquery(project = c("TCGA-GBM", "TCGA-LGG"), 
+                  legacy = T, 
+                  platform = c("Illumina Human Methylation 450", "Illumina Human Methylation 27"))
+
+getResults(query, rows = 1:100)
+```
+
+
+### whole-genome bisulfite sequencing (WGBS)  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
