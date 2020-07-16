@@ -1,0 +1,45 @@
+---
+title: "TCGAbiolinks"
+author: "yincy"
+date: "7/16/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r load packages, message=FALSE, warning=FALSE}
+library(TCGAbiolinks)
+```
+
+
+# Introduction  
+TCGAbiolinks is able to access The National Cancer Institute (NCI) Genomic Data Commons (GDC) thorough its [GDC Application Programming Interface (API))[https://gdc.cancer.gov/developers/gdc-application-programming-interface-api] to search, download and prepare relevant data for analysis in R.  
+
+
+# Searching GDC database  
+**Differebt sources: Legacy vs Harmonized**  
+There are two available sources to download GDC data using TCGAbiolinks:  
+
+- GDC legacy Archive: provides access to an unmodified copy of data that was previously stored in `CGHub` and in the TCGA Data Portal hosted by the TCGA Data Coordinating Center (DCC), in which uses as references GRCh37 (hg19) and GRCh36 (hg18).  
+
+- GDC harmonized database: data available was harmonized against GRCh38 (hg38) using GDC Bioinformatics Pipelines which provides methods to the standardization of biospecimen and clinical data.  
+
+
+**Understanding the barcode**  
+A TCGA barcode is composed of a collection of identifiers. Each specifically identifies a TCGA data element. Refer to the following figure for an illustration of how metadata identifiers comprise a barcode. An aliquot barcode contains the highest number of identifers.  
+
+Example:  
+
+- Aliquot barcode: TCGA-G4-6317-02A-11D-2064-05  
+- Participant: TCGA-G4-6317  
+- Sample: TCGA-G4-6317-02  
+
+
+ 
+
+
+
+
