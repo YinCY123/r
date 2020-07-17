@@ -1,0 +1,176 @@
+---
+title: "rnaturalearth"
+author: "yincy"
+date: "6/26/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This vignette shows how rnaturalearth allows mapping countries using different definitions of what a country is. What a country is can be more complicated than you might expect.  
+
+For example, from my own parochial perspective, it allows mapping the UK as a whole or separating out England, Scotland, Wales and Northern Ireland. It also allows you to exclude far away places like the Falkland Islands, or not. Mapping France it allows the inclusion or exclusion of French Guiana and islands in the South Pacific.  
+
+rnaturalearth is an R package to hold and facilitate interaction with natural earth vector map data.  
+
+Natural Earth is a public domain map dataset including vector country boundaries.  
+
+### Load required packages  
+```{r}
+library(rnaturalearth)
+library(ggplot2)
+library(sp)
+```
+
+
+### Country types: countries, map_units and sovereignty   
+Natural Earth data are classified by countries, map_units and sovereignty. Below you will see that specifying united kingdom for  
+
+1. `countries` gives the UK undivided  
+2. `map_units` gives England, Scotland, Wales and Northern Ireland  
+3. `sovereignty` includes the Falkland Islands  
+
+Filtering by `geounit` can give finer control. e.g. to plot Scotland alone, or France without French Guiana.  
+
+countries, UK undivided  
+```{r}
+uk_countries <- ne_countries(country = "united kingdom", 
+                             type = "countries")
+
+sp::plot(uk_countries)
+```
+
+map_units, UK divided into England, Scotland, Wales and Northern Ireland  
+```{r}
+sp::plot(ne_countries(country = "united kingdom", type = "map_units"))
+```
+
+map_units, select by geounit to plot scotland alone 
+```{r}
+sp::plot(ne_countries(geounit = "scotland", type = "map_units"))
+```
+
+sovereignty, Falkland Island included in UK  
+```{r}
+sp::plot(ne_countries(country = "united kingdom", type = "sovereignty"), col = "red")
+sp::plot(ne_coastline(scale = 110), col = "lightgrey", lty = 3, add = TRUE)
+```
+
+France, country includes French Guiana  
+```{r}
+sp::plot(ne_countries(country = "france"))
+```
+
+France map_units includes France Guiana too  
+```{r}
+sp::plot(ne_countries(country = "france", type = "map_units"))
+```
+
+
+France filter map_units by geounit to exclude French Guinan  
+```{r}
+sp::plot(ne_countries(geounit = "france", type = "map_units"))
+```
+
+### Country scales: small, medium and large  
+The different definitions of a country outlined above are available at different scales.  
+
+```{r}
+#country large scale  
+sp::plot(ne_countries(country = "united kingdom", scale = "large"))
+
+# country, medium scale  
+sp::plot(ne_countries(country = "united kingdom", scale = "medium"))
+
+# country, small scale  
+sp::plot(ne_countries(country = "united kingdom", scale = "small"))
+```
+
+
+
+### States, admin level1, select by country or geounit  
+```{r}
+# states country = 'united kingdom'
+sp::plot(ne_states(country = "untied kingdom"))
+
+# states geounit = 'england'
+sp::plot(ne_states(geounit = "england"))
+
+# states country='france'
+sp::plot(ne_states(country = "france"))
+
+# states geounit = 'france'
+sp::plot(ne_states(geounit = "france"))
+```
+
+
+***  
+`rnaturalearth` does two main things.  
+
+1. Contains pre-downloaded vector maps for  
++ countries `ne_countries()`  
++ states `ne_states()`  
++ coastline `ne_coastline()`  
+
+2. Has `ne_download()` function to facilitate download of other vector and raster maps  
+
+### Maps in the package  
+Pre-download maps can be accessed with  
+1. `ne_countries()` fro country (admin-0) boundaries  
+2. `ne_states()` for boundaries within countries (admin-1)  
+3. `ne_coastline()` for world coastline  
+
+```{r}
+# world at small scale (low resolution)  
+sp::plot(ne_countries(type = "countries", scale = "small"))
+ne_countries(type = "countries", scale = "small")
+```
+
+```{r}
+sp::plot(ne_countries(country = "united kingdom", scale = "medium"))
+```
+
+```{r}
+sp::plot(ne_countries(country = "united kingdom", scale = "large"))
+```
+
+
+
+### downloading other Natural Earth vectors with `ne_download`.  
+Each Natural Earth dataset is characterised on the website according to scale, type and category. rnaturalearth allows you to specify scale, type and category and will construct the url and download the corresponding file.  
+```{r}
+# lakes
+lakes110 <- ne_download(scale = 110, type = "lakes", category = "physical")
+sp::plot(lakes110, col = "blue")
+
+# rivers
+rivers110 <- ne_download(scale = 110, type = 'rivers_lake_centerlines', category = 'physical')
+sp::plot(rivers110, col = 'blue')
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
