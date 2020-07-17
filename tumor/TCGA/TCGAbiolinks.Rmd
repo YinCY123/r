@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r load packages, message=FALSE, warning=FALSE}
 library(TCGAbiolinks)
+library(tidyverse)
 ```
 
 
@@ -131,23 +132,110 @@ This example shows how the user can search for glioblastoma multiform (GBM) and 
 ```{r}
 query <- GDCquery(project = c("TCGA-GBM", "TCGA-LGG"), 
                   legacy = T, 
-                  platform = c("Illumina Human Methylation 450", "Illumina Human Methylation 27"))
+                  platform = c("Illumina Human Methylation 450", "Illumina Human Methylation 27"), 
+                  data.category = "DNA methylation")
 
-getResults(query, rows = 1:100)
+getResults(query, rows = 1:100) %>% tibble::as_tibble()
 ```
 
 
 ### whole-genome bisulfite sequencing (WGBS)  
+```{r}
+query <- GDCquery(project = "TCGA-LUAD", 
+                  legacy = T, 
+                  data.category = "DNA methylation", 
+                  data.type = "Methylation percentage", 
+                  experimental.strategy = "Bisulfite-Seq")
 
 
+#VCF - controlled data 
+query <- GDCquery(project = "TCGA-LUAD", 
+                  legacy = T, 
+                  data.category = "DNA methylation", 
+                  data.type = "Bisulfite sequence alignment", 
+                  experimental.strategy = "Bisulfite-Seq")
 
 
+# WGBS BAM files - controlled data  
+query <- GDCquery(project = "TCGA-LUAD", 
+                  legacy = T, 
+                  data.type = "Aligned reads", 
+                  data.category = "Raw sequencing data", 
+                  experimental.strategy = "Bisulfite-Seq")
+
+getResults(query)
+```
 
 
+### Gene expression  
+This example shows how the user can search for glioblastoma multiform (GBM) gene expression data with the normalized results for expression of a gene. For more information about file.types check [GDC TCGA file types](https://gdc.cancer.gov/resources-tcga-users/legacy-archive-tcga-tag-descriptions).  
+```{r}
+query.exp.hg19 <- GDCquery(project = "TCGA-GBM", 
+                           data.category = "Gene expression", 
+                           data.type = "Gene expression quantification", 
+                           platform = "Illumina HiSeq", 
+                           file.type = "normalized_results", 
+                           experimental.strategy = "RNA-Seq", 
+                           barcode = c("TCGA-14-0736-02A-01R-2005-01", "TCGA-06-0211-02A-02R-2005-01"), 
+                           legacy = T)
+
+getResults(query.exp.hg19)
+```
 
 
+### Get Manifest file  
+If you want to get the manifest file from the query object you can use the function `getManifest`.  
+```{r}
+getManifest(query = query.exp.hg19, save = F)
+```
 
 
+## ATAC-seq data  
+For the moment, ATAC-seq data is available at the [GDC publication page](https://gdc.cancer.gov/about-data/publications/ATACseq-AWG). Also, for more details, you can check an ATAC-seq workshop at http://rpubs.com/tiagochst/atac_seq_workshop  
+
+```{r, message=FALSE, warning=FALSE}
+GDCquery_ATAC_seq() %>% getResults() %>% as_tibble()
+```
+
+You can use the function `GDCquery_ATAC_seq` filter the manifest table and use `GDCdownload` to save the data locally.  
+```{r}
+query <- GDCquery_ATAC_seq(file.type = "rds")
+GDCdownload(query = query, method = "client")
+```
+
+```{r}
+query <- GDCquery_ATAC_seq(file.type = "bigWigs")
+GDCdownload(query = query, method = "client")
+```
+
+
+## Summary of available files per patient  
+Retrieve the number of files under each data_category _ data_type + experiemtnal_strategy _ platform. Almost like https://portal.gdc.cancer.gov/exploration  
+```{r}
+tab <- getSampleFilesSummary(project = "TCGA-ACC")
+
+tab %>% as_tibble()
+```
+
+
+# files for analysis  
+**TCGAbiolinks** has provided a few functions to download and prepare data from GDC for analysis. This section starts by explaining the different downloads methods and the SummarizedExperiment object which is the default data structure used in TCGAbiolinks.  
+
+## Downloading and preparing data for analysis 
+**Data downloading: Methods differences**    
+
+- client: this method create a MANIFEST file and download the data using [GDC Data Transfer Tool](https://gdc.cancer.gov/access-data/gdc-data-transfer-tool) this method is more reliable but it might be slower compared to the api method.  
+- api: this methods used the [GDC Application Programming Interface (API)](https://gdc.cancer.gov/developers/gdc-application-programming-interface-api) to download the data. This will create a MANIFEST file and the data downloaded will be compressed into a tar.gz file. If the size and the number of the files are too big this tar.gz will be too big which might have high probability of download failure. To solve that we created the `files.per.chunk` argument which will split the files into small chunks, for example, if chunks.per.download is equal to 10 we will download only 10 files inside each tar.gz.   
+
+**Data prepared:SummarizedExperiment object**  
+A `SummarizedExperiment` object has three main matrices that can be accessed using the `SummarizedExperiemnt` package:  
+
+- Sample matrix information is accessed via `colData(data`: stores sample information. TCGAbiolinks will add indexed clinicl data and subtype information from marker TCGA papers.  
+- Assay matrix information is accessed via `assay(data`: stores molecula data   
+- Feature matrix information (gene information) is accessed via `rowRanges(data)`: stores metadata about the features, including their genomic ranges.  
+
+**Summarized Experiment: annotation information**  
+When using thefunction `GDCprepare` there is an argument called `SummarizedExperiment` which defines the output type a Summarized Experiment (default option) or a data frame. To create a summarized Experiment object we annotate the data with genomic positions with last patch release version of the genome available. For legacy data (data aligned to hg19) TCGAbiolinks is using GRCh37.p13 and for harmonized data (data aligned to hg38) now it is using GRCh38.p7.  
 
 
 
