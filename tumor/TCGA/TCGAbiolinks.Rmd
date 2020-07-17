@@ -218,7 +218,7 @@ tab %>% as_tibble()
 ```
 
 
-# files for analysis  
+# Downloading and preparing files for analysis  
 **TCGAbiolinks** has provided a few functions to download and prepare data from GDC for analysis. This section starts by explaining the different downloads methods and the SummarizedExperiment object which is the default data structure used in TCGAbiolinks.  
 
 ## Downloading and preparing data for analysis 
