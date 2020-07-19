@@ -19,7 +19,7 @@ library(tidyverse)
 # Chapter 1 Getting Started with XML and JSON  
 ## Reading from HTMLTables  
 ```{r}
-u <- "f:/List of countries and dependencies by population - Wikipedia.html"
+u <- "/home/yincy/git/R-codes/Books/XML-and-Web-technology/files/List of countries and dependencies by population - Wikipedia.html"
 tbls <- readHTMLTable(doc = u)
 tbls %>% class()
 ```
@@ -30,7 +30,9 @@ sapply(tbls, nrow) # the large table is the population table
 ```
 
 ```{r}
-pop <- readHTMLTable(doc = u, which = 1)
+pop <- readHTMLTable(doc = u, 
+                     which = 1, 
+                     header = T)
 colnames(pop) <- c("Rank", "Country", "Population", "Percentage", "Date", "Source")
 pop %>% head()
 ```
@@ -40,7 +42,7 @@ For each <table> node, `readHTMLTable()` loops over the row nodes (<tr>) and pro
 
 The data are typically in <td> elements, and we simply extract the contents of each cell as string.  
 
-The <th> elements in a table typically indicate column header, and is used for variable names when approprite.  
+The <th> elements in a table typically indicate column header, and is used for variable names when appropriate.  
 
 
 # Chapter 2 An Introduction to XML  
