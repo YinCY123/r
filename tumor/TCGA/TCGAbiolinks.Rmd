@@ -479,4 +479,96 @@ clinical.BCRtab.all <- GDCprepare(query)
 clinical.BCRtab.all %>% names()
 ```
 
+```{r}
+query <- GDCquery(project = "TCGA-BRCA", 
+                  data.category = "Clinical", 
+                  data.type = "Clinical Supplement", 
+                  data.format = "BCR Biotab")
+
+GDCdownload(query = query)
+clinical.BCRtab.all <- GDCprepare(query)
+```
+
+```{r}
+clinical.BCRtab.all %>% names()
+```
+
+```{r}
+clinical.BCRtab.all %>% class()
+clinical.BCRtab.all$clinical_patient_brca %>% colnames() %>% tibble::as_tibble()
+```
+
+ER status count 
+```{r}
+clinical.BCRtab.all %>% .$clinical_patient_brca %>% .$er_status_by_ihc %>% table()
+```
+
+ER content  
+```{r}
+er.cols <- grep("^er", colnames(clinical.BCRtab.all$clinical_patient_brca))
+clinical.BCRtab.all$clinical_patient_brca[, c(2, er.cols)] %>% 
+    DT::datatable(options = list(scrollX = TRUE))
+```
+
+```{r}
+clinical.BCRtab.all$clinical_patient_brca %>% 
+    head() %>% 
+    DT::datatable(options = list(scrollX = T, keys = TRUE))
+```
+
+### Biospecimen  
+Biospecimen BCR Biotab  
+```{r}
+query.biospeciemn <- GDCquery(project = "TCGA-BRCA", 
+                              data.category = "Biospecimen", 
+                              data.type = "Biospecimen Supplement", 
+                              data.format = "BCR Biotab")
+
+GDCdownload(query = query.biospeciemn)
+biospecimen.BCRtab.all <- GDCprepare(query = query.biospeciemn)
+```
+
+All available tables  
+```{r}
+biospecimen.BCRtab.all %>% names()
+biospecimen.BCRtab.all$biospecimen_aliquot_brca 
+```
+
+### Clinical indexed data  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
