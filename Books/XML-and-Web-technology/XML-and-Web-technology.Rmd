@@ -47,46 +47,277 @@ The <th> elements in a table typically indicate column header, and is used for v
 
 # Chapter 3 Parsing XML Content  
 ```{r}
-doc <- xmlParse("files/sweat_metabolites.xml")
-doc <- xmlParse(file = "files/sweat_metabolites.xml")
-doc
+doc <- xmlParse("Data/Kiva/lenders/")
+lenderNode <- xmlRoot(doc)[["lenders"]]
+occ <- sapply(xmlChildren(lenderNode), function(node) {
+    xmlValue(node[["occupation"]])
+}) %>% table() %>% sort(decreasing = T)
+```
+
+
+```{r}
+doc <- xmlParse(file = "Data/merged_catalog.xml.gz")
+root <- xmlRoot(x = doc)
+xmlName(root)
 ```
 
 ```{r}
-root <- xmlRoot(x = doc)
-xmlSize(root)
-xmlName(root)
+root %>% xmlSize()
+```
+
+```{r}
 xmlChildren(root) %>% length()
 ```
 
 ```{r}
-meta1 <- root[["metabolite"]]
-meta1[1]
+event1 <- root[["event"]]
+event1
 ```
 
 ```{r}
-meta1[2]
+event1[[10]] %>% xmlAttrs() %>% .["value"]
 ```
 
 ```{r}
-meta1[3]
+root[1:3]
 ```
 
 ```{r}
-meta1 %>% xmlChildren() %>% length()
+evs <- root["event"]
+length(evs)
+root[names(root) == "event"]
 ```
 
 
 ```{r}
-root
+names(event1) # node names of the child elements
 ```
 
+```{r}
+xmlName(event1) # node names of the node itself
+``` 
+
+```{r}
+doc <- xmlParse(file = "Data/Kiva/lenders/1.xml")
+lenderNode <- xmlRoot(doc)[["lenders"]]
+xmlSize(lenderNode)
+```
+
+```{r}
+lenderNode
+lenderNode[[1]][c("name", "occupation", "image", "country_code")]
+```
+
+```{r}
+lenderNode[[1]][c("name", "image", "whereabouts", "country_code")]
+```
+
+```{r}
+w <- sapply(xmlChildren(lenderNode[[1]]), xmlSize) > 1
+lenderNode[[1]][w]
+```
 
 
 ```{r}
-node <- xmlRoot(x = doc)[["metabolite"]]
-sapply(xmlChildren(node), function(node) xmlValue(node[["status"]])) 
+doc <- xmlParse(file = "Data/merged_catalog.xml.gz")
+root <- xmlRoot(x = doc)
+
+timests <- xmlSApply(X = root, xmlGetAttr, name = "time-stamp")
+timests %>% class()
+timests[[1]]
 ```
+
+```{r}
+xmlSApply(X = root, xmlGetAttr, name = "id")
+```
+
+```{r}
+child10 <- xmlSApply(root, "[[", 10) %>% sapply(X = ., xmlGetAttr, name = "value")
+names(child10) <- NULL
+table(child10) %>% barplot()
+```
+
+```{r}
+xmlSApply(root, xmlSize)[1:4]
+```
+
+more general approch to ge magnitude  
+```{r}
+mags <- xmlSApply(root, function(evNode){
+    parNames = xmlSApply(evNode, xmlGetAttr, "name")
+    i = which(parNames == "magnitude")
+    xmlGetAttr(evNode[[i]], name = "value")
+})
+```
+
+```{r}
+mags <- getNodeSet(doc = root, 
+           path = "/merge/event/param[@name='magnitude']/@value") %>% 
+    unlist() %>% 
+    as.numeric()
+mags %>% table() %>% barplot()
+```
+
+
+```{r}
+# do not lost access to the parent even though we assigned this node to a new variable.  
+firstMag <- root[[1]][[10]]
+
+getSibling(node = firstMag, after = T)
+```
+
+
+```{r}
+xmlParent(firstMag) %>% getSibling(after = TRUE) %>% xmlAttrs()
+```
+
+
+```{r}
+xmlAncestors(x = firstMag)[[1]] %>% xmlName()
+```
+
+```{r}
+firstMag %>% xmlParent() %>% getSibling(after = T) %>% .[[10]]
+```
+
+```{r}
+root[2]
+```
+
+
+**The DOM Parser in R**  
+
+read the XML document into R  
+```{r}
+doc <- xmlParse(file = "Data/sampleDoc.xml")
+```
+
+Access the root node  
+```{r}
+root <- xmlRoot(x = doc)
+```
+
+Operate on a node as if it is a list of its children, i.e. use `[` and `[[` to access elements in the tree.  
+```{r}
+node3_1 <- root[[3]][[1]]
+node3_1 <- root[["section"]][["para"]]
+```
+
+The `XML` package provides functions for determining information about a node. These include `xmlName()`, `xmlSize()`, `xmlAttrs()`, `xmlGetAttr()`, `xmlValue`, `xmlNamespace()` and `getDefaultNamespace()`, which provide, in order, the node's name, number of children, attributes, a specific attribute, text content of the node and its descendants, namespace, and defualt namespace.  
+```{r}
+root[["title"]] %>% xmlValue()
+root[["section"]] %>% xmlValue()
+```
+
+In addition to `[` and `[[`, other functions in XML enables us to work with a node's aiblings, children, parent and acncestors. These are `getSibling()`, `xmlChildren()`, `xmlParent()`, and `xmlAncestors()`, respectively.  
+```{r}
+node3_1 %>% xmlParent()
+```
+
+```{r}
+getSibling(node = root[[2]])
+```
+
+```{r}
+node3_1 %>% xmlParent() %>% xmlParent() %>% .[[1]]
+
+# equal to the root[[1]]
+root[[1]]
+```
+
+```{r}
+node3_1 %>% xmlParent() %>% getSibling(after = F) %>% getSibling(after = F)
+```
+
+The tree object behaves differently from regular R objects. When we make the assignment, `node3_1 == root[[3]][[1]]`, we now have a reference to that point in the tree. Any operations on `node3_1` will be made to the tree as well.  
+```{r}
+node3_1 = root[[3]][[1]]
+node3_1 %>% xmlParent() %>% xmlParent()
+```
+
+
+## Parsing Other XML Element Types  
+```{r}
+rdbRoot <- xmlParse(file = "Data/sampleDoc.xml") %>% xmlRoot()
+
+rdbRoot[[2]]
+```
+
+```{r}
+rdbRoot[[2]] %>% xmlValue()
+```
+
+The `xmlValue()` function is generic so it it works on different types of nodes. For nodes that are mixtures of text content and other nodes, `xmlValue()` returns a character string that concatenates the text content of all the node's descendants.  
+```{r}
+rdbRoot[[3]][[1]] %>% names()
+```
+
+```{r}
+rdbRoot[[3]][[1]] %>% 
+    xmlChildren() %>% 
+    sapply(class)
+```
+
+```{r}
+rdbRoot[[3]][[1]] %>% 
+    xmlSApply(xmlValue)
+```
+
+```{r}
+rdbRoot[[3]][[1]] %>% 
+    xmlNamespace()
+
+
+rdbRoot[[3]][[1]] %>% 
+    getDefaultNamespace()
+```
+
+
+## Reading XML from Different Input Sources  
+The parser available through the `XML` package supports reading local files, in-memory XML strings, URLs, and 'local' compressed files.  
+```{r}
+xmlParse(file = "https://sports.sohu.com/s/nba", isHTML = T)
+```
+
+ 
+```{r}
+getEncoding(obj = rdbRoot)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
