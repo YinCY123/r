@@ -48,9 +48,43 @@ The <th> elements in a table typically indicate column header, and is used for v
 # Chapter 3 Parsing XML Content  
 ```{r}
 doc <- xmlParse("files/sweat_metabolites.xml")
+doc <- xmlParse(file = "files/sweat_metabolites.xml")
+doc
+```
 
+```{r}
+root <- xmlRoot(x = doc)
+xmlSize(root)
+xmlName(root)
+xmlChildren(root) %>% length()
+```
+
+```{r}
+meta1 <- root[["metabolite"]]
+meta1[1]
+```
+
+```{r}
+meta1[2]
+```
+
+```{r}
+meta1[3]
+```
+
+```{r}
+meta1 %>% xmlChildren() %>% length()
+```
+
+
+```{r}
+root
+```
+
+
+
+```{r}
 node <- xmlRoot(x = doc)[["metabolite"]]
-
 sapply(xmlChildren(node), function(node) xmlValue(node[["status"]])) 
 ```
 
