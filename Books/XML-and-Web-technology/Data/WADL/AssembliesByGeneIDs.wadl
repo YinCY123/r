@@ -1,0 +1,95 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='AssemblyQuestions'>
+<resource path='AssembliesByGeneIDs.xml'>
+<method href='#assembliesbygeneids'/>
+</resource>
+<resource path='AssembliesByGeneIDs.json'>
+<method href='#assembliesbygeneids'/>
+</resource>
+<method name='POST' id='assembliesbygeneids'>
+<doc title='display_name'><![CDATA[Gene ID]]></doc>
+<doc title='summary'><![CDATA[Find EST assemblies by gene id(s).]]></doc>
+<doc title='description'><![CDATA[Find EST assemblies by Gene ID(s).]]></doc>
+<request>
+<param name='single_gene_id' type='xsd:string' required='true' default='GL50803_10019' >
+<doc title='prompt'><![CDATA[Gene ID]]></doc>
+<doc title='help'><![CDATA[Gene IDs (locus tags) are quite different for each species. We use the gene IDs provided by the sequence generator.]]></doc>
+<doc title='default'><![CDATA[GL50803_10019]]></doc>
+</param>
+<param name='bp_overlap_gte' type='xsd:string' required='true' default='100' >
+<doc title='prompt'><![CDATA[Base Overlap >=]]></doc>
+<doc title='help'><![CDATA[Overlap of expressed sequence tag (EST) alignments with annotated genes is a useful approach to verify gene predictions. In general, the specificity of this evidence is proportional to the overlap length.]]></doc>
+<doc title='default'><![CDATA[100]]></doc>
+</param>
+<param name='min_ests_in_assembly' type='xsd:string' required='false' default='1' >
+<doc title='prompt'><![CDATA[Number of ESTs >=]]></doc>
+<doc title='help'><![CDATA[Enter a minimum number of ESTs that is required per EST assembly.]]></doc>
+<doc title='default'><![CDATA[1]]></doc>
+</param>
+<param name='best_alignment_only' type='xsd:string' required='true' default='Yes' repeating='false'>
+<doc title='prompt'><![CDATA[Best alignments only]]></doc>
+<doc title='help'><![CDATA[Select yes to return only those EST assembly alignments that are the best alignment for the assembly.  Many of the assemblies align at multiple positions in the genome.  Selecting yes will consider only those alignments that are the best for each assembly]]></doc>
+<doc title='default'><![CDATA[Yes]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='Yes'><doc title='description'><![CDATA[Yes]]></doc></option>
+<option value='No'><doc title='description'><![CDATA[No]]></doc></option>
+</param>
+<param name='high_confidence_only' type='xsd:string' required='true' default='No' repeating='false'>
+<doc title='prompt'><![CDATA[Consistent alignments only]]></doc>
+<doc title='help'><![CDATA[Select yes to return only those EST assembly alignments that are consistent.  We define define consistent as having >= 95% identity (the majority have >= 99%) and aligning the assembly sequence in a manner that is consistent with a gene model.  Ie, there can be gaps (representing introns) in the target genomic sequence but not in the assembly query.]]></doc>
+<doc title='default'><![CDATA[No]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='No'><doc title='description'><![CDATA[No]]></doc></option>
+<option value='Yes'><doc title='description'><![CDATA[Yes]]></doc></option>
+</param>
+<param name='min_percent_identity' type='xsd:string' required='true' default='90' >
+<doc title='prompt'><![CDATA[Percent identity >=]]></doc>
+<doc title='help'><![CDATA[You can specify a minimum percent identity of the alignment between the EST assembly and genomic DNA.  We only store alignments with >= 90% identity]]></doc>
+<doc title='default'><![CDATA[90]]></doc>
+</param>
+<param name='min_percent_assembly_aligned' type='xsd:string' required='true' default='20' >
+<doc title='prompt'><![CDATA[Percent of EST assembly bases aligned >=]]></doc>
+<doc title='help'><![CDATA[Enter the minimum percentage of bases in the assembly sequence that are aligned to genomic DNA in this alignment.]]></doc>
+<doc title='default'><![CDATA[20]]></doc>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Assembly Id]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='organism_text'><doc title='description'><![CDATA[organism_text]]></doc></option>
+<option value='est_count'><doc title='description'><![CDATA[EST count]]></doc></option>
+<option value='a_count'><doc title='description'><![CDATA[A Count]]></doc></option>
+<option value='t_count'><doc title='description'><![CDATA[T Count]]></doc></option>
+<option value='c_count'><doc title='description'><![CDATA[C Count]]></doc></option>
+<option value='g_count'><doc title='description'><![CDATA[G Count]]></doc></option>
+<option value='other_count'><doc title='description'><![CDATA[Other Count]]></doc></option>
+<option value='length'><doc title='description'><![CDATA[Length]]></doc></option>
+<option value='sequence'><doc title='description'><![CDATA[Sequence]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+<option value='assembly_locations'><doc title='description'><![CDATA[Assembly location(s)]]></doc></option>
+<option value='genes'><doc title='description'><![CDATA[Gene(s)]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

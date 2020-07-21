@@ -1,0 +1,172 @@
+<article xmlns:r="http://www.r-project.org">
+
+The idea here is to sample from the very large wikipedia
+file and to take out just k pages.
+
+<r:init>
+library(XML)
+</r:init>
+
+<r:code>
+if(TRUE) {
+  # This determines which pages we sample. 
+  # The number 170598 comes from grep'ing the XML file for page
+ N = 50
+ indices = sort(sample(1:170598, N))
+print(indices)
+} else {
+ indices = 1:4
+ N = length(indices)
+}
+
+count = 0
+numNodesProcessed = 0
+</r:code>
+
+
+<r:function>
+assignNode =
+function(node)
+{
+ file = paste("page", xmlValue(node[["id"]]), ".xml", sep = "")
+ saveXML(node, file)
+ cat("saved", file, "\n")
+}
+class(assignNode) = "SAXBranchFunction"
+</r:function>
+<r:function><![CDATA[
+page = 
+function(parser, name, attrs, ...)
+{
+  numNodesProcessed <<- numNodesProcessed + 1
+  if(count == N) {
+     cat("Stopping parser\n")
+     xmlStopParser(parser)
+  } else {
+    if(numNodesProcessed %in% indices) {
+       count <<- count + 1
+          # return a branch function which causes xmlEventParse to 
+          # collect up the node and then pass it to that function.
+       return(assignNode)
+    }
+  }
+
+
+  FALSE
+}
+
+class(page) = "XMLParserContextFunction"
+]]></r:function>
+
+
+<para>
+This function is a slight modification of the page function above and
+is used as a branch function specified directly via the
+<r:arg>branches</r:arg> parameter.  This is invoked for every page
+node.  As a result, this is easier to think about as there is a single
+function for processing all page nodes.  However, it is less efficient
+as it causes each page sub-tree to be built even if we are not
+interested in it as it is not to be part of our sample.  The other
+approach above avoids this by causing the sub-tree to be built only if
+the node is part of our sample.
+<r:function><![CDATA[
+b.page = 
+function(parser, node)
+{
+  numNodesProcessed <<- numNodesProcessed + 1
+  if(count == N) {
+     cat("Stopping parser\n")
+     xmlStopParser(parser)
+  } else {
+    if(numNodesProcessed %in% indices) {
+       count <<- count + 1
+          # return a branch function which causes xmlEventParse to 
+          # collect up the node and then pass it to that function.
+       assignNode(node)
+    } else
+     cat("skipping", numNodesProcessed, count, "\n")
+  }
+
+  FALSE
+}
+class(b.page) = "XMLParserContextFunction"
+]]></r:function>
+</para>
+
+<para>
+At this point, we can run the code.
+This version uses the slower branch function
+rather than the two-step process of a regular SAX
+handler for page nodes and then returning a 
+SAXBranchFunction.
+<r:code eval="false">
+xmlEventParse("enwikisource-20080526-pages-meta-history.xml", 
+               branches = list(page = b.page), saxVersion = 1L)
+</r:code>
+
+
+This is the less direct, but more efficient version that
+uses the two-step approach.
+<note>
+Note that at present, this uses the saxVersion = 2L.
+But there are problems with the output.
+</note>
+<r:code>
+xmlEventParse("enwikisource-20080526-pages-meta-history.xml", 
+               handlers = list(page = page), saxVersion = 2L)
+</r:code>
+</para>
+
+system.time(source("sample.R"))
+
+<section>
+<title>DOM-based parsing</title>
+
+<para>
+<r:code>
+doc = xmlInternalTreeParse("enwikisource-20080526-pages-meta-history.xml")
+</r:code>
+
+<r:code>
+pages = xmlChildren(xmlRoot(doc))
+
+</r:code>
+
+It takes about 20 minutes to run through all 
+<r:code>
+tmp = lapply(pages[1:100], function(x) sapply(x["revision"], function(r) c(xmlValue(r[["timestamp"]]), xmlValue(r[["contributor"]]))))
+</r:code>
+
+<r:code>
+numRevs = sapply(revs, length)/2
+summary(numRevs)
+quantile(numRevs, seq(.75, 1, by = .01))
+which(numRevs == max(numRevs))
+xmlValue(pages[[13970]][["title"]])
+
+sapply(pages[ numRevs == 24 ] , function(x) xmlValue(x[["title"]]))
+</r:code>
+
+
+Get the revision information into a data frame
+<r:code>
+revs = revs[-1]
+revInfo = data.frame(times = as.POSIXct(strptime(unlist(lapply(revs, function(x) x[1,])), "%Y-%m-%dT%H:%M:%SZ")),
+           contributor = unlist(lapply(revs, function(x) x[2,])),
+           page = rep(1:length(revs), numRevs[-1]))
+</r:code>
+
+Can we look at the times of the revisions and
+determine which are changes to existing content and which are additions?
+
+</para>
+</section>
+
+
+<section>
+http://www.aaronsw.com/weblog/whowriteswikipedia
+</section>
+
+
+</article>
+

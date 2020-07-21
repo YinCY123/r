@@ -1,0 +1,349 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='IsolateQuestions'>
+<resource path='IsolateByTaxon.xml'>
+<method href='#isolatebytaxon'/>
+</resource>
+<resource path='IsolateByTaxon.json'>
+<method href='#isolatebytaxon'/>
+</resource>
+<method name='POST' id='isolatebytaxon'>
+<doc title='display_name'><![CDATA[Taxon/Strain]]></doc>
+<doc title='summary'><![CDATA[Find isolates from one or more species.]]></doc>
+<doc title='description'><![CDATA[Find isolates from one or more species.]]></doc>
+<request>
+<param name='strain' type='xsd:string' required='true' default='Cryptosporidium sp. AHCF-4,Cryptosporidium sp. B1-11,Cryptosporidium sp. B1-36,Cryptosporidium sp. B1-41,Cryptosporidium sp. B2-6,Cryptosporidium sp. B2-7,Cryptosporidium sp. BB23,Cryptosporidium sp. BD1,Cryptosporidium sp. BE20,Cryptosporidium sp. BE5,Cryptosporidium sp. BE6,Cryptosporidium sp. BG5,Cryptosporidium sp. BP1,Cryptosporidium sp. BW3,Cryptosporidium sp. CHB-01,Cryptosporidium sp. CHB-02,Cryptosporidium sp. CHB-03,Cryptosporidium sp. CHB-04,Cryptosporidium sp. CHB-05,Cryptosporidium sp. CHB-06,Cryptosporidium sp. CS15S,Cryptosporidium sp. CSP06,Cryptosporidium sp. CrCZ-27,Cryptosporidium sp. CrIT-20,Cryptosporidium sp. Czech B1,Cryptosporidium sp. Czech B4,Cryptosporidium sp. Ec-14887,Cryptosporidium sp. Eire V zz67,Cryptosporidium sp. Eire VI w37,Cryptosporidium sp. Eire w65.4,Cryptosporidium sp. Eire w65.5,Cryptosporidium sp. GF1,Cryptosporidium sp. GF2,Cryptosporidium sp. GF2_1,Cryptosporidium sp. GF2_2,Cryptosporidium sp. H205,Cryptosporidium sp. HPF-2007,Cryptosporidium sp. K1,Cryptosporidium sp. K4515,Cryptosporidium sp. KLJ-0,Cryptosporidium sp. KLJ-1,Cryptosporidium sp. KLJ-2,Cryptosporidium sp. KLJ-3a,Cryptosporidium sp. KLJ-3b,Cryptosporidium sp. KLJ-5,Cryptosporidium sp. KLJ-6,Cryptosporidium sp. KLJ-7,Cryptosporidium sp. KLJ-8,Cryptosporidium sp. KLJ-9,Cryptosporidium sp. LLX-2003,Cryptosporidium sp. LPHN,Cryptosporidium sp. M16,Cryptosporidium sp. M24,Cryptosporidium sp. M29,Cryptosporidium sp. M30,Cryptosporidium sp. M427,Cryptosporidium sp. M452,Cryptosporidium sp. MNJ-1,Cryptosporidium sp. Marsupial K1,Cryptosporidium sp. Marsupial K2,Cryptosporidium sp. Morro Bay New-1,Cryptosporidium sp. Morro Bay New-2,Cryptosporidium sp. Morro Bay Non-Crypto-1,Cryptosporidium sp. Morro Bay Non-Crypto-2,Cryptosporidium sp. ND59,Cryptosporidium sp. O92,Cryptosporidium sp. O93,Cryptosporidium sp. P111,Cryptosporidium sp. PF1,Cryptosporidium sp. PG1-26,Cryptosporidium sp. Pig 1,Cryptosporidium sp. Q1,Cryptosporidium sp. RFAF1,Cryptosporidium sp. RFAF1_1,Cryptosporidium sp. RFAF1_2,Cryptosporidium sp. RFAF1_3,Cryptosporidium sp. RO-Sh2,Cryptosporidium sp. S2317,Cryptosporidium sp. S45,Cryptosporidium sp. S49,Cryptosporidium sp. SHCF-1,Cryptosporidium sp. SHCF-2,Cryptosporidium sp. SHCF-3,Cryptosporidium sp. SHCF-4,Cryptosporidium sp. SHCF-5,Cryptosporidium sp. SHCF-6,Cryptosporidium sp. SI23,Cryptosporidium sp. Sbey05c,Cryptosporidium sp. Sbld05a,Cryptosporidium sp. Sbld05c,Cryptosporidium sp. Sbld05d,Cryptosporidium sp. Sltl05c,Cryptosporidium sp. Tahvildar/sh55/IRN,Cryptosporidium sp. Tahvildar/sh59/IRN,Cryptosporidium sp. Taiwan A-4,Cryptosporidium sp. Taiwan B2-21,Cryptosporidium sp. UR-2005,Cryptosporidium sp. W10998 SMC-2008,Cryptosporidium sp. WH3,Cryptosporidium sp. WH33,Cryptosporidium sp. WH5,Cryptosporidium sp. azami,Cryptosporidium sp. beaver genotype,Cryptosporidium sp. cat104,Cryptosporidium sp. cat127,Cryptosporidium sp. cat137,Cryptosporidium sp. cat161,Cryptosporidium sp. cat162,Cryptosporidium sp. cat178,Cryptosporidium sp. cat205,Cryptosporidium sp. cat227,Cryptosporidium sp. cat230,Cryptosporidium sp. cat232,Cryptosporidium sp. cat233,Cryptosporidium sp. cat238,Cryptosporidium sp. cat239,Cryptosporidium sp. cat244,Cryptosporidium sp. cat311,Cryptosporidium sp. cat323,Cryptosporidium sp. cat324,Cryptosporidium sp. cat406,Cryptosporidium sp. cat438,Cryptosporidium sp. cat454,Cryptosporidium sp. cat98,Cryptosporidium sp. cervine genotype (W4),Cryptosporidium sp. chipmunk genotype (W17),Cryptosporidium sp. deer mouse genotype I,Cryptosporidium sp. deer mouse genotype II,Cryptosporidium sp. deer mouse genotype III (W1),Cryptosporidium sp. deer mouse genotype IV (W3),Cryptosporidium sp. dogtype_556,Cryptosporidium sp. ex Perameles bougainville,Cryptosporidium sp. ex Phoca hispida,Cryptosporidium sp. ex Struthio camelus 2005,Cryptosporidium sp. g36,Cryptosporidium sp. goose genotype II,Cryptosporidium sp. irani,Cryptosporidium sp. isfahani,Cryptosporidium sp. kn732,Cryptosporidium sp. marsupial genotype II,Cryptosporidium sp. mink genotype,Cryptosporidium sp. muskrat 603,Cryptosporidium sp. muskrat genotype I (W7),Cryptosporidium sp. muskrat genotype II (W16),Cryptosporidium sp. oyster 19,Cryptosporidium sp. p11,Cryptosporidium sp. pig genotype II,Cryptosporidium sp. shrew genotype (W5),Cryptosporidium sp. vole genotype (W15),Cryptosporidium sp. z10,Cryptosporidium sp. z13,Cryptosporidium sp. zoo.195,Cryptosporidium struthionis,Cryptosporidium suis,Cryptosporidium wrairi,environmental samples,unclassified Cryptosporidium,Giardia lamblia,Giardia lamblia ATCC 50803,unclassified Giardia,Plasmodium berghei,Plasmodium berghei str. ANKA,Plasmodium chabaudi,Plasmodium chabaudi adami,Plasmodium chabaudi chabaudi,Plasmodium falciparum,Plasmodium falciparum 3D7,Plasmodium falciparum NF54,Plasmodium knowlesi,Plasmodium reichenowi,Plasmodium vivax,Plasmodium yoelii,Plasmodium yoelii killicki,Plasmodium yoelii nigeriensis,Plasmodium yoelii yoelii,unclassified Plasmodium,Toxoplasma gondii,Neospora caninum,Cryptosporidium andersoni,Cryptosporidium baileyi,Cryptosporidium bovis,Cryptosporidium canis,Cryptosporidium cf. molnari,Cryptosporidium cf. parvum,Cryptosporidium environmental sequence,Cryptosporidium felis,Cryptosporidium fragile,Cryptosporidium galli,Cryptosporidium hominis,Cryptosporidium meleagridis,Cryptosporidium muris,Cryptosporidium parvum,Cryptosporidium parvum Iowa,Cryptosporidium saurophilum,Cryptosporidium serpentis,Cryptosporidium sp.,Cryptosporidium sp. #691,Cryptosporidium sp. 0583K,Cryptosporidium sp. 1040,Cryptosporidium sp. 1041,Cryptosporidium sp. 1170,Cryptosporidium sp. 118b,Cryptosporidium sp. 1196,Cryptosporidium sp. 1453,Cryptosporidium sp. 1457,Cryptosporidium sp. 1665,Cryptosporidium sp. 169a,Cryptosporidium sp. 169c,Cryptosporidium sp. 17a,Cryptosporidium sp. 17b,Cryptosporidium sp. 200a,Cryptosporidium sp. 200b,Cryptosporidium sp. 2040,Cryptosporidium sp. 2041,Cryptosporidium sp. 204a,Cryptosporidium sp. 2162,Cryptosporidium sp. 21a,Cryptosporidium sp. 21b,Cryptosporidium sp. 21g,Cryptosporidium sp. 2622,Cryptosporidium sp. 2879,Cryptosporidium sp. 2879.VT-2.2003,Cryptosporidium sp. 2a,Cryptosporidium sp. 2b,Cryptosporidium sp. 30,Cryptosporidium sp. 3421,Cryptosporidium sp. 351,Cryptosporidium sp. 3568,Cryptosporidium sp. 3726,Cryptosporidium sp. 411,Cryptosporidium sp. 428,Cryptosporidium sp. 43c,Cryptosporidium sp. 499,Cryptosporidium sp. 518,Cryptosporidium sp. 5490,Cryptosporidium sp. 5538,Cryptosporidium sp. 6750,Cryptosporidium sp. 67a,Cryptosporidium sp. 67b,Cryptosporidium sp. 6876,Cryptosporidium sp. 6887,Cryptosporidium sp. 6898,Cryptosporidium sp. 715,Cryptosporidium sp. 750,Cryptosporidium sp. 751,Cryptosporidium sp. 77c,Cryptosporidium sp. 815,Cryptosporidium sp. 886,Cryptosporidium sp. 888,Cryptosporidium sp. 90g,Cryptosporidium sp. 9111,Cryptosporidium sp. 938,Cryptosporidium sp. 944,Cryptosporidium sp. 94a,Cryptosporidium sp. 94b,Cryptosporidium sp. 9870,Cryptosporidium sp. A16,Cryptosporidium sp. A26,Cryptosporidium sp. A29,Cryptosporidium sp. A7,Cryptosporidium sp. AHCF-1,Cryptosporidium sp. AHCF-2,Cryptosporidium sp. AHCF-3' repeating='true'>
+<doc title='prompt'><![CDATA[Species/Strain Name]]></doc>
+<doc title='help'><![CDATA[Species Name (and strain if appropriate)]]></doc>
+<doc title='default'><![CDATA[Cryptosporidium sp. AHCF-4,Cryptosporidium sp. B1-11,Cryptosporidium sp. B1-36,Cryptosporidium sp. B1-41,Cryptosporidium sp. B2-6,Cryptosporidium sp. B2-7,Cryptosporidium sp. BB23,Cryptosporidium sp. BD1,Cryptosporidium sp. BE20,Cryptosporidium sp. BE5,Cryptosporidium sp. BE6,Cryptosporidium sp. BG5,Cryptosporidium sp. BP1,Cryptosporidium sp. BW3,Cryptosporidium sp. CHB-01,Cryptosporidium sp. CHB-02,Cryptosporidium sp. CHB-03,Cryptosporidium sp. CHB-04,Cryptosporidium sp. CHB-05,Cryptosporidium sp. CHB-06,Cryptosporidium sp. CS15S,Cryptosporidium sp. CSP06,Cryptosporidium sp. CrCZ-27,Cryptosporidium sp. CrIT-20,Cryptosporidium sp. Czech B1,Cryptosporidium sp. Czech B4,Cryptosporidium sp. Ec-14887,Cryptosporidium sp. Eire V zz67,Cryptosporidium sp. Eire VI w37,Cryptosporidium sp. Eire w65.4,Cryptosporidium sp. Eire w65.5,Cryptosporidium sp. GF1,Cryptosporidium sp. GF2,Cryptosporidium sp. GF2_1,Cryptosporidium sp. GF2_2,Cryptosporidium sp. H205,Cryptosporidium sp. HPF-2007,Cryptosporidium sp. K1,Cryptosporidium sp. K4515,Cryptosporidium sp. KLJ-0,Cryptosporidium sp. KLJ-1,Cryptosporidium sp. KLJ-2,Cryptosporidium sp. KLJ-3a,Cryptosporidium sp. KLJ-3b,Cryptosporidium sp. KLJ-5,Cryptosporidium sp. KLJ-6,Cryptosporidium sp. KLJ-7,Cryptosporidium sp. KLJ-8,Cryptosporidium sp. KLJ-9,Cryptosporidium sp. LLX-2003,Cryptosporidium sp. LPHN,Cryptosporidium sp. M16,Cryptosporidium sp. M24,Cryptosporidium sp. M29,Cryptosporidium sp. M30,Cryptosporidium sp. M427,Cryptosporidium sp. M452,Cryptosporidium sp. MNJ-1,Cryptosporidium sp. Marsupial K1,Cryptosporidium sp. Marsupial K2,Cryptosporidium sp. Morro Bay New-1,Cryptosporidium sp. Morro Bay New-2,Cryptosporidium sp. Morro Bay Non-Crypto-1,Cryptosporidium sp. Morro Bay Non-Crypto-2,Cryptosporidium sp. ND59,Cryptosporidium sp. O92,Cryptosporidium sp. O93,Cryptosporidium sp. P111,Cryptosporidium sp. PF1,Cryptosporidium sp. PG1-26,Cryptosporidium sp. Pig 1,Cryptosporidium sp. Q1,Cryptosporidium sp. RFAF1,Cryptosporidium sp. RFAF1_1,Cryptosporidium sp. RFAF1_2,Cryptosporidium sp. RFAF1_3,Cryptosporidium sp. RO-Sh2,Cryptosporidium sp. S2317,Cryptosporidium sp. S45,Cryptosporidium sp. S49,Cryptosporidium sp. SHCF-1,Cryptosporidium sp. SHCF-2,Cryptosporidium sp. SHCF-3,Cryptosporidium sp. SHCF-4,Cryptosporidium sp. SHCF-5,Cryptosporidium sp. SHCF-6,Cryptosporidium sp. SI23,Cryptosporidium sp. Sbey05c,Cryptosporidium sp. Sbld05a,Cryptosporidium sp. Sbld05c,Cryptosporidium sp. Sbld05d,Cryptosporidium sp. Sltl05c,Cryptosporidium sp. Tahvildar/sh55/IRN,Cryptosporidium sp. Tahvildar/sh59/IRN,Cryptosporidium sp. Taiwan A-4,Cryptosporidium sp. Taiwan B2-21,Cryptosporidium sp. UR-2005,Cryptosporidium sp. W10998 SMC-2008,Cryptosporidium sp. WH3,Cryptosporidium sp. WH33,Cryptosporidium sp. WH5,Cryptosporidium sp. azami,Cryptosporidium sp. beaver genotype,Cryptosporidium sp. cat104,Cryptosporidium sp. cat127,Cryptosporidium sp. cat137,Cryptosporidium sp. cat161,Cryptosporidium sp. cat162,Cryptosporidium sp. cat178,Cryptosporidium sp. cat205,Cryptosporidium sp. cat227,Cryptosporidium sp. cat230,Cryptosporidium sp. cat232,Cryptosporidium sp. cat233,Cryptosporidium sp. cat238,Cryptosporidium sp. cat239,Cryptosporidium sp. cat244,Cryptosporidium sp. cat311,Cryptosporidium sp. cat323,Cryptosporidium sp. cat324,Cryptosporidium sp. cat406,Cryptosporidium sp. cat438,Cryptosporidium sp. cat454,Cryptosporidium sp. cat98,Cryptosporidium sp. cervine genotype (W4),Cryptosporidium sp. chipmunk genotype (W17),Cryptosporidium sp. deer mouse genotype I,Cryptosporidium sp. deer mouse genotype II,Cryptosporidium sp. deer mouse genotype III (W1),Cryptosporidium sp. deer mouse genotype IV (W3),Cryptosporidium sp. dogtype_556,Cryptosporidium sp. ex Perameles bougainville,Cryptosporidium sp. ex Phoca hispida,Cryptosporidium sp. ex Struthio camelus 2005,Cryptosporidium sp. g36,Cryptosporidium sp. goose genotype II,Cryptosporidium sp. irani,Cryptosporidium sp. isfahani,Cryptosporidium sp. kn732,Cryptosporidium sp. marsupial genotype II,Cryptosporidium sp. mink genotype,Cryptosporidium sp. muskrat 603,Cryptosporidium sp. muskrat genotype I (W7),Cryptosporidium sp. muskrat genotype II (W16),Cryptosporidium sp. oyster 19,Cryptosporidium sp. p11,Cryptosporidium sp. pig genotype II,Cryptosporidium sp. shrew genotype (W5),Cryptosporidium sp. vole genotype (W15),Cryptosporidium sp. z10,Cryptosporidium sp. z13,Cryptosporidium sp. zoo.195,Cryptosporidium struthionis,Cryptosporidium suis,Cryptosporidium wrairi,environmental samples,unclassified Cryptosporidium,Giardia lamblia,Giardia lamblia ATCC 50803,unclassified Giardia,Plasmodium berghei,Plasmodium berghei str. ANKA,Plasmodium chabaudi,Plasmodium chabaudi adami,Plasmodium chabaudi chabaudi,Plasmodium falciparum,Plasmodium falciparum 3D7,Plasmodium falciparum NF54,Plasmodium knowlesi,Plasmodium reichenowi,Plasmodium vivax,Plasmodium yoelii,Plasmodium yoelii killicki,Plasmodium yoelii nigeriensis,Plasmodium yoelii yoelii,unclassified Plasmodium,Toxoplasma gondii,Neospora caninum,Cryptosporidium andersoni,Cryptosporidium baileyi,Cryptosporidium bovis,Cryptosporidium canis,Cryptosporidium cf. molnari,Cryptosporidium cf. parvum,Cryptosporidium environmental sequence,Cryptosporidium felis,Cryptosporidium fragile,Cryptosporidium galli,Cryptosporidium hominis,Cryptosporidium meleagridis,Cryptosporidium muris,Cryptosporidium parvum,Cryptosporidium parvum Iowa,Cryptosporidium saurophilum,Cryptosporidium serpentis,Cryptosporidium sp.,Cryptosporidium sp. #691,Cryptosporidium sp. 0583K,Cryptosporidium sp. 1040,Cryptosporidium sp. 1041,Cryptosporidium sp. 1170,Cryptosporidium sp. 118b,Cryptosporidium sp. 1196,Cryptosporidium sp. 1453,Cryptosporidium sp. 1457,Cryptosporidium sp. 1665,Cryptosporidium sp. 169a,Cryptosporidium sp. 169c,Cryptosporidium sp. 17a,Cryptosporidium sp. 17b,Cryptosporidium sp. 200a,Cryptosporidium sp. 200b,Cryptosporidium sp. 2040,Cryptosporidium sp. 2041,Cryptosporidium sp. 204a,Cryptosporidium sp. 2162,Cryptosporidium sp. 21a,Cryptosporidium sp. 21b,Cryptosporidium sp. 21g,Cryptosporidium sp. 2622,Cryptosporidium sp. 2879,Cryptosporidium sp. 2879.VT-2.2003,Cryptosporidium sp. 2a,Cryptosporidium sp. 2b,Cryptosporidium sp. 30,Cryptosporidium sp. 3421,Cryptosporidium sp. 351,Cryptosporidium sp. 3568,Cryptosporidium sp. 3726,Cryptosporidium sp. 411,Cryptosporidium sp. 428,Cryptosporidium sp. 43c,Cryptosporidium sp. 499,Cryptosporidium sp. 518,Cryptosporidium sp. 5490,Cryptosporidium sp. 5538,Cryptosporidium sp. 6750,Cryptosporidium sp. 67a,Cryptosporidium sp. 67b,Cryptosporidium sp. 6876,Cryptosporidium sp. 6887,Cryptosporidium sp. 6898,Cryptosporidium sp. 715,Cryptosporidium sp. 750,Cryptosporidium sp. 751,Cryptosporidium sp. 77c,Cryptosporidium sp. 815,Cryptosporidium sp. 886,Cryptosporidium sp. 888,Cryptosporidium sp. 90g,Cryptosporidium sp. 9111,Cryptosporidium sp. 938,Cryptosporidium sp. 944,Cryptosporidium sp. 94a,Cryptosporidium sp. 94b,Cryptosporidium sp. 9870,Cryptosporidium sp. A16,Cryptosporidium sp. A26,Cryptosporidium sp. A29,Cryptosporidium sp. A7,Cryptosporidium sp. AHCF-1,Cryptosporidium sp. AHCF-2,Cryptosporidium sp. AHCF-3]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='Cryptosporidium sp. AHCF-4'><doc title='description'><![CDATA[Cryptosporidium sp. AHCF-4]]></doc></option>
+<option value='Cryptosporidium sp. B1-11'><doc title='description'><![CDATA[Cryptosporidium sp. B1-11]]></doc></option>
+<option value='Cryptosporidium sp. B1-36'><doc title='description'><![CDATA[Cryptosporidium sp. B1-36]]></doc></option>
+<option value='Cryptosporidium sp. B1-41'><doc title='description'><![CDATA[Cryptosporidium sp. B1-41]]></doc></option>
+<option value='Cryptosporidium sp. B2-6'><doc title='description'><![CDATA[Cryptosporidium sp. B2-6]]></doc></option>
+<option value='Cryptosporidium sp. B2-7'><doc title='description'><![CDATA[Cryptosporidium sp. B2-7]]></doc></option>
+<option value='Cryptosporidium sp. BB23'><doc title='description'><![CDATA[Cryptosporidium sp. BB23]]></doc></option>
+<option value='Cryptosporidium sp. BD1'><doc title='description'><![CDATA[Cryptosporidium sp. BD1]]></doc></option>
+<option value='Cryptosporidium sp. BE20'><doc title='description'><![CDATA[Cryptosporidium sp. BE20]]></doc></option>
+<option value='Cryptosporidium sp. BE5'><doc title='description'><![CDATA[Cryptosporidium sp. BE5]]></doc></option>
+<option value='Cryptosporidium sp. BE6'><doc title='description'><![CDATA[Cryptosporidium sp. BE6]]></doc></option>
+<option value='Cryptosporidium sp. BG5'><doc title='description'><![CDATA[Cryptosporidium sp. BG5]]></doc></option>
+<option value='Cryptosporidium sp. BP1'><doc title='description'><![CDATA[Cryptosporidium sp. BP1]]></doc></option>
+<option value='Cryptosporidium sp. BW3'><doc title='description'><![CDATA[Cryptosporidium sp. BW3]]></doc></option>
+<option value='Cryptosporidium sp. CHB-01'><doc title='description'><![CDATA[Cryptosporidium sp. CHB-01]]></doc></option>
+<option value='Cryptosporidium sp. CHB-02'><doc title='description'><![CDATA[Cryptosporidium sp. CHB-02]]></doc></option>
+<option value='Cryptosporidium sp. CHB-03'><doc title='description'><![CDATA[Cryptosporidium sp. CHB-03]]></doc></option>
+<option value='Cryptosporidium sp. CHB-04'><doc title='description'><![CDATA[Cryptosporidium sp. CHB-04]]></doc></option>
+<option value='Cryptosporidium sp. CHB-05'><doc title='description'><![CDATA[Cryptosporidium sp. CHB-05]]></doc></option>
+<option value='Cryptosporidium sp. CHB-06'><doc title='description'><![CDATA[Cryptosporidium sp. CHB-06]]></doc></option>
+<option value='Cryptosporidium sp. CS15S'><doc title='description'><![CDATA[Cryptosporidium sp. CS15S]]></doc></option>
+<option value='Cryptosporidium sp. CSP06'><doc title='description'><![CDATA[Cryptosporidium sp. CSP06]]></doc></option>
+<option value='Cryptosporidium sp. CrCZ-27'><doc title='description'><![CDATA[Cryptosporidium sp. CrCZ-27]]></doc></option>
+<option value='Cryptosporidium sp. CrIT-20'><doc title='description'><![CDATA[Cryptosporidium sp. CrIT-20]]></doc></option>
+<option value='Cryptosporidium sp. Czech B1'><doc title='description'><![CDATA[Cryptosporidium sp. Czech B1]]></doc></option>
+<option value='Cryptosporidium sp. Czech B4'><doc title='description'><![CDATA[Cryptosporidium sp. Czech B4]]></doc></option>
+<option value='Cryptosporidium sp. Ec-14887'><doc title='description'><![CDATA[Cryptosporidium sp. Ec-14887]]></doc></option>
+<option value='Cryptosporidium sp. Eire V zz67'><doc title='description'><![CDATA[Cryptosporidium sp. Eire V zz67]]></doc></option>
+<option value='Cryptosporidium sp. Eire VI w37'><doc title='description'><![CDATA[Cryptosporidium sp. Eire VI w37]]></doc></option>
+<option value='Cryptosporidium sp. Eire w65.4'><doc title='description'><![CDATA[Cryptosporidium sp. Eire w65.4]]></doc></option>
+<option value='Cryptosporidium sp. Eire w65.5'><doc title='description'><![CDATA[Cryptosporidium sp. Eire w65.5]]></doc></option>
+<option value='Cryptosporidium sp. GF1'><doc title='description'><![CDATA[Cryptosporidium sp. GF1]]></doc></option>
+<option value='Cryptosporidium sp. GF2'><doc title='description'><![CDATA[Cryptosporidium sp. GF2]]></doc></option>
+<option value='Cryptosporidium sp. GF2_1'><doc title='description'><![CDATA[Cryptosporidium sp. GF2_1]]></doc></option>
+<option value='Cryptosporidium sp. GF2_2'><doc title='description'><![CDATA[Cryptosporidium sp. GF2_2]]></doc></option>
+<option value='Cryptosporidium sp. H205'><doc title='description'><![CDATA[Cryptosporidium sp. H205]]></doc></option>
+<option value='Cryptosporidium sp. HPF-2007'><doc title='description'><![CDATA[Cryptosporidium sp. HPF-2007]]></doc></option>
+<option value='Cryptosporidium sp. K1'><doc title='description'><![CDATA[Cryptosporidium sp. K1]]></doc></option>
+<option value='Cryptosporidium sp. K4515'><doc title='description'><![CDATA[Cryptosporidium sp. K4515]]></doc></option>
+<option value='Cryptosporidium sp. KLJ-0'><doc title='description'><![CDATA[Cryptosporidium sp. KLJ-0]]></doc></option>
+<option value='Cryptosporidium sp. KLJ-1'><doc title='description'><![CDATA[Cryptosporidium sp. KLJ-1]]></doc></option>
+<option value='Cryptosporidium sp. KLJ-2'><doc title='description'><![CDATA[Cryptosporidium sp. KLJ-2]]></doc></option>
+<option value='Cryptosporidium sp. KLJ-3a'><doc title='description'><![CDATA[Cryptosporidium sp. KLJ-3a]]></doc></option>
+<option value='Cryptosporidium sp. KLJ-3b'><doc title='description'><![CDATA[Cryptosporidium sp. KLJ-3b]]></doc></option>
+<option value='Cryptosporidium sp. KLJ-5'><doc title='description'><![CDATA[Cryptosporidium sp. KLJ-5]]></doc></option>
+<option value='Cryptosporidium sp. KLJ-6'><doc title='description'><![CDATA[Cryptosporidium sp. KLJ-6]]></doc></option>
+<option value='Cryptosporidium sp. KLJ-7'><doc title='description'><![CDATA[Cryptosporidium sp. KLJ-7]]></doc></option>
+<option value='Cryptosporidium sp. KLJ-8'><doc title='description'><![CDATA[Cryptosporidium sp. KLJ-8]]></doc></option>
+<option value='Cryptosporidium sp. KLJ-9'><doc title='description'><![CDATA[Cryptosporidium sp. KLJ-9]]></doc></option>
+<option value='Cryptosporidium sp. LLX-2003'><doc title='description'><![CDATA[Cryptosporidium sp. LLX-2003]]></doc></option>
+<option value='Cryptosporidium sp. LPHN'><doc title='description'><![CDATA[Cryptosporidium sp. LPHN]]></doc></option>
+<option value='Cryptosporidium sp. M16'><doc title='description'><![CDATA[Cryptosporidium sp. M16]]></doc></option>
+<option value='Cryptosporidium sp. M24'><doc title='description'><![CDATA[Cryptosporidium sp. M24]]></doc></option>
+<option value='Cryptosporidium sp. M29'><doc title='description'><![CDATA[Cryptosporidium sp. M29]]></doc></option>
+<option value='Cryptosporidium sp. M30'><doc title='description'><![CDATA[Cryptosporidium sp. M30]]></doc></option>
+<option value='Cryptosporidium sp. M427'><doc title='description'><![CDATA[Cryptosporidium sp. M427]]></doc></option>
+<option value='Cryptosporidium sp. M452'><doc title='description'><![CDATA[Cryptosporidium sp. M452]]></doc></option>
+<option value='Cryptosporidium sp. MNJ-1'><doc title='description'><![CDATA[Cryptosporidium sp. MNJ-1]]></doc></option>
+<option value='Cryptosporidium sp. Marsupial K1'><doc title='description'><![CDATA[Cryptosporidium sp. Marsupial K1]]></doc></option>
+<option value='Cryptosporidium sp. Marsupial K2'><doc title='description'><![CDATA[Cryptosporidium sp. Marsupial K2]]></doc></option>
+<option value='Cryptosporidium sp. Morro Bay New-1'><doc title='description'><![CDATA[Cryptosporidium sp. Morro Bay New-1]]></doc></option>
+<option value='Cryptosporidium sp. Morro Bay New-2'><doc title='description'><![CDATA[Cryptosporidium sp. Morro Bay New-2]]></doc></option>
+<option value='Cryptosporidium sp. Morro Bay Non-Crypto-1'><doc title='description'><![CDATA[Cryptosporidium sp. Morro Bay Non-Crypto-1]]></doc></option>
+<option value='Cryptosporidium sp. Morro Bay Non-Crypto-2'><doc title='description'><![CDATA[Cryptosporidium sp. Morro Bay Non-Crypto-2]]></doc></option>
+<option value='Cryptosporidium sp. ND59'><doc title='description'><![CDATA[Cryptosporidium sp. ND59]]></doc></option>
+<option value='Cryptosporidium sp. O92'><doc title='description'><![CDATA[Cryptosporidium sp. O92]]></doc></option>
+<option value='Cryptosporidium sp. O93'><doc title='description'><![CDATA[Cryptosporidium sp. O93]]></doc></option>
+<option value='Cryptosporidium sp. P111'><doc title='description'><![CDATA[Cryptosporidium sp. P111]]></doc></option>
+<option value='Cryptosporidium sp. PF1'><doc title='description'><![CDATA[Cryptosporidium sp. PF1]]></doc></option>
+<option value='Cryptosporidium sp. PG1-26'><doc title='description'><![CDATA[Cryptosporidium sp. PG1-26]]></doc></option>
+<option value='Cryptosporidium sp. Pig 1'><doc title='description'><![CDATA[Cryptosporidium sp. Pig 1]]></doc></option>
+<option value='Cryptosporidium sp. Q1'><doc title='description'><![CDATA[Cryptosporidium sp. Q1]]></doc></option>
+<option value='Cryptosporidium sp. RFAF1'><doc title='description'><![CDATA[Cryptosporidium sp. RFAF1]]></doc></option>
+<option value='Cryptosporidium sp. RFAF1_1'><doc title='description'><![CDATA[Cryptosporidium sp. RFAF1_1]]></doc></option>
+<option value='Cryptosporidium sp. RFAF1_2'><doc title='description'><![CDATA[Cryptosporidium sp. RFAF1_2]]></doc></option>
+<option value='Cryptosporidium sp. RFAF1_3'><doc title='description'><![CDATA[Cryptosporidium sp. RFAF1_3]]></doc></option>
+<option value='Cryptosporidium sp. RO-Sh2'><doc title='description'><![CDATA[Cryptosporidium sp. RO-Sh2]]></doc></option>
+<option value='Cryptosporidium sp. S2317'><doc title='description'><![CDATA[Cryptosporidium sp. S2317]]></doc></option>
+<option value='Cryptosporidium sp. S45'><doc title='description'><![CDATA[Cryptosporidium sp. S45]]></doc></option>
+<option value='Cryptosporidium sp. S49'><doc title='description'><![CDATA[Cryptosporidium sp. S49]]></doc></option>
+<option value='Cryptosporidium sp. SHCF-1'><doc title='description'><![CDATA[Cryptosporidium sp. SHCF-1]]></doc></option>
+<option value='Cryptosporidium sp. SHCF-2'><doc title='description'><![CDATA[Cryptosporidium sp. SHCF-2]]></doc></option>
+<option value='Cryptosporidium sp. SHCF-3'><doc title='description'><![CDATA[Cryptosporidium sp. SHCF-3]]></doc></option>
+<option value='Cryptosporidium sp. SHCF-4'><doc title='description'><![CDATA[Cryptosporidium sp. SHCF-4]]></doc></option>
+<option value='Cryptosporidium sp. SHCF-5'><doc title='description'><![CDATA[Cryptosporidium sp. SHCF-5]]></doc></option>
+<option value='Cryptosporidium sp. SHCF-6'><doc title='description'><![CDATA[Cryptosporidium sp. SHCF-6]]></doc></option>
+<option value='Cryptosporidium sp. SI23'><doc title='description'><![CDATA[Cryptosporidium sp. SI23]]></doc></option>
+<option value='Cryptosporidium sp. Sbey05c'><doc title='description'><![CDATA[Cryptosporidium sp. Sbey05c]]></doc></option>
+<option value='Cryptosporidium sp. Sbld05a'><doc title='description'><![CDATA[Cryptosporidium sp. Sbld05a]]></doc></option>
+<option value='Cryptosporidium sp. Sbld05c'><doc title='description'><![CDATA[Cryptosporidium sp. Sbld05c]]></doc></option>
+<option value='Cryptosporidium sp. Sbld05d'><doc title='description'><![CDATA[Cryptosporidium sp. Sbld05d]]></doc></option>
+<option value='Cryptosporidium sp. Sltl05c'><doc title='description'><![CDATA[Cryptosporidium sp. Sltl05c]]></doc></option>
+<option value='Cryptosporidium sp. Tahvildar/sh55/IRN'><doc title='description'><![CDATA[Cryptosporidium sp. Tahvildar/sh55/IRN]]></doc></option>
+<option value='Cryptosporidium sp. Tahvildar/sh59/IRN'><doc title='description'><![CDATA[Cryptosporidium sp. Tahvildar/sh59/IRN]]></doc></option>
+<option value='Cryptosporidium sp. Taiwan A-4'><doc title='description'><![CDATA[Cryptosporidium sp. Taiwan A-4]]></doc></option>
+<option value='Cryptosporidium sp. Taiwan B2-21'><doc title='description'><![CDATA[Cryptosporidium sp. Taiwan B2-21]]></doc></option>
+<option value='Cryptosporidium sp. UR-2005'><doc title='description'><![CDATA[Cryptosporidium sp. UR-2005]]></doc></option>
+<option value='Cryptosporidium sp. W10998 SMC-2008'><doc title='description'><![CDATA[Cryptosporidium sp. W10998 SMC-2008]]></doc></option>
+<option value='Cryptosporidium sp. WH3'><doc title='description'><![CDATA[Cryptosporidium sp. WH3]]></doc></option>
+<option value='Cryptosporidium sp. WH33'><doc title='description'><![CDATA[Cryptosporidium sp. WH33]]></doc></option>
+<option value='Cryptosporidium sp. WH5'><doc title='description'><![CDATA[Cryptosporidium sp. WH5]]></doc></option>
+<option value='Cryptosporidium sp. azami'><doc title='description'><![CDATA[Cryptosporidium sp. azami]]></doc></option>
+<option value='Cryptosporidium sp. beaver genotype'><doc title='description'><![CDATA[Cryptosporidium sp. beaver genotype]]></doc></option>
+<option value='Cryptosporidium sp. cat104'><doc title='description'><![CDATA[Cryptosporidium sp. cat104]]></doc></option>
+<option value='Cryptosporidium sp. cat127'><doc title='description'><![CDATA[Cryptosporidium sp. cat127]]></doc></option>
+<option value='Cryptosporidium sp. cat137'><doc title='description'><![CDATA[Cryptosporidium sp. cat137]]></doc></option>
+<option value='Cryptosporidium sp. cat161'><doc title='description'><![CDATA[Cryptosporidium sp. cat161]]></doc></option>
+<option value='Cryptosporidium sp. cat162'><doc title='description'><![CDATA[Cryptosporidium sp. cat162]]></doc></option>
+<option value='Cryptosporidium sp. cat178'><doc title='description'><![CDATA[Cryptosporidium sp. cat178]]></doc></option>
+<option value='Cryptosporidium sp. cat205'><doc title='description'><![CDATA[Cryptosporidium sp. cat205]]></doc></option>
+<option value='Cryptosporidium sp. cat227'><doc title='description'><![CDATA[Cryptosporidium sp. cat227]]></doc></option>
+<option value='Cryptosporidium sp. cat230'><doc title='description'><![CDATA[Cryptosporidium sp. cat230]]></doc></option>
+<option value='Cryptosporidium sp. cat232'><doc title='description'><![CDATA[Cryptosporidium sp. cat232]]></doc></option>
+<option value='Cryptosporidium sp. cat233'><doc title='description'><![CDATA[Cryptosporidium sp. cat233]]></doc></option>
+<option value='Cryptosporidium sp. cat238'><doc title='description'><![CDATA[Cryptosporidium sp. cat238]]></doc></option>
+<option value='Cryptosporidium sp. cat239'><doc title='description'><![CDATA[Cryptosporidium sp. cat239]]></doc></option>
+<option value='Cryptosporidium sp. cat244'><doc title='description'><![CDATA[Cryptosporidium sp. cat244]]></doc></option>
+<option value='Cryptosporidium sp. cat311'><doc title='description'><![CDATA[Cryptosporidium sp. cat311]]></doc></option>
+<option value='Cryptosporidium sp. cat323'><doc title='description'><![CDATA[Cryptosporidium sp. cat323]]></doc></option>
+<option value='Cryptosporidium sp. cat324'><doc title='description'><![CDATA[Cryptosporidium sp. cat324]]></doc></option>
+<option value='Cryptosporidium sp. cat406'><doc title='description'><![CDATA[Cryptosporidium sp. cat406]]></doc></option>
+<option value='Cryptosporidium sp. cat438'><doc title='description'><![CDATA[Cryptosporidium sp. cat438]]></doc></option>
+<option value='Cryptosporidium sp. cat454'><doc title='description'><![CDATA[Cryptosporidium sp. cat454]]></doc></option>
+<option value='Cryptosporidium sp. cat98'><doc title='description'><![CDATA[Cryptosporidium sp. cat98]]></doc></option>
+<option value='Cryptosporidium sp. cervine genotype (W4)'><doc title='description'><![CDATA[Cryptosporidium sp. cervine genotype (W4)]]></doc></option>
+<option value='Cryptosporidium sp. chipmunk genotype (W17)'><doc title='description'><![CDATA[Cryptosporidium sp. chipmunk genotype (W17)]]></doc></option>
+<option value='Cryptosporidium sp. deer mouse genotype I'><doc title='description'><![CDATA[Cryptosporidium sp. deer mouse genotype I]]></doc></option>
+<option value='Cryptosporidium sp. deer mouse genotype II'><doc title='description'><![CDATA[Cryptosporidium sp. deer mouse genotype II]]></doc></option>
+<option value='Cryptosporidium sp. deer mouse genotype III (W1)'><doc title='description'><![CDATA[Cryptosporidium sp. deer mouse genotype III (W1)]]></doc></option>
+<option value='Cryptosporidium sp. deer mouse genotype IV (W3)'><doc title='description'><![CDATA[Cryptosporidium sp. deer mouse genotype IV (W3)]]></doc></option>
+<option value='Cryptosporidium sp. dogtype_556'><doc title='description'><![CDATA[Cryptosporidium sp. dogtype_556]]></doc></option>
+<option value='Cryptosporidium sp. ex Perameles bougainville'><doc title='description'><![CDATA[Cryptosporidium sp. ex Perameles bougainville]]></doc></option>
+<option value='Cryptosporidium sp. ex Phoca hispida'><doc title='description'><![CDATA[Cryptosporidium sp. ex Phoca hispida]]></doc></option>
+<option value='Cryptosporidium sp. ex Struthio camelus 2005'><doc title='description'><![CDATA[Cryptosporidium sp. ex Struthio camelus 2005]]></doc></option>
+<option value='Cryptosporidium sp. g36'><doc title='description'><![CDATA[Cryptosporidium sp. g36]]></doc></option>
+<option value='Cryptosporidium sp. goose genotype II'><doc title='description'><![CDATA[Cryptosporidium sp. goose genotype II]]></doc></option>
+<option value='Cryptosporidium sp. irani'><doc title='description'><![CDATA[Cryptosporidium sp. irani]]></doc></option>
+<option value='Cryptosporidium sp. isfahani'><doc title='description'><![CDATA[Cryptosporidium sp. isfahani]]></doc></option>
+<option value='Cryptosporidium sp. kn732'><doc title='description'><![CDATA[Cryptosporidium sp. kn732]]></doc></option>
+<option value='Cryptosporidium sp. marsupial genotype II'><doc title='description'><![CDATA[Cryptosporidium sp. marsupial genotype II]]></doc></option>
+<option value='Cryptosporidium sp. mink genotype'><doc title='description'><![CDATA[Cryptosporidium sp. mink genotype]]></doc></option>
+<option value='Cryptosporidium sp. muskrat 603'><doc title='description'><![CDATA[Cryptosporidium sp. muskrat 603]]></doc></option>
+<option value='Cryptosporidium sp. muskrat genotype I (W7)'><doc title='description'><![CDATA[Cryptosporidium sp. muskrat genotype I (W7)]]></doc></option>
+<option value='Cryptosporidium sp. muskrat genotype II (W16)'><doc title='description'><![CDATA[Cryptosporidium sp. muskrat genotype II (W16)]]></doc></option>
+<option value='Cryptosporidium sp. oyster 19'><doc title='description'><![CDATA[Cryptosporidium sp. oyster 19]]></doc></option>
+<option value='Cryptosporidium sp. p11'><doc title='description'><![CDATA[Cryptosporidium sp. p11]]></doc></option>
+<option value='Cryptosporidium sp. pig genotype II'><doc title='description'><![CDATA[Cryptosporidium sp. pig genotype II]]></doc></option>
+<option value='Cryptosporidium sp. shrew genotype (W5)'><doc title='description'><![CDATA[Cryptosporidium sp. shrew genotype (W5)]]></doc></option>
+<option value='Cryptosporidium sp. vole genotype (W15)'><doc title='description'><![CDATA[Cryptosporidium sp. vole genotype (W15)]]></doc></option>
+<option value='Cryptosporidium sp. z10'><doc title='description'><![CDATA[Cryptosporidium sp. z10]]></doc></option>
+<option value='Cryptosporidium sp. z13'><doc title='description'><![CDATA[Cryptosporidium sp. z13]]></doc></option>
+<option value='Cryptosporidium sp. zoo.195'><doc title='description'><![CDATA[Cryptosporidium sp. zoo.195]]></doc></option>
+<option value='Cryptosporidium struthionis'><doc title='description'><![CDATA[Cryptosporidium struthionis]]></doc></option>
+<option value='Cryptosporidium suis'><doc title='description'><![CDATA[Cryptosporidium suis]]></doc></option>
+<option value='Cryptosporidium wrairi'><doc title='description'><![CDATA[Cryptosporidium wrairi]]></doc></option>
+<option value='environmental samples'><doc title='description'><![CDATA[environmental samples]]></doc></option>
+<option value='unclassified Cryptosporidium'><doc title='description'><![CDATA[unclassified Cryptosporidium]]></doc></option>
+<option value='Giardia lamblia'><doc title='description'><![CDATA[Giardia lamblia]]></doc></option>
+<option value='Giardia lamblia ATCC 50803'><doc title='description'><![CDATA[Giardia lamblia ATCC 50803]]></doc></option>
+<option value='unclassified Giardia'><doc title='description'><![CDATA[unclassified Giardia]]></doc></option>
+<option value='Plasmodium berghei'><doc title='description'><![CDATA[Plasmodium berghei]]></doc></option>
+<option value='Plasmodium berghei str. ANKA'><doc title='description'><![CDATA[Plasmodium berghei str. ANKA]]></doc></option>
+<option value='Plasmodium chabaudi'><doc title='description'><![CDATA[Plasmodium chabaudi]]></doc></option>
+<option value='Plasmodium chabaudi adami'><doc title='description'><![CDATA[Plasmodium chabaudi adami]]></doc></option>
+<option value='Plasmodium chabaudi chabaudi'><doc title='description'><![CDATA[Plasmodium chabaudi chabaudi]]></doc></option>
+<option value='Plasmodium falciparum'><doc title='description'><![CDATA[Plasmodium falciparum]]></doc></option>
+<option value='Plasmodium falciparum 3D7'><doc title='description'><![CDATA[Plasmodium falciparum 3D7]]></doc></option>
+<option value='Plasmodium falciparum NF54'><doc title='description'><![CDATA[Plasmodium falciparum NF54]]></doc></option>
+<option value='Plasmodium knowlesi'><doc title='description'><![CDATA[Plasmodium knowlesi]]></doc></option>
+<option value='Plasmodium reichenowi'><doc title='description'><![CDATA[Plasmodium reichenowi]]></doc></option>
+<option value='Plasmodium vivax'><doc title='description'><![CDATA[Plasmodium vivax]]></doc></option>
+<option value='Plasmodium yoelii'><doc title='description'><![CDATA[Plasmodium yoelii]]></doc></option>
+<option value='Plasmodium yoelii killicki'><doc title='description'><![CDATA[Plasmodium yoelii killicki]]></doc></option>
+<option value='Plasmodium yoelii nigeriensis'><doc title='description'><![CDATA[Plasmodium yoelii nigeriensis]]></doc></option>
+<option value='Plasmodium yoelii yoelii'><doc title='description'><![CDATA[Plasmodium yoelii yoelii]]></doc></option>
+<option value='unclassified Plasmodium'><doc title='description'><![CDATA[unclassified Plasmodium]]></doc></option>
+<option value='Toxoplasma gondii'><doc title='description'><![CDATA[Toxoplasma gondii]]></doc></option>
+<option value='Neospora caninum'><doc title='description'><![CDATA[Neospora caninum]]></doc></option>
+<option value='Cryptosporidium andersoni'><doc title='description'><![CDATA[Cryptosporidium andersoni]]></doc></option>
+<option value='Cryptosporidium baileyi'><doc title='description'><![CDATA[Cryptosporidium baileyi]]></doc></option>
+<option value='Cryptosporidium bovis'><doc title='description'><![CDATA[Cryptosporidium bovis]]></doc></option>
+<option value='Cryptosporidium canis'><doc title='description'><![CDATA[Cryptosporidium canis]]></doc></option>
+<option value='Cryptosporidium cf. molnari'><doc title='description'><![CDATA[Cryptosporidium cf. molnari]]></doc></option>
+<option value='Cryptosporidium cf. parvum'><doc title='description'><![CDATA[Cryptosporidium cf. parvum]]></doc></option>
+<option value='Cryptosporidium environmental sequence'><doc title='description'><![CDATA[Cryptosporidium environmental sequence]]></doc></option>
+<option value='Cryptosporidium felis'><doc title='description'><![CDATA[Cryptosporidium felis]]></doc></option>
+<option value='Cryptosporidium fragile'><doc title='description'><![CDATA[Cryptosporidium fragile]]></doc></option>
+<option value='Cryptosporidium galli'><doc title='description'><![CDATA[Cryptosporidium galli]]></doc></option>
+<option value='Cryptosporidium hominis'><doc title='description'><![CDATA[Cryptosporidium hominis]]></doc></option>
+<option value='Cryptosporidium meleagridis'><doc title='description'><![CDATA[Cryptosporidium meleagridis]]></doc></option>
+<option value='Cryptosporidium muris'><doc title='description'><![CDATA[Cryptosporidium muris]]></doc></option>
+<option value='Cryptosporidium parvum'><doc title='description'><![CDATA[Cryptosporidium parvum]]></doc></option>
+<option value='Cryptosporidium parvum Iowa'><doc title='description'><![CDATA[Cryptosporidium parvum Iowa]]></doc></option>
+<option value='Cryptosporidium saurophilum'><doc title='description'><![CDATA[Cryptosporidium saurophilum]]></doc></option>
+<option value='Cryptosporidium serpentis'><doc title='description'><![CDATA[Cryptosporidium serpentis]]></doc></option>
+<option value='Cryptosporidium sp.'><doc title='description'><![CDATA[Cryptosporidium sp.]]></doc></option>
+<option value='Cryptosporidium sp. #691'><doc title='description'><![CDATA[Cryptosporidium sp. #691]]></doc></option>
+<option value='Cryptosporidium sp. 0583K'><doc title='description'><![CDATA[Cryptosporidium sp. 0583K]]></doc></option>
+<option value='Cryptosporidium sp. 1040'><doc title='description'><![CDATA[Cryptosporidium sp. 1040]]></doc></option>
+<option value='Cryptosporidium sp. 1041'><doc title='description'><![CDATA[Cryptosporidium sp. 1041]]></doc></option>
+<option value='Cryptosporidium sp. 1170'><doc title='description'><![CDATA[Cryptosporidium sp. 1170]]></doc></option>
+<option value='Cryptosporidium sp. 118b'><doc title='description'><![CDATA[Cryptosporidium sp. 118b]]></doc></option>
+<option value='Cryptosporidium sp. 1196'><doc title='description'><![CDATA[Cryptosporidium sp. 1196]]></doc></option>
+<option value='Cryptosporidium sp. 1453'><doc title='description'><![CDATA[Cryptosporidium sp. 1453]]></doc></option>
+<option value='Cryptosporidium sp. 1457'><doc title='description'><![CDATA[Cryptosporidium sp. 1457]]></doc></option>
+<option value='Cryptosporidium sp. 1665'><doc title='description'><![CDATA[Cryptosporidium sp. 1665]]></doc></option>
+<option value='Cryptosporidium sp. 169a'><doc title='description'><![CDATA[Cryptosporidium sp. 169a]]></doc></option>
+<option value='Cryptosporidium sp. 169c'><doc title='description'><![CDATA[Cryptosporidium sp. 169c]]></doc></option>
+<option value='Cryptosporidium sp. 17a'><doc title='description'><![CDATA[Cryptosporidium sp. 17a]]></doc></option>
+<option value='Cryptosporidium sp. 17b'><doc title='description'><![CDATA[Cryptosporidium sp. 17b]]></doc></option>
+<option value='Cryptosporidium sp. 200a'><doc title='description'><![CDATA[Cryptosporidium sp. 200a]]></doc></option>
+<option value='Cryptosporidium sp. 200b'><doc title='description'><![CDATA[Cryptosporidium sp. 200b]]></doc></option>
+<option value='Cryptosporidium sp. 2040'><doc title='description'><![CDATA[Cryptosporidium sp. 2040]]></doc></option>
+<option value='Cryptosporidium sp. 2041'><doc title='description'><![CDATA[Cryptosporidium sp. 2041]]></doc></option>
+<option value='Cryptosporidium sp. 204a'><doc title='description'><![CDATA[Cryptosporidium sp. 204a]]></doc></option>
+<option value='Cryptosporidium sp. 2162'><doc title='description'><![CDATA[Cryptosporidium sp. 2162]]></doc></option>
+<option value='Cryptosporidium sp. 21a'><doc title='description'><![CDATA[Cryptosporidium sp. 21a]]></doc></option>
+<option value='Cryptosporidium sp. 21b'><doc title='description'><![CDATA[Cryptosporidium sp. 21b]]></doc></option>
+<option value='Cryptosporidium sp. 21g'><doc title='description'><![CDATA[Cryptosporidium sp. 21g]]></doc></option>
+<option value='Cryptosporidium sp. 2622'><doc title='description'><![CDATA[Cryptosporidium sp. 2622]]></doc></option>
+<option value='Cryptosporidium sp. 2879'><doc title='description'><![CDATA[Cryptosporidium sp. 2879]]></doc></option>
+<option value='Cryptosporidium sp. 2879.VT-2.2003'><doc title='description'><![CDATA[Cryptosporidium sp. 2879.VT-2.2003]]></doc></option>
+<option value='Cryptosporidium sp. 2a'><doc title='description'><![CDATA[Cryptosporidium sp. 2a]]></doc></option>
+<option value='Cryptosporidium sp. 2b'><doc title='description'><![CDATA[Cryptosporidium sp. 2b]]></doc></option>
+<option value='Cryptosporidium sp. 30'><doc title='description'><![CDATA[Cryptosporidium sp. 30]]></doc></option>
+<option value='Cryptosporidium sp. 3421'><doc title='description'><![CDATA[Cryptosporidium sp. 3421]]></doc></option>
+<option value='Cryptosporidium sp. 351'><doc title='description'><![CDATA[Cryptosporidium sp. 351]]></doc></option>
+<option value='Cryptosporidium sp. 3568'><doc title='description'><![CDATA[Cryptosporidium sp. 3568]]></doc></option>
+<option value='Cryptosporidium sp. 3726'><doc title='description'><![CDATA[Cryptosporidium sp. 3726]]></doc></option>
+<option value='Cryptosporidium sp. 411'><doc title='description'><![CDATA[Cryptosporidium sp. 411]]></doc></option>
+<option value='Cryptosporidium sp. 428'><doc title='description'><![CDATA[Cryptosporidium sp. 428]]></doc></option>
+<option value='Cryptosporidium sp. 43c'><doc title='description'><![CDATA[Cryptosporidium sp. 43c]]></doc></option>
+<option value='Cryptosporidium sp. 499'><doc title='description'><![CDATA[Cryptosporidium sp. 499]]></doc></option>
+<option value='Cryptosporidium sp. 518'><doc title='description'><![CDATA[Cryptosporidium sp. 518]]></doc></option>
+<option value='Cryptosporidium sp. 5490'><doc title='description'><![CDATA[Cryptosporidium sp. 5490]]></doc></option>
+<option value='Cryptosporidium sp. 5538'><doc title='description'><![CDATA[Cryptosporidium sp. 5538]]></doc></option>
+<option value='Cryptosporidium sp. 6750'><doc title='description'><![CDATA[Cryptosporidium sp. 6750]]></doc></option>
+<option value='Cryptosporidium sp. 67a'><doc title='description'><![CDATA[Cryptosporidium sp. 67a]]></doc></option>
+<option value='Cryptosporidium sp. 67b'><doc title='description'><![CDATA[Cryptosporidium sp. 67b]]></doc></option>
+<option value='Cryptosporidium sp. 6876'><doc title='description'><![CDATA[Cryptosporidium sp. 6876]]></doc></option>
+<option value='Cryptosporidium sp. 6887'><doc title='description'><![CDATA[Cryptosporidium sp. 6887]]></doc></option>
+<option value='Cryptosporidium sp. 6898'><doc title='description'><![CDATA[Cryptosporidium sp. 6898]]></doc></option>
+<option value='Cryptosporidium sp. 715'><doc title='description'><![CDATA[Cryptosporidium sp. 715]]></doc></option>
+<option value='Cryptosporidium sp. 750'><doc title='description'><![CDATA[Cryptosporidium sp. 750]]></doc></option>
+<option value='Cryptosporidium sp. 751'><doc title='description'><![CDATA[Cryptosporidium sp. 751]]></doc></option>
+<option value='Cryptosporidium sp. 77c'><doc title='description'><![CDATA[Cryptosporidium sp. 77c]]></doc></option>
+<option value='Cryptosporidium sp. 815'><doc title='description'><![CDATA[Cryptosporidium sp. 815]]></doc></option>
+<option value='Cryptosporidium sp. 886'><doc title='description'><![CDATA[Cryptosporidium sp. 886]]></doc></option>
+<option value='Cryptosporidium sp. 888'><doc title='description'><![CDATA[Cryptosporidium sp. 888]]></doc></option>
+<option value='Cryptosporidium sp. 90g'><doc title='description'><![CDATA[Cryptosporidium sp. 90g]]></doc></option>
+<option value='Cryptosporidium sp. 9111'><doc title='description'><![CDATA[Cryptosporidium sp. 9111]]></doc></option>
+<option value='Cryptosporidium sp. 938'><doc title='description'><![CDATA[Cryptosporidium sp. 938]]></doc></option>
+<option value='Cryptosporidium sp. 944'><doc title='description'><![CDATA[Cryptosporidium sp. 944]]></doc></option>
+<option value='Cryptosporidium sp. 94a'><doc title='description'><![CDATA[Cryptosporidium sp. 94a]]></doc></option>
+<option value='Cryptosporidium sp. 94b'><doc title='description'><![CDATA[Cryptosporidium sp. 94b]]></doc></option>
+<option value='Cryptosporidium sp. 9870'><doc title='description'><![CDATA[Cryptosporidium sp. 9870]]></doc></option>
+<option value='Cryptosporidium sp. A16'><doc title='description'><![CDATA[Cryptosporidium sp. A16]]></doc></option>
+<option value='Cryptosporidium sp. A26'><doc title='description'><![CDATA[Cryptosporidium sp. A26]]></doc></option>
+<option value='Cryptosporidium sp. A29'><doc title='description'><![CDATA[Cryptosporidium sp. A29]]></doc></option>
+<option value='Cryptosporidium sp. A7'><doc title='description'><![CDATA[Cryptosporidium sp. A7]]></doc></option>
+<option value='Cryptosporidium sp. AHCF-1'><doc title='description'><![CDATA[Cryptosporidium sp. AHCF-1]]></doc></option>
+<option value='Cryptosporidium sp. AHCF-2'><doc title='description'><![CDATA[Cryptosporidium sp. AHCF-2]]></doc></option>
+<option value='Cryptosporidium sp. AHCF-3'><doc title='description'><![CDATA[Cryptosporidium sp. AHCF-3]]></doc></option>
+</param>
+<param name='type' type='xsd:string' required='true' default='Sequencing Typed,3kChip,Barcode,HD_Array,RFLP Typed' repeating='true'>
+<doc title='prompt'><![CDATA[Isolate assay type]]></doc>
+<doc title='help'><![CDATA[Choose the isolate type you want to query]]></doc>
+<doc title='default'><![CDATA[Sequencing Typed,3kChip,Barcode,HD_Array,RFLP Typed]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='Sequencing Typed'><doc title='description'><![CDATA[Sequencing Typed]]></doc></option>
+<option value='3kChip'><doc title='description'><![CDATA[3kChip]]></doc></option>
+<option value='Barcode'><doc title='description'><![CDATA[Barcode]]></doc></option>
+<option value='HD_Array'><doc title='description'><![CDATA[HD_Array]]></doc></option>
+<option value='RFLP Typed'><doc title='description'><![CDATA[RFLP Typed]]></doc></option>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Isolate Id]]></doc></option>
+<option value='pcr_primers'><doc title='description'><![CDATA[PCR primer]]></doc></option>
+<option value='country'><doc title='description'><![CDATA[Country]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='strain'><doc title='description'><![CDATA[Strain]]></doc></option>
+<option value='specific_host'><doc title='description'><![CDATA[Host]]></doc></option>
+<option value='isolation_source'><doc title='description'><![CDATA[Isolation Source]]></doc></option>
+<option value='description'><doc title='description'><![CDATA[Description]]></doc></option>
+<option value='note'><doc title='description'><![CDATA[Note]]></doc></option>
+<option value='product'><doc title='description'><![CDATA[Isolate Product]]></doc></option>
+<option value='data_type'><doc title='description'><![CDATA[Isolate Type]]></doc></option>
+<option value='collected_by'><doc title='description'><![CDATA[Collected By]]></doc></option>
+<option value='length'><doc title='description'><![CDATA[Length]]></doc></option>
+<option value='external_db_name'><doc title='description'><![CDATA[External DB Name]]></doc></option>
+<option value='external_db_version'><doc title='description'><![CDATA[External DB Version]]></doc></option>
+<option value='sequence'><doc title='description'><![CDATA[DNA Sequence]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+<option value='Reference'><doc title='description'><![CDATA[Reference]]></doc></option>
+<option value='GeneOverlap'><doc title='description'><![CDATA[Blast Similarity Alignments and Overlapping Genes]]></doc></option>
+<option value='IsolateComments'><doc title='description'><![CDATA[User Comments]]></doc></option>
+<option value='ProteinSequence'><doc title='description'><![CDATA[Protein Sequence]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='description'><doc title='description'><![CDATA[Description]]></doc></option>
+<option value='product'><doc title='description'><![CDATA[Product]]></doc></option>
+<option value='host'><doc title='description'><![CDATA[Host]]></doc></option>
+<option value='note'><doc title='description'><![CDATA[Note]]></doc></option>
+<option value='isolation_source'><doc title='description'><![CDATA[Isolation Source]]></doc></option>
+<option value='geographic_location'><doc title='description'><![CDATA[Geographic Location]]></doc></option>
+<option value='SNP'><doc title='description'><![CDATA[Isolates SNP Features]]></doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

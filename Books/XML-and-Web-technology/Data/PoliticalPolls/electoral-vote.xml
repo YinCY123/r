@@ -1,0 +1,7 @@
+con = url("http://www.electoral-vote.com/evp2008/Pres/pres_polls.csv")
+pres = read.csv(con, header = TRUE)
+pres$Date = as.POSIXct(strptime(as.character(pres$Date), "%b %d"))
+
+library(lattice)
+xyplot(Dem + GOP ~ pres$Date | State, pres, auto.key = TRUE)
+

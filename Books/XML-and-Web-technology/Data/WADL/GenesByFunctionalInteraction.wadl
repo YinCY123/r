@@ -1,0 +1,140 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='GeneQuestions'>
+<resource path='GenesByFunctionalInteraction.xml'>
+<method href='#genesbyfunctionalinteraction'/>
+</resource>
+<resource path='GenesByFunctionalInteraction.json'>
+<method href='#genesbyfunctionalinteraction'/>
+</resource>
+<method name='POST' id='genesbyfunctionalinteraction'>
+<doc title='display_name'><![CDATA[Predicted Functional Interaction]]></doc>
+<doc title='summary'><![CDATA[Find genes of <i>P. falciparum</i> (strain HB3) identified by the plasmoMAP project to have a functional interaction with the given gene.]]></doc>
+<doc title='description'><![CDATA[Find <i>Plasmodium falciparum</i> genes identified by the <a href="http://www.cbil.upenn.edu/plasmoMAP">plasmoMAP</a> project to have a functional interaction with the given gene.
+
+<br><br>Input a gene ID and a minimum interaction likelihood score.  Scores range from 2 to 9435, and increasing scores indicate higher confidence.  Generally, a likelihood score of 10 or more indicates a high-confidence interaction.
+
+<br><br>There are 388,969 total predicted protein pairs in the result set, with likelihood scores ranging from 2 to 9435. Below a score of 2, the number of false positives exceed the number of true positives. Most protein-protein interaction pairs (~79%) have a likelihood score of below 10, while about 20% of the pairs have a likelihood score between 10 and 9435 (only 251 pairs, or about 0.06% of the total, have a likelihood score above 100).
+
+<br><br>Empirical observations of the results show that while many pairs with very low likelihood scores (say between 2-4) are biologically valid, the predicted interactions are likely to be highly accurate as the scores approach a value of 10. In the published manuscript, a score of 14 was used to isolate a high-confidence subset of interactions, where the number of true positives was about 10 times greater than the number of false positives.]]></doc>
+<request>
+<param name='ds_gene_ids' type='xsd:string' required='true' default='PF11_0344' >
+<doc title='prompt'><![CDATA[Gene ID input set]]></doc>
+<doc title='help'><![CDATA[input a comma delimited set of gene ids, or upload a file]]></doc>
+<doc title='default'><![CDATA[PF11_0344]]></doc>
+</param>
+<param name='signature' type='xsd:string' required='true' default='' >
+<doc title='prompt'><![CDATA[User Signature]]></doc>
+<doc title='help'><![CDATA[Used to pass the Users Signature to the component sites]]></doc>
+<doc title='default'><![CDATA[null]]></doc>
+</param>
+<param name='min_interaction' type='xsd:string' required='true' default='2' >
+<doc title='prompt'><![CDATA[Minimum Likelihood Score]]></doc>
+<doc title='help'><![CDATA[Set a minimum for the likelihood of interaction]]></doc>
+<doc title='default'><![CDATA[2]]></doc>
+</param>
+<param name='include_only_queries' type='xsd:string' required='true' default='No' repeating='false'>
+<doc title='prompt'><![CDATA[Restrict to queries only]]></doc>
+<doc title='help'><![CDATA[Click yes to to restrict the results returned to only those genes which have been input as query ids.  This allows you to determine the relatedness of your query set]]></doc>
+<doc title='default'><![CDATA[No]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='No'><doc title='description'><![CDATA[No]]></doc></option>
+<option value='Yes'><doc title='description'><![CDATA[Yes]]></doc></option>
+</param>
+<param name='min_num_query_matches' type='xsd:string' required='true' default='1' >
+<doc title='prompt'><![CDATA[Minimum number of query matches]]></doc>
+<doc title='help'><![CDATA[Enter the minimum number of queries you want to match to your genes.  If you input 5 genes ids for your query and enter 5 minimum number of queries then the only genes returned would be ones that all 5 queries match]]></doc>
+<doc title='default'><![CDATA[1]]></doc>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Gene]]></doc></option>
+<option value='formatted_gene_id'><doc title='description'><![CDATA[Gene Group]]></doc></option>
+<option value='sequence_id'><doc title='description'><![CDATA[Genomic Sequence ID]]></doc></option>
+<option value='chromosome'><doc title='description'><![CDATA[Chromosome]]></doc></option>
+<option value='location_text'><doc title='description'><![CDATA[Genomic Location]]></doc></option>
+<option value='strand'><doc title='description'><![CDATA[Gene Strand]]></doc></option>
+<option value='gene_type'><doc title='description'><![CDATA[Gene Type]]></doc></option>
+<option value='exon_count'><doc title='description'><![CDATA[# Exons]]></doc></option>
+<option value='transcript_length'><doc title='description'><![CDATA[Transcript Length]]></doc></option>
+<option value='cds_length'><doc title='description'><![CDATA[CDS Length]]></doc></option>
+<option value='product'><doc title='description'><![CDATA[Product Description]]></doc></option>
+<option value='protein_length'><doc title='description'><![CDATA[Protein Length]]></doc></option>
+<option value='tm_count'><doc title='description'><![CDATA[# TM Domains]]></doc></option>
+<option value='molecular_weight'><doc title='description'><![CDATA[Molecular Weight]]></doc></option>
+<option value='isoelectric_point'><doc title='description'><![CDATA[Isoelectric Point]]></doc></option>
+<option value='ec_numbers_string'><doc title='description'><![CDATA[EC Numbers]]></doc></option>
+<option value='ortholog_number'><doc title='description'><![CDATA[Ortholog count]]></doc></option>
+<option value='paralog_number'><doc title='description'><![CDATA[Paralog count]]></doc></option>
+<option value='orthomcl_name'><doc title='description'><![CDATA[Ortholog Group]]></doc></option>
+<option value='signalp_scores'><doc title='description'><![CDATA[SignalP Scores]]></doc></option>
+<option value='signalp_peptide'><doc title='description'><![CDATA[SignalP Peptide]]></doc></option>
+<option value='ann_go_function'><doc title='description'><![CDATA[Annotated GO Function]]></doc></option>
+<option value='ann_go_process'><doc title='description'><![CDATA[Annotated GO Process]]></doc></option>
+<option value='ann_go_component'><doc title='description'><![CDATA[Annotated GO Component]]></doc></option>
+<option value='pred_go_function'><doc title='description'><![CDATA[Predicted GO Function]]></doc></option>
+<option value='pred_go_process'><doc title='description'><![CDATA[Predicted GO Process]]></doc></option>
+<option value='pred_go_component'><doc title='description'><![CDATA[Predicted GO Component]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='is_pseudo'><doc title='description'><![CDATA[Is Pseudo]]></doc></option>
+<option value='protein_sequence'><doc title='description'><![CDATA[Predicted Protein Sequence]]></doc></option>
+<option value='transcript_sequence'><doc title='description'><![CDATA[Predicted RNA/mRNA Sequence (introns spliced out)]]></doc></option>
+<option value='cds'><doc title='description'><![CDATA[Coding Sequence]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+<option value='likelihood_scores'><doc title='description'><![CDATA[Likelihood Scores]]></doc></option>
+<option value='query_ids'><doc title='description'><![CDATA[Query IDs]]></doc></option>
+<option value='queries_matched'><doc title='description'><![CDATA[Queries matched]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+<option value='SNPs'><doc title='description'><![CDATA[SNPs Summary]]></doc></option>
+<option value='GeneModelDump'><doc title='description'><![CDATA[Gene Model]]></doc></option>
+<option value='InterPro'><doc title='description'><![CDATA[InterPro Domains]]></doc></option>
+<option value='TMHMM'><doc title='description'><![CDATA[Transmembrane Domains]]></doc></option>
+<option value='LowComplexity'><doc title='description'><![CDATA[Low Complexity Regions]]></doc></option>
+<option value='SignalP'><doc title='description'><![CDATA[Signal Peptide]]></doc></option>
+<option value='BlastP'><doc title='description'><![CDATA[BlastP Hits]]></doc></option>
+<option value='Genbank'><doc title='description'><![CDATA[Gene Location]]></doc></option>
+<option value='SageTags'><doc title='description'><![CDATA[Sage Tags]]></doc></option>
+<option value='Notes'><doc title='description'><![CDATA[Notes]]></doc></option>
+<option value='UserComments'><doc title='description'><![CDATA[User Comments]]></doc></option>
+<option value='CommunityExpComments'><doc title='description'><![CDATA[Community Annotations]]></doc></option>
+<option value='EcNumber'><doc title='description'><![CDATA[EC Number]]></doc></option>
+<option value='MassSpec'><doc title='description'><![CDATA[Mass Spec.-based Expression Evidence]]></doc></option>
+<option value='GoTerms'><doc title='description'><![CDATA[GO Terms]]></doc></option>
+<option value='Phenotype'><doc title='description'><![CDATA[Phenotype]]></doc></option>
+<option value='Y2hInteractions'><doc title='description'><![CDATA[Y2H Interactions]]></doc></option>
+<option value='Orthologs'><doc title='description'><![CDATA[Orthologs and Paralogs within EuPathDB]]></doc></option>
+<option value='MetabolicPathways'><doc title='description'><![CDATA[Metabolic Pathways]]></doc></option>
+<option value='TaskComments'><doc title='description'><![CDATA[Toxoplasma Genome Sequencing Project Annotation]]></doc></option>
+<option value='ArrayElements'><doc title='description'><![CDATA[Mapped Array Elements]]></doc></option>
+<option value='TwoChannelDiffExpr'><doc title='description'><![CDATA[P.Berghei Differential Expression - DOZI KO vs. WT]]></doc></option>
+<option value='ProteinExpression'><doc title='description'><![CDATA[P.Berghei Protein Expression]]></doc></option>
+<option value='Mr4Reagents'><doc title='description'><![CDATA[MR4 Reagents]]></doc></option>
+<option value='ProteinDatabase'><doc title='description'><![CDATA[Protein Linkouts]]></doc></option>
+<option value='GeneLinkouts'><doc title='description'><![CDATA[External Links]]></doc></option>
+<option value='3dPreds'><doc title='description'><![CDATA[3D Structure Predictions]]></doc></option>
+<option value='PdbSimilarities'><doc title='description'><![CDATA[Similarities to Protein Data Bank (PDB) Chains]]></doc></option>
+<option value='Epitopes'><doc title='description'><![CDATA[Epitopes from IEDB]]></doc></option>
+<option value='IsolateOverlap'><doc title='description'><![CDATA[Isolates]]></doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

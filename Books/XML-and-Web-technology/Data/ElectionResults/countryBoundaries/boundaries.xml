@@ -1,0 +1,247 @@
+<article xmlns:r="http://www.r-project.org">
+<para>
+
+<r:code id="links">
+url = "http://general-election-2008-data.googlecode.com/svn/trunk/json/shapes/"
+doc = htmlParse(url)
+links = as.character(grep("json$", unlist(xpathSApply(doc, "//a/@href")), value = TRUE))
+</r:code>
+</para>
+
+
+<para>
+<r:function id="readStateBoundaries">
+readStateBoundaries =
+function(id, relativeTo = url)
+{
+  u = paste(relativeTo, id, sep = "")
+  txt = try( getURL(u) )
+  if(inherits(txt, "try-error"))
+     return(matrix(0, 0, 0))
+
+  els = fromJSON(txt)
+
+  structure(lapply(els$places[[1]],
+                      function(x)
+                             # Add NAs at the end so we can combine these into a single matrix
+                             # for use with polygon.
+                         matrix(c(unlist(x$shapes[[1]]$points), NA, NA), , 2, byrow = TRUE)),
+             names = sapply(els$places[[1]], function(x) x$name))
+}
+</r:function>
+</para>
+
+
+<para>
+<r:code><![CDATA[
+names(links) = rep("", length(links))
+i = match(tolower(state.abb), names(st))
+
+st = lapply(links, readStateBoundaries)
+names(st) = gsub(".json", "", links)
+if( any(i <- sapply(st, is.null)))
+  warning("failed for states ", paste(names(st)[i], collapse = ", "))
+]]></r:code>
+
+<r:code>
+i = match(names(st), tolower(state.abb), 0)
+names(st)[i != 0] = state.name[i]
+</r:code>
+<r:code>
+countyNameChanges =
+list( "idaho"  = c("Idaho" = "Idaho County"),
+      "louisiana" = c("Jefferson Davis" = "Jeff Davis", "DeSoto" = "De Soto", LaSalle = "La Salle"),
+      "mississippi" = c("Jefferson Davis" = "Jeff Davis"),
+      "kentucky" = c("La Rue" = "LaRue"),
+      oklahoma = c("LeFLore" = "Le Flore"),
+      illinios = c("DeWitt" = "De Witt", "JoDaviess = "Jo Daviess", "LaSalle" = "La Salle")
+      texas = c("De Witt" = "DeWitt", "La Vaca" = "LaVaca"),
+      "minnesota" = c("Lac Qui Parle" = "Lac Qui Parle"),
+       montana = c("Lewis & Clark" = "Lewis and Clark"),
+      "missouri" = c("St. Louis" = "St. Louis County", LaClede = Laclede), # Or City????
+      "new york" = c("New York" = "Manhattan", "St. Lawrence" = "Saint Lawrence", 
+                      "Kings" = "Brooklyn", "Richmond" = "Staten Island"),  # ????
+      virginia = gsub("City", "", c("Bedford City", "Fairfax City", "Franklin City","Richmond City", "Roanoke City")),
+      "arkansas" = c("St. Francis" = "Saint Francis"),
+      maryland = c("Baltimore City" = "Baltimore")
+    )
+
+updateNames =
+  function(id) {
+      tmp = st[[id]]
+      i = match(names(countyNameChanges[[id]]), names(tmp))
+      names(tmp)[i] =  countyNameChanges[[id]] 
+      tmp
+  }
+st[names(countyNameChanges)] = 
+         lapply(names(countyNameChanges), updateNames)
+
+
+</r:code>
+</para>
+
+<para>
+A plot of the distribution of county percentages for Obama
+by state.
+<r:plot>
+densityplot( ~ Obama/(Obama + McCain) | state, allStates, 
+              plot.points = FALSE, ref = FALSE,
+             panel = function(...) {
+                panel.densityplot(...)
+                panel.abline(v = .5, lty = 3)
+             })
+</r:plot>
+</para>
+<para>
+<r:code>
+statePolygons = lapply(st, function(x) do.call("rbind", x))
+allStateBoundaries = do.call("rbind", statePolygons)
+</r:code>
+</para>
+
+<para>
+<r:code>
+#lower48States = seq(along = st)[ - match(c("hi", "ak", "congressional"), names(st)) ]
+lower48StateBoundaries = do.call("rbind",
+                                  statePolygons[!(names(statePolygons) %in% c("hi", "ak", "us", "pr", "congressional"))])
+</r:code>
+</para>
+
+<para>
+<r:code>
+plot(lower48StateBoundaries, type = "n")
+polygon(lower48StateBoundaries)
+</r:code>
+</para>
+<para>
+
+How many counties are there?
+<r:code>
+sum(is.na(lower48StateBoundaries[,1]))
+</r:code>
+
+From the NY Times data
+<r:code>
+sum(sapply(states, nrow))
+</r:code>
+So there are 11 extra counties in the NY Times data that are not in the
+county shapes.
+Let's try to match the names.
+For example, let's look at Alabama.
+<r:code>
+x = names(st[["al"]])
+y = as.character(states[["alabama"]]$county)
+setdiff(x, y)
+setdiff(y, x)
+</r:code>
+
+<r:code>
+i = match(names(st), tolower(state.abb))
+names(st)[!is.na(i)] = tolower(state.name[i[!is.na(i)]])
+names(st) = gsub("-", " ", names(states))
+</r:code>
+
+<r:code>
+dif =
+ lapply(names(states),
+        function(id) {
+            x = tolower(names(st[[id]]))
+            y = tolower(as.character(states[[id]]$county))
+            ans = c(setdiff(x, y), setdiff(y, x))
+            if(length(ans)) {
+               i = sapply(setdiff(x, y), agrep, setdiff(y, x))
+               if(any(is.na(i)))
+                  return(setdiff(x, y)[is.na(i)])
+            }
+            character(0)
+        })
+names(dif) = names(states)
+</r:code>
+</para>
+<para>
+
+<r:function id="mapNames"><![CDATA[
+mapNames =
+function(id)
+{
+      # names of the counties in our polygon data.
+  ids = names(st[[id]])
+      # names of the counties in NY times data.
+  tgt = as.character(states[[id]]$county)
+
+  ans = rep(NA, length(ids))
+  names(ans) = ids
+
+    # find exact matches first
+  i = match(tolower(ids), tolower(tgt), 0)
+  ans[i != 0] = tgt[i]
+     # Reduce the set in tgt to be just those that we haven't matched yet.
+  tgt = tgt [ - i ]
+
+
+  if(any(is.na(ans))) {
+       # St. to saint (and spaces)
+       # Add " county" to word, e.g. Idaho County
+       # collapse spaces in both sets e.g. La Vaca to LaVaca
+       # and to & for Lewis and Clark.
+       #
+       # Jefferson Davis -> Jeff Davis
+       #
+       # missouri: St. Louis (County or City)
+       #
+       # .6% (< 1%) are mis/un-matched.
+
+    unmatched = names(ans)[ is.na(ans) ]
+    tmp = gsub("St.", "saint", unmatched)
+    tmp = gsub(" ", "", tmp)
+    tmp = gsub("and", "&", tmp)
+    tmp.tgt = gsub(" ", "", tgt)
+    
+    j  = match(tolower(tmp), tolower(tmp.tgt), 0)
+    ans[is.na(ans)][j] = tgt[j]
+
+    if(any(is.na(ans)))
+        warning("can't match ", paste(names(ans)[is.na(ans)], collapse = ", "), " in ", id)
+  }
+ 
+  ans
+}
+]]></r:function>
+
+
+<r:code>
+countyNamesMap = lapply(names(states), mapNames)
+</r:code>
+
+
+<r:code id="poly"><![CDATA[
+plot(lower48StateBoundaries, type = "n")
+lapply(names(states), 
+        function(id) {
+           poly = statePolygons[[id]]
+           i = sapply(tolower(names(st[[id]])), agrep, tolower(as.character(states[[id]]$county)))
+           if(any(is.na(i)))
+              stop("missing county in ", id, paste(names(poyl)[is.na(i)], collapse = ", "))
+
+           polygon(poly, col = ifelse(states[i, "Obama"] > states[i, "McCain"], "blue", "red"))
+        })
+]]></r:code>
+</para>
+
+<para>
+The county names from the NY times data are
+<r:code>
+sapply(states, function(x) as.character(x$county))
+</r:code>
+From the Google JSON data.
+</para>
+
+<para>
+Let's show how to deal with an individual state:
+<r:code>
+  v = readStateBoundaries("ar.json")
+  z = do.call("rbind", v)
+</r:code>
+</para>
+</article>
+

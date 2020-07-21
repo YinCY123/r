@@ -1,0 +1,164 @@
+<article>
+<section>
+<title></title>
+<para>
+We can get a table from
+http://www.realclearpolitics.com/epolls/2008/president/us/general_election_mccain_vs_obama-225.html
+If we cut and paste, the formatting becomes slightly complex to deal with
+because of the dates. (See table)
+But the real problem is that we don't have this information available for
+the senate, house and governor races.
+</para>
+<para>
+
+<r:code>
+doc = htmlParse("http://www.realclearpolitics.com/epolls/2008/latestpolls/index.html")
+</r:code>
+Often the tables have a class or an id which identifies
+the purpose of the table and is used in the CSS
+to customize the appearance.
+So let's find all the table nodes and find their id
+<r:code>
+unlist(xpathApply(doc, "//table", xmlGetAttr, "id"))
+</r:code>
+And it turns out that there aren't any!
+So let's look at the class attribute
+<r:code>
+unlist(xpathApply(doc, "//table", xmlGetAttr, "class"))
+</r:code>
+And we see that there are lots of "sortable" tables.
+</para>
+<para>
+Okay, so then next thing to try is look at the div nodes.
+<r:code>
+unlist(xpathApply(doc, "//div", xmlGetAttr, "class"))
+</r:code>
+And that gives us something more suggestive of what we are looking for.
+Specifically, the table-races might be the one we want.
+So let's go get that node.
+<r:code>
+div = doc[["//div[@class='table-races']"]]
+</r:code>
+And we can print this and "see" that it is what we want.
+But we still have to dig into this.
+</para>
+<para>
+In fact, we can get the three pages of the poll results
+that realclearpolitics provides from the same file.
+If we look at the id attribute on each div node, we see that
+there are three with values "table-1", "table-2" and "table-3".
+</para>
+<para>
+How do we go down into the table and past all the extraneous material?
+Well one approach is to just go and look at the rows,
+so we can fetch those nodes:
+<r:code>
+rows = getNodeSet(div, ".//tr")
+</r:code>
+We don't want all of them as some of them are just banners/headers 
+such as the date and the Race, Poll, Results, Spread header.
+So we can see if we can identify a pattern.
+</para>
+<para>
+The dates are quite easy to identify since the row has just one child node.
+So we can eliminate those rows without 4 elements:
+<r:code>
+i = sapply(rows, xmlSize) == 4
+</r:code>
+
+And if we take a look at the second and third rows in the original collection of
+rows, we see that the second has th sub-nodes, whereas the
+third has td sub-nodes. So the second is a header (th).
+<r:code>
+data.rows = sapply(rows[i], function(x) all(names(x) == "td"))
+</r:code>
+Of course, we will need the dates as we are interested in
+looking at how the  polls change over time.
+<r:code>
+polls  = t(sapply(rows[i][data.rows], 
+                   function(r) xmlSApply(r, xmlValue)))
+</r:code>
+<r:code>
+colnames(polls) = xmlSApply(rows[[2]], xmlValue)
+</r:code>
+Because of the "(Click to sort)", we might just
+want to set these manually.
+<r:code>
+colnames(polls) = c("Race", "Poll", "Results", "Spread")
+</r:code>
+</para>
+<para>
+Let's turn our polls object into a data frame.
+We have the four variables/fields for each,
+but we want to turn the Results into separate values.
+We'll do this by creating fields Obama and McCain
+and putting the actual fields in.
+<r:code>
+polls = as.data.frame(polls)
+els = strsplit(as.character(polls$Results), ",[ ]*")
+results = 
+  sapply(els, function(x) { 
+               tmp = strsplit(x, " ")
+               structure(sapply(tmp, `[`, 2), names = sapply(tmp, `[`, 1))
+             })
+polls$Obama = as.numeric(sapply(results, `[`, "Obama"))
+polls$McCain = as.numeric(sapply(results, `[`, "McCain"))
+  # Drop the original Results
+polls = polls[,  !(names(polls) %in% c("Results", "Spread"))]
+</r:code>
+But what about the polls that have more than Obama and McCain,
+e.g. Nader and Barr.
+</para>
+<para>
+Let's compute the dates.  We have to find which date corresponds the
+each collection/group of polls.  This information is available
+indirectly from the vector assigned to <r:var>i</r:var>.  Wherever
+there is a date row, there is a FALSE in this logical vector.
+Therefore all rows in between these have the date corresponding to the
+date in the previous "FALSE" entry.  Let's read the dates
+<r:code>
+sapply(rows[!i], xmlValue)
+</r:code>
+We will probably  want these as POSIXct objects in R.
+The dates are in the form "Sunday, October 05". So we use
+the format in strptime as follows
+<r:code>
+dates = strptime(sapply(rows[!i], xmlValue), "%A, %B %d")
+</r:code>
+</para>
+<para>
+Now, how do we repeat this for the relevant
+polls taken  on that day?
+We  look at the positions in i where these date nodes occur.
+For example, there are 6 on the first day, 6 on the next
+4 on the next, and 8 on the next, ....
+So we could generate our dates by repeating
+the first one 6 times, the second one 6 times,
+the third one 4 times and the fourth one 8 times and so on.
+We can use <r:func>rep</r:func> to do this, but we need
+to compute the sequence.
+It is the sequence in between the dates we want, but we have to skip
+the header.
+<r:code>
+reps = diff(c(which(!i), length(i) + 1)) - 2
+polls$date = rep(as.POSIXct(dates), reps)
+</r:code>
+</para>
+<para>
+How do we get the other pages?
+</para>
+<para>
+Reorganize the data frame to treat the candidate as a factor,
+i.e. put the columns for the candidates into a single results variable.
+You will need to replicate the other variables.
+<r:code>
+</r:code>
+</para>
+<para>
+How do we get the senate, house and governor polling data ?
+</para>
+</section>
+<section>
+<title></title>
+</section>
+</article>

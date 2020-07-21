@@ -1,0 +1,226 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='GeneQuestions'>
+<resource path='GenesByPhenotype.xml'>
+<method href='#genesbyphenotype'/>
+</resource>
+<resource path='GenesByPhenotype.json'>
+<method href='#genesbyphenotype'/>
+</resource>
+<method name='POST' id='genesbyphenotype'>
+<doc title='display_name'><![CDATA[Phenotype]]></doc>
+<doc title='summary'><![CDATA[Find T. brucei genes based on phenotype.]]></doc>
+<doc title='description'><![CDATA[Find <i>T. brucei</i> genes by phenotype based on RNAi knockdown and insufficiency studies.]]></doc>
+<request>
+<param name='organism' type='xsd:string' required='true' default='Trypanosoma brucei TREU927' repeating='true'>
+<doc title='prompt'><![CDATA[Organism]]></doc>
+<doc title='help'><![CDATA[Organism]]></doc>
+<doc title='default'><![CDATA[Trypanosoma brucei TREU927]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='Trypanosoma brucei TREU927'><doc title='description'><![CDATA[Trypanosoma brucei TREU927]]></doc></option>
+</param>
+<param name='phenotype' type='xsd:string' required='true' default='intracellular protein transport,intracellular protein transportabnormal' repeating='true'>
+<doc title='prompt'><![CDATA[Phenotype]]></doc>
+<doc title='help'><![CDATA[Phenotype]]></doc>
+<doc title='default'><![CDATA[intracellular protein transport,intracellular protein transportabnormal]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='excretionincreased'><doc title='description'><![CDATA[excretionincreased]]></doc></option>
+<option value='intracellular protein transport'><doc title='description'><![CDATA[intracellular protein transport]]></doc></option>
+<option value='methionyl-tRNA frmyltransferase activity'><doc title='description'><![CDATA[methionyl-tRNA frmyltransferase activity]]></doc></option>
+<option value='mitochondrial DNA'><doc title='description'><![CDATA[mitochondrial DNA]]></doc></option>
+<option value='RNA editingnormal'><doc title='description'><![CDATA[RNA editingnormal]]></doc></option>
+<option value='cytosol to ER transportnormal'><doc title='description'><![CDATA[cytosol to ER transportnormal]]></doc></option>
+<option value='fluid-phase endocytosisnormal'><doc title='description'><![CDATA[fluid-phase endocytosisnormal]]></doc></option>
+<option value='mitosisnormal'><doc title='description'><![CDATA[mitosisnormal]]></doc></option>
+<option value='proteasome assemblynormal'><doc title='description'><![CDATA[proteasome assemblynormal]]></doc></option>
+<option value='polycistronic mRNA processing'><doc title='description'><![CDATA[polycistronic mRNA processing]]></doc></option>
+<option value='regulation of gene expression'><doc title='description'><![CDATA[regulation of gene expression]]></doc></option>
+<option value='regulation of gene expression - epigenetic'><doc title='description'><![CDATA[regulation of gene expression - epigenetic]]></doc></option>
+<option value='cytokinesisabnormal'><doc title='description'><![CDATA[cytokinesisabnormal]]></doc></option>
+<option value='growth'><doc title='description'><![CDATA[growth]]></doc></option>
+<option value='cell cycle'><doc title='description'><![CDATA[cell cycle]]></doc></option>
+<option value='cell morphogenesis'><doc title='description'><![CDATA[cell morphogenesis]]></doc></option>
+<option value='mitochondrion organization and biogenesis'><doc title='description'><![CDATA[mitochondrion organization and biogenesis]]></doc></option>
+<option value='cell morphogenesisnormal'><doc title='description'><![CDATA[cell morphogenesisnormal]]></doc></option>
+<option value='mitochondrion organization and biogenesisnormal'><doc title='description'><![CDATA[mitochondrion organization and biogenesisnormal]]></doc></option>
+<option value='golgi organization and biogenesis'><doc title='description'><![CDATA[golgi organization and biogenesis]]></doc></option>
+<option value='endocytosis'><doc title='description'><![CDATA[endocytosis]]></doc></option>
+<option value='regulation of cell motility'><doc title='description'><![CDATA[regulation of cell motility]]></doc></option>
+<option value='regulation of cell motilitynormal'><doc title='description'><![CDATA[regulation of cell motilitynormal]]></doc></option>
+<option value='golgi organization and biogenesisnormal'><doc title='description'><![CDATA[golgi organization and biogenesisnormal]]></doc></option>
+<option value='endocytosisnormal'><doc title='description'><![CDATA[endocytosisnormal]]></doc></option>
+<option value='growthnormal'><doc title='description'><![CDATA[growthnormal]]></doc></option>
+<option value='growthdecreased'><doc title='description'><![CDATA[growthdecreased]]></doc></option>
+<option value='growthlethal'><doc title='description'><![CDATA[growthlethal]]></doc></option>
+<option value='cell cyclenormal'><doc title='description'><![CDATA[cell cyclenormal]]></doc></option>
+<option value='cell cycleabnormal'><doc title='description'><![CDATA[cell cycleabnormal]]></doc></option>
+<option value='cell morphogenesisabnormal'><doc title='description'><![CDATA[cell morphogenesisabnormal]]></doc></option>
+<option value='enzyme activity'><doc title='description'><![CDATA[enzyme activity]]></doc></option>
+<option value='enzyme activityabsent'><doc title='description'><![CDATA[enzyme activityabsent]]></doc></option>
+<option value='proteosomal ubiquitin-dependent protein catabolic processabsent'><doc title='description'><![CDATA[proteosomal ubiquitin-dependent protein catabolic processabsent]]></doc></option>
+<option value='proteosomal ubiquitin-dependent protein catabolic process'><doc title='description'><![CDATA[proteosomal ubiquitin-dependent protein catabolic process]]></doc></option>
+<option value='cell cyclearrested'><doc title='description'><![CDATA[cell cyclearrested]]></doc></option>
+<option value='cell motilitydecreased'><doc title='description'><![CDATA[cell motilitydecreased]]></doc></option>
+<option value='cell motility'><doc title='description'><![CDATA[cell motility]]></doc></option>
+<option value='RNA editing'><doc title='description'><![CDATA[RNA editing]]></doc></option>
+<option value='peptidase activity'><doc title='description'><![CDATA[peptidase activity]]></doc></option>
+<option value='molecular function'><doc title='description'><![CDATA[molecular function]]></doc></option>
+<option value='proteasome assembly'><doc title='description'><![CDATA[proteasome assembly]]></doc></option>
+<option value='endocytosisabnormal'><doc title='description'><![CDATA[endocytosisabnormal]]></doc></option>
+<option value='molecular functionabsent'><doc title='description'><![CDATA[molecular functionabsent]]></doc></option>
+<option value='proteasome assemblydisrupted'><doc title='description'><![CDATA[proteasome assemblydisrupted]]></doc></option>
+<option value='peptidase activitynormal'><doc title='description'><![CDATA[peptidase activitynormal]]></doc></option>
+<option value='golgi organization and biogenesisabnormal'><doc title='description'><![CDATA[golgi organization and biogenesisabnormal]]></doc></option>
+<option value='flagellum biogenesisabnormal'><doc title='description'><![CDATA[flagellum biogenesisabnormal]]></doc></option>
+<option value='mitochondrion organization and biogenesisabnormal'><doc title='description'><![CDATA[mitochondrion organization and biogenesisabnormal]]></doc></option>
+<option value='peptidase activitydecreased'><doc title='description'><![CDATA[peptidase activitydecreased]]></doc></option>
+<option value='cytokinesis'><doc title='description'><![CDATA[cytokinesis]]></doc></option>
+<option value='flagellum biogenesis'><doc title='description'><![CDATA[flagellum biogenesis]]></doc></option>
+<option value='RNA splicing'><doc title='description'><![CDATA[RNA splicing]]></doc></option>
+<option value='cytokinesisabsent'><doc title='description'><![CDATA[cytokinesisabsent]]></doc></option>
+<option value='cell movement'><doc title='description'><![CDATA[cell movement]]></doc></option>
+<option value='RNA editingdecreased'><doc title='description'><![CDATA[RNA editingdecreased]]></doc></option>
+<option value='RNA editingabnormal'><doc title='description'><![CDATA[RNA editingabnormal]]></doc></option>
+<option value='RNA splicingabnormal'><doc title='description'><![CDATA[RNA splicingabnormal]]></doc></option>
+<option value='cell movementabnormal'><doc title='description'><![CDATA[cell movementabnormal]]></doc></option>
+<option value='cytosolic calcium ion homeostasisabnormal'><doc title='description'><![CDATA[cytosolic calcium ion homeostasisabnormal]]></doc></option>
+<option value='growthabnormal'><doc title='description'><![CDATA[growthabnormal]]></doc></option>
+<option value='regulation of RNA stabilityabnormal'><doc title='description'><![CDATA[regulation of RNA stabilityabnormal]]></doc></option>
+<option value='regulation of cell motilityabnormal'><doc title='description'><![CDATA[regulation of cell motilityabnormal]]></doc></option>
+<option value='tRNA synthesisabnormal'><doc title='description'><![CDATA[tRNA synthesisabnormal]]></doc></option>
+<option value='RNA editingabsent'><doc title='description'><![CDATA[RNA editingabsent]]></doc></option>
+<option value='fluid-phase endocytosisabsent'><doc title='description'><![CDATA[fluid-phase endocytosisabsent]]></doc></option>
+<option value='ribosome biogenesisabsent'><doc title='description'><![CDATA[ribosome biogenesisabsent]]></doc></option>
+<option value='growtharrested'><doc title='description'><![CDATA[growtharrested]]></doc></option>
+<option value='carbon utilization'><doc title='description'><![CDATA[carbon utilization]]></doc></option>
+<option value='cellular response to phosphate starvation'><doc title='description'><![CDATA[cellular response to phosphate starvation]]></doc></option>
+<option value='cytosolic calcium ion homeostasis'><doc title='description'><![CDATA[cytosolic calcium ion homeostasis]]></doc></option>
+<option value='mRNA stabilizationdecreased'><doc title='description'><![CDATA[mRNA stabilizationdecreased]]></doc></option>
+<option value='fluid-phase endocytosis'><doc title='description'><![CDATA[fluid-phase endocytosis]]></doc></option>
+<option value='growthincreased'><doc title='description'><![CDATA[growthincreased]]></doc></option>
+<option value='cellular response to phosphate starvationincreased sensitivity'><doc title='description'><![CDATA[cellular response to phosphate starvationincreased sensitivity]]></doc></option>
+<option value='mRNA stabilization'><doc title='description'><![CDATA[mRNA stabilization]]></doc></option>
+<option value='mitosis'><doc title='description'><![CDATA[mitosis]]></doc></option>
+<option value='regulation of RNA stability'><doc title='description'><![CDATA[regulation of RNA stability]]></doc></option>
+<option value='ribosome biogenesis'><doc title='description'><![CDATA[ribosome biogenesis]]></doc></option>
+<option value='tRNA synthesis'><doc title='description'><![CDATA[tRNA synthesis]]></doc></option>
+<option value='chromosomeabnormal'><doc title='description'><![CDATA[chromosomeabnormal]]></doc></option>
+<option value='regulation of mitochondrial membrane potential'><doc title='description'><![CDATA[regulation of mitochondrial membrane potential]]></doc></option>
+<option value='developmental stageabnormal'><doc title='description'><![CDATA[developmental stageabnormal]]></doc></option>
+<option value='intracellular protein transportabnormal'><doc title='description'><![CDATA[intracellular protein transportabnormal]]></doc></option>
+<option value='polycistronic mRNA processingabnormal'><doc title='description'><![CDATA[polycistronic mRNA processingabnormal]]></doc></option>
+<option value='regulation of gene expression - epigeneticabnormal'><doc title='description'><![CDATA[regulation of gene expression - epigeneticabnormal]]></doc></option>
+<option value='regulation of gene expressionabnormal'><doc title='description'><![CDATA[regulation of gene expressionabnormal]]></doc></option>
+<option value='basal body duplicationabsent'><doc title='description'><![CDATA[basal body duplicationabsent]]></doc></option>
+<option value='mitosisabsent'><doc title='description'><![CDATA[mitosisabsent]]></doc></option>
+<option value='regulation of mitochondrial membrane potentialabsent'><doc title='description'><![CDATA[regulation of mitochondrial membrane potentialabsent]]></doc></option>
+<option value='acidification'><doc title='description'><![CDATA[acidification]]></doc></option>
+<option value='basal body duplication'><doc title='description'><![CDATA[basal body duplication]]></doc></option>
+<option value='cell differation'><doc title='description'><![CDATA[cell differation]]></doc></option>
+<option value='chromosome'><doc title='description'><![CDATA[chromosome]]></doc></option>
+<option value='cytosol to ER transport'><doc title='description'><![CDATA[cytosol to ER transport]]></doc></option>
+<option value='RNA splicingdecreased'><doc title='description'><![CDATA[RNA splicingdecreased]]></doc></option>
+<option value='acidificationdecreased'><doc title='description'><![CDATA[acidificationdecreased]]></doc></option>
+<option value='carbon utilizationdecreased'><doc title='description'><![CDATA[carbon utilizationdecreased]]></doc></option>
+<option value='endocytosisdecreased'><doc title='description'><![CDATA[endocytosisdecreased]]></doc></option>
+<option value='enzyme activitydecreased'><doc title='description'><![CDATA[enzyme activitydecreased]]></doc></option>
+<option value='exocytosisdecreased'><doc title='description'><![CDATA[exocytosisdecreased]]></doc></option>
+<option value='methionyl-tRNA frmyltransferase activitydecreased'><doc title='description'><![CDATA[methionyl-tRNA frmyltransferase activitydecreased]]></doc></option>
+<option value='mitochondrial DNAdecreased'><doc title='description'><![CDATA[mitochondrial DNAdecreased]]></doc></option>
+<option value='developmental stage'><doc title='description'><![CDATA[developmental stage]]></doc></option>
+<option value='growthdrug insensitive'><doc title='description'><![CDATA[growthdrug insensitive]]></doc></option>
+<option value='excretion'><doc title='description'><![CDATA[excretion]]></doc></option>
+<option value='exocytosis'><doc title='description'><![CDATA[exocytosis]]></doc></option>
+<option value='carbon utilizationincreased'><doc title='description'><![CDATA[carbon utilizationincreased]]></doc></option>
+<option value='cell differationincreased'><doc title='description'><![CDATA[cell differationincreased]]></doc></option>
+<option value='enzyme activityincreased'><doc title='description'><![CDATA[enzyme activityincreased]]></doc></option>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Gene]]></doc></option>
+<option value='formatted_gene_id'><doc title='description'><![CDATA[Gene Group]]></doc></option>
+<option value='sequence_id'><doc title='description'><![CDATA[Genomic Sequence ID]]></doc></option>
+<option value='chromosome'><doc title='description'><![CDATA[Chromosome]]></doc></option>
+<option value='location_text'><doc title='description'><![CDATA[Genomic Location]]></doc></option>
+<option value='strand'><doc title='description'><![CDATA[Gene Strand]]></doc></option>
+<option value='gene_type'><doc title='description'><![CDATA[Gene Type]]></doc></option>
+<option value='exon_count'><doc title='description'><![CDATA[# Exons]]></doc></option>
+<option value='transcript_length'><doc title='description'><![CDATA[Transcript Length]]></doc></option>
+<option value='cds_length'><doc title='description'><![CDATA[CDS Length]]></doc></option>
+<option value='product'><doc title='description'><![CDATA[Product Description]]></doc></option>
+<option value='protein_length'><doc title='description'><![CDATA[Protein Length]]></doc></option>
+<option value='tm_count'><doc title='description'><![CDATA[# TM Domains]]></doc></option>
+<option value='molecular_weight'><doc title='description'><![CDATA[Molecular Weight]]></doc></option>
+<option value='isoelectric_point'><doc title='description'><![CDATA[Isoelectric Point]]></doc></option>
+<option value='ec_numbers_string'><doc title='description'><![CDATA[EC Numbers]]></doc></option>
+<option value='ortholog_number'><doc title='description'><![CDATA[Ortholog count]]></doc></option>
+<option value='paralog_number'><doc title='description'><![CDATA[Paralog count]]></doc></option>
+<option value='orthomcl_name'><doc title='description'><![CDATA[Ortholog Group]]></doc></option>
+<option value='signalp_scores'><doc title='description'><![CDATA[SignalP Scores]]></doc></option>
+<option value='signalp_peptide'><doc title='description'><![CDATA[SignalP Peptide]]></doc></option>
+<option value='ann_go_function'><doc title='description'><![CDATA[Annotated GO Function]]></doc></option>
+<option value='ann_go_process'><doc title='description'><![CDATA[Annotated GO Process]]></doc></option>
+<option value='ann_go_component'><doc title='description'><![CDATA[Annotated GO Component]]></doc></option>
+<option value='pred_go_function'><doc title='description'><![CDATA[Predicted GO Function]]></doc></option>
+<option value='pred_go_process'><doc title='description'><![CDATA[Predicted GO Process]]></doc></option>
+<option value='pred_go_component'><doc title='description'><![CDATA[Predicted GO Component]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='is_pseudo'><doc title='description'><![CDATA[Is Pseudo]]></doc></option>
+<option value='protein_sequence'><doc title='description'><![CDATA[Predicted Protein Sequence]]></doc></option>
+<option value='transcript_sequence'><doc title='description'><![CDATA[Predicted RNA/mRNA Sequence (introns spliced out)]]></doc></option>
+<option value='cds'><doc title='description'><![CDATA[Coding Sequence]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+<option value='SNPs'><doc title='description'><![CDATA[SNPs Summary]]></doc></option>
+<option value='GeneModelDump'><doc title='description'><![CDATA[Gene Model]]></doc></option>
+<option value='InterPro'><doc title='description'><![CDATA[InterPro Domains]]></doc></option>
+<option value='TMHMM'><doc title='description'><![CDATA[Transmembrane Domains]]></doc></option>
+<option value='LowComplexity'><doc title='description'><![CDATA[Low Complexity Regions]]></doc></option>
+<option value='SignalP'><doc title='description'><![CDATA[Signal Peptide]]></doc></option>
+<option value='BlastP'><doc title='description'><![CDATA[BlastP Hits]]></doc></option>
+<option value='Genbank'><doc title='description'><![CDATA[Gene Location]]></doc></option>
+<option value='SageTags'><doc title='description'><![CDATA[Sage Tags]]></doc></option>
+<option value='Notes'><doc title='description'><![CDATA[Notes]]></doc></option>
+<option value='UserComments'><doc title='description'><![CDATA[User Comments]]></doc></option>
+<option value='CommunityExpComments'><doc title='description'><![CDATA[Community Annotations]]></doc></option>
+<option value='EcNumber'><doc title='description'><![CDATA[EC Number]]></doc></option>
+<option value='MassSpec'><doc title='description'><![CDATA[Mass Spec.-based Expression Evidence]]></doc></option>
+<option value='GoTerms'><doc title='description'><![CDATA[GO Terms]]></doc></option>
+<option value='Phenotype'><doc title='description'><![CDATA[Phenotype]]></doc></option>
+<option value='Y2hInteractions'><doc title='description'><![CDATA[Y2H Interactions]]></doc></option>
+<option value='Orthologs'><doc title='description'><![CDATA[Orthologs and Paralogs within EuPathDB]]></doc></option>
+<option value='MetabolicPathways'><doc title='description'><![CDATA[Metabolic Pathways]]></doc></option>
+<option value='TaskComments'><doc title='description'><![CDATA[Toxoplasma Genome Sequencing Project Annotation]]></doc></option>
+<option value='ArrayElements'><doc title='description'><![CDATA[Mapped Array Elements]]></doc></option>
+<option value='TwoChannelDiffExpr'><doc title='description'><![CDATA[P.Berghei Differential Expression - DOZI KO vs. WT]]></doc></option>
+<option value='ProteinExpression'><doc title='description'><![CDATA[P.Berghei Protein Expression]]></doc></option>
+<option value='Mr4Reagents'><doc title='description'><![CDATA[MR4 Reagents]]></doc></option>
+<option value='ProteinDatabase'><doc title='description'><![CDATA[Protein Linkouts]]></doc></option>
+<option value='GeneLinkouts'><doc title='description'><![CDATA[External Links]]></doc></option>
+<option value='3dPreds'><doc title='description'><![CDATA[3D Structure Predictions]]></doc></option>
+<option value='PdbSimilarities'><doc title='description'><![CDATA[Similarities to Protein Data Bank (PDB) Chains]]></doc></option>
+<option value='Epitopes'><doc title='description'><![CDATA[Epitopes from IEDB]]></doc></option>
+<option value='IsolateOverlap'><doc title='description'><![CDATA[Isolates]]></doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

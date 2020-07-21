@@ -1,0 +1,731 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='GeneQuestions'>
+<resource path='GenesByESTOverlap.xml'>
+<method href='#genesbyestoverlap'/>
+</resource>
+<resource path='GenesByESTOverlap.json'>
+<method href='#genesbyestoverlap'/>
+</resource>
+<method name='POST' id='genesbyestoverlap'>
+<doc title='display_name'><![CDATA[EST Evidence]]></doc>
+<doc title='summary'><![CDATA[Find genes with evidence of expression based on expressed sequence tags (ESTs)]]></doc>
+<doc title='description'><![CDATA[Find genes with evidence of expression based on expressed sequence tags (ESTs).
+              For example:  What <i>P. falciparum</i> genes overlap with aligned ESTs from the 3D7 gametocyte library?<p>
+              EST overlap with an annotated gene is a useful way to verify gene predictions but the absense of overlapping ESTs does not mean that a gene is not expressed.  
+              Showing the advanced parameters allows you to specify more or less stringent alignment and overlap parameters.]]></doc>
+<request>
+<param name='libraryIdGenes' type='xsd:string' required='true' default='Entamoeba dispar,Entamoeba histolytica trophozoite,E. histolytica Normalized cDNA library,Entamoeba cDNA clone 6 (trophozoite),Entamoeba histolytica HM-1:IMSS,Entamoeba cDNA to mRNA (trophozoite),Entamoeba histolytica YS-27,Entamoeba histolytica,Entamoeba dispar cDNAs (trophozoite),Entamoeba histolytica HM-1:IMSS mRNA (Tomoo Tanaka) (trophozoite),WatanabeCpHNJ-1 (oocyst),Cryptosporidium muris,XCP Sugano cDNA library (sporozoite stage),uniZAPCpIOWAsporoLib3 (sporozoite),Cryptosporidium muris (strain RN66) cDNA library; stage oocyst,pSKIIminusCpIOWAsporoLib2 (sporozoite),C. parvum KSU-1 normalized sporozoite,Pooled Cryptosporidium parvum KSU-1 enriched 24-48hr post-infection; in-vitro non-normalized nano...,Cryptosporidium parvum,uniZAPCpIOWAsporoLib1 (sporozoite),Giardia lamblia trophozoite (Trophozoite),Giardia Assemblage A isolate WB,trophozoite cDNA,Encephalitozoon cuniculi,RACE-PCR products from Encephalitozoon cuniculi (Dormant spores),Laboratory isolate 3D7AH1 Pf Trophozoite stage var gene cDNA,VARPB11A ( ),VARPB13G ( ),VARPB18H ( ),VARPB19D ( ),VARPB27A ( ),Ugandan isolate UKS2 Pf var gene cDNA (Trophozoite),VARPB15E ( ),VARPB27B ( ),VARPB56F ( ),VARPB53G ( ),VARPB59D ( ),Laboratory isolate 7G8 Pf Ring stage var gene cDNA,VARPB19H ( ),Laboratory isolate FCR3s1.6 Pf Ring stage var gene cDNA,SSH library of Plasmodium berghei strain RQ (erythrocytic stage),VARPB56C ( ),Ugandan isolate UAS40 Pf var gene cDNA (Trophozoite),VARPB42F ( ),VARPB14A ( ),VARPB1D ( ),VARPB23F ( ),Ugandan isolate UAS22 Pf var gene cDNA (Trophozoite),VARPB16G ( ),VARPB3G ( ),VARPB57B ( ),VARPB32C ( ),VARPB18A ( ),VARPB4F ( ),VARPB54C ( ),Ugandan isolate UAM50 Pf var gene cDNA (Trophozoite),VARPB59A ( ),Blood stage Plasmodium falciparum cDNA library PFExtensions,VARPB34F ( ),VARPB26E ( ),VARPB5F ( ),Ugandan isolate UAS24 Pf var gene cDNA (Trophozoite),VARPB29B ( ),VARPB50G ( ),Laboratory isolate FCR3 Pf Trophozoite stage var gene cDNA,Ugandan isolate UAS06 Pf var gene cDNA (Trophozoite),VARPB55D ( ),In vitro adapted parasite UAS31b Pf Trophozoite stage var gene cDNA,Ugandan isolate UAM16 Pf var gene cDNA (Trophozoite),VARPB1H ( ),VARPB28A ( ),VARPB40H ( ),Ugandan isolate UKM64 Pf Ring stage var gene cDNA,VARPB9A ( ),Plasmodium berghei NK65 salivary gland sporozoite,WatanabePv,VARPB51A ( ),Laboratory isolate DD2 Pf Trophozoite stage var gene cDNA,Plasmodium berghei ookinete stage,VARPB22E ( ),VARPB8D ( ),XPF Sugano cDNA library (erythrocytic stage),VARPB59C ( ),Ugandan isolate UKS4 Pf var gene cDNA (Trophozoite),VARPB3C ( ),VARPB42D ( ),Ugandan isolate UKS47 Pf Ring stage var gene cDNA,VARPB27E ( ),VARPB51F ( ),VARPB21G ( ),Blood stage Plasmodium falciparum cDNA library PfSuOrig,Ugandan isolate UAM32 Pf var gene cDNA (Trophozoite),VARPB31G ( ),VARPB3D ( ),Ugandan isolate UAM25 Pf var gene cDNA (Trophozoite),VARPB58C ( ),VARPB31A ( ),VARPB51H ( ),VARPB6F ( ),VARPB28G ( ),VARPB60B ( ),Blood stage Plasmodium falciparum cDNA library PfBamH1,Laboratory isolate FCR3 Pf Ring stage var gene cDNA,Plasmodium yoelli 17X axenic hepatic stages,Ugandan isolate UAS36 Pf var gene cDNA (Trophozoite),Laboratory isolate 3D7AH1S.2 Pf Trophozoite stage var gene cDNA,Ugandan isolate UAS21 Pf var gene cDNA (Trophozoite),VARPB16A ( ),VARPB23G ( ),Ugandan isolate UAM27 Pf var gene cDNA (Trophozoite),VARPB26G ( ),VARPB29G ( ),Ugandan isolate UAS47 Pf var gene cDNA (Trophozoite),VARPB48B ( ),VARPB55F ( ),XPB Sugano cDNA library (erythrocytic stage),Ugandan isolate UAM39 Pf var gene cDNA (Trophozoite),VARPB48H ( ),Plasmodium falciparum,VARPB35H ( ),VARPB40E ( ),Ugandan isolate UKS12 Pf var gene cDNA (Trophozoite),Ugandan isolate UKM19 Pf Ring stage var gene cDNA,VARPB29C ( ),VARPB29H ( ),VARPB13C ( ),VARPB17D ( ),VARPB24A ( ),VARPB3F ( ),VARPB56H ( ),VARPB17A ( ),VARPB40F ( ),Ugandan isolate UAM49 Pf var gene cDNA (Trophozoite),Ugandan isolate UAS41 Pf var gene cDNA (Trophozoite),VARPB36H ( ),VARPB43H ( ),Ugandan isolate UAS13 Pf var gene cDNA (Trophozoite),Plasmodium berghei liver stage parasite,VARPB58B ( ),Plasmodium berghei,Ugandan isolate UAS12 Pf var gene cDNA (Trophozoite),Ugandan isolate UKM64 Pf Trophozoite stage var gene cDNA,VARPB47G ( ),VARPB26B ( ),In vitro adapted parasite UAS22b Pf Trophozoite stage var gene cDNA,VARPB53C ( ),VARPB32F ( ),VARPB43D ( ),VARPB5B ( ),VARPB25E ( ),VARPB56B ( ),PvBEcDNA (Assexual Blood Stages),Ugandan isolate UAM46 Pf var gene cDNA (Trophozoite),VARPB25B ( ),VARPB57C ( ),VARPB59B ( ),VARPB6A ( ),Laboratory isolate TM284 Pf Trophozoite stage var gene cDNA,Plasmodium falciparum 3D7 asexual cDNA,VARPB24E ( ),Ugandan isolate UAM08 Pf var gene cDNA (Trophozoite),Ugandan isolate UAS39 Pf var gene cDNA (Trophozoite),VARPB1C ( ),VARPB39E ( ),Ugandan isolate UAM47 Pf var gene cDNA (Trophozoite),Ugandan isolate UAM09 Pf var gene cDNA (Trophozoite),VARPB5A ( ),VARPB57A ( ),Ugandan isolate UAM34 Pf var gene cDNA (Trophozoite),VARPB20F ( ),VARPB50F ( ),Plasmodium berghei cDNA library,Ugandan isolate UKS14 Pf Ring stage var gene cDNA,VARPB13H ( ),VARPB4E ( ),VARPB54E ( ),Ugandan isolate UKM19 Pf Trophozoite stage var gene cDNA,VARPB48C ( ),VARPB20D ( ),VARPB3B ( ),VARPB31F ( ),In vitro adapted parasite UAM52b Pf Trophozoite stage var gene cDNA,VARPB48D ( ),VARPB59E ( ),VARPB39B ( ),VARPB39H ( ),VARPB43E ( ),Plasmodium yoelii yoelii from Anopheles stephensi midgut (oocyst),Sugano Malaria cDNA library (erythrocytic stage),Ugandan isolate UAS08 Pf var gene cDNA (Trophozoite),VARPB27F ( ),VARPB55H ( ),VARPB6E ( ),Ugandan isolate UAM12 Pf var gene cDNA (Trophozoite),Ugandan isolate UAM20 Pf var gene cDNA (Trophozoite),VARPB21E ( ),Ugandan isolate UAS20 Pf var gene cDNA (Trophozoite),VARPB7C ( ),Pb cDNA #17; Tommaso Pace; Marta Ponzi; and Clara Frontali (asynchronous blood stage),VARPB53H ( ),Ugandan isolate UAM53 Pf var gene cDNA (Trophozoite),WatanabePy17XL,VARPB54A ( ),XPV Sugano cDNA library (erythrocytic stage),In vitro adapted parasite UAS31b Pf Ring stage var gene cDNA,Ugandan isolate UKS7 Pf Trophozoite stage var gene cDNA,VARPB30A ( ),VARPB51G ( ),In vitro adapted parasite UAS41b Pf Trophozoite stage var gene cDNA,Ugandan isolate UAM23 Pf var gene cDNA (Trophozoite),VARPB25G ( ),VARPB25A ( ),VARPB54D ( ),Laboratory isolate FCR3s1.6 Pf Trophozoite stage var gene cDNA,VARPB41F ( ),VARPB5G ( ),czapPFDd2.1; Debopam Chakrabarti,VARPB22F ( ),VARPB8A ( ),Ugandan isolate UAM17 Pf var gene cDNA (Trophozoite),VARPB49H ( ),ookinete library (12 h; 18h and 24 h after in vitro culture),In vitro adapted parasite UAS29b Pf Ring stage var gene cDNA,VARPB2F ( ),Ugandan isolate UAS19 Pf var gene cDNA (Trophozoite),Ugandan isolate UAM36 Pf var gene cDNA (Trophozoite),VARPB23E ( ),VARPB28B ( ),Plasmodium berghei ookinete,Ugandan isolate UAS29 Pf var gene cDNA (Trophozoite),VARPB58A ( ),VARPB58G ( ),VARPB21B ( ),VARPB54H ( ),VARPB7B ( ),GenoScope Schizont enriched,Ugandan isolate UKS14 Pf Trophozoite stage var gene cDNA,VARPB7E ( ),VARPB8B ( ),Ugandan isolate UKS3 Pf Ring stage var gene cDNA,VARPB8F ( ),VARPB60A ( ),Ugandan isolate UAM05 Pf var gene cDNA (Trophozoite),Ugandan isolate UKS10 Pf var gene cDNA (Trophozoite),VARPB14C ( ),Ugandan isolate UAS10 Pf var gene cDNA (Trophozoite),VARPB42G ( ),VARPB35D ( ),Ugandan isolate UAS33 Pf var gene cDNA (Trophozoite),Ugandan isolate UAS37 Pf var gene cDNA (Trophozoite),Ugandan isolate UAS48 Pf var gene cDNA (Trophozoite),VARPB9H ( ),Ugandan isolate UKS17 Pf var gene cDNA (Trophozoite),VARPB22A ( ),VARPB4C ( ),VARPB5D ( ),VARPB22D ( ),VARPB2E ( ),VARPB35F ( ),VARPB47F ( ),VARPB53E ( ),VARPB2A ( ),cbsPfHB3.1; Debopam Chakrabarti,Ugandan isolate UAM33 Pf var gene cDNA (Trophozoite),VARPB20G ( ),VARPB3E ( ),Ugandan isolate UAS14 Pf var gene cDNA (Trophozoite),VARPB25C ( ),VARPB42B ( ),VARPB25F ( ),Ugandan isolate UAM48 Pf var gene cDNA (Trophozoite),VARPB22B ( ),WatanabePf3D7_cultured,XPYs Sugano cDNA library (erythrocytic stage),VARPB4D ( ),Ugandan isolate UAM13 Pf var gene cDNA (Trophozoite),VARPB11B ( ),VARPB1G ( ),VARPB56G ( ),Ugandan isolate UAS28 Pf var gene cDNA (Trophozoite),VARPB24G ( ),VARPB39G ( ),VARPB29A ( ),VARPB14B ( ),VARPB5E ( ),Ugandan isolate UAM38 Pf var gene cDNA (Trophozoite),VARPB43F ( ),VARPB58E ( ),Ugandan isolate UAS43 Pf var gene cDNA (Trophozoite),Ugandan isolate UAM21 Pf var gene cDNA (Trophozoite),Ugandan isolate UKS25 Pf var gene cDNA (Trophozoite),Ugandan isolate UKS3 Pf var gene cDNA (Trophozoite),VARPB39C ( ),VARPB48A ( ),Ugandan isolate UAS07 Pf var gene cDNA (Trophozoite),VARPB24B ( ),VARPB59F ( ),VARPB27H ( ),VARPB31D ( ),VARPB47E ( ),VARPB6B ( ),Ugandan isolate UKS14 Pf var gene cDNA (Trophozoite),VARPB53B ( ),VARPB43C ( ),XPYw Sugano cDNA library (erythrocytic stage),Laboratory isolate 7G8 Pf Trophozoite stage var gene cDNA,VARPB1E ( ),Plasmodium yoelii,VARPB23D ( ),VARPB55A ( ),VARPB8G ( ),VARPB36C ( ),VARPB56A ( ),VARPB58F ( ),Ugandan isolate UAM26 Pf var gene cDNA (Trophozoite),VARPB27G ( ),VARPB15C ( ),Plasmodium falciparum 3D7 gametocyte cDNA library (gametocyte (stage III-V)),Ugandan isolate UKS25 Pf Ring stage var gene cDNA,VARPB31H ( ),Laboratory isolate 3D7AH1 Pf Ring stage var gene cDNA,Ugandan isolate UAS03 Pf var gene cDNA (Trophozoite),VARPB26F ( ),Ugandan isolate UAS32 Pf var gene cDNA (Trophozoite),VARPB27C ( ),VARPB26D ( ),VARPB43B ( ),Ugandan isolate UAM18 Pf var gene cDNA (Trophozoite),VARPB4B ( ),Pb sgSpz/ooSpz subtraction library,Ugandan isolate UAS34 Pf var gene cDNA (Trophozoite),Ugandan isolate UKS5 Pf var gene cDNA (Trophozoite),VARPB24C ( ),VARPB6C ( ),VARPB56E ( ),Laboratory isolate 3D7AH1S.2 Pf Ring stage var gene cDNA,Ugandan isolate UKS7 Pf Ring stage var gene cDNA,VARPB59H ( ),SSH library of Plasmodium berghei strain K173 (erythrocytic stage),VARPB20B ( ),Ugandan isolate UAM44 Pf var gene cDNA (Trophozoite),VARPB27D ( ),VARPB40A ( ),VARPB5C ( ),VARPB60C ( ),Ugandan isolate UAS45 Pf var gene cDNA (Trophozoite),Ugandan isolate UAS18 Pf var gene cDNA (Trophozoite),Ugandan isolate UKS13 Pf var gene cDNA (Trophozoite),VARPB22G ( ),VARPB28C ( ),VARPB59G ( ),In vitro adapted parasite UAS29b Pf Trophozoite stage var gene cDNA,Ugandan isolate UAM11 Pf var gene cDNA (Trophozoite),VARPB51B ( ),VARPB58H ( ),Ugandan isolate UAS46 Pf var gene cDNA (Trophozoite),Ugandan isolate UAM22 Pf var gene cDNA (Trophozoite),Ugandan isolate UAS44 Pf var gene cDNA (Trophozoite),Zhang/Gardner Pf 3D7 mixed asexual (Asexual stage),Ugandan isolate UKS47 Pf Trophozoite stage var gene cDNA,VARPB39D ( ),Ugandan isolate UAM42 Pf var gene cDNA (Trophozoite),VARPB24H ( ),Nc-1 pZ Tachyzoite cDNA Library,TgME49cDNA (in vitro Bradyzoite; 6day),Toxoplasma gondii encystation; subtracted cDNA,TgZAP-cDNA1 (tachyzoite),Tg COUG Tachyzoite cDNA Library,Nc 1314 Tachyzoite cDNA,Toxoplasma gondii,TgRH Tachyzoite cDNA,TgRH Tachyzoite Norm 5 cDNA Library,TgRH Tachyzoite FL cDNA,TgVEG Fully sporulated oocyst cDNA (Fully sporulated oocysts),TgRH*-Tachyzoite cDNA,TgVEG118 Tachyzoite cDNA Library,TgME49 invivo Bradyzoite cDNA (in vitro Bradyzoite; 6day),Nc-1 Tachyzoite cDNA Library,Neospora caninum,TgME49 invivo Bradyzoite cDNA size selected,Nc-1 Tachyzoite cDNA Library 2,differentially expressed gene in tachyzoite stage of Neospora caninum Korea isolate Nc-Kr2 (Tachy...,TgRH Tachyzoite Norm 7 cDNA Library,Toxoplasma gondii mRNA (T.Koyama),TgVEG Partially sporulated oocyst cDNA (Partially sporulated oocysts),Neospora caninum Lambda Zap cDNA library,Toxoplasma gondii Tachyzoite Library (Tachyzoite developmental stage),Tg CAST Tachyzoite cDNA Library 2,WatanabeTgRH (tachyzoites),TgRHcDNA,TgVEG118 Tachyzoite cDNA Library-2,TgRH Tachyzoite Subtracted cDNA Library,TgMAS Tachyzoite cDNA Library,Nc-LIV Tachyzoite cDNA Library,Toxoplasma gondii Bradyzoite Library (Bradyzoite developmental stage),Tg CAST Tachyzoite cDNA Library,RH tachyzoite cDNA library,TgME49 3 day invitro bradyzoite,TgVEG-Tachyzoite cDNA,TgME49 B7 Tachyzoite cDNA Library 1,TgRH Tachyzoite Norm 1 cDNA Library,Nc-1Tachyzoite cDNA,TgME49 Tachyzoite cDNA,TgME49 B7 Tachyzoite cDNA Library 2,Low iron culture (TvLI),non-normalized T1 cDNA library,Cot6 normalized T1 cDNA library,Cot1000 normalized T1 cDNA library,HMW C1 cDNA library,Low glucose culture (TvLG),Normal unsynchronized culture (TvEST) (Unsynchronized culture),VEC-mediated cytoadherence (TvVEC) (Amoeboid stage),Fibronectin-mediated cytoadherence (TvFN) (Amoeboid stage),G2/M trophozoite (TvG2M) (G1/S phase),Trichomonas vaginalis,Cold-induced pseudocyst (TvCS) (Pseudocyst stage),Leishmania major Amastigote full length cDNA library,Stage-specific mRNA,Trypanosoma congolense,Trypanosoma brucei rhodesiense ZAP II library (Insect form),Leishmania major,Leishmania mexicana,Trypanosoma congolense isolate IL300 normalised bloodstream stage,Leishmania major Amastigote Lambda Zap II library,Trypanosoma cruzi Y (Tomoo Tanaka),Leishmania braziliensis,Trypanosoma brucei strain 927 ESTs,sucrose-gradient-F23 (promastigote),Leishmania braziliensis procyclic stage; logarithmic growth phase,Trypanosoma cruzi amastigote cDNA library,LmLV39cDNA,Trypanosoma cruzi,Differentially expressed Trypanosoma brucei mRNAs,T. cruzi epimastigote normalized cDNA Library,TcTR (trypomastigote),Bloodstream form of serodeme ILTat1.1,Trypanosoma congolense isolate IL300 metacyclic stage,T. Cruzi epimastigote normalised cDNA Library,SM-Lib-Tc Tehuantepec 17WTS,page (promastigote),Random insertions of transposon MosHYG in Leishmania major (promastigote),Trypanosoma congolense isolate IL300 bloodstream stage,TcT-E (trypomastigote),sucrose-gradient-F25 (promastigote),Leishmania major promastigote full length cDNA library from stationary stage (day 10),Trypanosoma congolense isolate IL300 epimastigote stage,T.cruzi epimastigote normalized cDNA Library,MVAT4 bloodstream form of serodeme WRATat1.1,T. cruzi epimastigote normalised cDNA Library,SM-Lib-Tc Y BZR,Trypanosoma brucei,SM-Lib-Tc Tehuantepec 17LER,Leishmania major promastigote full length cDNA library from early logarithmic stage (day 3),Leishmania major promastigote full length cDNA library from logarithmic stage (day 7),Trypanosoma cruzi differential display cDNA library,T.cruzi epimastigote non-normalized cDNA Library,Trypanosoma congolense isolate IL300 procyclic stage,VARPB4G ( ),Ugandan isolate UAS25 Pf var gene cDNA (Trophozoite),VARPB28F ( ),VARPB56D ( ),Ugandan isolate UAM31 Pf var gene cDNA (Trophozoite),Ugandan isolate UAM41 Pf var gene cDNA (Trophozoite),Ugandan isolate UKS5 Pf Ring stage var gene cDNA,VARPB28E ( ),VARPB49F ( ),Ugandan isolate UAM45 Pf var gene cDNA (Trophozoite),VARPB34H ( ),VARPB50E ( ),In vitro adapted parasite UAS22b Pf Ring stage var gene cDNA,Ugandan isolate UAS26 Pf var gene cDNA (Trophozoite),Ugandan isolate UAM40 Pf var gene cDNA (Trophozoite),Plasmodium yoelii sporozoite cDNA (sporozoites from salivary gland),VARPB13D ( ),VARPB1F ( ),VARPB21A ( ),Ugandan isolate UKS9 Pf var gene cDNA (Trophozoite),VARPB40D ( ),Pb cDNA #20; Charles Yowell and Jane Carlton (asynchronous blood stage),Ugandan isolate UAS23 Pf var gene cDNA (Trophozoite),VARPB34A ( ),VARPB53D ( ),Plasmodium yoelii liver stage LCM cDNA library (40 hour liver schizont),Ugandan isolate UKS15 Pf Ring stage var gene cDNA,Plasmodium berghei strain ANKA erythrocytic stage,Ugandan isolate UKS15 Pf var gene cDNA (Trophozoite),VARPB5H ( ),Ugandan isolate UAM37 Pf var gene cDNA (Trophozoite),Ugandan isolate UAM52 Pf var gene cDNA (Trophozoite),VARPB18C ( ),VARPB34E ( ),VARPB15A ( ),Ugandan isolate UAM51 Pf var gene cDNA (Trophozoite),VARPB7D ( ),VARPB23B ( ),VARPB55B ( ),VARPB29F ( ),Plasmodium falciparum NF54 (D.A.Fidock) (asynchronous asexual blood stage),Ugandan isolate UKS7 Pf var gene cDNA (Trophozoite),VARPB54F ( ),In vitro adapted parasite UAM52b Pf Ring stage var gene cDNA,Laboratory isolate TM284 Pf Ring stage var gene cDNA,Ugandan isolate UAS11 Pf var gene cDNA (Trophozoite),Plasmodium falciparum FCB1 schizont,Ugandan isolate UAM35 Pf var gene cDNA (Trophozoite),Ugandan isolate UAS27 Pf var gene cDNA (Trophozoite),Ugandan isolate UAS38 Pf var gene cDNA (Trophozoite),VARPB26H ( ),Laboratory isolate DD2 Pf Ring stage var gene cDNA,VARPB22H ( ),VARPB31B ( ),VARPB35G ( ),VARPB42H ( ),VARPB53F ( ),Ugandan isolate UAM43 Pf var gene cDNA (Trophozoite),VARPB4H ( ),Plasmodium vivax,VARPB43G ( ),In vitro adapted parasite UAS41b Pf Ring stage var gene cDNA,PyBS (Asexual blood stages),Ugandan isolate UAM15 Pf var gene cDNA (Trophozoite),VARPB2D ( ),Plasmodium berghei midgut sporozoite,Plasmodium falciparum cDNA pUC8 Express Library (late erythrocytic-stage parasite mRNA),VARPB18F ( ),VARPB17G ( ),VARPB50H ( ),Plasmodium berghei erythrocytic schizont,Plasmodium berghei salivary grand sporozoite (salivary gland sporozoite),Plasmodium falciparum FcB1 schizont,VARPB3A ( ),VARPB48G ( ),VARPB55G ( ),VARPB40G ( ),VARPB42C ( ),Ugandan isolate UAM14 Pf var gene cDNA (Trophozoite),VARPB7G ( ),VARPB8C ( ),VARPB55C ( ),VARPB7A ( ),VARPB9C ( ),Blood stage Plasmodium falciparum cDNA library PfSau3a,Ugandan isolate UAM29 Pf var gene cDNA (Trophozoite),VARPB21H ( ),VARPB6D ( ),VARPB7F ( ),VARPB9B ( ),Ugandan isolate UAM28 Pf var gene cDNA (Trophozoite),VARPB14D ( ),VARPB23H ( ),Ugandan isolate UAS31 Pf var gene cDNA (Trophozoite),Ugandan isolate UKS1 Pf var gene cDNA (Trophozoite),VARPB13A ( ),Ugandan isolate UAS17 Pf var gene cDNA (Trophozoite),VARPB6G ( ),Field isolate cDNA library,Ugandan isolate UAS16 Pf var gene cDNA (Trophozoite),VARPB58D ( ),VARPB8H ( ),VARPB4A ( ),VARPB24D ( ),VARPB36D ( ),VARPB3H ( ),VARPB53A ( ),VARPB6H ( ),VARPB54B ( ),VARPB19B ( ),VARPB29E ( ),VARPB54G ( ),VARPB7H ( ),VARPB22C ( ),VARPB48E ( ),Trypanosoma cruzi CL Brener epimastigote,Leishmania infantum,Leishmania braziliensis amastigote stage; 72 hours post infection,Trypanosoma congolense isolate IL300 normalised metacyclic stage,TcAM (amastigote-like)' repeating='true'>
+<doc title='prompt'><![CDATA[EST Library]]></doc>
+<doc title='help'><![CDATA[Select a clone library.]]></doc>
+<doc title='default'><![CDATA[Entamoeba dispar,Entamoeba histolytica trophozoite,E. histolytica Normalized cDNA library,Entamoeba cDNA clone 6 (trophozoite),Entamoeba histolytica HM-1:IMSS,Entamoeba cDNA to mRNA (trophozoite),Entamoeba histolytica YS-27,Entamoeba histolytica,Entamoeba dispar cDNAs (trophozoite),Entamoeba histolytica HM-1:IMSS mRNA (Tomoo Tanaka) (trophozoite),WatanabeCpHNJ-1 (oocyst),Cryptosporidium muris,XCP Sugano cDNA library (sporozoite stage),uniZAPCpIOWAsporoLib3 (sporozoite),Cryptosporidium muris (strain RN66) cDNA library; stage oocyst,pSKIIminusCpIOWAsporoLib2 (sporozoite),C. parvum KSU-1 normalized sporozoite,Pooled Cryptosporidium parvum KSU-1 enriched 24-48hr post-infection; in-vitro non-normalized nano...,Cryptosporidium parvum,uniZAPCpIOWAsporoLib1 (sporozoite),Giardia lamblia trophozoite (Trophozoite),Giardia Assemblage A isolate WB,trophozoite cDNA,Encephalitozoon cuniculi,RACE-PCR products from Encephalitozoon cuniculi (Dormant spores),Laboratory isolate 3D7AH1 Pf Trophozoite stage var gene cDNA,VARPB11A ( ),VARPB13G ( ),VARPB18H ( ),VARPB19D ( ),VARPB27A ( ),Ugandan isolate UKS2 Pf var gene cDNA (Trophozoite),VARPB15E ( ),VARPB27B ( ),VARPB56F ( ),VARPB53G ( ),VARPB59D ( ),Laboratory isolate 7G8 Pf Ring stage var gene cDNA,VARPB19H ( ),Laboratory isolate FCR3s1.6 Pf Ring stage var gene cDNA,SSH library of Plasmodium berghei strain RQ (erythrocytic stage),VARPB56C ( ),Ugandan isolate UAS40 Pf var gene cDNA (Trophozoite),VARPB42F ( ),VARPB14A ( ),VARPB1D ( ),VARPB23F ( ),Ugandan isolate UAS22 Pf var gene cDNA (Trophozoite),VARPB16G ( ),VARPB3G ( ),VARPB57B ( ),VARPB32C ( ),VARPB18A ( ),VARPB4F ( ),VARPB54C ( ),Ugandan isolate UAM50 Pf var gene cDNA (Trophozoite),VARPB59A ( ),Blood stage Plasmodium falciparum cDNA library PFExtensions,VARPB34F ( ),VARPB26E ( ),VARPB5F ( ),Ugandan isolate UAS24 Pf var gene cDNA (Trophozoite),VARPB29B ( ),VARPB50G ( ),Laboratory isolate FCR3 Pf Trophozoite stage var gene cDNA,Ugandan isolate UAS06 Pf var gene cDNA (Trophozoite),VARPB55D ( ),In vitro adapted parasite UAS31b Pf Trophozoite stage var gene cDNA,Ugandan isolate UAM16 Pf var gene cDNA (Trophozoite),VARPB1H ( ),VARPB28A ( ),VARPB40H ( ),Ugandan isolate UKM64 Pf Ring stage var gene cDNA,VARPB9A ( ),Plasmodium berghei NK65 salivary gland sporozoite,WatanabePv,VARPB51A ( ),Laboratory isolate DD2 Pf Trophozoite stage var gene cDNA,Plasmodium berghei ookinete stage,VARPB22E ( ),VARPB8D ( ),XPF Sugano cDNA library (erythrocytic stage),VARPB59C ( ),Ugandan isolate UKS4 Pf var gene cDNA (Trophozoite),VARPB3C ( ),VARPB42D ( ),Ugandan isolate UKS47 Pf Ring stage var gene cDNA,VARPB27E ( ),VARPB51F ( ),VARPB21G ( ),Blood stage Plasmodium falciparum cDNA library PfSuOrig,Ugandan isolate UAM32 Pf var gene cDNA (Trophozoite),VARPB31G ( ),VARPB3D ( ),Ugandan isolate UAM25 Pf var gene cDNA (Trophozoite),VARPB58C ( ),VARPB31A ( ),VARPB51H ( ),VARPB6F ( ),VARPB28G ( ),VARPB60B ( ),Blood stage Plasmodium falciparum cDNA library PfBamH1,Laboratory isolate FCR3 Pf Ring stage var gene cDNA,Plasmodium yoelli 17X axenic hepatic stages,Ugandan isolate UAS36 Pf var gene cDNA (Trophozoite),Laboratory isolate 3D7AH1S.2 Pf Trophozoite stage var gene cDNA,Ugandan isolate UAS21 Pf var gene cDNA (Trophozoite),VARPB16A ( ),VARPB23G ( ),Ugandan isolate UAM27 Pf var gene cDNA (Trophozoite),VARPB26G ( ),VARPB29G ( ),Ugandan isolate UAS47 Pf var gene cDNA (Trophozoite),VARPB48B ( ),VARPB55F ( ),XPB Sugano cDNA library (erythrocytic stage),Ugandan isolate UAM39 Pf var gene cDNA (Trophozoite),VARPB48H ( ),Plasmodium falciparum,VARPB35H ( ),VARPB40E ( ),Ugandan isolate UKS12 Pf var gene cDNA (Trophozoite),Ugandan isolate UKM19 Pf Ring stage var gene cDNA,VARPB29C ( ),VARPB29H ( ),VARPB13C ( ),VARPB17D ( ),VARPB24A ( ),VARPB3F ( ),VARPB56H ( ),VARPB17A ( ),VARPB40F ( ),Ugandan isolate UAM49 Pf var gene cDNA (Trophozoite),Ugandan isolate UAS41 Pf var gene cDNA (Trophozoite),VARPB36H ( ),VARPB43H ( ),Ugandan isolate UAS13 Pf var gene cDNA (Trophozoite),Plasmodium berghei liver stage parasite,VARPB58B ( ),Plasmodium berghei,Ugandan isolate UAS12 Pf var gene cDNA (Trophozoite),Ugandan isolate UKM64 Pf Trophozoite stage var gene cDNA,VARPB47G ( ),VARPB26B ( ),In vitro adapted parasite UAS22b Pf Trophozoite stage var gene cDNA,VARPB53C ( ),VARPB32F ( ),VARPB43D ( ),VARPB5B ( ),VARPB25E ( ),VARPB56B ( ),PvBEcDNA (Assexual Blood Stages),Ugandan isolate UAM46 Pf var gene cDNA (Trophozoite),VARPB25B ( ),VARPB57C ( ),VARPB59B ( ),VARPB6A ( ),Laboratory isolate TM284 Pf Trophozoite stage var gene cDNA,Plasmodium falciparum 3D7 asexual cDNA,VARPB24E ( ),Ugandan isolate UAM08 Pf var gene cDNA (Trophozoite),Ugandan isolate UAS39 Pf var gene cDNA (Trophozoite),VARPB1C ( ),VARPB39E ( ),Ugandan isolate UAM47 Pf var gene cDNA (Trophozoite),Ugandan isolate UAM09 Pf var gene cDNA (Trophozoite),VARPB5A ( ),VARPB57A ( ),Ugandan isolate UAM34 Pf var gene cDNA (Trophozoite),VARPB20F ( ),VARPB50F ( ),Plasmodium berghei cDNA library,Ugandan isolate UKS14 Pf Ring stage var gene cDNA,VARPB13H ( ),VARPB4E ( ),VARPB54E ( ),Ugandan isolate UKM19 Pf Trophozoite stage var gene cDNA,VARPB48C ( ),VARPB20D ( ),VARPB3B ( ),VARPB31F ( ),In vitro adapted parasite UAM52b Pf Trophozoite stage var gene cDNA,VARPB48D ( ),VARPB59E ( ),VARPB39B ( ),VARPB39H ( ),VARPB43E ( ),Plasmodium yoelii yoelii from Anopheles stephensi midgut (oocyst),Sugano Malaria cDNA library (erythrocytic stage),Ugandan isolate UAS08 Pf var gene cDNA (Trophozoite),VARPB27F ( ),VARPB55H ( ),VARPB6E ( ),Ugandan isolate UAM12 Pf var gene cDNA (Trophozoite),Ugandan isolate UAM20 Pf var gene cDNA (Trophozoite),VARPB21E ( ),Ugandan isolate UAS20 Pf var gene cDNA (Trophozoite),VARPB7C ( ),Pb cDNA #17; Tommaso Pace; Marta Ponzi; and Clara Frontali (asynchronous blood stage),VARPB53H ( ),Ugandan isolate UAM53 Pf var gene cDNA (Trophozoite),WatanabePy17XL,VARPB54A ( ),XPV Sugano cDNA library (erythrocytic stage),In vitro adapted parasite UAS31b Pf Ring stage var gene cDNA,Ugandan isolate UKS7 Pf Trophozoite stage var gene cDNA,VARPB30A ( ),VARPB51G ( ),In vitro adapted parasite UAS41b Pf Trophozoite stage var gene cDNA,Ugandan isolate UAM23 Pf var gene cDNA (Trophozoite),VARPB25G ( ),VARPB25A ( ),VARPB54D ( ),Laboratory isolate FCR3s1.6 Pf Trophozoite stage var gene cDNA,VARPB41F ( ),VARPB5G ( ),czapPFDd2.1; Debopam Chakrabarti,VARPB22F ( ),VARPB8A ( ),Ugandan isolate UAM17 Pf var gene cDNA (Trophozoite),VARPB49H ( ),ookinete library (12 h; 18h and 24 h after in vitro culture),In vitro adapted parasite UAS29b Pf Ring stage var gene cDNA,VARPB2F ( ),Ugandan isolate UAS19 Pf var gene cDNA (Trophozoite),Ugandan isolate UAM36 Pf var gene cDNA (Trophozoite),VARPB23E ( ),VARPB28B ( ),Plasmodium berghei ookinete,Ugandan isolate UAS29 Pf var gene cDNA (Trophozoite),VARPB58A ( ),VARPB58G ( ),VARPB21B ( ),VARPB54H ( ),VARPB7B ( ),GenoScope Schizont enriched,Ugandan isolate UKS14 Pf Trophozoite stage var gene cDNA,VARPB7E ( ),VARPB8B ( ),Ugandan isolate UKS3 Pf Ring stage var gene cDNA,VARPB8F ( ),VARPB60A ( ),Ugandan isolate UAM05 Pf var gene cDNA (Trophozoite),Ugandan isolate UKS10 Pf var gene cDNA (Trophozoite),VARPB14C ( ),Ugandan isolate UAS10 Pf var gene cDNA (Trophozoite),VARPB42G ( ),VARPB35D ( ),Ugandan isolate UAS33 Pf var gene cDNA (Trophozoite),Ugandan isolate UAS37 Pf var gene cDNA (Trophozoite),Ugandan isolate UAS48 Pf var gene cDNA (Trophozoite),VARPB9H ( ),Ugandan isolate UKS17 Pf var gene cDNA (Trophozoite),VARPB22A ( ),VARPB4C ( ),VARPB5D ( ),VARPB22D ( ),VARPB2E ( ),VARPB35F ( ),VARPB47F ( ),VARPB53E ( ),VARPB2A ( ),cbsPfHB3.1; Debopam Chakrabarti,Ugandan isolate UAM33 Pf var gene cDNA (Trophozoite),VARPB20G ( ),VARPB3E ( ),Ugandan isolate UAS14 Pf var gene cDNA (Trophozoite),VARPB25C ( ),VARPB42B ( ),VARPB25F ( ),Ugandan isolate UAM48 Pf var gene cDNA (Trophozoite),VARPB22B ( ),WatanabePf3D7_cultured,XPYs Sugano cDNA library (erythrocytic stage),VARPB4D ( ),Ugandan isolate UAM13 Pf var gene cDNA (Trophozoite),VARPB11B ( ),VARPB1G ( ),VARPB56G ( ),Ugandan isolate UAS28 Pf var gene cDNA (Trophozoite),VARPB24G ( ),VARPB39G ( ),VARPB29A ( ),VARPB14B ( ),VARPB5E ( ),Ugandan isolate UAM38 Pf var gene cDNA (Trophozoite),VARPB43F ( ),VARPB58E ( ),Ugandan isolate UAS43 Pf var gene cDNA (Trophozoite),Ugandan isolate UAM21 Pf var gene cDNA (Trophozoite),Ugandan isolate UKS25 Pf var gene cDNA (Trophozoite),Ugandan isolate UKS3 Pf var gene cDNA (Trophozoite),VARPB39C ( ),VARPB48A ( ),Ugandan isolate UAS07 Pf var gene cDNA (Trophozoite),VARPB24B ( ),VARPB59F ( ),VARPB27H ( ),VARPB31D ( ),VARPB47E ( ),VARPB6B ( ),Ugandan isolate UKS14 Pf var gene cDNA (Trophozoite),VARPB53B ( ),VARPB43C ( ),XPYw Sugano cDNA library (erythrocytic stage),Laboratory isolate 7G8 Pf Trophozoite stage var gene cDNA,VARPB1E ( ),Plasmodium yoelii,VARPB23D ( ),VARPB55A ( ),VARPB8G ( ),VARPB36C ( ),VARPB56A ( ),VARPB58F ( ),Ugandan isolate UAM26 Pf var gene cDNA (Trophozoite),VARPB27G ( ),VARPB15C ( ),Plasmodium falciparum 3D7 gametocyte cDNA library (gametocyte (stage III-V)),Ugandan isolate UKS25 Pf Ring stage var gene cDNA,VARPB31H ( ),Laboratory isolate 3D7AH1 Pf Ring stage var gene cDNA,Ugandan isolate UAS03 Pf var gene cDNA (Trophozoite),VARPB26F ( ),Ugandan isolate UAS32 Pf var gene cDNA (Trophozoite),VARPB27C ( ),VARPB26D ( ),VARPB43B ( ),Ugandan isolate UAM18 Pf var gene cDNA (Trophozoite),VARPB4B ( ),Pb sgSpz/ooSpz subtraction library,Ugandan isolate UAS34 Pf var gene cDNA (Trophozoite),Ugandan isolate UKS5 Pf var gene cDNA (Trophozoite),VARPB24C ( ),VARPB6C ( ),VARPB56E ( ),Laboratory isolate 3D7AH1S.2 Pf Ring stage var gene cDNA,Ugandan isolate UKS7 Pf Ring stage var gene cDNA,VARPB59H ( ),SSH library of Plasmodium berghei strain K173 (erythrocytic stage),VARPB20B ( ),Ugandan isolate UAM44 Pf var gene cDNA (Trophozoite),VARPB27D ( ),VARPB40A ( ),VARPB5C ( ),VARPB60C ( ),Ugandan isolate UAS45 Pf var gene cDNA (Trophozoite),Ugandan isolate UAS18 Pf var gene cDNA (Trophozoite),Ugandan isolate UKS13 Pf var gene cDNA (Trophozoite),VARPB22G ( ),VARPB28C ( ),VARPB59G ( ),In vitro adapted parasite UAS29b Pf Trophozoite stage var gene cDNA,Ugandan isolate UAM11 Pf var gene cDNA (Trophozoite),VARPB51B ( ),VARPB58H ( ),Ugandan isolate UAS46 Pf var gene cDNA (Trophozoite),Ugandan isolate UAM22 Pf var gene cDNA (Trophozoite),Ugandan isolate UAS44 Pf var gene cDNA (Trophozoite),Zhang/Gardner Pf 3D7 mixed asexual (Asexual stage),Ugandan isolate UKS47 Pf Trophozoite stage var gene cDNA,VARPB39D ( ),Ugandan isolate UAM42 Pf var gene cDNA (Trophozoite),VARPB24H ( ),Nc-1 pZ Tachyzoite cDNA Library,TgME49cDNA (in vitro Bradyzoite; 6day),Toxoplasma gondii encystation; subtracted cDNA,TgZAP-cDNA1 (tachyzoite),Tg COUG Tachyzoite cDNA Library,Nc 1314 Tachyzoite cDNA,Toxoplasma gondii,TgRH Tachyzoite cDNA,TgRH Tachyzoite Norm 5 cDNA Library,TgRH Tachyzoite FL cDNA,TgVEG Fully sporulated oocyst cDNA (Fully sporulated oocysts),TgRH*-Tachyzoite cDNA,TgVEG118 Tachyzoite cDNA Library,TgME49 invivo Bradyzoite cDNA (in vitro Bradyzoite; 6day),Nc-1 Tachyzoite cDNA Library,Neospora caninum,TgME49 invivo Bradyzoite cDNA size selected,Nc-1 Tachyzoite cDNA Library 2,differentially expressed gene in tachyzoite stage of Neospora caninum Korea isolate Nc-Kr2 (Tachy...,TgRH Tachyzoite Norm 7 cDNA Library,Toxoplasma gondii mRNA (T.Koyama),TgVEG Partially sporulated oocyst cDNA (Partially sporulated oocysts),Neospora caninum Lambda Zap cDNA library,Toxoplasma gondii Tachyzoite Library (Tachyzoite developmental stage),Tg CAST Tachyzoite cDNA Library 2,WatanabeTgRH (tachyzoites),TgRHcDNA,TgVEG118 Tachyzoite cDNA Library-2,TgRH Tachyzoite Subtracted cDNA Library,TgMAS Tachyzoite cDNA Library,Nc-LIV Tachyzoite cDNA Library,Toxoplasma gondii Bradyzoite Library (Bradyzoite developmental stage),Tg CAST Tachyzoite cDNA Library,RH tachyzoite cDNA library,TgME49 3 day invitro bradyzoite,TgVEG-Tachyzoite cDNA,TgME49 B7 Tachyzoite cDNA Library 1,TgRH Tachyzoite Norm 1 cDNA Library,Nc-1Tachyzoite cDNA,TgME49 Tachyzoite cDNA,TgME49 B7 Tachyzoite cDNA Library 2,Low iron culture (TvLI),non-normalized T1 cDNA library,Cot6 normalized T1 cDNA library,Cot1000 normalized T1 cDNA library,HMW C1 cDNA library,Low glucose culture (TvLG),Normal unsynchronized culture (TvEST) (Unsynchronized culture),VEC-mediated cytoadherence (TvVEC) (Amoeboid stage),Fibronectin-mediated cytoadherence (TvFN) (Amoeboid stage),G2/M trophozoite (TvG2M) (G1/S phase),Trichomonas vaginalis,Cold-induced pseudocyst (TvCS) (Pseudocyst stage),Leishmania major Amastigote full length cDNA library,Stage-specific mRNA,Trypanosoma congolense,Trypanosoma brucei rhodesiense ZAP II library (Insect form),Leishmania major,Leishmania mexicana,Trypanosoma congolense isolate IL300 normalised bloodstream stage,Leishmania major Amastigote Lambda Zap II library,Trypanosoma cruzi Y (Tomoo Tanaka),Leishmania braziliensis,Trypanosoma brucei strain 927 ESTs,sucrose-gradient-F23 (promastigote),Leishmania braziliensis procyclic stage; logarithmic growth phase,Trypanosoma cruzi amastigote cDNA library,LmLV39cDNA,Trypanosoma cruzi,Differentially expressed Trypanosoma brucei mRNAs,T. cruzi epimastigote normalized cDNA Library,TcTR (trypomastigote),Bloodstream form of serodeme ILTat1.1,Trypanosoma congolense isolate IL300 metacyclic stage,T. Cruzi epimastigote normalised cDNA Library,SM-Lib-Tc Tehuantepec 17WTS,page (promastigote),Random insertions of transposon MosHYG in Leishmania major (promastigote),Trypanosoma congolense isolate IL300 bloodstream stage,TcT-E (trypomastigote),sucrose-gradient-F25 (promastigote),Leishmania major promastigote full length cDNA library from stationary stage (day 10),Trypanosoma congolense isolate IL300 epimastigote stage,T.cruzi epimastigote normalized cDNA Library,MVAT4 bloodstream form of serodeme WRATat1.1,T. cruzi epimastigote normalised cDNA Library,SM-Lib-Tc Y BZR,Trypanosoma brucei,SM-Lib-Tc Tehuantepec 17LER,Leishmania major promastigote full length cDNA library from early logarithmic stage (day 3),Leishmania major promastigote full length cDNA library from logarithmic stage (day 7),Trypanosoma cruzi differential display cDNA library,T.cruzi epimastigote non-normalized cDNA Library,Trypanosoma congolense isolate IL300 procyclic stage,VARPB4G ( ),Ugandan isolate UAS25 Pf var gene cDNA (Trophozoite),VARPB28F ( ),VARPB56D ( ),Ugandan isolate UAM31 Pf var gene cDNA (Trophozoite),Ugandan isolate UAM41 Pf var gene cDNA (Trophozoite),Ugandan isolate UKS5 Pf Ring stage var gene cDNA,VARPB28E ( ),VARPB49F ( ),Ugandan isolate UAM45 Pf var gene cDNA (Trophozoite),VARPB34H ( ),VARPB50E ( ),In vitro adapted parasite UAS22b Pf Ring stage var gene cDNA,Ugandan isolate UAS26 Pf var gene cDNA (Trophozoite),Ugandan isolate UAM40 Pf var gene cDNA (Trophozoite),Plasmodium yoelii sporozoite cDNA (sporozoites from salivary gland),VARPB13D ( ),VARPB1F ( ),VARPB21A ( ),Ugandan isolate UKS9 Pf var gene cDNA (Trophozoite),VARPB40D ( ),Pb cDNA #20; Charles Yowell and Jane Carlton (asynchronous blood stage),Ugandan isolate UAS23 Pf var gene cDNA (Trophozoite),VARPB34A ( ),VARPB53D ( ),Plasmodium yoelii liver stage LCM cDNA library (40 hour liver schizont),Ugandan isolate UKS15 Pf Ring stage var gene cDNA,Plasmodium berghei strain ANKA erythrocytic stage,Ugandan isolate UKS15 Pf var gene cDNA (Trophozoite),VARPB5H ( ),Ugandan isolate UAM37 Pf var gene cDNA (Trophozoite),Ugandan isolate UAM52 Pf var gene cDNA (Trophozoite),VARPB18C ( ),VARPB34E ( ),VARPB15A ( ),Ugandan isolate UAM51 Pf var gene cDNA (Trophozoite),VARPB7D ( ),VARPB23B ( ),VARPB55B ( ),VARPB29F ( ),Plasmodium falciparum NF54 (D.A.Fidock) (asynchronous asexual blood stage),Ugandan isolate UKS7 Pf var gene cDNA (Trophozoite),VARPB54F ( ),In vitro adapted parasite UAM52b Pf Ring stage var gene cDNA,Laboratory isolate TM284 Pf Ring stage var gene cDNA,Ugandan isolate UAS11 Pf var gene cDNA (Trophozoite),Plasmodium falciparum FCB1 schizont,Ugandan isolate UAM35 Pf var gene cDNA (Trophozoite),Ugandan isolate UAS27 Pf var gene cDNA (Trophozoite),Ugandan isolate UAS38 Pf var gene cDNA (Trophozoite),VARPB26H ( ),Laboratory isolate DD2 Pf Ring stage var gene cDNA,VARPB22H ( ),VARPB31B ( ),VARPB35G ( ),VARPB42H ( ),VARPB53F ( ),Ugandan isolate UAM43 Pf var gene cDNA (Trophozoite),VARPB4H ( ),Plasmodium vivax,VARPB43G ( ),In vitro adapted parasite UAS41b Pf Ring stage var gene cDNA,PyBS (Asexual blood stages),Ugandan isolate UAM15 Pf var gene cDNA (Trophozoite),VARPB2D ( ),Plasmodium berghei midgut sporozoite,Plasmodium falciparum cDNA pUC8 Express Library (late erythrocytic-stage parasite mRNA),VARPB18F ( ),VARPB17G ( ),VARPB50H ( ),Plasmodium berghei erythrocytic schizont,Plasmodium berghei salivary grand sporozoite (salivary gland sporozoite),Plasmodium falciparum FcB1 schizont,VARPB3A ( ),VARPB48G ( ),VARPB55G ( ),VARPB40G ( ),VARPB42C ( ),Ugandan isolate UAM14 Pf var gene cDNA (Trophozoite),VARPB7G ( ),VARPB8C ( ),VARPB55C ( ),VARPB7A ( ),VARPB9C ( ),Blood stage Plasmodium falciparum cDNA library PfSau3a,Ugandan isolate UAM29 Pf var gene cDNA (Trophozoite),VARPB21H ( ),VARPB6D ( ),VARPB7F ( ),VARPB9B ( ),Ugandan isolate UAM28 Pf var gene cDNA (Trophozoite),VARPB14D ( ),VARPB23H ( ),Ugandan isolate UAS31 Pf var gene cDNA (Trophozoite),Ugandan isolate UKS1 Pf var gene cDNA (Trophozoite),VARPB13A ( ),Ugandan isolate UAS17 Pf var gene cDNA (Trophozoite),VARPB6G ( ),Field isolate cDNA library,Ugandan isolate UAS16 Pf var gene cDNA (Trophozoite),VARPB58D ( ),VARPB8H ( ),VARPB4A ( ),VARPB24D ( ),VARPB36D ( ),VARPB3H ( ),VARPB53A ( ),VARPB6H ( ),VARPB54B ( ),VARPB19B ( ),VARPB29E ( ),VARPB54G ( ),VARPB7H ( ),VARPB22C ( ),VARPB48E ( ),Trypanosoma cruzi CL Brener epimastigote,Leishmania infantum,Leishmania braziliensis amastigote stage; 72 hours post infection,Trypanosoma congolense isolate IL300 normalised metacyclic stage,TcAM (amastigote-like)]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='Entamoeba dispar'><doc title='description'><![CDATA[Entamoeba dispar]]></doc></option>
+<option value='Entamoeba histolytica trophozoite'><doc title='description'><![CDATA[Entamoeba histolytica trophozoite]]></doc></option>
+<option value='E. histolytica Normalized cDNA library'><doc title='description'><![CDATA[E. histolytica Normalized cDNA library]]></doc></option>
+<option value='Entamoeba cDNA clone 6 (trophozoite)'><doc title='description'><![CDATA[Entamoeba cDNA clone 6 (trophozoite)]]></doc></option>
+<option value='Entamoeba histolytica HM-1:IMSS'><doc title='description'><![CDATA[Entamoeba histolytica HM-1:IMSS]]></doc></option>
+<option value='Entamoeba cDNA to mRNA (trophozoite)'><doc title='description'><![CDATA[Entamoeba cDNA to mRNA (trophozoite)]]></doc></option>
+<option value='Entamoeba histolytica YS-27'><doc title='description'><![CDATA[Entamoeba histolytica YS-27]]></doc></option>
+<option value='Entamoeba histolytica'><doc title='description'><![CDATA[Entamoeba histolytica]]></doc></option>
+<option value='Entamoeba dispar cDNAs (trophozoite)'><doc title='description'><![CDATA[Entamoeba dispar cDNAs (trophozoite)]]></doc></option>
+<option value='Entamoeba histolytica HM-1:IMSS mRNA (Tomoo Tanaka) (trophozoite)'><doc title='description'><![CDATA[Entamoeba histolytica HM-1:IMSS mRNA (Tomoo Tanaka) (trophozoite)]]></doc></option>
+<option value='WatanabeCpHNJ-1 (oocyst)'><doc title='description'><![CDATA[WatanabeCpHNJ-1 (oocyst)]]></doc></option>
+<option value='Cryptosporidium muris'><doc title='description'><![CDATA[Cryptosporidium muris]]></doc></option>
+<option value='XCP Sugano cDNA library (sporozoite stage)'><doc title='description'><![CDATA[XCP Sugano cDNA library (sporozoite stage)]]></doc></option>
+<option value='uniZAPCpIOWAsporoLib3 (sporozoite)'><doc title='description'><![CDATA[uniZAPCpIOWAsporoLib3 (sporozoite)]]></doc></option>
+<option value='Cryptosporidium muris (strain RN66) cDNA library; stage oocyst'><doc title='description'><![CDATA[Cryptosporidium muris (strain RN66) cDNA library; stage oocyst]]></doc></option>
+<option value='pSKIIminusCpIOWAsporoLib2 (sporozoite)'><doc title='description'><![CDATA[pSKIIminusCpIOWAsporoLib2 (sporozoite)]]></doc></option>
+<option value='C. parvum KSU-1 normalized sporozoite'><doc title='description'><![CDATA[C. parvum KSU-1 normalized sporozoite]]></doc></option>
+<option value='Pooled Cryptosporidium parvum KSU-1 enriched 24-48hr post-infection; in-vitro non-normalized nano...'><doc title='description'><![CDATA[Pooled Cryptosporidium parvum KSU-1 enriched 24-48hr post-infection; in-vitro non-normalized nano...]]></doc></option>
+<option value='Cryptosporidium parvum'><doc title='description'><![CDATA[Cryptosporidium parvum]]></doc></option>
+<option value='uniZAPCpIOWAsporoLib1 (sporozoite)'><doc title='description'><![CDATA[uniZAPCpIOWAsporoLib1 (sporozoite)]]></doc></option>
+<option value='Giardia lamblia trophozoite (Trophozoite)'><doc title='description'><![CDATA[Giardia lamblia trophozoite (Trophozoite)]]></doc></option>
+<option value='Giardia Assemblage A isolate WB'><doc title='description'><![CDATA[Giardia Assemblage A isolate WB]]></doc></option>
+<option value='trophozoite cDNA'><doc title='description'><![CDATA[trophozoite cDNA]]></doc></option>
+<option value='Encephalitozoon cuniculi'><doc title='description'><![CDATA[Encephalitozoon cuniculi]]></doc></option>
+<option value='RACE-PCR products from Encephalitozoon cuniculi (Dormant spores)'><doc title='description'><![CDATA[RACE-PCR products from Encephalitozoon cuniculi (Dormant spores)]]></doc></option>
+<option value='Laboratory isolate 3D7AH1 Pf Trophozoite stage var gene cDNA'><doc title='description'><![CDATA[Laboratory isolate 3D7AH1 Pf Trophozoite stage var gene cDNA]]></doc></option>
+<option value='VARPB11A ( )'><doc title='description'><![CDATA[VARPB11A ( )]]></doc></option>
+<option value='VARPB13G ( )'><doc title='description'><![CDATA[VARPB13G ( )]]></doc></option>
+<option value='VARPB18H ( )'><doc title='description'><![CDATA[VARPB18H ( )]]></doc></option>
+<option value='VARPB19D ( )'><doc title='description'><![CDATA[VARPB19D ( )]]></doc></option>
+<option value='VARPB27A ( )'><doc title='description'><![CDATA[VARPB27A ( )]]></doc></option>
+<option value='Ugandan isolate UKS2 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UKS2 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB15E ( )'><doc title='description'><![CDATA[VARPB15E ( )]]></doc></option>
+<option value='VARPB27B ( )'><doc title='description'><![CDATA[VARPB27B ( )]]></doc></option>
+<option value='VARPB56F ( )'><doc title='description'><![CDATA[VARPB56F ( )]]></doc></option>
+<option value='VARPB53G ( )'><doc title='description'><![CDATA[VARPB53G ( )]]></doc></option>
+<option value='VARPB59D ( )'><doc title='description'><![CDATA[VARPB59D ( )]]></doc></option>
+<option value='Laboratory isolate 7G8 Pf Ring stage var gene cDNA'><doc title='description'><![CDATA[Laboratory isolate 7G8 Pf Ring stage var gene cDNA]]></doc></option>
+<option value='VARPB19H ( )'><doc title='description'><![CDATA[VARPB19H ( )]]></doc></option>
+<option value='Laboratory isolate FCR3s1.6 Pf Ring stage var gene cDNA'><doc title='description'><![CDATA[Laboratory isolate FCR3s1.6 Pf Ring stage var gene cDNA]]></doc></option>
+<option value='SSH library of Plasmodium berghei strain RQ (erythrocytic stage)'><doc title='description'><![CDATA[SSH library of Plasmodium berghei strain RQ (erythrocytic stage)]]></doc></option>
+<option value='VARPB56C ( )'><doc title='description'><![CDATA[VARPB56C ( )]]></doc></option>
+<option value='Ugandan isolate UAS40 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS40 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB42F ( )'><doc title='description'><![CDATA[VARPB42F ( )]]></doc></option>
+<option value='VARPB14A ( )'><doc title='description'><![CDATA[VARPB14A ( )]]></doc></option>
+<option value='VARPB1D ( )'><doc title='description'><![CDATA[VARPB1D ( )]]></doc></option>
+<option value='VARPB23F ( )'><doc title='description'><![CDATA[VARPB23F ( )]]></doc></option>
+<option value='Ugandan isolate UAS22 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS22 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB16G ( )'><doc title='description'><![CDATA[VARPB16G ( )]]></doc></option>
+<option value='VARPB3G ( )'><doc title='description'><![CDATA[VARPB3G ( )]]></doc></option>
+<option value='VARPB57B ( )'><doc title='description'><![CDATA[VARPB57B ( )]]></doc></option>
+<option value='VARPB32C ( )'><doc title='description'><![CDATA[VARPB32C ( )]]></doc></option>
+<option value='VARPB18A ( )'><doc title='description'><![CDATA[VARPB18A ( )]]></doc></option>
+<option value='VARPB4F ( )'><doc title='description'><![CDATA[VARPB4F ( )]]></doc></option>
+<option value='VARPB54C ( )'><doc title='description'><![CDATA[VARPB54C ( )]]></doc></option>
+<option value='Ugandan isolate UAM50 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM50 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB59A ( )'><doc title='description'><![CDATA[VARPB59A ( )]]></doc></option>
+<option value='Blood stage Plasmodium falciparum cDNA library PFExtensions'><doc title='description'><![CDATA[Blood stage Plasmodium falciparum cDNA library PFExtensions]]></doc></option>
+<option value='VARPB34F ( )'><doc title='description'><![CDATA[VARPB34F ( )]]></doc></option>
+<option value='VARPB26E ( )'><doc title='description'><![CDATA[VARPB26E ( )]]></doc></option>
+<option value='VARPB5F ( )'><doc title='description'><![CDATA[VARPB5F ( )]]></doc></option>
+<option value='Ugandan isolate UAS24 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS24 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB29B ( )'><doc title='description'><![CDATA[VARPB29B ( )]]></doc></option>
+<option value='VARPB50G ( )'><doc title='description'><![CDATA[VARPB50G ( )]]></doc></option>
+<option value='Laboratory isolate FCR3 Pf Trophozoite stage var gene cDNA'><doc title='description'><![CDATA[Laboratory isolate FCR3 Pf Trophozoite stage var gene cDNA]]></doc></option>
+<option value='Ugandan isolate UAS06 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS06 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB55D ( )'><doc title='description'><![CDATA[VARPB55D ( )]]></doc></option>
+<option value='In vitro adapted parasite UAS31b Pf Trophozoite stage var gene cDNA'><doc title='description'><![CDATA[In vitro adapted parasite UAS31b Pf Trophozoite stage var gene cDNA]]></doc></option>
+<option value='Ugandan isolate UAM16 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM16 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB1H ( )'><doc title='description'><![CDATA[VARPB1H ( )]]></doc></option>
+<option value='VARPB28A ( )'><doc title='description'><![CDATA[VARPB28A ( )]]></doc></option>
+<option value='VARPB40H ( )'><doc title='description'><![CDATA[VARPB40H ( )]]></doc></option>
+<option value='Ugandan isolate UKM64 Pf Ring stage var gene cDNA'><doc title='description'><![CDATA[Ugandan isolate UKM64 Pf Ring stage var gene cDNA]]></doc></option>
+<option value='VARPB9A ( )'><doc title='description'><![CDATA[VARPB9A ( )]]></doc></option>
+<option value='Plasmodium berghei NK65 salivary gland sporozoite'><doc title='description'><![CDATA[Plasmodium berghei NK65 salivary gland sporozoite]]></doc></option>
+<option value='WatanabePv'><doc title='description'><![CDATA[WatanabePv]]></doc></option>
+<option value='VARPB51A ( )'><doc title='description'><![CDATA[VARPB51A ( )]]></doc></option>
+<option value='Laboratory isolate DD2 Pf Trophozoite stage var gene cDNA'><doc title='description'><![CDATA[Laboratory isolate DD2 Pf Trophozoite stage var gene cDNA]]></doc></option>
+<option value='Plasmodium berghei ookinete stage'><doc title='description'><![CDATA[Plasmodium berghei ookinete stage]]></doc></option>
+<option value='VARPB22E ( )'><doc title='description'><![CDATA[VARPB22E ( )]]></doc></option>
+<option value='VARPB8D ( )'><doc title='description'><![CDATA[VARPB8D ( )]]></doc></option>
+<option value='XPF Sugano cDNA library (erythrocytic stage)'><doc title='description'><![CDATA[XPF Sugano cDNA library (erythrocytic stage)]]></doc></option>
+<option value='VARPB59C ( )'><doc title='description'><![CDATA[VARPB59C ( )]]></doc></option>
+<option value='Ugandan isolate UKS4 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UKS4 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB3C ( )'><doc title='description'><![CDATA[VARPB3C ( )]]></doc></option>
+<option value='VARPB42D ( )'><doc title='description'><![CDATA[VARPB42D ( )]]></doc></option>
+<option value='Ugandan isolate UKS47 Pf Ring stage var gene cDNA'><doc title='description'><![CDATA[Ugandan isolate UKS47 Pf Ring stage var gene cDNA]]></doc></option>
+<option value='VARPB27E ( )'><doc title='description'><![CDATA[VARPB27E ( )]]></doc></option>
+<option value='VARPB51F ( )'><doc title='description'><![CDATA[VARPB51F ( )]]></doc></option>
+<option value='VARPB21G ( )'><doc title='description'><![CDATA[VARPB21G ( )]]></doc></option>
+<option value='Blood stage Plasmodium falciparum cDNA library PfSuOrig'><doc title='description'><![CDATA[Blood stage Plasmodium falciparum cDNA library PfSuOrig]]></doc></option>
+<option value='Ugandan isolate UAM32 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM32 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB31G ( )'><doc title='description'><![CDATA[VARPB31G ( )]]></doc></option>
+<option value='VARPB3D ( )'><doc title='description'><![CDATA[VARPB3D ( )]]></doc></option>
+<option value='Ugandan isolate UAM25 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM25 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB58C ( )'><doc title='description'><![CDATA[VARPB58C ( )]]></doc></option>
+<option value='VARPB31A ( )'><doc title='description'><![CDATA[VARPB31A ( )]]></doc></option>
+<option value='VARPB51H ( )'><doc title='description'><![CDATA[VARPB51H ( )]]></doc></option>
+<option value='VARPB6F ( )'><doc title='description'><![CDATA[VARPB6F ( )]]></doc></option>
+<option value='VARPB28G ( )'><doc title='description'><![CDATA[VARPB28G ( )]]></doc></option>
+<option value='VARPB60B ( )'><doc title='description'><![CDATA[VARPB60B ( )]]></doc></option>
+<option value='Blood stage Plasmodium falciparum cDNA library PfBamH1'><doc title='description'><![CDATA[Blood stage Plasmodium falciparum cDNA library PfBamH1]]></doc></option>
+<option value='Laboratory isolate FCR3 Pf Ring stage var gene cDNA'><doc title='description'><![CDATA[Laboratory isolate FCR3 Pf Ring stage var gene cDNA]]></doc></option>
+<option value='Plasmodium yoelli 17X axenic hepatic stages'><doc title='description'><![CDATA[Plasmodium yoelli 17X axenic hepatic stages]]></doc></option>
+<option value='Ugandan isolate UAS36 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS36 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Laboratory isolate 3D7AH1S.2 Pf Trophozoite stage var gene cDNA'><doc title='description'><![CDATA[Laboratory isolate 3D7AH1S.2 Pf Trophozoite stage var gene cDNA]]></doc></option>
+<option value='Ugandan isolate UAS21 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS21 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB16A ( )'><doc title='description'><![CDATA[VARPB16A ( )]]></doc></option>
+<option value='VARPB23G ( )'><doc title='description'><![CDATA[VARPB23G ( )]]></doc></option>
+<option value='Ugandan isolate UAM27 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM27 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB26G ( )'><doc title='description'><![CDATA[VARPB26G ( )]]></doc></option>
+<option value='VARPB29G ( )'><doc title='description'><![CDATA[VARPB29G ( )]]></doc></option>
+<option value='Ugandan isolate UAS47 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS47 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB48B ( )'><doc title='description'><![CDATA[VARPB48B ( )]]></doc></option>
+<option value='VARPB55F ( )'><doc title='description'><![CDATA[VARPB55F ( )]]></doc></option>
+<option value='XPB Sugano cDNA library (erythrocytic stage)'><doc title='description'><![CDATA[XPB Sugano cDNA library (erythrocytic stage)]]></doc></option>
+<option value='Ugandan isolate UAM39 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM39 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB48H ( )'><doc title='description'><![CDATA[VARPB48H ( )]]></doc></option>
+<option value='Plasmodium falciparum'><doc title='description'><![CDATA[Plasmodium falciparum]]></doc></option>
+<option value='VARPB35H ( )'><doc title='description'><![CDATA[VARPB35H ( )]]></doc></option>
+<option value='VARPB40E ( )'><doc title='description'><![CDATA[VARPB40E ( )]]></doc></option>
+<option value='Ugandan isolate UKS12 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UKS12 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Ugandan isolate UKM19 Pf Ring stage var gene cDNA'><doc title='description'><![CDATA[Ugandan isolate UKM19 Pf Ring stage var gene cDNA]]></doc></option>
+<option value='VARPB29C ( )'><doc title='description'><![CDATA[VARPB29C ( )]]></doc></option>
+<option value='VARPB29H ( )'><doc title='description'><![CDATA[VARPB29H ( )]]></doc></option>
+<option value='VARPB13C ( )'><doc title='description'><![CDATA[VARPB13C ( )]]></doc></option>
+<option value='VARPB17D ( )'><doc title='description'><![CDATA[VARPB17D ( )]]></doc></option>
+<option value='VARPB24A ( )'><doc title='description'><![CDATA[VARPB24A ( )]]></doc></option>
+<option value='VARPB3F ( )'><doc title='description'><![CDATA[VARPB3F ( )]]></doc></option>
+<option value='VARPB56H ( )'><doc title='description'><![CDATA[VARPB56H ( )]]></doc></option>
+<option value='VARPB17A ( )'><doc title='description'><![CDATA[VARPB17A ( )]]></doc></option>
+<option value='VARPB40F ( )'><doc title='description'><![CDATA[VARPB40F ( )]]></doc></option>
+<option value='Ugandan isolate UAM49 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM49 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Ugandan isolate UAS41 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS41 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB36H ( )'><doc title='description'><![CDATA[VARPB36H ( )]]></doc></option>
+<option value='VARPB43H ( )'><doc title='description'><![CDATA[VARPB43H ( )]]></doc></option>
+<option value='Ugandan isolate UAS13 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS13 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Plasmodium berghei liver stage parasite'><doc title='description'><![CDATA[Plasmodium berghei liver stage parasite]]></doc></option>
+<option value='VARPB58B ( )'><doc title='description'><![CDATA[VARPB58B ( )]]></doc></option>
+<option value='Plasmodium berghei'><doc title='description'><![CDATA[Plasmodium berghei]]></doc></option>
+<option value='Ugandan isolate UAS12 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS12 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Ugandan isolate UKM64 Pf Trophozoite stage var gene cDNA'><doc title='description'><![CDATA[Ugandan isolate UKM64 Pf Trophozoite stage var gene cDNA]]></doc></option>
+<option value='VARPB47G ( )'><doc title='description'><![CDATA[VARPB47G ( )]]></doc></option>
+<option value='VARPB26B ( )'><doc title='description'><![CDATA[VARPB26B ( )]]></doc></option>
+<option value='In vitro adapted parasite UAS22b Pf Trophozoite stage var gene cDNA'><doc title='description'><![CDATA[In vitro adapted parasite UAS22b Pf Trophozoite stage var gene cDNA]]></doc></option>
+<option value='VARPB53C ( )'><doc title='description'><![CDATA[VARPB53C ( )]]></doc></option>
+<option value='VARPB32F ( )'><doc title='description'><![CDATA[VARPB32F ( )]]></doc></option>
+<option value='VARPB43D ( )'><doc title='description'><![CDATA[VARPB43D ( )]]></doc></option>
+<option value='VARPB5B ( )'><doc title='description'><![CDATA[VARPB5B ( )]]></doc></option>
+<option value='VARPB25E ( )'><doc title='description'><![CDATA[VARPB25E ( )]]></doc></option>
+<option value='VARPB56B ( )'><doc title='description'><![CDATA[VARPB56B ( )]]></doc></option>
+<option value='PvBEcDNA (Assexual Blood Stages)'><doc title='description'><![CDATA[PvBEcDNA (Assexual Blood Stages)]]></doc></option>
+<option value='Ugandan isolate UAM46 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM46 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB25B ( )'><doc title='description'><![CDATA[VARPB25B ( )]]></doc></option>
+<option value='VARPB57C ( )'><doc title='description'><![CDATA[VARPB57C ( )]]></doc></option>
+<option value='VARPB59B ( )'><doc title='description'><![CDATA[VARPB59B ( )]]></doc></option>
+<option value='VARPB6A ( )'><doc title='description'><![CDATA[VARPB6A ( )]]></doc></option>
+<option value='Laboratory isolate TM284 Pf Trophozoite stage var gene cDNA'><doc title='description'><![CDATA[Laboratory isolate TM284 Pf Trophozoite stage var gene cDNA]]></doc></option>
+<option value='Plasmodium falciparum 3D7 asexual cDNA'><doc title='description'><![CDATA[Plasmodium falciparum 3D7 asexual cDNA]]></doc></option>
+<option value='VARPB24E ( )'><doc title='description'><![CDATA[VARPB24E ( )]]></doc></option>
+<option value='Ugandan isolate UAM08 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM08 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Ugandan isolate UAS39 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS39 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB1C ( )'><doc title='description'><![CDATA[VARPB1C ( )]]></doc></option>
+<option value='VARPB39E ( )'><doc title='description'><![CDATA[VARPB39E ( )]]></doc></option>
+<option value='Ugandan isolate UAM47 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM47 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Ugandan isolate UAM09 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM09 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB5A ( )'><doc title='description'><![CDATA[VARPB5A ( )]]></doc></option>
+<option value='VARPB57A ( )'><doc title='description'><![CDATA[VARPB57A ( )]]></doc></option>
+<option value='Ugandan isolate UAM34 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM34 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB20F ( )'><doc title='description'><![CDATA[VARPB20F ( )]]></doc></option>
+<option value='VARPB50F ( )'><doc title='description'><![CDATA[VARPB50F ( )]]></doc></option>
+<option value='Plasmodium berghei cDNA library'><doc title='description'><![CDATA[Plasmodium berghei cDNA library]]></doc></option>
+<option value='Ugandan isolate UKS14 Pf Ring stage var gene cDNA'><doc title='description'><![CDATA[Ugandan isolate UKS14 Pf Ring stage var gene cDNA]]></doc></option>
+<option value='VARPB13H ( )'><doc title='description'><![CDATA[VARPB13H ( )]]></doc></option>
+<option value='VARPB4E ( )'><doc title='description'><![CDATA[VARPB4E ( )]]></doc></option>
+<option value='VARPB54E ( )'><doc title='description'><![CDATA[VARPB54E ( )]]></doc></option>
+<option value='Ugandan isolate UKM19 Pf Trophozoite stage var gene cDNA'><doc title='description'><![CDATA[Ugandan isolate UKM19 Pf Trophozoite stage var gene cDNA]]></doc></option>
+<option value='VARPB48C ( )'><doc title='description'><![CDATA[VARPB48C ( )]]></doc></option>
+<option value='VARPB20D ( )'><doc title='description'><![CDATA[VARPB20D ( )]]></doc></option>
+<option value='VARPB3B ( )'><doc title='description'><![CDATA[VARPB3B ( )]]></doc></option>
+<option value='VARPB31F ( )'><doc title='description'><![CDATA[VARPB31F ( )]]></doc></option>
+<option value='In vitro adapted parasite UAM52b Pf Trophozoite stage var gene cDNA'><doc title='description'><![CDATA[In vitro adapted parasite UAM52b Pf Trophozoite stage var gene cDNA]]></doc></option>
+<option value='VARPB48D ( )'><doc title='description'><![CDATA[VARPB48D ( )]]></doc></option>
+<option value='VARPB59E ( )'><doc title='description'><![CDATA[VARPB59E ( )]]></doc></option>
+<option value='VARPB39B ( )'><doc title='description'><![CDATA[VARPB39B ( )]]></doc></option>
+<option value='VARPB39H ( )'><doc title='description'><![CDATA[VARPB39H ( )]]></doc></option>
+<option value='VARPB43E ( )'><doc title='description'><![CDATA[VARPB43E ( )]]></doc></option>
+<option value='Plasmodium yoelii yoelii from Anopheles stephensi midgut (oocyst)'><doc title='description'><![CDATA[Plasmodium yoelii yoelii from Anopheles stephensi midgut (oocyst)]]></doc></option>
+<option value='Sugano Malaria cDNA library (erythrocytic stage)'><doc title='description'><![CDATA[Sugano Malaria cDNA library (erythrocytic stage)]]></doc></option>
+<option value='Ugandan isolate UAS08 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS08 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB27F ( )'><doc title='description'><![CDATA[VARPB27F ( )]]></doc></option>
+<option value='VARPB55H ( )'><doc title='description'><![CDATA[VARPB55H ( )]]></doc></option>
+<option value='VARPB6E ( )'><doc title='description'><![CDATA[VARPB6E ( )]]></doc></option>
+<option value='Ugandan isolate UAM12 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM12 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Ugandan isolate UAM20 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM20 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB21E ( )'><doc title='description'><![CDATA[VARPB21E ( )]]></doc></option>
+<option value='Ugandan isolate UAS20 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS20 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB7C ( )'><doc title='description'><![CDATA[VARPB7C ( )]]></doc></option>
+<option value='Pb cDNA #17; Tommaso Pace; Marta Ponzi; and Clara Frontali (asynchronous blood stage)'><doc title='description'><![CDATA[Pb cDNA #17; Tommaso Pace; Marta Ponzi; and Clara Frontali (asynchronous blood stage)]]></doc></option>
+<option value='VARPB53H ( )'><doc title='description'><![CDATA[VARPB53H ( )]]></doc></option>
+<option value='Ugandan isolate UAM53 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM53 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='WatanabePy17XL'><doc title='description'><![CDATA[WatanabePy17XL]]></doc></option>
+<option value='VARPB54A ( )'><doc title='description'><![CDATA[VARPB54A ( )]]></doc></option>
+<option value='XPV Sugano cDNA library (erythrocytic stage)'><doc title='description'><![CDATA[XPV Sugano cDNA library (erythrocytic stage)]]></doc></option>
+<option value='In vitro adapted parasite UAS31b Pf Ring stage var gene cDNA'><doc title='description'><![CDATA[In vitro adapted parasite UAS31b Pf Ring stage var gene cDNA]]></doc></option>
+<option value='Ugandan isolate UKS7 Pf Trophozoite stage var gene cDNA'><doc title='description'><![CDATA[Ugandan isolate UKS7 Pf Trophozoite stage var gene cDNA]]></doc></option>
+<option value='VARPB30A ( )'><doc title='description'><![CDATA[VARPB30A ( )]]></doc></option>
+<option value='VARPB51G ( )'><doc title='description'><![CDATA[VARPB51G ( )]]></doc></option>
+<option value='In vitro adapted parasite UAS41b Pf Trophozoite stage var gene cDNA'><doc title='description'><![CDATA[In vitro adapted parasite UAS41b Pf Trophozoite stage var gene cDNA]]></doc></option>
+<option value='Ugandan isolate UAM23 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM23 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB25G ( )'><doc title='description'><![CDATA[VARPB25G ( )]]></doc></option>
+<option value='VARPB25A ( )'><doc title='description'><![CDATA[VARPB25A ( )]]></doc></option>
+<option value='VARPB54D ( )'><doc title='description'><![CDATA[VARPB54D ( )]]></doc></option>
+<option value='Laboratory isolate FCR3s1.6 Pf Trophozoite stage var gene cDNA'><doc title='description'><![CDATA[Laboratory isolate FCR3s1.6 Pf Trophozoite stage var gene cDNA]]></doc></option>
+<option value='VARPB41F ( )'><doc title='description'><![CDATA[VARPB41F ( )]]></doc></option>
+<option value='VARPB5G ( )'><doc title='description'><![CDATA[VARPB5G ( )]]></doc></option>
+<option value='czapPFDd2.1; Debopam Chakrabarti'><doc title='description'><![CDATA[czapPFDd2.1; Debopam Chakrabarti]]></doc></option>
+<option value='VARPB22F ( )'><doc title='description'><![CDATA[VARPB22F ( )]]></doc></option>
+<option value='VARPB8A ( )'><doc title='description'><![CDATA[VARPB8A ( )]]></doc></option>
+<option value='Ugandan isolate UAM17 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM17 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB49H ( )'><doc title='description'><![CDATA[VARPB49H ( )]]></doc></option>
+<option value='ookinete library (12 h; 18h and 24 h after in vitro culture)'><doc title='description'><![CDATA[ookinete library (12 h; 18h and 24 h after in vitro culture)]]></doc></option>
+<option value='In vitro adapted parasite UAS29b Pf Ring stage var gene cDNA'><doc title='description'><![CDATA[In vitro adapted parasite UAS29b Pf Ring stage var gene cDNA]]></doc></option>
+<option value='VARPB2F ( )'><doc title='description'><![CDATA[VARPB2F ( )]]></doc></option>
+<option value='Ugandan isolate UAS19 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS19 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Ugandan isolate UAM36 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM36 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB23E ( )'><doc title='description'><![CDATA[VARPB23E ( )]]></doc></option>
+<option value='VARPB28B ( )'><doc title='description'><![CDATA[VARPB28B ( )]]></doc></option>
+<option value='Plasmodium berghei ookinete'><doc title='description'><![CDATA[Plasmodium berghei ookinete]]></doc></option>
+<option value='Ugandan isolate UAS29 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS29 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB58A ( )'><doc title='description'><![CDATA[VARPB58A ( )]]></doc></option>
+<option value='VARPB58G ( )'><doc title='description'><![CDATA[VARPB58G ( )]]></doc></option>
+<option value='VARPB21B ( )'><doc title='description'><![CDATA[VARPB21B ( )]]></doc></option>
+<option value='VARPB54H ( )'><doc title='description'><![CDATA[VARPB54H ( )]]></doc></option>
+<option value='VARPB7B ( )'><doc title='description'><![CDATA[VARPB7B ( )]]></doc></option>
+<option value='GenoScope Schizont enriched'><doc title='description'><![CDATA[GenoScope Schizont enriched]]></doc></option>
+<option value='Ugandan isolate UKS14 Pf Trophozoite stage var gene cDNA'><doc title='description'><![CDATA[Ugandan isolate UKS14 Pf Trophozoite stage var gene cDNA]]></doc></option>
+<option value='VARPB7E ( )'><doc title='description'><![CDATA[VARPB7E ( )]]></doc></option>
+<option value='VARPB8B ( )'><doc title='description'><![CDATA[VARPB8B ( )]]></doc></option>
+<option value='Ugandan isolate UKS3 Pf Ring stage var gene cDNA'><doc title='description'><![CDATA[Ugandan isolate UKS3 Pf Ring stage var gene cDNA]]></doc></option>
+<option value='VARPB8F ( )'><doc title='description'><![CDATA[VARPB8F ( )]]></doc></option>
+<option value='VARPB60A ( )'><doc title='description'><![CDATA[VARPB60A ( )]]></doc></option>
+<option value='Ugandan isolate UAM05 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM05 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Ugandan isolate UKS10 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UKS10 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB14C ( )'><doc title='description'><![CDATA[VARPB14C ( )]]></doc></option>
+<option value='Ugandan isolate UAS10 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS10 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB42G ( )'><doc title='description'><![CDATA[VARPB42G ( )]]></doc></option>
+<option value='VARPB35D ( )'><doc title='description'><![CDATA[VARPB35D ( )]]></doc></option>
+<option value='Ugandan isolate UAS33 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS33 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Ugandan isolate UAS37 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS37 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Ugandan isolate UAS48 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS48 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB9H ( )'><doc title='description'><![CDATA[VARPB9H ( )]]></doc></option>
+<option value='Ugandan isolate UKS17 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UKS17 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB22A ( )'><doc title='description'><![CDATA[VARPB22A ( )]]></doc></option>
+<option value='VARPB4C ( )'><doc title='description'><![CDATA[VARPB4C ( )]]></doc></option>
+<option value='VARPB5D ( )'><doc title='description'><![CDATA[VARPB5D ( )]]></doc></option>
+<option value='VARPB22D ( )'><doc title='description'><![CDATA[VARPB22D ( )]]></doc></option>
+<option value='VARPB2E ( )'><doc title='description'><![CDATA[VARPB2E ( )]]></doc></option>
+<option value='VARPB35F ( )'><doc title='description'><![CDATA[VARPB35F ( )]]></doc></option>
+<option value='VARPB47F ( )'><doc title='description'><![CDATA[VARPB47F ( )]]></doc></option>
+<option value='VARPB53E ( )'><doc title='description'><![CDATA[VARPB53E ( )]]></doc></option>
+<option value='VARPB2A ( )'><doc title='description'><![CDATA[VARPB2A ( )]]></doc></option>
+<option value='cbsPfHB3.1; Debopam Chakrabarti'><doc title='description'><![CDATA[cbsPfHB3.1; Debopam Chakrabarti]]></doc></option>
+<option value='Ugandan isolate UAM33 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM33 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB20G ( )'><doc title='description'><![CDATA[VARPB20G ( )]]></doc></option>
+<option value='VARPB3E ( )'><doc title='description'><![CDATA[VARPB3E ( )]]></doc></option>
+<option value='Ugandan isolate UAS14 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS14 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB25C ( )'><doc title='description'><![CDATA[VARPB25C ( )]]></doc></option>
+<option value='VARPB42B ( )'><doc title='description'><![CDATA[VARPB42B ( )]]></doc></option>
+<option value='VARPB25F ( )'><doc title='description'><![CDATA[VARPB25F ( )]]></doc></option>
+<option value='Ugandan isolate UAM48 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM48 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB22B ( )'><doc title='description'><![CDATA[VARPB22B ( )]]></doc></option>
+<option value='WatanabePf3D7_cultured'><doc title='description'><![CDATA[WatanabePf3D7_cultured]]></doc></option>
+<option value='XPYs Sugano cDNA library (erythrocytic stage)'><doc title='description'><![CDATA[XPYs Sugano cDNA library (erythrocytic stage)]]></doc></option>
+<option value='VARPB4D ( )'><doc title='description'><![CDATA[VARPB4D ( )]]></doc></option>
+<option value='Ugandan isolate UAM13 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM13 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB11B ( )'><doc title='description'><![CDATA[VARPB11B ( )]]></doc></option>
+<option value='VARPB1G ( )'><doc title='description'><![CDATA[VARPB1G ( )]]></doc></option>
+<option value='VARPB56G ( )'><doc title='description'><![CDATA[VARPB56G ( )]]></doc></option>
+<option value='Ugandan isolate UAS28 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS28 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB24G ( )'><doc title='description'><![CDATA[VARPB24G ( )]]></doc></option>
+<option value='VARPB39G ( )'><doc title='description'><![CDATA[VARPB39G ( )]]></doc></option>
+<option value='VARPB29A ( )'><doc title='description'><![CDATA[VARPB29A ( )]]></doc></option>
+<option value='VARPB14B ( )'><doc title='description'><![CDATA[VARPB14B ( )]]></doc></option>
+<option value='VARPB5E ( )'><doc title='description'><![CDATA[VARPB5E ( )]]></doc></option>
+<option value='Ugandan isolate UAM38 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM38 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB43F ( )'><doc title='description'><![CDATA[VARPB43F ( )]]></doc></option>
+<option value='VARPB58E ( )'><doc title='description'><![CDATA[VARPB58E ( )]]></doc></option>
+<option value='Ugandan isolate UAS43 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS43 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Ugandan isolate UAM21 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM21 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Ugandan isolate UKS25 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UKS25 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Ugandan isolate UKS3 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UKS3 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB39C ( )'><doc title='description'><![CDATA[VARPB39C ( )]]></doc></option>
+<option value='VARPB48A ( )'><doc title='description'><![CDATA[VARPB48A ( )]]></doc></option>
+<option value='Ugandan isolate UAS07 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS07 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB24B ( )'><doc title='description'><![CDATA[VARPB24B ( )]]></doc></option>
+<option value='VARPB59F ( )'><doc title='description'><![CDATA[VARPB59F ( )]]></doc></option>
+<option value='VARPB27H ( )'><doc title='description'><![CDATA[VARPB27H ( )]]></doc></option>
+<option value='VARPB31D ( )'><doc title='description'><![CDATA[VARPB31D ( )]]></doc></option>
+<option value='VARPB47E ( )'><doc title='description'><![CDATA[VARPB47E ( )]]></doc></option>
+<option value='VARPB6B ( )'><doc title='description'><![CDATA[VARPB6B ( )]]></doc></option>
+<option value='Ugandan isolate UKS14 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UKS14 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB53B ( )'><doc title='description'><![CDATA[VARPB53B ( )]]></doc></option>
+<option value='VARPB43C ( )'><doc title='description'><![CDATA[VARPB43C ( )]]></doc></option>
+<option value='XPYw Sugano cDNA library (erythrocytic stage)'><doc title='description'><![CDATA[XPYw Sugano cDNA library (erythrocytic stage)]]></doc></option>
+<option value='Laboratory isolate 7G8 Pf Trophozoite stage var gene cDNA'><doc title='description'><![CDATA[Laboratory isolate 7G8 Pf Trophozoite stage var gene cDNA]]></doc></option>
+<option value='VARPB1E ( )'><doc title='description'><![CDATA[VARPB1E ( )]]></doc></option>
+<option value='Plasmodium yoelii'><doc title='description'><![CDATA[Plasmodium yoelii]]></doc></option>
+<option value='VARPB23D ( )'><doc title='description'><![CDATA[VARPB23D ( )]]></doc></option>
+<option value='VARPB55A ( )'><doc title='description'><![CDATA[VARPB55A ( )]]></doc></option>
+<option value='VARPB8G ( )'><doc title='description'><![CDATA[VARPB8G ( )]]></doc></option>
+<option value='VARPB36C ( )'><doc title='description'><![CDATA[VARPB36C ( )]]></doc></option>
+<option value='VARPB56A ( )'><doc title='description'><![CDATA[VARPB56A ( )]]></doc></option>
+<option value='VARPB58F ( )'><doc title='description'><![CDATA[VARPB58F ( )]]></doc></option>
+<option value='Ugandan isolate UAM26 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM26 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB27G ( )'><doc title='description'><![CDATA[VARPB27G ( )]]></doc></option>
+<option value='VARPB15C ( )'><doc title='description'><![CDATA[VARPB15C ( )]]></doc></option>
+<option value='Plasmodium falciparum 3D7 gametocyte cDNA library (gametocyte (stage III-V))'><doc title='description'><![CDATA[Plasmodium falciparum 3D7 gametocyte cDNA library (gametocyte (stage III-V))]]></doc></option>
+<option value='Ugandan isolate UKS25 Pf Ring stage var gene cDNA'><doc title='description'><![CDATA[Ugandan isolate UKS25 Pf Ring stage var gene cDNA]]></doc></option>
+<option value='VARPB31H ( )'><doc title='description'><![CDATA[VARPB31H ( )]]></doc></option>
+<option value='Laboratory isolate 3D7AH1 Pf Ring stage var gene cDNA'><doc title='description'><![CDATA[Laboratory isolate 3D7AH1 Pf Ring stage var gene cDNA]]></doc></option>
+<option value='Ugandan isolate UAS03 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS03 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB26F ( )'><doc title='description'><![CDATA[VARPB26F ( )]]></doc></option>
+<option value='Ugandan isolate UAS32 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS32 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB27C ( )'><doc title='description'><![CDATA[VARPB27C ( )]]></doc></option>
+<option value='VARPB26D ( )'><doc title='description'><![CDATA[VARPB26D ( )]]></doc></option>
+<option value='VARPB43B ( )'><doc title='description'><![CDATA[VARPB43B ( )]]></doc></option>
+<option value='Ugandan isolate UAM18 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM18 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB4B ( )'><doc title='description'><![CDATA[VARPB4B ( )]]></doc></option>
+<option value='Pb sgSpz/ooSpz subtraction library'><doc title='description'><![CDATA[Pb sgSpz/ooSpz subtraction library]]></doc></option>
+<option value='Ugandan isolate UAS34 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS34 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Ugandan isolate UKS5 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UKS5 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB24C ( )'><doc title='description'><![CDATA[VARPB24C ( )]]></doc></option>
+<option value='VARPB6C ( )'><doc title='description'><![CDATA[VARPB6C ( )]]></doc></option>
+<option value='VARPB56E ( )'><doc title='description'><![CDATA[VARPB56E ( )]]></doc></option>
+<option value='Laboratory isolate 3D7AH1S.2 Pf Ring stage var gene cDNA'><doc title='description'><![CDATA[Laboratory isolate 3D7AH1S.2 Pf Ring stage var gene cDNA]]></doc></option>
+<option value='Ugandan isolate UKS7 Pf Ring stage var gene cDNA'><doc title='description'><![CDATA[Ugandan isolate UKS7 Pf Ring stage var gene cDNA]]></doc></option>
+<option value='VARPB59H ( )'><doc title='description'><![CDATA[VARPB59H ( )]]></doc></option>
+<option value='SSH library of Plasmodium berghei strain K173 (erythrocytic stage)'><doc title='description'><![CDATA[SSH library of Plasmodium berghei strain K173 (erythrocytic stage)]]></doc></option>
+<option value='VARPB20B ( )'><doc title='description'><![CDATA[VARPB20B ( )]]></doc></option>
+<option value='Ugandan isolate UAM44 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM44 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB27D ( )'><doc title='description'><![CDATA[VARPB27D ( )]]></doc></option>
+<option value='VARPB40A ( )'><doc title='description'><![CDATA[VARPB40A ( )]]></doc></option>
+<option value='VARPB5C ( )'><doc title='description'><![CDATA[VARPB5C ( )]]></doc></option>
+<option value='VARPB60C ( )'><doc title='description'><![CDATA[VARPB60C ( )]]></doc></option>
+<option value='Ugandan isolate UAS45 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS45 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Ugandan isolate UAS18 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS18 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Ugandan isolate UKS13 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UKS13 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB22G ( )'><doc title='description'><![CDATA[VARPB22G ( )]]></doc></option>
+<option value='VARPB28C ( )'><doc title='description'><![CDATA[VARPB28C ( )]]></doc></option>
+<option value='VARPB59G ( )'><doc title='description'><![CDATA[VARPB59G ( )]]></doc></option>
+<option value='In vitro adapted parasite UAS29b Pf Trophozoite stage var gene cDNA'><doc title='description'><![CDATA[In vitro adapted parasite UAS29b Pf Trophozoite stage var gene cDNA]]></doc></option>
+<option value='Ugandan isolate UAM11 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM11 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB51B ( )'><doc title='description'><![CDATA[VARPB51B ( )]]></doc></option>
+<option value='VARPB58H ( )'><doc title='description'><![CDATA[VARPB58H ( )]]></doc></option>
+<option value='Ugandan isolate UAS46 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS46 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Ugandan isolate UAM22 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM22 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Ugandan isolate UAS44 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS44 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Zhang/Gardner Pf 3D7 mixed asexual (Asexual stage)'><doc title='description'><![CDATA[Zhang/Gardner Pf 3D7 mixed asexual (Asexual stage)]]></doc></option>
+<option value='Ugandan isolate UKS47 Pf Trophozoite stage var gene cDNA'><doc title='description'><![CDATA[Ugandan isolate UKS47 Pf Trophozoite stage var gene cDNA]]></doc></option>
+<option value='VARPB39D ( )'><doc title='description'><![CDATA[VARPB39D ( )]]></doc></option>
+<option value='Ugandan isolate UAM42 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM42 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB24H ( )'><doc title='description'><![CDATA[VARPB24H ( )]]></doc></option>
+<option value='Nc-1 pZ Tachyzoite cDNA Library'><doc title='description'><![CDATA[Nc-1 pZ Tachyzoite cDNA Library]]></doc></option>
+<option value='TgME49cDNA (in vitro Bradyzoite; 6day)'><doc title='description'><![CDATA[TgME49cDNA (in vitro Bradyzoite; 6day)]]></doc></option>
+<option value='Toxoplasma gondii encystation; subtracted cDNA'><doc title='description'><![CDATA[Toxoplasma gondii encystation; subtracted cDNA]]></doc></option>
+<option value='TgZAP-cDNA1 (tachyzoite)'><doc title='description'><![CDATA[TgZAP-cDNA1 (tachyzoite)]]></doc></option>
+<option value='Tg COUG Tachyzoite cDNA Library'><doc title='description'><![CDATA[Tg COUG Tachyzoite cDNA Library]]></doc></option>
+<option value='Nc 1314 Tachyzoite cDNA'><doc title='description'><![CDATA[Nc 1314 Tachyzoite cDNA]]></doc></option>
+<option value='Toxoplasma gondii'><doc title='description'><![CDATA[Toxoplasma gondii]]></doc></option>
+<option value='TgRH Tachyzoite cDNA'><doc title='description'><![CDATA[TgRH Tachyzoite cDNA]]></doc></option>
+<option value='TgRH Tachyzoite Norm 5 cDNA Library'><doc title='description'><![CDATA[TgRH Tachyzoite Norm 5 cDNA Library]]></doc></option>
+<option value='TgRH Tachyzoite FL cDNA'><doc title='description'><![CDATA[TgRH Tachyzoite FL cDNA]]></doc></option>
+<option value='TgVEG Fully sporulated oocyst cDNA (Fully sporulated oocysts)'><doc title='description'><![CDATA[TgVEG Fully sporulated oocyst cDNA (Fully sporulated oocysts)]]></doc></option>
+<option value='TgRH*-Tachyzoite cDNA'><doc title='description'><![CDATA[TgRH*-Tachyzoite cDNA]]></doc></option>
+<option value='TgVEG118 Tachyzoite cDNA Library'><doc title='description'><![CDATA[TgVEG118 Tachyzoite cDNA Library]]></doc></option>
+<option value='TgME49 invivo Bradyzoite cDNA (in vitro Bradyzoite; 6day)'><doc title='description'><![CDATA[TgME49 invivo Bradyzoite cDNA (in vitro Bradyzoite; 6day)]]></doc></option>
+<option value='Nc-1 Tachyzoite cDNA Library'><doc title='description'><![CDATA[Nc-1 Tachyzoite cDNA Library]]></doc></option>
+<option value='Neospora caninum'><doc title='description'><![CDATA[Neospora caninum]]></doc></option>
+<option value='TgME49 invivo Bradyzoite cDNA size selected'><doc title='description'><![CDATA[TgME49 invivo Bradyzoite cDNA size selected]]></doc></option>
+<option value='Nc-1 Tachyzoite cDNA Library 2'><doc title='description'><![CDATA[Nc-1 Tachyzoite cDNA Library 2]]></doc></option>
+<option value='differentially expressed gene in tachyzoite stage of Neospora caninum Korea isolate Nc-Kr2 (Tachy...'><doc title='description'><![CDATA[differentially expressed gene in tachyzoite stage of Neospora caninum Korea isolate Nc-Kr2 (Tachy...]]></doc></option>
+<option value='TgRH Tachyzoite Norm 7 cDNA Library'><doc title='description'><![CDATA[TgRH Tachyzoite Norm 7 cDNA Library]]></doc></option>
+<option value='Toxoplasma gondii mRNA (T.Koyama)'><doc title='description'><![CDATA[Toxoplasma gondii mRNA (T.Koyama)]]></doc></option>
+<option value='TgVEG Partially sporulated oocyst cDNA (Partially sporulated oocysts)'><doc title='description'><![CDATA[TgVEG Partially sporulated oocyst cDNA (Partially sporulated oocysts)]]></doc></option>
+<option value='Neospora caninum Lambda Zap cDNA library'><doc title='description'><![CDATA[Neospora caninum Lambda Zap cDNA library]]></doc></option>
+<option value='Toxoplasma gondii Tachyzoite Library (Tachyzoite developmental stage)'><doc title='description'><![CDATA[Toxoplasma gondii Tachyzoite Library (Tachyzoite developmental stage)]]></doc></option>
+<option value='Tg CAST Tachyzoite cDNA Library 2'><doc title='description'><![CDATA[Tg CAST Tachyzoite cDNA Library 2]]></doc></option>
+<option value='WatanabeTgRH (tachyzoites)'><doc title='description'><![CDATA[WatanabeTgRH (tachyzoites)]]></doc></option>
+<option value='TgRHcDNA'><doc title='description'><![CDATA[TgRHcDNA]]></doc></option>
+<option value='TgVEG118 Tachyzoite cDNA Library-2'><doc title='description'><![CDATA[TgVEG118 Tachyzoite cDNA Library-2]]></doc></option>
+<option value='TgRH Tachyzoite Subtracted cDNA Library'><doc title='description'><![CDATA[TgRH Tachyzoite Subtracted cDNA Library]]></doc></option>
+<option value='TgMAS Tachyzoite cDNA Library'><doc title='description'><![CDATA[TgMAS Tachyzoite cDNA Library]]></doc></option>
+<option value='Nc-LIV Tachyzoite cDNA Library'><doc title='description'><![CDATA[Nc-LIV Tachyzoite cDNA Library]]></doc></option>
+<option value='Toxoplasma gondii Bradyzoite Library (Bradyzoite developmental stage)'><doc title='description'><![CDATA[Toxoplasma gondii Bradyzoite Library (Bradyzoite developmental stage)]]></doc></option>
+<option value='Tg CAST Tachyzoite cDNA Library'><doc title='description'><![CDATA[Tg CAST Tachyzoite cDNA Library]]></doc></option>
+<option value='RH tachyzoite cDNA library'><doc title='description'><![CDATA[RH tachyzoite cDNA library]]></doc></option>
+<option value='TgME49 3 day invitro bradyzoite'><doc title='description'><![CDATA[TgME49 3 day invitro bradyzoite]]></doc></option>
+<option value='TgVEG-Tachyzoite cDNA'><doc title='description'><![CDATA[TgVEG-Tachyzoite cDNA]]></doc></option>
+<option value='TgME49 B7 Tachyzoite cDNA Library 1'><doc title='description'><![CDATA[TgME49 B7 Tachyzoite cDNA Library 1]]></doc></option>
+<option value='TgRH Tachyzoite Norm 1 cDNA Library'><doc title='description'><![CDATA[TgRH Tachyzoite Norm 1 cDNA Library]]></doc></option>
+<option value='Nc-1Tachyzoite cDNA'><doc title='description'><![CDATA[Nc-1Tachyzoite cDNA]]></doc></option>
+<option value='TgME49 Tachyzoite cDNA'><doc title='description'><![CDATA[TgME49 Tachyzoite cDNA]]></doc></option>
+<option value='TgME49 B7 Tachyzoite cDNA Library 2'><doc title='description'><![CDATA[TgME49 B7 Tachyzoite cDNA Library 2]]></doc></option>
+<option value='Low iron culture (TvLI)'><doc title='description'><![CDATA[Low iron culture (TvLI)]]></doc></option>
+<option value='non-normalized T1 cDNA library'><doc title='description'><![CDATA[non-normalized T1 cDNA library]]></doc></option>
+<option value='Cot6 normalized T1 cDNA library'><doc title='description'><![CDATA[Cot6 normalized T1 cDNA library]]></doc></option>
+<option value='Cot1000 normalized T1 cDNA library'><doc title='description'><![CDATA[Cot1000 normalized T1 cDNA library]]></doc></option>
+<option value='HMW C1 cDNA library'><doc title='description'><![CDATA[HMW C1 cDNA library]]></doc></option>
+<option value='Low glucose culture (TvLG)'><doc title='description'><![CDATA[Low glucose culture (TvLG)]]></doc></option>
+<option value='Normal unsynchronized culture (TvEST) (Unsynchronized culture)'><doc title='description'><![CDATA[Normal unsynchronized culture (TvEST) (Unsynchronized culture)]]></doc></option>
+<option value='VEC-mediated cytoadherence (TvVEC) (Amoeboid stage)'><doc title='description'><![CDATA[VEC-mediated cytoadherence (TvVEC) (Amoeboid stage)]]></doc></option>
+<option value='Fibronectin-mediated cytoadherence (TvFN) (Amoeboid stage)'><doc title='description'><![CDATA[Fibronectin-mediated cytoadherence (TvFN) (Amoeboid stage)]]></doc></option>
+<option value='G2/M trophozoite (TvG2M) (G1/S phase)'><doc title='description'><![CDATA[G2/M trophozoite (TvG2M) (G1/S phase)]]></doc></option>
+<option value='Trichomonas vaginalis'><doc title='description'><![CDATA[Trichomonas vaginalis]]></doc></option>
+<option value='Cold-induced pseudocyst (TvCS) (Pseudocyst stage)'><doc title='description'><![CDATA[Cold-induced pseudocyst (TvCS) (Pseudocyst stage)]]></doc></option>
+<option value='Leishmania major Amastigote full length cDNA library'><doc title='description'><![CDATA[Leishmania major Amastigote full length cDNA library]]></doc></option>
+<option value='Stage-specific mRNA'><doc title='description'><![CDATA[Stage-specific mRNA]]></doc></option>
+<option value='Trypanosoma congolense'><doc title='description'><![CDATA[Trypanosoma congolense]]></doc></option>
+<option value='Trypanosoma brucei rhodesiense ZAP II library (Insect form)'><doc title='description'><![CDATA[Trypanosoma brucei rhodesiense ZAP II library (Insect form)]]></doc></option>
+<option value='Leishmania major'><doc title='description'><![CDATA[Leishmania major]]></doc></option>
+<option value='Leishmania mexicana'><doc title='description'><![CDATA[Leishmania mexicana]]></doc></option>
+<option value='Trypanosoma congolense isolate IL300 normalised bloodstream stage'><doc title='description'><![CDATA[Trypanosoma congolense isolate IL300 normalised bloodstream stage]]></doc></option>
+<option value='Leishmania major Amastigote Lambda Zap II library'><doc title='description'><![CDATA[Leishmania major Amastigote Lambda Zap II library]]></doc></option>
+<option value='Trypanosoma cruzi Y (Tomoo Tanaka)'><doc title='description'><![CDATA[Trypanosoma cruzi Y (Tomoo Tanaka)]]></doc></option>
+<option value='Leishmania braziliensis'><doc title='description'><![CDATA[Leishmania braziliensis]]></doc></option>
+<option value='Trypanosoma brucei strain 927 ESTs'><doc title='description'><![CDATA[Trypanosoma brucei strain 927 ESTs]]></doc></option>
+<option value='sucrose-gradient-F23 (promastigote)'><doc title='description'><![CDATA[sucrose-gradient-F23 (promastigote)]]></doc></option>
+<option value='Leishmania braziliensis procyclic stage; logarithmic growth phase'><doc title='description'><![CDATA[Leishmania braziliensis procyclic stage; logarithmic growth phase]]></doc></option>
+<option value='Trypanosoma cruzi amastigote cDNA library'><doc title='description'><![CDATA[Trypanosoma cruzi amastigote cDNA library]]></doc></option>
+<option value='LmLV39cDNA'><doc title='description'><![CDATA[LmLV39cDNA]]></doc></option>
+<option value='Trypanosoma cruzi'><doc title='description'><![CDATA[Trypanosoma cruzi]]></doc></option>
+<option value='Differentially expressed Trypanosoma brucei mRNAs'><doc title='description'><![CDATA[Differentially expressed Trypanosoma brucei mRNAs]]></doc></option>
+<option value='T. cruzi epimastigote normalized cDNA Library'><doc title='description'><![CDATA[T. cruzi epimastigote normalized cDNA Library]]></doc></option>
+<option value='TcTR (trypomastigote)'><doc title='description'><![CDATA[TcTR (trypomastigote)]]></doc></option>
+<option value='Bloodstream form of serodeme ILTat1.1'><doc title='description'><![CDATA[Bloodstream form of serodeme ILTat1.1]]></doc></option>
+<option value='Trypanosoma congolense isolate IL300 metacyclic stage'><doc title='description'><![CDATA[Trypanosoma congolense isolate IL300 metacyclic stage]]></doc></option>
+<option value='T. Cruzi epimastigote normalised cDNA Library'><doc title='description'><![CDATA[T. Cruzi epimastigote normalised cDNA Library]]></doc></option>
+<option value='SM-Lib-Tc Tehuantepec 17WTS'><doc title='description'><![CDATA[SM-Lib-Tc Tehuantepec 17WTS]]></doc></option>
+<option value='page (promastigote)'><doc title='description'><![CDATA[page (promastigote)]]></doc></option>
+<option value='Random insertions of transposon MosHYG in Leishmania major (promastigote)'><doc title='description'><![CDATA[Random insertions of transposon MosHYG in Leishmania major (promastigote)]]></doc></option>
+<option value='Trypanosoma congolense isolate IL300 bloodstream stage'><doc title='description'><![CDATA[Trypanosoma congolense isolate IL300 bloodstream stage]]></doc></option>
+<option value='TcT-E (trypomastigote)'><doc title='description'><![CDATA[TcT-E (trypomastigote)]]></doc></option>
+<option value='sucrose-gradient-F25 (promastigote)'><doc title='description'><![CDATA[sucrose-gradient-F25 (promastigote)]]></doc></option>
+<option value='Leishmania major promastigote full length cDNA library from stationary stage (day 10)'><doc title='description'><![CDATA[Leishmania major promastigote full length cDNA library from stationary stage (day 10)]]></doc></option>
+<option value='Trypanosoma congolense isolate IL300 epimastigote stage'><doc title='description'><![CDATA[Trypanosoma congolense isolate IL300 epimastigote stage]]></doc></option>
+<option value='T.cruzi epimastigote normalized cDNA Library'><doc title='description'><![CDATA[T.cruzi epimastigote normalized cDNA Library]]></doc></option>
+<option value='MVAT4 bloodstream form of serodeme WRATat1.1'><doc title='description'><![CDATA[MVAT4 bloodstream form of serodeme WRATat1.1]]></doc></option>
+<option value='T. cruzi epimastigote normalised cDNA Library'><doc title='description'><![CDATA[T. cruzi epimastigote normalised cDNA Library]]></doc></option>
+<option value='SM-Lib-Tc Y BZR'><doc title='description'><![CDATA[SM-Lib-Tc Y BZR]]></doc></option>
+<option value='Trypanosoma brucei'><doc title='description'><![CDATA[Trypanosoma brucei]]></doc></option>
+<option value='SM-Lib-Tc Tehuantepec 17LER'><doc title='description'><![CDATA[SM-Lib-Tc Tehuantepec 17LER]]></doc></option>
+<option value='Leishmania major promastigote full length cDNA library from early logarithmic stage (day 3)'><doc title='description'><![CDATA[Leishmania major promastigote full length cDNA library from early logarithmic stage (day 3)]]></doc></option>
+<option value='Leishmania major promastigote full length cDNA library from logarithmic stage (day 7)'><doc title='description'><![CDATA[Leishmania major promastigote full length cDNA library from logarithmic stage (day 7)]]></doc></option>
+<option value='Trypanosoma cruzi differential display cDNA library'><doc title='description'><![CDATA[Trypanosoma cruzi differential display cDNA library]]></doc></option>
+<option value='T.cruzi epimastigote non-normalized cDNA Library'><doc title='description'><![CDATA[T.cruzi epimastigote non-normalized cDNA Library]]></doc></option>
+<option value='Trypanosoma congolense isolate IL300 procyclic stage'><doc title='description'><![CDATA[Trypanosoma congolense isolate IL300 procyclic stage]]></doc></option>
+<option value='VARPB4G ( )'><doc title='description'><![CDATA[VARPB4G ( )]]></doc></option>
+<option value='Ugandan isolate UAS25 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS25 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB28F ( )'><doc title='description'><![CDATA[VARPB28F ( )]]></doc></option>
+<option value='VARPB56D ( )'><doc title='description'><![CDATA[VARPB56D ( )]]></doc></option>
+<option value='Ugandan isolate UAM31 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM31 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Ugandan isolate UAM41 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM41 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Ugandan isolate UKS5 Pf Ring stage var gene cDNA'><doc title='description'><![CDATA[Ugandan isolate UKS5 Pf Ring stage var gene cDNA]]></doc></option>
+<option value='VARPB28E ( )'><doc title='description'><![CDATA[VARPB28E ( )]]></doc></option>
+<option value='VARPB49F ( )'><doc title='description'><![CDATA[VARPB49F ( )]]></doc></option>
+<option value='Ugandan isolate UAM45 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM45 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB34H ( )'><doc title='description'><![CDATA[VARPB34H ( )]]></doc></option>
+<option value='VARPB50E ( )'><doc title='description'><![CDATA[VARPB50E ( )]]></doc></option>
+<option value='In vitro adapted parasite UAS22b Pf Ring stage var gene cDNA'><doc title='description'><![CDATA[In vitro adapted parasite UAS22b Pf Ring stage var gene cDNA]]></doc></option>
+<option value='Ugandan isolate UAS26 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS26 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Ugandan isolate UAM40 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM40 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Plasmodium yoelii sporozoite cDNA (sporozoites from salivary gland)'><doc title='description'><![CDATA[Plasmodium yoelii sporozoite cDNA (sporozoites from salivary gland)]]></doc></option>
+<option value='VARPB13D ( )'><doc title='description'><![CDATA[VARPB13D ( )]]></doc></option>
+<option value='VARPB1F ( )'><doc title='description'><![CDATA[VARPB1F ( )]]></doc></option>
+<option value='VARPB21A ( )'><doc title='description'><![CDATA[VARPB21A ( )]]></doc></option>
+<option value='Ugandan isolate UKS9 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UKS9 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB40D ( )'><doc title='description'><![CDATA[VARPB40D ( )]]></doc></option>
+<option value='Pb cDNA #20; Charles Yowell and Jane Carlton (asynchronous blood stage)'><doc title='description'><![CDATA[Pb cDNA #20; Charles Yowell and Jane Carlton (asynchronous blood stage)]]></doc></option>
+<option value='Ugandan isolate UAS23 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS23 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB34A ( )'><doc title='description'><![CDATA[VARPB34A ( )]]></doc></option>
+<option value='VARPB53D ( )'><doc title='description'><![CDATA[VARPB53D ( )]]></doc></option>
+<option value='Plasmodium yoelii liver stage LCM cDNA library (40 hour liver schizont)'><doc title='description'><![CDATA[Plasmodium yoelii liver stage LCM cDNA library (40 hour liver schizont)]]></doc></option>
+<option value='Ugandan isolate UKS15 Pf Ring stage var gene cDNA'><doc title='description'><![CDATA[Ugandan isolate UKS15 Pf Ring stage var gene cDNA]]></doc></option>
+<option value='Plasmodium berghei strain ANKA erythrocytic stage'><doc title='description'><![CDATA[Plasmodium berghei strain ANKA erythrocytic stage]]></doc></option>
+<option value='Ugandan isolate UKS15 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UKS15 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB5H ( )'><doc title='description'><![CDATA[VARPB5H ( )]]></doc></option>
+<option value='Ugandan isolate UAM37 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM37 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Ugandan isolate UAM52 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM52 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB18C ( )'><doc title='description'><![CDATA[VARPB18C ( )]]></doc></option>
+<option value='VARPB34E ( )'><doc title='description'><![CDATA[VARPB34E ( )]]></doc></option>
+<option value='VARPB15A ( )'><doc title='description'><![CDATA[VARPB15A ( )]]></doc></option>
+<option value='Ugandan isolate UAM51 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM51 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB7D ( )'><doc title='description'><![CDATA[VARPB7D ( )]]></doc></option>
+<option value='VARPB23B ( )'><doc title='description'><![CDATA[VARPB23B ( )]]></doc></option>
+<option value='VARPB55B ( )'><doc title='description'><![CDATA[VARPB55B ( )]]></doc></option>
+<option value='VARPB29F ( )'><doc title='description'><![CDATA[VARPB29F ( )]]></doc></option>
+<option value='Plasmodium falciparum NF54 (D.A.Fidock) (asynchronous asexual blood stage)'><doc title='description'><![CDATA[Plasmodium falciparum NF54 (D.A.Fidock) (asynchronous asexual blood stage)]]></doc></option>
+<option value='Ugandan isolate UKS7 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UKS7 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB54F ( )'><doc title='description'><![CDATA[VARPB54F ( )]]></doc></option>
+<option value='In vitro adapted parasite UAM52b Pf Ring stage var gene cDNA'><doc title='description'><![CDATA[In vitro adapted parasite UAM52b Pf Ring stage var gene cDNA]]></doc></option>
+<option value='Laboratory isolate TM284 Pf Ring stage var gene cDNA'><doc title='description'><![CDATA[Laboratory isolate TM284 Pf Ring stage var gene cDNA]]></doc></option>
+<option value='Ugandan isolate UAS11 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS11 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Plasmodium falciparum FCB1 schizont'><doc title='description'><![CDATA[Plasmodium falciparum FCB1 schizont]]></doc></option>
+<option value='Ugandan isolate UAM35 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM35 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Ugandan isolate UAS27 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS27 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Ugandan isolate UAS38 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS38 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB26H ( )'><doc title='description'><![CDATA[VARPB26H ( )]]></doc></option>
+<option value='Laboratory isolate DD2 Pf Ring stage var gene cDNA'><doc title='description'><![CDATA[Laboratory isolate DD2 Pf Ring stage var gene cDNA]]></doc></option>
+<option value='VARPB22H ( )'><doc title='description'><![CDATA[VARPB22H ( )]]></doc></option>
+<option value='VARPB31B ( )'><doc title='description'><![CDATA[VARPB31B ( )]]></doc></option>
+<option value='VARPB35G ( )'><doc title='description'><![CDATA[VARPB35G ( )]]></doc></option>
+<option value='VARPB42H ( )'><doc title='description'><![CDATA[VARPB42H ( )]]></doc></option>
+<option value='VARPB53F ( )'><doc title='description'><![CDATA[VARPB53F ( )]]></doc></option>
+<option value='Ugandan isolate UAM43 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM43 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB4H ( )'><doc title='description'><![CDATA[VARPB4H ( )]]></doc></option>
+<option value='Plasmodium vivax'><doc title='description'><![CDATA[Plasmodium vivax]]></doc></option>
+<option value='VARPB43G ( )'><doc title='description'><![CDATA[VARPB43G ( )]]></doc></option>
+<option value='In vitro adapted parasite UAS41b Pf Ring stage var gene cDNA'><doc title='description'><![CDATA[In vitro adapted parasite UAS41b Pf Ring stage var gene cDNA]]></doc></option>
+<option value='PyBS (Asexual blood stages)'><doc title='description'><![CDATA[PyBS (Asexual blood stages)]]></doc></option>
+<option value='Ugandan isolate UAM15 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM15 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB2D ( )'><doc title='description'><![CDATA[VARPB2D ( )]]></doc></option>
+<option value='Plasmodium berghei midgut sporozoite'><doc title='description'><![CDATA[Plasmodium berghei midgut sporozoite]]></doc></option>
+<option value='Plasmodium falciparum cDNA pUC8 Express Library (late erythrocytic-stage parasite mRNA)'><doc title='description'><![CDATA[Plasmodium falciparum cDNA pUC8 Express Library (late erythrocytic-stage parasite mRNA)]]></doc></option>
+<option value='VARPB18F ( )'><doc title='description'><![CDATA[VARPB18F ( )]]></doc></option>
+<option value='VARPB17G ( )'><doc title='description'><![CDATA[VARPB17G ( )]]></doc></option>
+<option value='VARPB50H ( )'><doc title='description'><![CDATA[VARPB50H ( )]]></doc></option>
+<option value='Plasmodium berghei erythrocytic schizont'><doc title='description'><![CDATA[Plasmodium berghei erythrocytic schizont]]></doc></option>
+<option value='Plasmodium berghei salivary grand sporozoite (salivary gland sporozoite)'><doc title='description'><![CDATA[Plasmodium berghei salivary grand sporozoite (salivary gland sporozoite)]]></doc></option>
+<option value='Plasmodium falciparum FcB1 schizont'><doc title='description'><![CDATA[Plasmodium falciparum FcB1 schizont]]></doc></option>
+<option value='VARPB3A ( )'><doc title='description'><![CDATA[VARPB3A ( )]]></doc></option>
+<option value='VARPB48G ( )'><doc title='description'><![CDATA[VARPB48G ( )]]></doc></option>
+<option value='VARPB55G ( )'><doc title='description'><![CDATA[VARPB55G ( )]]></doc></option>
+<option value='VARPB40G ( )'><doc title='description'><![CDATA[VARPB40G ( )]]></doc></option>
+<option value='VARPB42C ( )'><doc title='description'><![CDATA[VARPB42C ( )]]></doc></option>
+<option value='Ugandan isolate UAM14 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM14 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB7G ( )'><doc title='description'><![CDATA[VARPB7G ( )]]></doc></option>
+<option value='VARPB8C ( )'><doc title='description'><![CDATA[VARPB8C ( )]]></doc></option>
+<option value='VARPB55C ( )'><doc title='description'><![CDATA[VARPB55C ( )]]></doc></option>
+<option value='VARPB7A ( )'><doc title='description'><![CDATA[VARPB7A ( )]]></doc></option>
+<option value='VARPB9C ( )'><doc title='description'><![CDATA[VARPB9C ( )]]></doc></option>
+<option value='Blood stage Plasmodium falciparum cDNA library PfSau3a'><doc title='description'><![CDATA[Blood stage Plasmodium falciparum cDNA library PfSau3a]]></doc></option>
+<option value='Ugandan isolate UAM29 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM29 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB21H ( )'><doc title='description'><![CDATA[VARPB21H ( )]]></doc></option>
+<option value='VARPB6D ( )'><doc title='description'><![CDATA[VARPB6D ( )]]></doc></option>
+<option value='VARPB7F ( )'><doc title='description'><![CDATA[VARPB7F ( )]]></doc></option>
+<option value='VARPB9B ( )'><doc title='description'><![CDATA[VARPB9B ( )]]></doc></option>
+<option value='Ugandan isolate UAM28 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAM28 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB14D ( )'><doc title='description'><![CDATA[VARPB14D ( )]]></doc></option>
+<option value='VARPB23H ( )'><doc title='description'><![CDATA[VARPB23H ( )]]></doc></option>
+<option value='Ugandan isolate UAS31 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS31 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='Ugandan isolate UKS1 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UKS1 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB13A ( )'><doc title='description'><![CDATA[VARPB13A ( )]]></doc></option>
+<option value='Ugandan isolate UAS17 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS17 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB6G ( )'><doc title='description'><![CDATA[VARPB6G ( )]]></doc></option>
+<option value='Field isolate cDNA library'><doc title='description'><![CDATA[Field isolate cDNA library]]></doc></option>
+<option value='Ugandan isolate UAS16 Pf var gene cDNA (Trophozoite)'><doc title='description'><![CDATA[Ugandan isolate UAS16 Pf var gene cDNA (Trophozoite)]]></doc></option>
+<option value='VARPB58D ( )'><doc title='description'><![CDATA[VARPB58D ( )]]></doc></option>
+<option value='VARPB8H ( )'><doc title='description'><![CDATA[VARPB8H ( )]]></doc></option>
+<option value='VARPB4A ( )'><doc title='description'><![CDATA[VARPB4A ( )]]></doc></option>
+<option value='VARPB24D ( )'><doc title='description'><![CDATA[VARPB24D ( )]]></doc></option>
+<option value='VARPB36D ( )'><doc title='description'><![CDATA[VARPB36D ( )]]></doc></option>
+<option value='VARPB3H ( )'><doc title='description'><![CDATA[VARPB3H ( )]]></doc></option>
+<option value='VARPB53A ( )'><doc title='description'><![CDATA[VARPB53A ( )]]></doc></option>
+<option value='VARPB6H ( )'><doc title='description'><![CDATA[VARPB6H ( )]]></doc></option>
+<option value='VARPB54B ( )'><doc title='description'><![CDATA[VARPB54B ( )]]></doc></option>
+<option value='VARPB19B ( )'><doc title='description'><![CDATA[VARPB19B ( )]]></doc></option>
+<option value='VARPB29E ( )'><doc title='description'><![CDATA[VARPB29E ( )]]></doc></option>
+<option value='VARPB54G ( )'><doc title='description'><![CDATA[VARPB54G ( )]]></doc></option>
+<option value='VARPB7H ( )'><doc title='description'><![CDATA[VARPB7H ( )]]></doc></option>
+<option value='VARPB22C ( )'><doc title='description'><![CDATA[VARPB22C ( )]]></doc></option>
+<option value='VARPB48E ( )'><doc title='description'><![CDATA[VARPB48E ( )]]></doc></option>
+<option value='Trypanosoma cruzi CL Brener epimastigote'><doc title='description'><![CDATA[Trypanosoma cruzi CL Brener epimastigote]]></doc></option>
+<option value='Leishmania infantum'><doc title='description'><![CDATA[Leishmania infantum]]></doc></option>
+<option value='Leishmania braziliensis amastigote stage; 72 hours post infection'><doc title='description'><![CDATA[Leishmania braziliensis amastigote stage; 72 hours post infection]]></doc></option>
+<option value='Trypanosoma congolense isolate IL300 normalised metacyclic stage'><doc title='description'><![CDATA[Trypanosoma congolense isolate IL300 normalised metacyclic stage]]></doc></option>
+<option value='TcAM (amastigote-like)'><doc title='description'><![CDATA[TcAM (amastigote-like)]]></doc></option>
+</param>
+<param name='max_number_best_alignments' type='xsd:string' required='false' default='1' >
+<doc title='prompt'><![CDATA[Maximum number of best alignments]]></doc>
+<doc title='help'><![CDATA[EST sequences can have two (or more) best alignments that have the same percent identity, length and score.  This parameter allows you to specify the maximum number of these best alignments that will be considered for any EST to be included in the query.  For example, if you specify 1 then all the ESTs that do not have a unique best alignment will be ignored in the query.]]></doc>
+<doc title='default'><![CDATA[1]]></doc>
+</param>
+<param name='min_number_est_aligned' type='xsd:string' required='true' default='1' >
+<doc title='prompt'><![CDATA[Number of ESTs aligned >=]]></doc>
+<doc title='help'><![CDATA[Enter the minimum number of ESTs that must align from the libraries selected to return a gene.]]></doc>
+<doc title='default'><![CDATA[1]]></doc>
+</param>
+<param name='bp_overlap_gte' type='xsd:string' required='true' default='100' >
+<doc title='prompt'><![CDATA[Base Overlap >=]]></doc>
+<doc title='help'><![CDATA[Overlap of expressed sequence tag (EST) alignments with annotated genes is a useful approach to verify gene predictions. In general, the specificity of this evidence is proportional to the overlap length.]]></doc>
+<doc title='default'><![CDATA[100]]></doc>
+</param>
+<param name='best_alignment_only' type='xsd:string' required='true' default='Yes' repeating='false'>
+<doc title='prompt'><![CDATA[Best alignments only]]></doc>
+<doc title='help'><![CDATA[Select yes to return only those EST alignments that are the best alignment for the EST.  Many of the ESTs align at multiple positions in the genome.  Selecting yes will consider only those alignments that are the best for each EST]]></doc>
+<doc title='default'><![CDATA[Yes]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='Yes'><doc title='description'><![CDATA[Yes]]></doc></option>
+<option value='No'><doc title='description'><![CDATA[No]]></doc></option>
+</param>
+<param name='high_confidence_only' type='xsd:string' required='true' default='No' repeating='false'>
+<doc title='prompt'><![CDATA[Consistent alignments only]]></doc>
+<doc title='help'><![CDATA[Select yes to return only those EST alignments that are consistent.  We define define consistent as having >= 95% identity (the majority have >= 99%) and aligning the EST sequence in a manner that is consistent with a gene model.  Ie, there can be gaps (representing introns) in the target genomic sequence but not in the EST query.]]></doc>
+<doc title='default'><![CDATA[No]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='No'><doc title='description'><![CDATA[No]]></doc></option>
+<option value='Yes'><doc title='description'><![CDATA[Yes]]></doc></option>
+</param>
+<param name='min_percent_identity' type='xsd:string' required='true' default='90' >
+<doc title='prompt'><![CDATA[Percent identity >=]]></doc>
+<doc title='help'><![CDATA[You can specify a minimum percent identity of the alignment between the EST and genomic DNA.  We only store alignments with >= 90% identity]]></doc>
+<doc title='default'><![CDATA[90]]></doc>
+</param>
+<param name='min_percent_est_aligned' type='xsd:string' required='true' default='20' >
+<doc title='prompt'><![CDATA[Percent of EST bases aligned >=]]></doc>
+<doc title='help'><![CDATA[Enter the minimum percentage of bases in the EST sequence that are aligned to genomic DNA in this alignment.]]></doc>
+<doc title='default'><![CDATA[20]]></doc>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Gene]]></doc></option>
+<option value='formatted_gene_id'><doc title='description'><![CDATA[Gene Group]]></doc></option>
+<option value='sequence_id'><doc title='description'><![CDATA[Genomic Sequence ID]]></doc></option>
+<option value='chromosome'><doc title='description'><![CDATA[Chromosome]]></doc></option>
+<option value='location_text'><doc title='description'><![CDATA[Genomic Location]]></doc></option>
+<option value='strand'><doc title='description'><![CDATA[Gene Strand]]></doc></option>
+<option value='gene_type'><doc title='description'><![CDATA[Gene Type]]></doc></option>
+<option value='exon_count'><doc title='description'><![CDATA[# Exons]]></doc></option>
+<option value='transcript_length'><doc title='description'><![CDATA[Transcript Length]]></doc></option>
+<option value='cds_length'><doc title='description'><![CDATA[CDS Length]]></doc></option>
+<option value='product'><doc title='description'><![CDATA[Product Description]]></doc></option>
+<option value='protein_length'><doc title='description'><![CDATA[Protein Length]]></doc></option>
+<option value='tm_count'><doc title='description'><![CDATA[# TM Domains]]></doc></option>
+<option value='molecular_weight'><doc title='description'><![CDATA[Molecular Weight]]></doc></option>
+<option value='isoelectric_point'><doc title='description'><![CDATA[Isoelectric Point]]></doc></option>
+<option value='ec_numbers_string'><doc title='description'><![CDATA[EC Numbers]]></doc></option>
+<option value='ortholog_number'><doc title='description'><![CDATA[Ortholog count]]></doc></option>
+<option value='paralog_number'><doc title='description'><![CDATA[Paralog count]]></doc></option>
+<option value='orthomcl_name'><doc title='description'><![CDATA[Ortholog Group]]></doc></option>
+<option value='signalp_scores'><doc title='description'><![CDATA[SignalP Scores]]></doc></option>
+<option value='signalp_peptide'><doc title='description'><![CDATA[SignalP Peptide]]></doc></option>
+<option value='ann_go_function'><doc title='description'><![CDATA[Annotated GO Function]]></doc></option>
+<option value='ann_go_process'><doc title='description'><![CDATA[Annotated GO Process]]></doc></option>
+<option value='ann_go_component'><doc title='description'><![CDATA[Annotated GO Component]]></doc></option>
+<option value='pred_go_function'><doc title='description'><![CDATA[Predicted GO Function]]></doc></option>
+<option value='pred_go_process'><doc title='description'><![CDATA[Predicted GO Process]]></doc></option>
+<option value='pred_go_component'><doc title='description'><![CDATA[Predicted GO Component]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='is_pseudo'><doc title='description'><![CDATA[Is Pseudo]]></doc></option>
+<option value='protein_sequence'><doc title='description'><![CDATA[Predicted Protein Sequence]]></doc></option>
+<option value='transcript_sequence'><doc title='description'><![CDATA[Predicted RNA/mRNA Sequence (introns spliced out)]]></doc></option>
+<option value='cds'><doc title='description'><![CDATA[Coding Sequence]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+<option value='number_of_ests'><doc title='description'><![CDATA[Number of ESTs]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+<option value='SNPs'><doc title='description'><![CDATA[SNPs Summary]]></doc></option>
+<option value='GeneModelDump'><doc title='description'><![CDATA[Gene Model]]></doc></option>
+<option value='InterPro'><doc title='description'><![CDATA[InterPro Domains]]></doc></option>
+<option value='TMHMM'><doc title='description'><![CDATA[Transmembrane Domains]]></doc></option>
+<option value='LowComplexity'><doc title='description'><![CDATA[Low Complexity Regions]]></doc></option>
+<option value='SignalP'><doc title='description'><![CDATA[Signal Peptide]]></doc></option>
+<option value='BlastP'><doc title='description'><![CDATA[BlastP Hits]]></doc></option>
+<option value='Genbank'><doc title='description'><![CDATA[Gene Location]]></doc></option>
+<option value='SageTags'><doc title='description'><![CDATA[Sage Tags]]></doc></option>
+<option value='Notes'><doc title='description'><![CDATA[Notes]]></doc></option>
+<option value='UserComments'><doc title='description'><![CDATA[User Comments]]></doc></option>
+<option value='CommunityExpComments'><doc title='description'><![CDATA[Community Annotations]]></doc></option>
+<option value='EcNumber'><doc title='description'><![CDATA[EC Number]]></doc></option>
+<option value='MassSpec'><doc title='description'><![CDATA[Mass Spec.-based Expression Evidence]]></doc></option>
+<option value='GoTerms'><doc title='description'><![CDATA[GO Terms]]></doc></option>
+<option value='Phenotype'><doc title='description'><![CDATA[Phenotype]]></doc></option>
+<option value='Y2hInteractions'><doc title='description'><![CDATA[Y2H Interactions]]></doc></option>
+<option value='Orthologs'><doc title='description'><![CDATA[Orthologs and Paralogs within EuPathDB]]></doc></option>
+<option value='MetabolicPathways'><doc title='description'><![CDATA[Metabolic Pathways]]></doc></option>
+<option value='TaskComments'><doc title='description'><![CDATA[Toxoplasma Genome Sequencing Project Annotation]]></doc></option>
+<option value='ArrayElements'><doc title='description'><![CDATA[Mapped Array Elements]]></doc></option>
+<option value='TwoChannelDiffExpr'><doc title='description'><![CDATA[P.Berghei Differential Expression - DOZI KO vs. WT]]></doc></option>
+<option value='ProteinExpression'><doc title='description'><![CDATA[P.Berghei Protein Expression]]></doc></option>
+<option value='Mr4Reagents'><doc title='description'><![CDATA[MR4 Reagents]]></doc></option>
+<option value='ProteinDatabase'><doc title='description'><![CDATA[Protein Linkouts]]></doc></option>
+<option value='GeneLinkouts'><doc title='description'><![CDATA[External Links]]></doc></option>
+<option value='3dPreds'><doc title='description'><![CDATA[3D Structure Predictions]]></doc></option>
+<option value='PdbSimilarities'><doc title='description'><![CDATA[Similarities to Protein Data Bank (PDB) Chains]]></doc></option>
+<option value='Epitopes'><doc title='description'><![CDATA[Epitopes from IEDB]]></doc></option>
+<option value='IsolateOverlap'><doc title='description'><![CDATA[Isolates]]></doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

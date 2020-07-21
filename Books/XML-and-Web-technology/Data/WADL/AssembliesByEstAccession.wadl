@@ -1,0 +1,66 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='AssemblyQuestions'>
+<resource path='AssembliesByEstAccession.xml'>
+<method href='#assembliesbyestaccession'/>
+</resource>
+<resource path='AssembliesByEstAccession.json'>
+<method href='#assembliesbyestaccession'/>
+</resource>
+<method name='POST' id='assembliesbyestaccession'>
+<doc title='display_name'><![CDATA[ID]]></doc>
+<doc title='summary'><![CDATA[Find EST Clusters by EST accession]]></doc>
+<doc title='description'><![CDATA[Find EST Assemblies by EST ID. Either enter the ID list manually, 
+           or upload a file that contains the list. IDs can be delimited by a comma, 
+           a semi colon, or any white spaces. Also, the list may contain IDs from any of the EuPathDB organisms.  For example, a list can be in the
+           following form: "AA420947, EV500870, AU087658"
+           NOTE:  You can query for ESTs directly by using the <a href="showQuestion.do?questionFullName=EstQuestions.EstBySourceId">EST By Accession Query</a>.]]></doc>
+<request>
+<param name='est_id' type='xsd:string' required='true' default='AU087658,AA009308,EV500870,AA420947,CV202103' >
+<doc title='prompt'><![CDATA[EST ID input set]]></doc>
+<doc title='help'><![CDATA[Input a comma delimited set of EST ids, or upload a file]]></doc>
+<doc title='default'><![CDATA[AU087658,AA009308,EV500870,AA420947,CV202103]]></doc>
+</param>
+<param name='signature' type='xsd:string' required='true' default='' >
+<doc title='prompt'><![CDATA[User Signature]]></doc>
+<doc title='help'><![CDATA[Used to pass the Users Signature to the component sites]]></doc>
+<doc title='default'><![CDATA[null]]></doc>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Assembly Id]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='organism_text'><doc title='description'><![CDATA[organism_text]]></doc></option>
+<option value='est_count'><doc title='description'><![CDATA[EST count]]></doc></option>
+<option value='a_count'><doc title='description'><![CDATA[A Count]]></doc></option>
+<option value='t_count'><doc title='description'><![CDATA[T Count]]></doc></option>
+<option value='c_count'><doc title='description'><![CDATA[C Count]]></doc></option>
+<option value='g_count'><doc title='description'><![CDATA[G Count]]></doc></option>
+<option value='other_count'><doc title='description'><![CDATA[Other Count]]></doc></option>
+<option value='length'><doc title='description'><![CDATA[Length]]></doc></option>
+<option value='sequence'><doc title='description'><![CDATA[Sequence]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

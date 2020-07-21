@@ -1,0 +1,192 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='IsolateQuestions'>
+<resource path='IsolateByRFLPGenotype.xml'>
+<method href='#isolatebyrflpgenotype'/>
+</resource>
+<resource path='IsolateByRFLPGenotype.json'>
+<method href='#isolatebyrflpgenotype'/>
+</resource>
+<method name='POST' id='isolatebyrflpgenotype'>
+<doc title='display_name'><![CDATA[RFLP Genotype]]></doc>
+<doc title='summary'><![CDATA[Find isolates by RFLP genotype.]]></doc>
+<doc title='description'><![CDATA[Find isolates by RFLP genotype (Chunlei Su).  You can view all RFLP Genotypes in tabular format <a href="showQuestion.do?questionFullName=IsolateQuestions.IsolateByGenotypeNumber">here</a>.  You can also view <a href="/Standards_gel_pics.pdf">RFLP images</a> in PDF format.]]></doc>
+<request>
+<param name='rflp_protein_SAG1' type='xsd:string' required='true' default='Don&apos;t Care' repeating='false'>
+<doc title='prompt'><![CDATA[Protein SAG1]]></doc>
+<doc title='help'><![CDATA[Protein SAG1]]></doc>
+<doc title='default'><![CDATA[Don't Care]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='Don&apos;t Care'><doc title='description'><![CDATA[Don't Care]]></doc></option>
+<option value='I'><doc title='description'><![CDATA[I]]></doc></option>
+<option value='II'><doc title='description'><![CDATA[II]]></doc></option>
+<option value='II or III'><doc title='description'><![CDATA[II or III]]></doc></option>
+<option value='u-1'><doc title='description'><![CDATA[u-1]]></doc></option>
+</param>
+<param name='rflp_protein_53_SAG2' type='xsd:string' required='true' default='Don&apos;t Care' repeating='false'>
+<doc title='prompt'><![CDATA[5'+3' SAG2]]></doc>
+<doc title='help'><![CDATA[5'+3' SAG2]]></doc>
+<doc title='default'><![CDATA[Don't Care]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='Don&apos;t Care'><doc title='description'><![CDATA[Don't Care]]></doc></option>
+<option value='I'><doc title='description'><![CDATA[I]]></doc></option>
+<option value='II'><doc title='description'><![CDATA[II]]></doc></option>
+<option value='III'><doc title='description'><![CDATA[III]]></doc></option>
+<option value='nd'><doc title='description'><![CDATA[nd]]></doc></option>
+</param>
+<param name='rflp_protein_alt_SAG2' type='xsd:string' required='true' default='Don&apos;t Care' repeating='false'>
+<doc title='prompt'><![CDATA[alt. SAG2]]></doc>
+<doc title='help'><![CDATA[alt. SAG2]]></doc>
+<doc title='default'><![CDATA[Don't Care]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='Don&apos;t Care'><doc title='description'><![CDATA[Don't Care]]></doc></option>
+<option value='I'><doc title='description'><![CDATA[I]]></doc></option>
+<option value='II'><doc title='description'><![CDATA[II]]></doc></option>
+<option value='III'><doc title='description'><![CDATA[III]]></doc></option>
+<option value='nd'><doc title='description'><![CDATA[nd]]></doc></option>
+</param>
+<param name='rflp_protein_SAG3' type='xsd:string' required='true' default='Don&apos;t Care' repeating='false'>
+<doc title='prompt'><![CDATA[SAG3]]></doc>
+<doc title='help'><![CDATA[SAG3]]></doc>
+<doc title='default'><![CDATA[Don't Care]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='Don&apos;t Care'><doc title='description'><![CDATA[Don't Care]]></doc></option>
+<option value='I'><doc title='description'><![CDATA[I]]></doc></option>
+<option value='II'><doc title='description'><![CDATA[II]]></doc></option>
+<option value='III'><doc title='description'><![CDATA[III]]></doc></option>
+</param>
+<param name='rflp_protein_BTUB' type='xsd:string' required='true' default='Don&apos;t Care' repeating='false'>
+<doc title='prompt'><![CDATA[BTUB]]></doc>
+<doc title='help'><![CDATA[BTUB]]></doc>
+<doc title='default'><![CDATA[Don't Care]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='Don&apos;t Care'><doc title='description'><![CDATA[Don't Care]]></doc></option>
+<option value='I'><doc title='description'><![CDATA[I]]></doc></option>
+<option value='II'><doc title='description'><![CDATA[II]]></doc></option>
+<option value='III'><doc title='description'><![CDATA[III]]></doc></option>
+</param>
+<param name='rflp_protein_GRA6' type='xsd:string' required='true' default='Don&apos;t Care' repeating='false'>
+<doc title='prompt'><![CDATA[GRA6]]></doc>
+<doc title='help'><![CDATA[GRA6]]></doc>
+<doc title='default'><![CDATA[Don't Care]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='Don&apos;t Care'><doc title='description'><![CDATA[Don't Care]]></doc></option>
+<option value='I'><doc title='description'><![CDATA[I]]></doc></option>
+<option value='II'><doc title='description'><![CDATA[II]]></doc></option>
+<option value='III'><doc title='description'><![CDATA[III]]></doc></option>
+</param>
+<param name='rflp_protein_c22-8' type='xsd:string' required='true' default='Don&apos;t Care' repeating='false'>
+<doc title='prompt'><![CDATA[c22-8]]></doc>
+<doc title='help'><![CDATA[c22-8]]></doc>
+<doc title='default'><![CDATA[Don't Care]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='Don&apos;t Care'><doc title='description'><![CDATA[Don't Care]]></doc></option>
+<option value='I'><doc title='description'><![CDATA[I]]></doc></option>
+<option value='II'><doc title='description'><![CDATA[II]]></doc></option>
+<option value='III'><doc title='description'><![CDATA[III]]></doc></option>
+<option value='u-1'><doc title='description'><![CDATA[u-1]]></doc></option>
+<option value='u-2'><doc title='description'><![CDATA[u-2]]></doc></option>
+</param>
+<param name='rflp_protein_c29-2' type='xsd:string' required='true' default='Don&apos;t Care' repeating='false'>
+<doc title='prompt'><![CDATA[c29-2]]></doc>
+<doc title='help'><![CDATA[c29-2]]></doc>
+<doc title='default'><![CDATA[Don't Care]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='Don&apos;t Care'><doc title='description'><![CDATA[Don't Care]]></doc></option>
+<option value='I'><doc title='description'><![CDATA[I]]></doc></option>
+<option value='II'><doc title='description'><![CDATA[II]]></doc></option>
+<option value='III'><doc title='description'><![CDATA[III]]></doc></option>
+<option value='nd'><doc title='description'><![CDATA[nd]]></doc></option>
+<option value='u-1'><doc title='description'><![CDATA[u-1]]></doc></option>
+</param>
+<param name='rflp_protein_L358' type='xsd:string' required='true' default='Don&apos;t Care' repeating='false'>
+<doc title='prompt'><![CDATA[L358]]></doc>
+<doc title='help'><![CDATA[L358]]></doc>
+<doc title='default'><![CDATA[Don't Care]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='Don&apos;t Care'><doc title='description'><![CDATA[Don't Care]]></doc></option>
+<option value='I'><doc title='description'><![CDATA[I]]></doc></option>
+<option value='II'><doc title='description'><![CDATA[II]]></doc></option>
+<option value='III'><doc title='description'><![CDATA[III]]></doc></option>
+</param>
+<param name='rflp_protein_PK1' type='xsd:string' required='true' default='Don&apos;t Care' repeating='false'>
+<doc title='prompt'><![CDATA[PK1]]></doc>
+<doc title='help'><![CDATA[PK1]]></doc>
+<doc title='default'><![CDATA[Don't Care]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='Don&apos;t Care'><doc title='description'><![CDATA[Don't Care]]></doc></option>
+<option value='I'><doc title='description'><![CDATA[I]]></doc></option>
+<option value='II'><doc title='description'><![CDATA[II]]></doc></option>
+<option value='III'><doc title='description'><![CDATA[III]]></doc></option>
+<option value='nd'><doc title='description'><![CDATA[nd]]></doc></option>
+<option value='u-1'><doc title='description'><![CDATA[u-1]]></doc></option>
+<option value='u-2'><doc title='description'><![CDATA[u-2]]></doc></option>
+<option value='u-3'><doc title='description'><![CDATA[u-3]]></doc></option>
+</param>
+<param name='rflp_protein_Apico' type='xsd:string' required='true' default='Don&apos;t Care' repeating='false'>
+<doc title='prompt'><![CDATA[Apico]]></doc>
+<doc title='help'><![CDATA[Apico]]></doc>
+<doc title='default'><![CDATA[Don't Care]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='Don&apos;t Care'><doc title='description'><![CDATA[Don't Care]]></doc></option>
+<option value='I'><doc title='description'><![CDATA[I]]></doc></option>
+<option value='II'><doc title='description'><![CDATA[II]]></doc></option>
+<option value='III'><doc title='description'><![CDATA[III]]></doc></option>
+<option value='nd'><doc title='description'><![CDATA[nd]]></doc></option>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Isolate Id]]></doc></option>
+<option value='pcr_primers'><doc title='description'><![CDATA[PCR primer]]></doc></option>
+<option value='country'><doc title='description'><![CDATA[Country]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='strain'><doc title='description'><![CDATA[Strain]]></doc></option>
+<option value='specific_host'><doc title='description'><![CDATA[Host]]></doc></option>
+<option value='isolation_source'><doc title='description'><![CDATA[Isolation Source]]></doc></option>
+<option value='description'><doc title='description'><![CDATA[Description]]></doc></option>
+<option value='note'><doc title='description'><![CDATA[Note]]></doc></option>
+<option value='product'><doc title='description'><![CDATA[Isolate Product]]></doc></option>
+<option value='data_type'><doc title='description'><![CDATA[Isolate Type]]></doc></option>
+<option value='collected_by'><doc title='description'><![CDATA[Collected By]]></doc></option>
+<option value='length'><doc title='description'><![CDATA[Length]]></doc></option>
+<option value='external_db_name'><doc title='description'><![CDATA[External DB Name]]></doc></option>
+<option value='external_db_version'><doc title='description'><![CDATA[External DB Version]]></doc></option>
+<option value='sequence'><doc title='description'><![CDATA[DNA Sequence]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+<option value='gene_type'><doc title='description'><![CDATA[Type]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+<option value='Reference'><doc title='description'><![CDATA[Reference]]></doc></option>
+<option value='GeneOverlap'><doc title='description'><![CDATA[Blast Similarity Alignments and Overlapping Genes]]></doc></option>
+<option value='IsolateComments'><doc title='description'><![CDATA[User Comments]]></doc></option>
+<option value='ProteinSequence'><doc title='description'><![CDATA[Protein Sequence]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='description'><doc title='description'><![CDATA[Description]]></doc></option>
+<option value='product'><doc title='description'><![CDATA[Product]]></doc></option>
+<option value='host'><doc title='description'><![CDATA[Host]]></doc></option>
+<option value='note'><doc title='description'><![CDATA[Note]]></doc></option>
+<option value='isolation_source'><doc title='description'><![CDATA[Isolation Source]]></doc></option>
+<option value='geographic_location'><doc title='description'><![CDATA[Geographic Location]]></doc></option>
+<option value='SNP'><doc title='description'><![CDATA[Isolates SNP Features]]></doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

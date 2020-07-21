@@ -1,0 +1,392 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='GeneQuestions'>
+<resource path='GenesByMetabolicPathway.xml'>
+<method href='#genesbymetabolicpathway'/>
+</resource>
+<resource path='GenesByMetabolicPathway.json'>
+<method href='#genesbymetabolicpathway'/>
+</resource>
+<method name='POST' id='genesbymetabolicpathway'>
+<doc title='display_name'><![CDATA[Metabolic Pathway]]></doc>
+<doc title='summary'><![CDATA[Find genes involved in a specific metabolic pathway.]]></doc>
+<doc title='description'><![CDATA[Find genes involved in a specific metabolic pathway. 
+          <br><br>
+
+         Maps of Metabolic Pathways were constructed as described on the Malaria Parasite Metabolic Pathways website
+            <a href="http://sites.huji.ac.il/malaria/FramIntroduction.html">here</a> .<br>
+         Metabolic Pathway Reconstruction  for <i> T. gondii</i> is
+            available on the KEGG Pathway site
+            <a href="http://eupathdb.org/common/KEGGpathways/">here</a>.]]></doc>
+<request>
+<param name='organism' type='xsd:string' required='true' default='Plasmodium falciparum,Toxoplasma gondii' repeating='true'>
+<doc title='prompt'><![CDATA[Organism]]></doc>
+<doc title='help'><![CDATA[Organism]]></doc>
+<doc title='default'><![CDATA[Plasmodium falciparum,Toxoplasma gondii]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='Plasmodium falciparum'><doc title='description'><![CDATA[Plasmodium falciparum]]></doc></option>
+<option value='Toxoplasma gondii'><doc title='description'><![CDATA[Toxoplasma gondii]]></doc></option>
+</param>
+<param name='metabolic_pathway' type='xsd:string' required='true' default='chrom_lands' repeating='false'>
+<doc title='prompt'><![CDATA[Metabolic Pathway]]></doc>
+<doc title='help'><![CDATA[Results will be sorted ascending or descending order]]></doc>
+<doc title='default'><![CDATA[chrom_lands]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='chrom_lands'><doc title='description'><![CDATA[Plasmodium falciparum chromatin landscape]]></doc></option>
+<option value='porphyrinmetpath'><doc title='description'><![CDATA[Porphyrin metabolism]]></doc></option>
+<option value='SUMOylation'><doc title='description'><![CDATA[Post-translational modification -SUMOylation]]></doc></option>
+<option value='elongat_f2'><doc title='description'><![CDATA[Post-translational modification of elongation factor 2]]></doc></option>
+<option value='eukaryotes'><doc title='description'><![CDATA[Posttranslational translocation in eukaryotes]]></doc></option>
+<option value='replicationForm'><doc title='description'><![CDATA[Pre-replicative complex formation and transition to replication]]></doc></option>
+<option value='ProteasomeMeditated'><doc title='description'><![CDATA[Proteasome-mediated degradation of non-native ER proteins]]></doc></option>
+<option value='proteaUbiqpath'><doc title='description'><![CDATA[Proteasome-mediated proteolysis of ubiquinated proteins]]></doc></option>
+<option value='arginine'><doc title='description'><![CDATA[Protein arginine methylation]]></doc></option>
+<option value='proteinBiosynth'><doc title='description'><![CDATA[Protein biosynthesis]]></doc></option>
+<option value='Protein_kinases'><doc title='description'><![CDATA[Protein kinase coding genes]]></doc></option>
+<option value='phosphorylation'><doc title='description'><![CDATA[Protein phosphorylation]]></doc></option>
+<option value='protProphase'><doc title='description'><![CDATA[Proteins involved in steps during passage through prophase]]></doc></option>
+<option value='protER'><doc title='description'><![CDATA[Proteins with ER retention sequences]]></doc></option>
+<option value='purinemetpath'><doc title='description'><![CDATA[Purine metabolism]]></doc></option>
+<option value='organizKinetochore'><doc title='description'><![CDATA[Putative organization of the kinetochore]]></doc></option>
+<option value='vitaminB6metpath'><doc title='description'><![CDATA[Pyridoxal phosphate (Vitamin B6) metabolism]]></doc></option>
+<option value='pyrimidinemetpath'><doc title='description'><![CDATA[Pyrimidine metabolism]]></doc></option>
+<option value='pyruvatemetpath'><doc title='description'><![CDATA[Pyruvate metabolism]]></doc></option>
+<option value='RNApolyI'><doc title='description'><![CDATA[RNA polymerase I transcribes rRNA]]></doc></option>
+<option value='RNApolyII'><doc title='description'><![CDATA[RNA polymerase II transcribes mRNA]]></doc></option>
+<option value='RNApolyIII'><doc title='description'><![CDATA[RNA polymerase III transcribes tRNA and 5S rRNA]]></doc></option>
+<option value='rabCycle'><doc title='description'><![CDATA[Rab cycle]]></doc></option>
+<option value='rabIntracellular'><doc title='description'><![CDATA[Rab proteins in intracellular traffic]]></doc></option>
+<option value='redoxmetpath'><doc title='description'><![CDATA[Redox metabolism]]></doc></option>
+<option value='redoxReg'><doc title='description'><![CDATA[Redox regulation of proteins]]></doc></option>
+<option value='microtubuleDynam'><doc title='description'><![CDATA[Regulation of spindle microtubule dynamics]]></doc></option>
+<option value='riboflavin'><doc title='description'><![CDATA[Riboflavin metabolism]]></doc></option>
+<option value='ribosomeStruct'><doc title='description'><![CDATA[Ribosomal structure]]></doc></option>
+<option value='rosetting'><doc title='description'><![CDATA[Rosette formation between normal and infected RBC]]></doc></option>
+<option value='SCF'><doc title='description'><![CDATA[SCF (Skp1-Cullin-F-box) ubiquitin ligase]]></doc></option>
+<option value='selenocysteine'><doc title='description'><![CDATA[Selenocysteine biosynthesis]]></doc></option>
+<option value='shikimatebiopath'><doc title='description'><![CDATA[Shikimate Biosynthesis]]></doc></option>
+<option value='SRPmTargeting'><doc title='description'><![CDATA[Signal recognition particle-mediated targeting of membrane and secretory proteins]]></doc></option>
+<option value='sphingometpath'><doc title='description'><![CDATA[Sphingomyelin and ceramide metabolism]]></doc></option>
+<option value='splicing'><doc title='description'><![CDATA[Splicing of pre-mRNA]]></doc></option>
+<option value='chromatin'><doc title='description'><![CDATA[Structure and organization of centromeric chromatin]]></doc></option>
+<option value='rRNAstruct'><doc title='description'><![CDATA[Structure and processing of pre rRNA]]></doc></option>
+<option value='nuclearPore'><doc title='description'><![CDATA[Structure of the nuclear pore]]></doc></option>
+<option value='proteinsLocalizpath'><doc title='description'><![CDATA[Subcellular localization of proteins involved in invasion]]></doc></option>
+<option value='terpenoid'><doc title='description'><![CDATA[Terpenoid metabolism]]></doc></option>
+<option value='mitoticCentro'><doc title='description'><![CDATA[The structure of the mitotic centrosome]]></doc></option>
+<option value='RNApolyStruct'><doc title='description'><![CDATA[The structures of RNA polymerases]]></doc></option>
+<option value='thiaminemetpath'><doc title='description'><![CDATA[Thiamine metabolism]]></doc></option>
+<option value='prokaryotes'><doc title='description'><![CDATA[Translation in prokaryotes  a template for apicoplast and mitochondrion]]></doc></option>
+<option value='PTEX'><doc title='description'><![CDATA[Translocon of exported proteins (PTEX)]]></doc></option>
+<option value='ERGolgiVacuole'><doc title='description'><![CDATA[Transporters of the ER/Golgi and digestive vacuole membranes]]></doc></option>
+<option value='mitochonApico'><doc title='description'><![CDATA[Transporters of the mitochondrial and apicoplast membranes]]></doc></option>
+<option value='PPM'><doc title='description'><![CDATA[Transporters of the plasma membrane]]></doc></option>
+<option value='tubulin'><doc title='description'><![CDATA[Tubulin and microtubules]]></doc></option>
+<option value='ubiquinonemetpath'><doc title='description'><![CDATA[Ubiquinone metabolism]]></doc></option>
+<option value='utilPhospho'><doc title='description'><![CDATA[Utilization of phospholipids]]></doc></option>
+<option value='cytoadherencescheme'><doc title='description'><![CDATA[interactions between modified host cell membrane and endothelial cell]]></doc></option>
+<option value='capformation'><doc title='description'><![CDATA[mRNA 5 capping]]></doc></option>
+<option value='mRNAdeg'><doc title='description'><![CDATA[mRNA degradation]]></doc></option>
+<option value='tRNA_mod'><doc title='description'><![CDATA[tRNA modifications]]></doc></option>
+<option value='map00351'><doc title='description'><![CDATA[1,1,1-Trichloro-2,2-bis(4-chlorophenyl)ethane (DDT) degradation]]></doc></option>
+<option value='map00631'><doc title='description'><![CDATA[1,2-Dichloroethane degradation]]></doc></option>
+<option value='map00627'><doc title='description'><![CDATA[1,4-Dichlorobenzene degradation]]></doc></option>
+<option value='map00623'><doc title='description'><![CDATA[2,4-Dichlorobenzoate degradation]]></doc></option>
+<option value='map00193'><doc title='description'><![CDATA[ATP synthesis]]></doc></option>
+<option value='map00252'><doc title='description'><![CDATA[Alanine and aspartate metabolism]]></doc></option>
+<option value='map00950'><doc title='description'><![CDATA[Alkaloid biosynthesis I]]></doc></option>
+<option value='map00960'><doc title='description'><![CDATA[Alkaloid biosynthesis II]]></doc></option>
+<option value='map00970'><doc title='description'><![CDATA[Aminoacyl-tRNA biosynthesis]]></doc></option>
+<option value='map00440'><doc title='description'><![CDATA[Aminophosphonate metabolism]]></doc></option>
+<option value='map00530'><doc title='description'><![CDATA[Aminosugars metabolism]]></doc></option>
+<option value='map00150'><doc title='description'><![CDATA[Androgen and estrogen metabolism]]></doc></option>
+<option value='map00330'><doc title='description'><![CDATA[Arginine and proline metabolism]]></doc></option>
+<option value='map00053'><doc title='description'><![CDATA[Ascorbate and aldarate metabolism]]></doc></option>
+<option value='map00632'><doc title='description'><![CDATA[Benzoate degradation via CoA ligation]]></doc></option>
+<option value='map00362'><doc title='description'><![CDATA[Benzoate degradation via hydroxylation]]></doc></option>
+<option value='map00120'><doc title='description'><![CDATA[Bile acid biosynthesis]]></doc></option>
+<option value='map01051'><doc title='description'><![CDATA[Biosynthesis of ansamycins]]></doc></option>
+<option value='map01053'><doc title='description'><![CDATA[Biosynthesis of siderophore group nonribosomal peptides]]></doc></option>
+<option value='map00100'><doc title='description'><![CDATA[Biosynthesis of steroids]]></doc></option>
+<option value='map01056'><doc title='description'><![CDATA[Biosynthesis of type II polyketide backbone]]></doc></option>
+<option value='map01057'><doc title='description'><![CDATA[Biosynthesis of type II polyketide products]]></doc></option>
+<option value='map00601'><doc title='description'><![CDATA[Blood group glycolipid biosynthesis-lactoseries]]></doc></option>
+<option value='map00602'><doc title='description'><![CDATA[Blood group glycolipid biosynthesis-neolactoseries]]></doc></option>
+<option value='map00650'><doc title='description'><![CDATA[Butanoate metabolism]]></doc></option>
+<option value='map00660'><doc title='description'><![CDATA[C5-Branched dibasic acid metabolism]]></doc></option>
+<option value='map00930'><doc title='description'><![CDATA[Caprolactam degradation]]></doc></option>
+<option value='map00710'><doc title='description'><![CDATA[Carbon fixation]]></doc></option>
+<option value='map00532'><doc title='description'><![CDATA[Chondroitin / Heparan sulfate biosynthesis]]></doc></option>
+<option value='map00020'><doc title='description'><![CDATA[Citrate cycle (TCA cycle)]]></doc></option>
+<option value='map00460'><doc title='description'><![CDATA[Cyanoamino acid metabolism]]></doc></option>
+<option value='map00272'><doc title='description'><![CDATA[Cysteine metabolism]]></doc></option>
+<option value='map03030'><doc title='description'><![CDATA[DNA polymerase]]></doc></option>
+<option value='map00642'><doc title='description'><![CDATA[Ethylbenzene degradation]]></doc></option>
+<option value='map00061'><doc title='description'><![CDATA[Fatty acid biosynthesis (path 1)]]></doc></option>
+<option value='map00062'><doc title='description'><![CDATA[Fatty acid biosynthesis (path 2)]]></doc></option>
+<option value='map00071'><doc title='description'><![CDATA[Fatty acid metabolism]]></doc></option>
+<option value='map02040'><doc title='description'><![CDATA[Flagellar assembly]]></doc></option>
+<option value='map00628'><doc title='description'><![CDATA[Fluorene degradation]]></doc></option>
+<option value='map00790'><doc title='description'><![CDATA[Folate biosynthesis]]></doc></option>
+<option value='map00051'><doc title='description'><![CDATA[Fructose and mannose metabolism]]></doc></option>
+<option value='map00052'><doc title='description'><![CDATA[Galactose metabolism]]></doc></option>
+<option value='map00604'><doc title='description'><![CDATA[Ganglioside biosynthesis]]></doc></option>
+<option value='map00603'><doc title='description'><![CDATA[Globoside metabolism]]></doc></option>
+<option value='map00251'><doc title='description'><![CDATA[Glutamate metabolism]]></doc></option>
+<option value='map00480'><doc title='description'><![CDATA[Glutathione metabolism]]></doc></option>
+<option value='map00561'><doc title='description'><![CDATA[Glycerolipid metabolism]]></doc></option>
+<option value='map00260'><doc title='description'><![CDATA[Glycine, serine and threonine metabolism]]></doc></option>
+<option value='map00010'><doc title='description'><![CDATA[Glycolysis / Gluconeogenesis]]></doc></option>
+<option value='map00531'><doc title='description'><![CDATA[Glycosaminoglycan degradation]]></doc></option>
+<option value='map00600'><doc title='description'><![CDATA[Glycosphingolipid metabolism]]></doc></option>
+<option value='map00630'><doc title='description'><![CDATA[Glyoxylate and dicarboxylate metabolism]]></doc></option>
+<option value='map00513'><doc title='description'><![CDATA[High-mannose type N-glycan biosynthesis]]></doc></option>
+<option value='map00340'><doc title='description'><![CDATA[Histidine metabolism]]></doc></option>
+<option value='map00031'><doc title='description'><![CDATA[Inositol metabolism]]></doc></option>
+<option value='map00562'><doc title='description'><![CDATA[Inositol phosphate metabolism]]></doc></option>
+<option value='map00903'><doc title='description'><![CDATA[Limonene and pinene degradation]]></doc></option>
+<option value='map00540'><doc title='description'><![CDATA[Lipopolysaccharide biosynthesis]]></doc></option>
+<option value='map00300'><doc title='description'><![CDATA[Lysine biosynthesis]]></doc></option>
+<option value='map00310'><doc title='description'><![CDATA[Lysine degradation]]></doc></option>
+<option value='map00680'><doc title='description'><![CDATA[Methane metabolism]]></doc></option>
+<option value='map00271'><doc title='description'><![CDATA[Methionine metabolism]]></doc></option>
+<option value='map00510'><doc title='description'><![CDATA[N-Glycan biosynthesis]]></doc></option>
+<option value='map00760'><doc title='description'><![CDATA[Nicotinate and nicotinamide metabolism]]></doc></option>
+<option value='map00626'><doc title='description'><![CDATA[Nitrobenzene degradation]]></doc></option>
+<option value='map00910'><doc title='description'><![CDATA[Nitrogen metabolism]]></doc></option>
+<option value='map00401'><doc title='description'><![CDATA[Novobiocin biosynthesis]]></doc></option>
+<option value='map00520'><doc title='description'><![CDATA[Nucleotide sugars metabolism]]></doc></option>
+<option value='map00512'><doc title='description'><![CDATA[O-Glycan biosynthesis]]></doc></option>
+<option value='map00670'><doc title='description'><![CDATA[One carbon pool by folate]]></doc></option>
+<option value='map00190'><doc title='description'><![CDATA[Oxidative phosphorylation]]></doc></option>
+<option value='map00770'><doc title='description'><![CDATA[Pantothenate and CoA biosynthesis]]></doc></option>
+<option value='map00311'><doc title='description'><![CDATA[Penicillins and cephalosporins biosynthesis]]></doc></option>
+<option value='map00040'><doc title='description'><![CDATA[Pentose and glucuronate interconversions]]></doc></option>
+<option value='map00030'><doc title='description'><![CDATA[Pentose phosphate pathway]]></doc></option>
+<option value='map00550'><doc title='description'><![CDATA[Peptidoglycan biosynthesis]]></doc></option>
+<option value='map00360'><doc title='description'><![CDATA[Phenylalanine metabolism]]></doc></option>
+<option value='map00400'><doc title='description'><![CDATA[Phenylalanine, tyrosine and tryptophan biosynthesis]]></doc></option>
+<option value='map04070'><doc title='description'><![CDATA[Phosphatidylinositol signaling system]]></doc></option>
+<option value='map00580'><doc title='description'><![CDATA[Phospholipid degradation]]></doc></option>
+<option value='map00195'><doc title='description'><![CDATA[Photosynthesis]]></doc></option>
+<option value='map00523'><doc title='description'><![CDATA[Polyketide sugar unit biosynthesis]]></doc></option>
+<option value='map00860'><doc title='description'><![CDATA[Porphyrin and chlorophyll metabolism]]></doc></option>
+<option value='map00640'><doc title='description'><![CDATA[Propanoate metabolism]]></doc></option>
+<option value='map00590'><doc title='description'><![CDATA[Prostaglandin and leukotriene metabolism]]></doc></option>
+<option value='map03050'><doc title='description'><![CDATA[Proteasome]]></doc></option>
+<option value='map03060'><doc title='description'><![CDATA[Protein export]]></doc></option>
+<option value='map00230'><doc title='description'><![CDATA[Purine metabolism]]></doc></option>
+<option value='map00240'><doc title='description'><![CDATA[Pyrimidine metabolism]]></doc></option>
+<option value='map00620'><doc title='description'><![CDATA[Pyruvate metabolism]]></doc></option>
+<option value='map03020'><doc title='description'><![CDATA[RNA polymerase]]></doc></option>
+<option value='map00720'><doc title='description'><![CDATA[Reductive carboxylate cycle (CO2 fixation)]]></doc></option>
+<option value='map00740'><doc title='description'><![CDATA[Riboflavin metabolism]]></doc></option>
+<option value='map00450'><doc title='description'><![CDATA[Selenoamino acid metabolism]]></doc></option>
+<option value='map00500'><doc title='description'><![CDATA[Starch and sucrose metabolism]]></doc></option>
+<option value='map00940'><doc title='description'><![CDATA[Stilbene, coumarine and lignin biosynthesis]]></doc></option>
+<option value='map00521'><doc title='description'><![CDATA[Streptomycin biosynthesis]]></doc></option>
+<option value='map00643'><doc title='description'><![CDATA[Styrene degradation]]></doc></option>
+<option value='map00920'><doc title='description'><![CDATA[Sulfur metabolism]]></doc></option>
+<option value='map00072'><doc title='description'><![CDATA[Synthesis and degradation of ketone bodies]]></doc></option>
+<option value='map00900'><doc title='description'><![CDATA[Terpenoid biosynthesis]]></doc></option>
+<option value='map00625'><doc title='description'><![CDATA[Tetrachloroethene degradation]]></doc></option>
+<option value='map00253'><doc title='description'><![CDATA[Tetracycline biosynthesis]]></doc></option>
+<option value='map00730'><doc title='description'><![CDATA[Thiamine metabolism]]></doc></option>
+<option value='map00380'><doc title='description'><![CDATA[Tryptophan metabolism]]></doc></option>
+<option value='map03090'><doc title='description'><![CDATA[Type II secretion system]]></doc></option>
+<option value='map03070'><doc title='description'><![CDATA[Type III secretion system]]></doc></option>
+<option value='map00350'><doc title='description'><![CDATA[Tyrosine metabolism]]></doc></option>
+<option value='map00130'><doc title='description'><![CDATA[Ubiquinone biosynthesis]]></doc></option>
+<option value='map04120'><doc title='description'><![CDATA[Ubiquitin mediated proteolysis]]></doc></option>
+<option value='map00220'><doc title='description'><![CDATA[Urea cycle and metabolism of amino groups]]></doc></option>
+<option value='map00290'><doc title='description'><![CDATA[Valine, leucine and isoleucine biosynthesis]]></doc></option>
+<option value='map00280'><doc title='description'><![CDATA[Valine, leucine and isoleucine degradation]]></doc></option>
+<option value='map00750'><doc title='description'><![CDATA[Vitamin B6 metabolism]]></doc></option>
+<option value='map00410'><doc title='description'><![CDATA[beta-Alanine metabolism]]></doc></option>
+<option value='map00361'><doc title='description'><![CDATA[gamma-Hexachlorocyclohexane degradation]]></doc></option>
+<option value='er_golgi_tr_qa'><doc title='description'><![CDATA["ER-to Golgi, translocation and quality control"]]></doc></option>
+<option value='LeuIsoValmetpath'><doc title='description'><![CDATA["Leucine, Isoleucine and Valine metabolism"]]></doc></option>
+<option value='prenylation'><doc title='description'><![CDATA["N-myristoylation, S-acylation and prenylation of proteins"]]></doc></option>
+<option value='thioredoxinpath'><doc title='description'><![CDATA["Thioredoxin, glutaredoxin and peroxiredoxin"]]></doc></option>
+<option value='14-3-3prot'><doc title='description'><![CDATA[14-3-3 protein]]></doc></option>
+<option value='actin'><doc title='description'><![CDATA[Actin and filaments]]></doc></option>
+<option value='eiF5A'><doc title='description'><![CDATA[Activation of eiF5A]]></doc></option>
+<option value='aminosugmetpath'><doc title='description'><![CDATA[Aminosugars metabolism]]></doc></option>
+<option value='complex_ubiquitin_ligase'><doc title='description'><![CDATA[Anaphase promoting complex ubquitine ligase]]></doc></option>
+<option value='arginineproline'><doc title='description'><![CDATA[Arginine and proline metabolism]]></doc></option>
+<option value='alanAspartate'><doc title='description'><![CDATA[Asparagine and Aspartate metabolism]]></doc></option>
+<option value='baseExcision'><doc title='description'><![CDATA[Base excision repair of AP sites]]></doc></option>
+<option value='BiogenesisCytochromeOxidase'><doc title='description'><![CDATA[Biogenesis of cytochrome oxidase]]></doc></option>
+<option value='BiosynthFeS'><doc title='description'><![CDATA[Biosynthesis of Fe-S proteins in the apicoplast]]></doc></option>
+<option value='bulk_mRna'><doc title='description'><![CDATA[Bulk mRNA transport through the nuclear pore]]></doc></option>
+<option value='CCR4'><doc title='description'><![CDATA[CCR4  NOT complex]]></doc></option>
+<option value='calmodulin'><doc title='description'><![CDATA[Calcium  calmodulin activation of protein kinases]]></doc></option>
+<option value='cat_phosph'><doc title='description'><![CDATA[Catabolism of polyphosphates]]></doc></option>
+<option value='Centriole'><doc title='description'><![CDATA[Centriole proteins]]></doc></option>
+<option value='centrosome'><doc title='description'><![CDATA[Centrosome proteins]]></doc></option>
+<option value='chaperone'><doc title='description'><![CDATA[Chaperone network of the mitochondrial matrix]]></doc></option>
+<option value='chapfold'><doc title='description'><![CDATA[Chaperone-assisted protein folding]]></doc></option>
+<option value='COPI'><doc title='description'><![CDATA[Classical COPI-mediated vesicular transport]]></doc></option>
+<option value='COPII'><doc title='description'><![CDATA[Classical COPII-mediated vesicular transport]]></doc></option>
+<option value='clathrintransport'><doc title='description'><![CDATA[Classical clathrin-mediated vesicular transport]]></doc></option>
+<option value='mRNAcleavage'><doc title='description'><![CDATA[Cleavage and polyadenylation of pre-mRNA]]></doc></option>
+<option value='coasynthesis'><doc title='description'><![CDATA[CoA biosynthesis]]></doc></option>
+<option value='linearMotor'><doc title='description'><![CDATA[Components of the linear motor responsible for merozoite motility in invasion]]></doc></option>
+<option value='termilalCleavage'><doc title='description'><![CDATA[Cotranslational cleavage of N-terminal methionine residues and N-terminal acetylation]]></doc></option>
+<option value='dnareplication'><doc title='description'><![CDATA[DNA Replication]]></doc></option>
+<option value='DNArepair'><doc title='description'><![CDATA[DNA mismatch repair system]]></doc></option>
+<option value='dolicholmetpath'><doc title='description'><![CDATA[Dolichol metabolism]]></doc></option>
+<option value='DomSurfaceProt'><doc title='description'><![CDATA[Domains of merozoite surface proteins]]></doc></option>
+<option value='dsbRecomb'><doc title='description'><![CDATA[Double strand break repair and homologous recombination]]></doc></option>
+<option value='MCprot'><doc title='description'><![CDATA[Established and putative Maurers clefts proteins]]></doc></option>
+<option value='Maurer'><doc title='description'><![CDATA[Exported parasite proteins associated with Maurers clefts]]></doc></option>
+<option value='facidsynthesispath'><doc title='description'><![CDATA[Fatty acid synthesis in the apicoplast]]></doc></option>
+<option value='folatebiopath'><doc title='description'><![CDATA[Folate biosynthesis]]></doc></option>
+<option value='Merozoiteproteins'><doc title='description'><![CDATA[Functional annotation of merozoite invasion-related proteins]]></doc></option>
+<option value='gen_phosph'><doc title='description'><![CDATA[Generation of polyphosphates]]></doc></option>
+<option value='SprotTab'><doc title='description'><![CDATA[Genes coding for Fe-S containing proteins]]></doc></option>
+<option value='GPI_prots'><doc title='description'><![CDATA[Genes coding for GPI-anchored membrane proteins]]></doc></option>
+<option value='Pf_chaperones'><doc title='description'><![CDATA[Genes coding for chaperones and their regulators]]></doc></option>
+<option value='Ribosomegenes'><doc title='description'><![CDATA[Genes coding for components involved in ribosome assembly]]></doc></option>
+<option value='DNAgenes'><doc title='description'><![CDATA[Genes coding for enzymes/proteins involved in DNA replication]]></doc></option>
+<option value='proteasome_new'><doc title='description'><![CDATA[Genes coding for the components of the proteasome degradation machinery and their timed transcrip...]]></doc></option>
+<option value='transporters'><doc title='description'><![CDATA[Genes coding for transport proteins]]></doc></option>
+<option value='ExcisionRepairTab'><doc title='description'><![CDATA[Genes involved in excision-repair]]></doc></option>
+<option value='Gen_apic_genome'><doc title='description'><![CDATA[Genes of the apicoplast genome]]></doc></option>
+<option value='glutamatemetpath'><doc title='description'><![CDATA[Glutamate metabolism]]></doc></option>
+<option value='glycineSerinemetpath'><doc title='description'><![CDATA[Glycine and Serine metabolism]]></doc></option>
+<option value='glycolysispath'><doc title='description'><![CDATA[Glycolysis]]></doc></option>
+<option value='gpiAnchor1path'><doc title='description'><![CDATA[Glycosylphosphatidylinositol (GPI) anchor biosynthesis]]></doc></option>
+<option value='Glyoxylate'><doc title='description'><![CDATA[Glyoxylate metabolism]]></doc></option>
+<option value='hemoglobinpolpath'><doc title='description'><![CDATA[Hemoglobin digestion and ferriprotoporphyrin IX polymerization]]></doc></option>
+<option value='Histone'><doc title='description'><![CDATA[Histone acetylation]]></doc></option>
+<option value='histoneMethylation'><doc title='description'><![CDATA[Histone lysine methylation]]></doc></option>
+<option value='import_export'><doc title='description'><![CDATA[Import and export through the nuclear pore]]></doc></option>
+<option value='importMito'><doc title='description'><![CDATA[Import of proteins into the mitochondrion]]></doc></option>
+<option value='intTranslation'><doc title='description'><![CDATA[Initiation of translation]]></doc></option>
+<option value='inosiPhosphmetpath'><doc title='description'><![CDATA[Inositol phosphate metabolism]]></doc></option>
+<option value='IGTP_bnd'><doc title='description'><![CDATA[Involvement of GTP-binding proteins and ribosomes in amino acid shortage]]></doc></option>
+<option value='isoprenoidmetpath'><doc title='description'><![CDATA[Isoprenoids metabolism]]></doc></option>
+<option value='exportin'><doc title='description'><![CDATA[Karyopherin/exportin-mediated nuclear export pathways]]></doc></option>
+<option value='Kinetochore'><doc title='description'><![CDATA[Kinetochores power chromosome movements in mitosis]]></doc></option>
+<option value='largeTethering'><doc title='description'><![CDATA[Large Tethering Complexes that Act in the Secretory and Endocytic Pathways]]></doc></option>
+<option value='lipoicAcid'><doc title='description'><![CDATA[Lipoic acid metabolism]]></doc></option>
+<option value='LysineMetabolism'><doc title='description'><![CDATA[Lysine metabolism]]></doc></option>
+<option value='mannosemetpath'><doc title='description'><![CDATA[Mannose and fructose metabolism]]></doc></option>
+<option value='riboMaturation'><doc title='description'><![CDATA[Maturation and export of 60S and 40S ribosomal subunits]]></doc></option>
+<option value='FeSProtein'><doc title='description'><![CDATA[Mechanism of FeS-protein biogenesis]]></doc></option>
+<option value='methioninemetpath'><doc title='description'><![CDATA[Methionine and polyamine metabolism]]></doc></option>
+<option value='mitochondrTCAcycle'><doc title='description'><![CDATA[Mitochondrial TCA cycle]]></doc></option>
+<option value='antioxidantSystem'><doc title='description'><![CDATA[Mitochondrial antioxidant system]]></doc></option>
+<option value='mitodiv'><doc title='description'><![CDATA[Mitochondrial division]]></doc></option>
+<option value='mitochondrionef'><doc title='description'><![CDATA[Mitochondrial electron flow]]></doc></option>
+<option value='wobble'><doc title='description'><![CDATA[Modification of the wobble position uridine (U34)]]></doc></option>
+<option value='res_antimal'><doc title='description'><![CDATA[Molecular markers of resistance to antimalarial drugs]]></doc></option>
+<option value='vesExocytosis'><doc title='description'><![CDATA[Molecular model of vesicle exocytosis]]></doc></option>
+<option value='molecularMotor'><doc title='description'><![CDATA[Molecular motor prototypes]]></doc></option>
+<option value='nicotinatemetpath'><doc title='description'><![CDATA[Nicotinate and nicotinamide metabolism]]></doc></option>
+<option value='nitrogenmetpath'><doc title='description'><![CDATA[Nitrogen metabolism]]></doc></option>
+<option value='apicoplastgenes'><doc title='description'><![CDATA[Nuclear genes with apicoplast signal sequences]]></doc></option>
+<option value='nuclearGenes'><doc title='description'><![CDATA[Nuclear genes with mitochondrial signal sequences]]></doc></option>
+<option value='NucleoAssembly'><doc title='description'><![CDATA[Nucleosome assembly and regulation]]></doc></option>
+<option value='excisionrepair'><doc title='description'><![CDATA[Nucleotide excision repair]]></doc></option>
+<option value='SHAMTandGCV'><doc title='description'><![CDATA[One-carbon enzyme systems serine hydroxymethyltransferase and glycine-cleavage complex]]></doc></option>
+<option value='oxidativefolding'><doc title='description'><![CDATA[Oxidative protein folding in the endoplasmic reticulum]]></doc></option>
+<option value='peptideExport'><doc title='description'><![CDATA[Pathways of peptide export from the mitochondrion]]></doc></option>
+<option value='ppcpath'><doc title='description'><![CDATA[Pentose Phosphate Cycle]]></doc></option>
+<option value='proteases'><doc title='description'><![CDATA[Peptidases and proteases]]></doc></option>
+<option value='PfEMP1'><doc title='description'><![CDATA[PfEMP1 domain architectures]]></doc></option>
+<option value='phenylTyrmetpath'><doc title='description'><![CDATA[Phenylalanine and Tyrosine metabolism]]></doc></option>
+<option value='Phos_tmd_exprs'><doc title='description'><![CDATA[Phosphatases of Plasmodium falciparum and their timed expression]]></doc></option>
+<option value='phcholine'><doc title='description'><![CDATA[Phosphatidylcholine metabolism]]></doc></option>
+<option value='phserine'><doc title='description'><![CDATA[Phosphatidylethanolamine and phosphatidylserine metabolism]]></doc></option>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Gene]]></doc></option>
+<option value='formatted_gene_id'><doc title='description'><![CDATA[Gene Group]]></doc></option>
+<option value='sequence_id'><doc title='description'><![CDATA[Genomic Sequence ID]]></doc></option>
+<option value='chromosome'><doc title='description'><![CDATA[Chromosome]]></doc></option>
+<option value='location_text'><doc title='description'><![CDATA[Genomic Location]]></doc></option>
+<option value='strand'><doc title='description'><![CDATA[Gene Strand]]></doc></option>
+<option value='gene_type'><doc title='description'><![CDATA[Gene Type]]></doc></option>
+<option value='exon_count'><doc title='description'><![CDATA[# Exons]]></doc></option>
+<option value='transcript_length'><doc title='description'><![CDATA[Transcript Length]]></doc></option>
+<option value='cds_length'><doc title='description'><![CDATA[CDS Length]]></doc></option>
+<option value='product'><doc title='description'><![CDATA[Product Description]]></doc></option>
+<option value='protein_length'><doc title='description'><![CDATA[Protein Length]]></doc></option>
+<option value='tm_count'><doc title='description'><![CDATA[# TM Domains]]></doc></option>
+<option value='molecular_weight'><doc title='description'><![CDATA[Molecular Weight]]></doc></option>
+<option value='isoelectric_point'><doc title='description'><![CDATA[Isoelectric Point]]></doc></option>
+<option value='ec_numbers_string'><doc title='description'><![CDATA[EC Numbers]]></doc></option>
+<option value='ortholog_number'><doc title='description'><![CDATA[Ortholog count]]></doc></option>
+<option value='paralog_number'><doc title='description'><![CDATA[Paralog count]]></doc></option>
+<option value='orthomcl_name'><doc title='description'><![CDATA[Ortholog Group]]></doc></option>
+<option value='signalp_scores'><doc title='description'><![CDATA[SignalP Scores]]></doc></option>
+<option value='signalp_peptide'><doc title='description'><![CDATA[SignalP Peptide]]></doc></option>
+<option value='ann_go_function'><doc title='description'><![CDATA[Annotated GO Function]]></doc></option>
+<option value='ann_go_process'><doc title='description'><![CDATA[Annotated GO Process]]></doc></option>
+<option value='ann_go_component'><doc title='description'><![CDATA[Annotated GO Component]]></doc></option>
+<option value='pred_go_function'><doc title='description'><![CDATA[Predicted GO Function]]></doc></option>
+<option value='pred_go_process'><doc title='description'><![CDATA[Predicted GO Process]]></doc></option>
+<option value='pred_go_component'><doc title='description'><![CDATA[Predicted GO Component]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='is_pseudo'><doc title='description'><![CDATA[Is Pseudo]]></doc></option>
+<option value='protein_sequence'><doc title='description'><![CDATA[Predicted Protein Sequence]]></doc></option>
+<option value='transcript_sequence'><doc title='description'><![CDATA[Predicted RNA/mRNA Sequence (introns spliced out)]]></doc></option>
+<option value='cds'><doc title='description'><![CDATA[Coding Sequence]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+<option value='SNPs'><doc title='description'><![CDATA[SNPs Summary]]></doc></option>
+<option value='GeneModelDump'><doc title='description'><![CDATA[Gene Model]]></doc></option>
+<option value='InterPro'><doc title='description'><![CDATA[InterPro Domains]]></doc></option>
+<option value='TMHMM'><doc title='description'><![CDATA[Transmembrane Domains]]></doc></option>
+<option value='LowComplexity'><doc title='description'><![CDATA[Low Complexity Regions]]></doc></option>
+<option value='SignalP'><doc title='description'><![CDATA[Signal Peptide]]></doc></option>
+<option value='BlastP'><doc title='description'><![CDATA[BlastP Hits]]></doc></option>
+<option value='Genbank'><doc title='description'><![CDATA[Gene Location]]></doc></option>
+<option value='SageTags'><doc title='description'><![CDATA[Sage Tags]]></doc></option>
+<option value='Notes'><doc title='description'><![CDATA[Notes]]></doc></option>
+<option value='UserComments'><doc title='description'><![CDATA[User Comments]]></doc></option>
+<option value='CommunityExpComments'><doc title='description'><![CDATA[Community Annotations]]></doc></option>
+<option value='EcNumber'><doc title='description'><![CDATA[EC Number]]></doc></option>
+<option value='MassSpec'><doc title='description'><![CDATA[Mass Spec.-based Expression Evidence]]></doc></option>
+<option value='GoTerms'><doc title='description'><![CDATA[GO Terms]]></doc></option>
+<option value='Phenotype'><doc title='description'><![CDATA[Phenotype]]></doc></option>
+<option value='Y2hInteractions'><doc title='description'><![CDATA[Y2H Interactions]]></doc></option>
+<option value='Orthologs'><doc title='description'><![CDATA[Orthologs and Paralogs within EuPathDB]]></doc></option>
+<option value='MetabolicPathways'><doc title='description'><![CDATA[Metabolic Pathways]]></doc></option>
+<option value='TaskComments'><doc title='description'><![CDATA[Toxoplasma Genome Sequencing Project Annotation]]></doc></option>
+<option value='ArrayElements'><doc title='description'><![CDATA[Mapped Array Elements]]></doc></option>
+<option value='TwoChannelDiffExpr'><doc title='description'><![CDATA[P.Berghei Differential Expression - DOZI KO vs. WT]]></doc></option>
+<option value='ProteinExpression'><doc title='description'><![CDATA[P.Berghei Protein Expression]]></doc></option>
+<option value='Mr4Reagents'><doc title='description'><![CDATA[MR4 Reagents]]></doc></option>
+<option value='ProteinDatabase'><doc title='description'><![CDATA[Protein Linkouts]]></doc></option>
+<option value='GeneLinkouts'><doc title='description'><![CDATA[External Links]]></doc></option>
+<option value='3dPreds'><doc title='description'><![CDATA[3D Structure Predictions]]></doc></option>
+<option value='PdbSimilarities'><doc title='description'><![CDATA[Similarities to Protein Data Bank (PDB) Chains]]></doc></option>
+<option value='Epitopes'><doc title='description'><![CDATA[Epitopes from IEDB]]></doc></option>
+<option value='IsolateOverlap'><doc title='description'><![CDATA[Isolates]]></doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

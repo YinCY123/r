@@ -1,0 +1,1253 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='GeneQuestions'>
+<resource path='GenesByEcNumber.xml'>
+<method href='#genesbyecnumber'/>
+</resource>
+<resource path='GenesByEcNumber.json'>
+<method href='#genesbyecnumber'/>
+</resource>
+<method name='POST' id='genesbyecnumber'>
+<doc title='display_name'><![CDATA[EC Number]]></doc>
+<doc title='summary'><![CDATA[Find genes by assigned Enzyme Commission (EC) number.]]></doc>
+<doc title='description'><![CDATA[Find genes that have been assigned a particular Enzyme Commission (EC) number. 
+              Use '-' in place of numbers to denote partial EC Numbers, for example, '2.7.7.-'. You may use '*' as a wild card character. <p>
+          For help with obtaining EC numbers, try the
+           <a href="http://ca.expasy.org/enzyme/">ExPASy-ENZYME</a>
+           browser.<p>
+              CryptoDB EC numbers have been assigned by the genome annotation centers, KEGG and CryptoCyc.
+              PlasmoDB EC numbers have been assigned to genes for <i>P. falciparum</i> by Andy Berry, Matt Berriman (Sanger Institute) and Hagai Ginsburg (Hebrew University). ToxoDB EC numbers have been assigned by Ian Paulsen (TIGR).
+              E.C. number annotation for <i>Toxoplasma gondii</i> are from <a href="http://www.tigr.org/~ipaulsen">Ian Paulsen</a> (TIGR)]]></doc>
+<request>
+<param name='organism' type='xsd:string' required='true' default='Entamoeba dispar,Entamoeba histolytica,Entamoeba invadens,Cryptosporidium parvum,Cryptosporidium hominis,Cryptosporidium muris,Giardia Assemblage A isolate WB,Giardia Assemblage B isolate GS,Giardia Assemblage E isolate P15,Plasmodium falciparum,Plasmodium vivax,Plasmodium yoelii,Plasmodium berghei,Plasmodium chabaudi,Plasmodium knowlesi,Neospora caninum,Toxoplasma gondii,Trichomonas vaginalis,Leishmania braziliensis,Leishmania infantum,Leishmania major,Leishmania mexicana,Trypanosoma brucei,Trypanosoma congolense,Trypanosoma cruzi,Trypanosoma vivax' repeating='true'>
+<doc title='prompt'><![CDATA[Organism]]></doc>
+<doc title='help'><![CDATA[Organism]]></doc>
+<doc title='default'><![CDATA[Entamoeba dispar,Entamoeba histolytica,Entamoeba invadens,Cryptosporidium parvum,Cryptosporidium hominis,Cryptosporidium muris,Giardia Assemblage A isolate WB,Giardia Assemblage B isolate GS,Giardia Assemblage E isolate P15,Plasmodium falciparum,Plasmodium vivax,Plasmodium yoelii,Plasmodium berghei,Plasmodium chabaudi,Plasmodium knowlesi,Neospora caninum,Toxoplasma gondii,Trichomonas vaginalis,Leishmania braziliensis,Leishmania infantum,Leishmania major,Leishmania mexicana,Trypanosoma brucei,Trypanosoma congolense,Trypanosoma cruzi,Trypanosoma vivax]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='Entamoeba dispar'><doc title='description'><![CDATA[Entamoeba dispar]]></doc></option>
+<option value='Entamoeba histolytica'><doc title='description'><![CDATA[Entamoeba histolytica]]></doc></option>
+<option value='Entamoeba invadens'><doc title='description'><![CDATA[Entamoeba invadens]]></doc></option>
+<option value='Cryptosporidium parvum'><doc title='description'><![CDATA[Cryptosporidium parvum]]></doc></option>
+<option value='Cryptosporidium hominis'><doc title='description'><![CDATA[Cryptosporidium hominis]]></doc></option>
+<option value='Cryptosporidium muris'><doc title='description'><![CDATA[Cryptosporidium muris]]></doc></option>
+<option value='Giardia Assemblage A isolate WB'><doc title='description'><![CDATA[Giardia Assemblage A isolate WB]]></doc></option>
+<option value='Giardia Assemblage B isolate GS'><doc title='description'><![CDATA[Giardia Assemblage B isolate GS]]></doc></option>
+<option value='Giardia Assemblage E isolate P15'><doc title='description'><![CDATA[Giardia Assemblage E isolate P15]]></doc></option>
+<option value='Plasmodium falciparum'><doc title='description'><![CDATA[Plasmodium falciparum]]></doc></option>
+<option value='Plasmodium vivax'><doc title='description'><![CDATA[Plasmodium vivax]]></doc></option>
+<option value='Plasmodium yoelii'><doc title='description'><![CDATA[Plasmodium yoelii]]></doc></option>
+<option value='Plasmodium berghei'><doc title='description'><![CDATA[Plasmodium berghei]]></doc></option>
+<option value='Plasmodium chabaudi'><doc title='description'><![CDATA[Plasmodium chabaudi]]></doc></option>
+<option value='Plasmodium knowlesi'><doc title='description'><![CDATA[Plasmodium knowlesi]]></doc></option>
+<option value='Neospora caninum'><doc title='description'><![CDATA[Neospora caninum]]></doc></option>
+<option value='Toxoplasma gondii'><doc title='description'><![CDATA[Toxoplasma gondii]]></doc></option>
+<option value='Trichomonas vaginalis'><doc title='description'><![CDATA[Trichomonas vaginalis]]></doc></option>
+<option value='Leishmania braziliensis'><doc title='description'><![CDATA[Leishmania braziliensis]]></doc></option>
+<option value='Leishmania infantum'><doc title='description'><![CDATA[Leishmania infantum]]></doc></option>
+<option value='Leishmania major'><doc title='description'><![CDATA[Leishmania major]]></doc></option>
+<option value='Leishmania mexicana'><doc title='description'><![CDATA[Leishmania mexicana]]></doc></option>
+<option value='Trypanosoma brucei'><doc title='description'><![CDATA[Trypanosoma brucei]]></doc></option>
+<option value='Trypanosoma congolense'><doc title='description'><![CDATA[Trypanosoma congolense]]></doc></option>
+<option value='Trypanosoma cruzi'><doc title='description'><![CDATA[Trypanosoma cruzi]]></doc></option>
+<option value='Trypanosoma vivax'><doc title='description'><![CDATA[Trypanosoma vivax]]></doc></option>
+</param>
+<param name='ec_number_pattern' type='xsd:string' required='true' default='2.1.1.16' repeating='false'>
+<doc title='prompt'><![CDATA[EC Number (use * as wildcard)]]></doc>
+<doc title='help'><![CDATA[Enzyme Commission numbers describe enzymes hierarchically by the class of rections they catalize.  Use '-' as a wildcard in place of numbers to denote partial EC Numbers.]]></doc>
+<doc title='default'><![CDATA[2.1.1.16]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='2.1.1.16'><doc title='description'><![CDATA[2.1.1.16 (Methylene-fatty-acyl-phospholipid synthase)]]></doc></option>
+<option value='1.2.7.1'><doc title='description'><![CDATA[1.2.7.1 (Pyruvate synthase)]]></doc></option>
+<option value='2.7.10.2'><doc title='description'><![CDATA[2.7.10.2 (Non-specific protein-tyrosine kinase)]]></doc></option>
+<option value='6.2.1.13'><doc title='description'><![CDATA[6.2.1.13 (Acetate--CoA ligase (ADP-forming))]]></doc></option>
+<option value='6.2.1.3'><doc title='description'><![CDATA[6.2.1.3 (Long-chain-fatty-acid--CoA ligase)]]></doc></option>
+<option value='6.2.1.26'><doc title='description'><![CDATA[6.2.1.26 (o-succinylbenzoate--CoA ligase)]]></doc></option>
+<option value='2.7.1.33'><doc title='description'><![CDATA[2.7.1.33 (Pantothenate kinase)]]></doc></option>
+<option value='1.6.1.2'><doc title='description'><![CDATA[1.6.1.2 (NAD(P)(+) transhydrogenase (AB-specific))]]></doc></option>
+<option value='2.6.1.52'><doc title='description'><![CDATA[2.6.1.52 (Phosphoserine transaminase)]]></doc></option>
+<option value='3.4.24.84'><doc title='description'><![CDATA[3.4.24.84 (Ste24 endopeptidase)]]></doc></option>
+<option value='3.4.24.57'><doc title='description'><![CDATA[3.4.24.57 (O-sialoglycoprotein endopeptidase)]]></doc></option>
+<option value='3.4.24.36'><doc title='description'><![CDATA[3.4.24.36 (Leishmanolysin)]]></doc></option>
+<option value='3.4.24.70'><doc title='description'><![CDATA[3.4.24.70 (Oligopeptidase A)]]></doc></option>
+<option value='6.5.1.1'><doc title='description'><![CDATA[6.5.1.1 (DNA ligase (ATP))]]></doc></option>
+<option value='2.7.4.6'><doc title='description'><![CDATA[2.7.4.6 (Nucleoside-diphosphate kinase)]]></doc></option>
+<option value='2.7.6.1'><doc title='description'><![CDATA[2.7.6.1 (Ribose-phosphate diphosphokinase)]]></doc></option>
+<option value='1.4.1.14'><doc title='description'><![CDATA[1.4.1.14 (Glutamate synthase (NADH))]]></doc></option>
+<option value='1.4.1.1'><doc title='description'><![CDATA[1.4.1.1 (Alanine dehydrogenase)]]></doc></option>
+<option value='3.1.26.11'><doc title='description'><![CDATA[3.1.26.11 (Ribonuclease Z)]]></doc></option>
+<option value='2.7.7.22'><doc title='description'><![CDATA[2.7.7.22 (Mannose-1-phosphate guanylyltransferase (GDP))]]></doc></option>
+<option value='3.2.1.14'><doc title='description'><![CDATA[3.2.1.14 (Chitinase)]]></doc></option>
+<option value='3.4.11.4'><doc title='description'><![CDATA[3.4.11.4 (Tripeptide aminopeptidase)]]></doc></option>
+<option value='1.1.1.149'><doc title='description'><![CDATA[1.1.1.149 (20-alpha-hydroxysteroid dehydrogenase)]]></doc></option>
+<option value='2.7.11.14'><doc title='description'><![CDATA[2.7.11.14 (Rhodopsin kinase)]]></doc></option>
+<option value='2.6.1.2'><doc title='description'><![CDATA[2.6.1.2 (Alanine transaminase)]]></doc></option>
+<option value='2.6.1.16'><doc title='description'><![CDATA[2.6.1.16 (Glutamine--fructose-6-phosphate transaminase (isomerizing))]]></doc></option>
+<option value='2.6.1.1'><doc title='description'><![CDATA[2.6.1.1 (Aspartate transaminase)]]></doc></option>
+<option value='3.1.1.23'><doc title='description'><![CDATA[3.1.1.23 (Acylglycerol lipase)]]></doc></option>
+<option value='3.4.22.49'><doc title='description'><![CDATA[3.4.22.49 (Separase)]]></doc></option>
+<option value='4.3.1.12'><doc title='description'><![CDATA[4.3.1.12 (Ornithine cyclodeaminase)]]></doc></option>
+<option value='2.4.1.142'><doc title='description'><![CDATA[2.4.1.142 (Chitobiosyldiphosphodolichol beta-mannosyltransferase)]]></doc></option>
+<option value='2.4.1.119'><doc title='description'><![CDATA[2.4.1.119 (Dolichyl-diphosphooligosaccharide--protein glycotransferase)]]></doc></option>
+<option value='2.4.1.18'><doc title='description'><![CDATA[2.4.1.18 (1,4-alpha-glucan branching enzyme)]]></doc></option>
+<option value='3.3.1.1'><doc title='description'><![CDATA[3.3.1.1 (Adenosylhomocysteinase)]]></doc></option>
+<option value='3.4.16.2'><doc title='description'><![CDATA[3.4.16.2 (Lysosomal Pro-Xaa carboxypeptidase)]]></doc></option>
+<option value='3.4.11.2'><doc title='description'><![CDATA[3.4.11.2 (Membrane alanyl aminopeptidase)]]></doc></option>
+<option value='3.4.11.21'><doc title='description'><![CDATA[3.4.11.21 (Aspartyl aminopeptidase)]]></doc></option>
+<option value='3.4.11.9'><doc title='description'><![CDATA[3.4.11.9 (Xaa-Pro aminopeptidase)]]></doc></option>
+<option value='3.4.11.18'><doc title='description'><![CDATA[3.4.11.18 (Methionyl aminopeptidase)]]></doc></option>
+<option value='3.4.22.38'><doc title='description'><![CDATA[3.4.22.38 (Cathepsin K)]]></doc></option>
+<option value='3.4.22.34'><doc title='description'><![CDATA[3.4.22.34 (Legumain)]]></doc></option>
+<option value='3.4.22.53'><doc title='description'><![CDATA[3.4.22.53 (Calpain-2)]]></doc></option>
+<option value='3.4.22.44'><doc title='description'><![CDATA[3.4.22.44 (Nuclear-inclusion-a endopeptidase)]]></doc></option>
+<option value='3.4.22.50'><doc title='description'><![CDATA[3.4.22.50 (V-cath endopeptidase)]]></doc></option>
+<option value='3.4.22.52'><doc title='description'><![CDATA[3.4.22.52 (Calpain-1)]]></doc></option>
+<option value='3.4.22.15'><doc title='description'><![CDATA[3.4.22.15 (Cathepsin L)]]></doc></option>
+<option value='3.4.22.27'><doc title='description'><![CDATA[3.4.22.27 (Cathepsin S)]]></doc></option>
+<option value='2.7.1.23'><doc title='description'><![CDATA[2.7.1.23 (NAD(+) kinase)]]></doc></option>
+<option value='3.6.3.28'><doc title='description'><![CDATA[3.6.3.28 (Phosphonate-transporting ATPase)]]></doc></option>
+<option value='3.6.3.1'><doc title='description'><![CDATA[3.6.3.1 (Phospholipid-translocating ATPase)]]></doc></option>
+<option value='3.6.3.30'><doc title='description'><![CDATA[3.6.3.30 (Fe(3+)-transporting ATPase)]]></doc></option>
+<option value='3.6.3.31'><doc title='description'><![CDATA[3.6.3.31 (Polyamine-transporting ATPase)]]></doc></option>
+<option value='3.6.3.14'><doc title='description'><![CDATA[3.6.3.14 (H(+)-transporting two-sector ATPase)]]></doc></option>
+<option value='3.6.3.8'><doc title='description'><![CDATA[3.6.3.8 (Calcium-transporting ATPase)]]></doc></option>
+<option value='3.6.3.16'><doc title='description'><![CDATA[3.6.3.16 (Arsenite-transporting ATPase)]]></doc></option>
+<option value='3.6.3.43'><doc title='description'><![CDATA[3.6.3.43 (Peptide-transporting ATPase)]]></doc></option>
+<option value='3.6.3.27'><doc title='description'><![CDATA[3.6.3.27 (Phosphate-transporting ATPase)]]></doc></option>
+<option value='3.6.3.15'><doc title='description'><![CDATA[3.6.3.15 (Sodium-transporting two-sector ATPase)]]></doc></option>
+<option value='3.1.3.67'><doc title='description'><![CDATA[3.1.3.67 (Phosphatidylinositol-3,4,5-trisphosphate 3-phosphatase)]]></doc></option>
+<option value='6.3.2.19'><doc title='description'><![CDATA[6.3.2.19 (Ubiquitin--protein ligase)]]></doc></option>
+<option value='3.1.26.4'><doc title='description'><![CDATA[3.1.26.4 (Ribonuclease H)]]></doc></option>
+<option value='3.4.22.16'><doc title='description'><![CDATA[3.4.22.16 (Cathepsin H)]]></doc></option>
+<option value='4.2.99.18'><doc title='description'><![CDATA[4.2.99.18 (DNA-(apurinic or apyrimidinic site) lyase)]]></doc></option>
+<option value='3.1.1.29'><doc title='description'><![CDATA[3.1.1.29 (Aminoacyl-tRNA hydrolase)]]></doc></option>
+<option value='3.1.1.4'><doc title='description'><![CDATA[3.1.1.4 (Phospholipase A(2))]]></doc></option>
+<option value='3.1.1.47'><doc title='description'><![CDATA[3.1.1.47 (1-alkyl-2-acetylglycerophosphocholine esterase)]]></doc></option>
+<option value='2.7.1.6'><doc title='description'><![CDATA[2.7.1.6 (Galactokinase)]]></doc></option>
+<option value='2.8.3.16'><doc title='description'><![CDATA[2.8.3.16 (Formyl-CoA transferase)]]></doc></option>
+<option value='1.3.99.5'><doc title='description'><![CDATA[1.3.99.5 (3-oxo-5-alpha-steroid 4-dehydrogenase)]]></doc></option>
+<option value='2.7.1.24'><doc title='description'><![CDATA[2.7.1.24 (Dephospho-CoA kinase)]]></doc></option>
+<option value='3.2.2.1'><doc title='description'><![CDATA[3.2.2.1 (Purine nucleosidase)]]></doc></option>
+<option value='3.2.1.10'><doc title='description'><![CDATA[3.2.1.10 (Oligo-1,6-glucosidase)]]></doc></option>
+<option value='3.1.27.1'><doc title='description'><![CDATA[3.1.27.1 (Ribonuclease T(2))]]></doc></option>
+<option value='3.2.1.33'><doc title='description'><![CDATA[3.2.1.33 (Amylo-alpha-1,6-glucosidase)]]></doc></option>
+<option value='3.2.1.84'><doc title='description'><![CDATA[3.2.1.84 (Glucan 1,3-alpha-glucosidase)]]></doc></option>
+<option value='3.2.1.17'><doc title='description'><![CDATA[3.2.1.17 (Lysozyme)]]></doc></option>
+<option value='3.2.1.2'><doc title='description'><![CDATA[3.2.1.2 (Beta-amylase)]]></doc></option>
+<option value='3.2.1.52'><doc title='description'><![CDATA[3.2.1.52 (Beta-N-acetylhexosaminidase)]]></doc></option>
+<option value='3.2.1.21'><doc title='description'><![CDATA[3.2.1.21 (Beta-glucosidase)]]></doc></option>
+<option value='3.2.1.143'><doc title='description'><![CDATA[3.2.1.143 (Poly(ADP-ribose) glycohydrolase)]]></doc></option>
+<option value='3.2.1.1'><doc title='description'><![CDATA[3.2.1.1 (Alpha-amylase)]]></doc></option>
+<option value='3.2.1.135'><doc title='description'><![CDATA[3.2.1.135 (Neopullulanase)]]></doc></option>
+<option value='3.1.21.7'><doc title='description'><![CDATA[3.1.21.7 (Deoxyribonuclease V)]]></doc></option>
+<option value='3.1.3.71'><doc title='description'><![CDATA[3.1.3.71 (2-phosphosulfolactate phosphatase)]]></doc></option>
+<option value='3.1.3.2'><doc title='description'><![CDATA[3.1.3.2 (Acid phosphatase)]]></doc></option>
+<option value='3.1.3.36'><doc title='description'><![CDATA[3.1.3.36 (Phosphoinositide 5-phosphatase)]]></doc></option>
+<option value='3.1.3.57'><doc title='description'><![CDATA[3.1.3.57 (Inositol-1,4-bisphosphate 1-phosphatase)]]></doc></option>
+<option value='3.1.3.25'><doc title='description'><![CDATA[3.1.3.25 (Inositol-phosphate phosphatase)]]></doc></option>
+<option value='3.1.3.48'><doc title='description'><![CDATA[3.1.3.48 (Protein-tyrosine-phosphatase)]]></doc></option>
+<option value='3.1.3.16'><doc title='description'><![CDATA[3.1.3.16 (Phosphoprotein phosphatase)]]></doc></option>
+<option value='3.1.3.3'><doc title='description'><![CDATA[3.1.3.3 (Phosphoserine phosphatase)]]></doc></option>
+<option value='3.1.3.62'><doc title='description'><![CDATA[3.1.3.62 (Multiple inositol-polyphosphate phosphatase)]]></doc></option>
+<option value='3.1.3.32'><doc title='description'><![CDATA[3.1.3.32 (Polynucleotide 3'-phosphatase)]]></doc></option>
+<option value='3.4.25.1'><doc title='description'><![CDATA[3.4.25.1 (Proteasome endopeptidase complex)]]></doc></option>
+<option value='3.4.13.3'><doc title='description'><![CDATA[3.4.13.3 (Xaa-His dipeptidase)]]></doc></option>
+<option value='3.4.13.9'><doc title='description'><![CDATA[3.4.13.9 (Xaa-Pro dipeptidase)]]></doc></option>
+<option value='3.4.19.12'><doc title='description'><![CDATA[3.4.19.12 (Ubiquitinyl hydrolase 1)]]></doc></option>
+<option value='3.4.19.1'><doc title='description'><![CDATA[3.4.19.1 (Acylaminoacyl-peptidase)]]></doc></option>
+<option value='3.4.17.4'><doc title='description'><![CDATA[3.4.17.4 (Gly-Xaa carboxypeptidase)]]></doc></option>
+<option value='3.4.14.2'><doc title='description'><![CDATA[3.4.14.2 (Dipeptidyl-peptidase II)]]></doc></option>
+<option value='3.4.14.5'><doc title='description'><![CDATA[3.4.14.5 (Dipeptidyl-peptidase IV)]]></doc></option>
+<option value='3.4.14.4'><doc title='description'><![CDATA[3.4.14.4 (Dipeptidyl-peptidase III)]]></doc></option>
+<option value='2.7.1.68'><doc title='description'><![CDATA[2.7.1.68 (1-phosphatidylinositol-4-phosphate 5-kinase)]]></doc></option>
+<option value='2.7.7.14'><doc title='description'><![CDATA[2.7.7.14 (Ethanolamine-phosphate cytidylyltransferase)]]></doc></option>
+<option value='2.7.11.17'><doc title='description'><![CDATA[2.7.11.17 (Calcium/calmodulin-dependent protein kinase)]]></doc></option>
+<option value='2.1.1.125'><doc title='description'><![CDATA[2.1.1.125 (Histone-arginine N-methyltransferase)]]></doc></option>
+<option value='2.2.1.3'><doc title='description'><![CDATA[2.2.1.3 (Formaldehyde transketolase)]]></doc></option>
+<option value='1.8.1.9'><doc title='description'><![CDATA[1.8.1.9 (Thioredoxin-disulfide reductase)]]></doc></option>
+<option value='2.7.8.11'><doc title='description'><![CDATA[2.7.8.11 (CDP-diacylglycerol--inositol 3-phosphatidyltransferase)]]></doc></option>
+<option value='2.3.1.30'><doc title='description'><![CDATA[2.3.1.30 (Serine O-acetyltransferase)]]></doc></option>
+<option value='1.1.1.2'><doc title='description'><![CDATA[1.1.1.2 (Alcohol dehydrogenase (NADP(+)))]]></doc></option>
+<option value='3.6.4.3'><doc title='description'><![CDATA[3.6.4.3 (Microtubule-severing ATPase)]]></doc></option>
+<option value='6.5.1.4'><doc title='description'><![CDATA[6.5.1.4 (RNA-3'-phosphate cyclase)]]></doc></option>
+<option value='2.7.7.50'><doc title='description'><![CDATA[2.7.7.50 (mRNA guanylyltransferase)]]></doc></option>
+<option value='4.1.1.36'><doc title='description'><![CDATA[4.1.1.36 (Phosphopantothenoylcysteine decarboxylase)]]></doc></option>
+<option value='2.7.2.10'><doc title='description'><![CDATA[2.7.2.10 (Phosphoglycerate kinase (GTP))]]></doc></option>
+<option value='2.7.2.1'><doc title='description'><![CDATA[2.7.2.1 (Acetate kinase)]]></doc></option>
+<option value='2.7.2.3'><doc title='description'><![CDATA[2.7.2.3 (Phosphoglycerate kinase)]]></doc></option>
+<option value='2.3.1.50'><doc title='description'><![CDATA[2.3.1.50 (Serine C-palmitoyltransferase)]]></doc></option>
+<option value='2.7.12.1'><doc title='description'><![CDATA[2.7.12.1 (Dual-specificity kinase)]]></doc></option>
+<option value='1.1.1.38'><doc title='description'><![CDATA[1.1.1.38 (Malate dehydrogenase (oxaloacetate-decarboxylating))]]></doc></option>
+<option value='1.12.7.2'><doc title='description'><![CDATA[1.12.7.2 (Ferredoxin hydrogenase)]]></doc></option>
+<option value='2.2.1.1'><doc title='description'><![CDATA[2.2.1.1 (Transketolase)]]></doc></option>
+<option value='2.7.7.7'><doc title='description'><![CDATA[2.7.7.7 (DNA-directed DNA polymerase)]]></doc></option>
+<option value='1.1.99.2'><doc title='description'><![CDATA[1.1.99.2 (2-hydroxyglutarate dehydrogenase)]]></doc></option>
+<option value='1.1.1.14'><doc title='description'><![CDATA[1.1.1.14 (L-iditol 2-dehydrogenase)]]></doc></option>
+<option value='6.4.1.2'><doc title='description'><![CDATA[6.4.1.2 (Acetyl-CoA carboxylase)]]></doc></option>
+<option value='6.3.1.2'><doc title='description'><![CDATA[6.3.1.2 (Glutamate--ammonia ligase)]]></doc></option>
+<option value='6.3.1.1'><doc title='description'><![CDATA[6.3.1.1 (Aspartate--ammonia ligase)]]></doc></option>
+<option value='6.3.1.5'><doc title='description'><![CDATA[6.3.1.5 (NAD(+) synthase)]]></doc></option>
+<option value='6.3.4.15'><doc title='description'><![CDATA[6.3.4.15 (Biotin--[acetyl-CoA-carboxylase] ligase)]]></doc></option>
+<option value='6.3.2.5'><doc title='description'><![CDATA[6.3.2.5 (Phosphopantothenate--cysteine ligase)]]></doc></option>
+<option value='2.7.8.15'><doc title='description'><![CDATA[2.7.8.15 (UDP-N-acetylglucosamine--dolichyl-phosphateN-acetylglucosaminephosphotransferase)]]></doc></option>
+<option value='1.1.1.1'><doc title='description'><![CDATA[1.1.1.1 (Alcohol dehydrogenase)]]></doc></option>
+<option value='2.1.3.1'><doc title='description'><![CDATA[2.1.3.1 (Methylmalonyl-CoA carboxytransferase)]]></doc></option>
+<option value='4.1.99.1'><doc title='description'><![CDATA[4.1.99.1 (Tryptophanase)]]></doc></option>
+<option value='4.3.1.1'><doc title='description'><![CDATA[4.3.1.1 (Aspartate ammonia-lyase)]]></doc></option>
+<option value='1.15.1.1'><doc title='description'><![CDATA[1.15.1.1 (Superoxide dismutase)]]></doc></option>
+<option value='1.8.4.11'><doc title='description'><![CDATA[1.8.4.11 (Peptide-methionine (S)-S-oxide reductase)]]></doc></option>
+<option value='1.11.1.15'><doc title='description'><![CDATA[1.11.1.15 (Peroxiredoxin)]]></doc></option>
+<option value='1.2.1.3'><doc title='description'><![CDATA[1.2.1.3 (Aldehyde dehydrogenase (NAD(+)))]]></doc></option>
+<option value='1.2.1.12'><doc title='description'><![CDATA[1.2.1.12 (Glyceraldehyde-3-phosphate dehydrogenase (phosphorylating))]]></doc></option>
+<option value='1.2.1.31'><doc title='description'><![CDATA[1.2.1.31 (L-aminoadipate-semialdehyde dehydrogenase)]]></doc></option>
+<option value='1.5.1.2'><doc title='description'><![CDATA[1.5.1.2 (Pyrroline-5-carboxylate reductase)]]></doc></option>
+<option value='1.3.1.2'><doc title='description'><![CDATA[1.3.1.2 (Dihydropyrimidine dehydrogenase (NADP(+)))]]></doc></option>
+<option value='1.2.1.10'><doc title='description'><![CDATA[1.2.1.10 (Acetaldehyde dehydrogenase (acetylating))]]></doc></option>
+<option value='1.2.1.51'><doc title='description'><![CDATA[1.2.1.51 (Pyruvate dehydrogenase (NADP(+)))]]></doc></option>
+<option value='2.7.1.67'><doc title='description'><![CDATA[2.7.1.67 (1-phosphatidylinositol 4-kinase)]]></doc></option>
+<option value='2.7.1.17'><doc title='description'><![CDATA[2.7.1.17 (Xylulokinase)]]></doc></option>
+<option value='1.1.1.26'><doc title='description'><![CDATA[1.1.1.26 (Glyoxylate reductase)]]></doc></option>
+<option value='2.7.11.24'><doc title='description'><![CDATA[2.7.11.24 (Mitogen-activated protein kinase)]]></doc></option>
+<option value='2.3.1.79'><doc title='description'><![CDATA[2.3.1.79 (Maltose O-acetyltransferase)]]></doc></option>
+<option value='2.3.1.4'><doc title='description'><![CDATA[2.3.1.4 (Glucosamine 6-phosphate N-acetyltransferase)]]></doc></option>
+<option value='2.7.11.7'><doc title='description'><![CDATA[2.7.11.7 ([Myosin heavy-chain] kinase)]]></doc></option>
+<option value='2.7.11.12'><doc title='description'><![CDATA[2.7.11.12 (cGMP-dependent protein kinase)]]></doc></option>
+<option value='2.7.11.25'><doc title='description'><![CDATA[2.7.11.25 (Mitogen-activated protein kinase kinase kinase)]]></doc></option>
+<option value='2.7.11.21'><doc title='description'><![CDATA[2.7.11.21 (Polo kinase)]]></doc></option>
+<option value='2.7.11.13'><doc title='description'><![CDATA[2.7.11.13 (Protein kinase C)]]></doc></option>
+<option value='2.7.11.1'><doc title='description'><![CDATA[2.7.11.1 (Non-specific serine/threonine protein kinase)]]></doc></option>
+<option value='2.7.11.23'><doc title='description'><![CDATA[2.7.11.23 ([RNA-polymerase]-subunit kinase)]]></doc></option>
+<option value='2.7.11.18'><doc title='description'><![CDATA[2.7.11.18 ([Myosin light-chain] kinase)]]></doc></option>
+<option value='2.7.11.11'><doc title='description'><![CDATA[2.7.11.11 (cAMP-dependent protein kinase)]]></doc></option>
+<option value='2.7.4.9'><doc title='description'><![CDATA[2.7.4.9 (dTMP kinase)]]></doc></option>
+<option value='4.2.1.46'><doc title='description'><![CDATA[4.2.1.46 (dTDP-glucose 4,6-dehydratase)]]></doc></option>
+<option value='2.3.1.88'><doc title='description'><![CDATA[2.3.1.88 (Peptide alpha-N-acetyltransferase)]]></doc></option>
+<option value='2.3.1.18'><doc title='description'><![CDATA[2.3.1.18 (Galactoside O-acetyltransferase)]]></doc></option>
+<option value='2.7.1.137'><doc title='description'><![CDATA[2.7.1.137 (Phosphatidylinositol 3-kinase)]]></doc></option>
+<option value='4.1.2.27'><doc title='description'><![CDATA[4.1.2.27 (Sphinganine-1-phosphate aldolase)]]></doc></option>
+<option value='2.1.1.36'><doc title='description'><![CDATA[2.1.1.36 (tRNA (adenine-N(1)-)-methyltransferase)]]></doc></option>
+<option value='4.1.2.13'><doc title='description'><![CDATA[4.1.2.13 (Fructose-bisphosphate aldolase)]]></doc></option>
+<option value='4.1.2.4'><doc title='description'><![CDATA[4.1.2.4 (Deoxyribose-phosphate aldolase)]]></doc></option>
+<option value='2.7.1.48'><doc title='description'><![CDATA[2.7.1.48 (Uridine kinase)]]></doc></option>
+<option value='2.1.1.48'><doc title='description'><![CDATA[2.1.1.48 (rRNA (adenine-N(6)-)-methyltransferase)]]></doc></option>
+<option value='2.7.4.21'><doc title='description'><![CDATA[2.7.4.21 (Inositol-hexakisphosphate kinase)]]></doc></option>
+<option value='2.7.4.8'><doc title='description'><![CDATA[2.7.4.8 (Guanylate kinase)]]></doc></option>
+<option value='2.7.4.3'><doc title='description'><![CDATA[2.7.4.3 (Adenylate kinase)]]></doc></option>
+<option value='2.7.6.2'><doc title='description'><![CDATA[2.7.6.2 (Thiamine diphosphokinase)]]></doc></option>
+<option value='1.1.1.37'><doc title='description'><![CDATA[1.1.1.37 (Malate dehydrogenase)]]></doc></option>
+<option value='1.1.1.95'><doc title='description'><![CDATA[1.1.1.95 (Phosphoglycerate dehydrogenase)]]></doc></option>
+<option value='1.1.1.62'><doc title='description'><![CDATA[1.1.1.62 (Estradiol 17-beta-dehydrogenase)]]></doc></option>
+<option value='1.1.1.40'><doc title='description'><![CDATA[1.1.1.40 (Malate dehydrogenase (oxaloacetate-decarboxylating) (NADP(+)))]]></doc></option>
+<option value='1.1.1.290'><doc title='description'><![CDATA[1.1.1.290 (4-phosphoerythronate dehydrogenase)]]></doc></option>
+<option value='1.1.1.100'><doc title='description'><![CDATA[1.1.1.100 (3-oxoacyl-[acyl-carrier-protein] reductase)]]></doc></option>
+<option value='2.7.8.1'><doc title='description'><![CDATA[2.7.8.1 (Ethanolaminephosphotransferase)]]></doc></option>
+<option value='2.7.8.17'><doc title='description'><![CDATA[2.7.8.17 (UDP-N-acetylglucosamine--lysosomal-enzymeN-acetylglucosaminephosphotransferase)]]></doc></option>
+<option value='4.1.1.18'><doc title='description'><![CDATA[4.1.1.18 (Lysine decarboxylase)]]></doc></option>
+<option value='4.1.1.17'><doc title='description'><![CDATA[4.1.1.17 (Ornithine decarboxylase)]]></doc></option>
+<option value='4.3.1.19'><doc title='description'><![CDATA[4.3.1.19 (Threonine ammonia-lyase)]]></doc></option>
+<option value='2.7.1.134'><doc title='description'><![CDATA[2.7.1.134 (Inositol-tetrakisphosphate 1-kinase)]]></doc></option>
+<option value='2.7.7.1'><doc title='description'><![CDATA[2.7.7.1 (Nicotinamide-nucleotide adenylyltransferase)]]></doc></option>
+<option value='2.7.9.1'><doc title='description'><![CDATA[2.7.9.1 (Pyruvate, phosphate dikinase)]]></doc></option>
+<option value='2.3.1.43'><doc title='description'><![CDATA[2.3.1.43 (Phosphatidylcholine--sterol O-acyltransferase)]]></doc></option>
+<option value='2.3.1.97'><doc title='description'><![CDATA[2.3.1.97 (Glycylpeptide N-tetradecanoyltransferase)]]></doc></option>
+<option value='2.1.1.100'><doc title='description'><![CDATA[2.1.1.100 (Protein-S-isoprenylcysteine O-methyltransferase)]]></doc></option>
+<option value='2.1.1.32'><doc title='description'><![CDATA[2.1.1.32 (tRNA (guanine-N(2)-)-methyltransferase)]]></doc></option>
+<option value='2.1.1.31'><doc title='description'><![CDATA[2.1.1.31 (tRNA (guanine-N(1)-)-methyltransferase)]]></doc></option>
+<option value='4.2.1.2'><doc title='description'><![CDATA[4.2.1.2 (Fumarate hydratase)]]></doc></option>
+<option value='4.2.1.9'><doc title='description'><![CDATA[4.2.1.9 (Dihydroxy-acid dehydratase)]]></doc></option>
+<option value='4.2.1.11'><doc title='description'><![CDATA[4.2.1.11 (Phosphopyruvate hydratase)]]></doc></option>
+<option value='2.7.7.25'><doc title='description'><![CDATA[2.7.7.25 (tRNA adenylyltransferase)]]></doc></option>
+<option value='2.7.7.6'><doc title='description'><![CDATA[2.7.7.6 (DNA-directed RNA polymerase)]]></doc></option>
+<option value='2.7.7.3'><doc title='description'><![CDATA[2.7.7.3 (Pantetheine-phosphate adenylyltransferase)]]></doc></option>
+<option value='2.7.7.41'><doc title='description'><![CDATA[2.7.7.41 (Phosphatidate cytidylyltransferase)]]></doc></option>
+<option value='2.7.7.19'><doc title='description'><![CDATA[2.7.7.19 (Polynucleotide adenylyltransferase)]]></doc></option>
+<option value='2.7.7.9'><doc title='description'><![CDATA[2.7.7.9 (UTP--glucose-1-phosphate uridylyltransferase)]]></doc></option>
+<option value='2.7.10.1'><doc title='description'><![CDATA[2.7.10.1 (Receptor protein-tyrosine kinase)]]></doc></option>
+<option value='2.7.12.2'><doc title='description'><![CDATA[2.7.12.2 (Mitogen-activated protein kinase kinase)]]></doc></option>
+<option value='2.7.1.20'><doc title='description'><![CDATA[2.7.1.20 (Adenosine kinase)]]></doc></option>
+<option value='2.7.1.90'><doc title='description'><![CDATA[2.7.1.90 (Diphosphate--fructose-6-phosphate 1-phosphotransferase)]]></doc></option>
+<option value='2.7.1.144'><doc title='description'><![CDATA[2.7.1.144 (Tagatose-6-phosphate kinase)]]></doc></option>
+<option value='2.7.1.35'><doc title='description'><![CDATA[2.7.1.35 (Pyridoxal kinase)]]></doc></option>
+<option value='2.7.1.11'><doc title='description'><![CDATA[2.7.1.11 (6-phosphofructokinase)]]></doc></option>
+<option value='2.7.1.30'><doc title='description'><![CDATA[2.7.1.30 (Glycerol kinase)]]></doc></option>
+<option value='2.7.1.4'><doc title='description'><![CDATA[2.7.1.4 (Fructokinase)]]></doc></option>
+<option value='2.7.1.21'><doc title='description'><![CDATA[2.7.1.21 (Thymidine kinase)]]></doc></option>
+<option value='1.11.1.9'><doc title='description'><![CDATA[1.11.1.9 (Glutathione peroxidase)]]></doc></option>
+<option value='1.17.4.-'><doc title='description'><![CDATA[1.17.4.- (With a disulfide as acceptor.)]]></doc></option>
+<option value='1.17.4.2'><doc title='description'><![CDATA[1.17.4.2 (Ribonucleoside-triphosphate reductase)]]></doc></option>
+<option value='1.17.4.1'><doc title='description'><![CDATA[1.17.4.1 (Ribonucleoside-diphosphate reductase)]]></doc></option>
+<option value='1.2.4.2'><doc title='description'><![CDATA[1.2.4.2 (Oxoglutarate dehydrogenase (succinyl-transferring))]]></doc></option>
+<option value='1.6.1.1'><doc title='description'><![CDATA[1.6.1.1 (NAD(P)(+) transhydrogenase (B-specific))]]></doc></option>
+<option value='1.6.4.5'><doc title='description'><![CDATA[1.6.4.5 (Transferred entry: 1.8.1.9)]]></doc></option>
+<option value='1.6.5.3'><doc title='description'><![CDATA[1.6.5.3 (NADH dehydrogenase (ubiquinone))]]></doc></option>
+<option value='1.6.99.3'><doc title='description'><![CDATA[1.6.99.3 (NADH dehydrogenase)]]></doc></option>
+<option value='1.1.1.8'><doc title='description'><![CDATA[1.1.1.8 (Glycerol-3-phosphate dehydrogenase (NAD(+)))]]></doc></option>
+<option value='1.1.1.219'><doc title='description'><![CDATA[1.1.1.219 (Dihydrokaempferol 4-reductase)]]></doc></option>
+<option value='1.1.1.42'><doc title='description'><![CDATA[1.1.1.42 (Isocitrate dehydrogenase (NADP(+)))]]></doc></option>
+<option value='1.1.1.94'><doc title='description'><![CDATA[1.1.1.94 (Glycerol-3-phosphate dehydrogenase (NAD(P)(+)))]]></doc></option>
+<option value='1.1.1.195'><doc title='description'><![CDATA[1.1.1.195 (Cinnamyl-alcohol dehydrogenase)]]></doc></option>
+<option value='1.1.1.35'><doc title='description'><![CDATA[1.1.1.35 (3-hydroxyacyl-CoA dehydrogenase)]]></doc></option>
+<option value='1.1.1.255'><doc title='description'><![CDATA[1.1.1.255 (Mannitol dehydrogenase)]]></doc></option>
+<option value='1.1.1.205'><doc title='description'><![CDATA[1.1.1.205 (IMP dehydrogenase)]]></doc></option>
+<option value='1.1.1.39'><doc title='description'><![CDATA[1.1.1.39 (Malate dehydrogenase (decarboxylating))]]></doc></option>
+<option value='1.6.2.4'><doc title='description'><![CDATA[1.6.2.4 (NADPH--hemoprotein reductase)]]></doc></option>
+<option value='1.1.99.5'><doc title='description'><![CDATA[1.1.99.5 (Transferred entry: 1.1.5.3)]]></doc></option>
+<option value='1.1.99.1'><doc title='description'><![CDATA[1.1.99.1 (Choline dehydrogenase)]]></doc></option>
+<option value='1.1.99.16'><doc title='description'><![CDATA[1.1.99.16 (Transferred entry: 1.1.5.4)]]></doc></option>
+<option value='1.1.1.178'><doc title='description'><![CDATA[1.1.1.178 (3-hydroxy-2-methylbutyryl-CoA dehydrogenase)]]></doc></option>
+<option value='1.1.1.27'><doc title='description'><![CDATA[1.1.1.27 (L-lactate dehydrogenase)]]></doc></option>
+<option value='1.4.3.6'><doc title='description'><![CDATA[1.4.3.6 (Amine oxidase (copper-containing))]]></doc></option>
+<option value='1.10.99.2'><doc title='description'><![CDATA[1.10.99.2 (Ribosyldihydronicotinamide dehydrogenase (quinone))]]></doc></option>
+<option value='2.5.1.10'><doc title='description'><![CDATA[2.5.1.10 (Geranyltranstransferase)]]></doc></option>
+<option value='3.1.26.5'><doc title='description'><![CDATA[3.1.26.5 (Ribonuclease P)]]></doc></option>
+<option value='2.1.2.1'><doc title='description'><![CDATA[2.1.2.1 (Glycine hydroxymethyltransferase)]]></doc></option>
+<option value='2.1.1.14'><doc title='description'><![CDATA[2.1.1.14 (5-methyltetrahydropteroyltriglutamate--homocysteine S-methyltransferase)]]></doc></option>
+<option value='2.1.1.114'><doc title='description'><![CDATA[2.1.1.114 (Hexaprenyldihydroxybenzoate methyltransferase)]]></doc></option>
+<option value='2.1.1.45'><doc title='description'><![CDATA[2.1.1.45 (Thymidylate synthase)]]></doc></option>
+<option value='2.1.1.37'><doc title='description'><![CDATA[2.1.1.37 (DNA (cytosine-5-)-methyltransferase)]]></doc></option>
+<option value='2.1.1.34'><doc title='description'><![CDATA[2.1.1.34 (tRNA guanosine-2'-O-methyltransferase)]]></doc></option>
+<option value='2.1.1.43'><doc title='description'><![CDATA[2.1.1.43 (Histone-lysine N-methyltransferase)]]></doc></option>
+<option value='2.3.1.47'><doc title='description'><![CDATA[2.3.1.47 (8-amino-7-oxononanoate synthase)]]></doc></option>
+<option value='2.3.1.48'><doc title='description'><![CDATA[2.3.1.48 (Histone acetyltransferase)]]></doc></option>
+<option value='2.3.1.51'><doc title='description'><![CDATA[2.3.1.51 (1-acylglycerol-3-phosphate O-acyltransferase)]]></doc></option>
+<option value='2.3.3.1'><doc title='description'><![CDATA[2.3.3.1 (Citrate (Si)-synthase)]]></doc></option>
+<option value='2.7.8.8'><doc title='description'><![CDATA[2.7.8.8 (CDP-diacylglycerol--serine O-phosphatidyltransferase)]]></doc></option>
+<option value='3.1.27.-'><doc title='description'><![CDATA[3.1.27.- (Endoribonucleases producing other than 5'-phosphomonoesters.)]]></doc></option>
+<option value='3.1.27.9'><doc title='description'><![CDATA[3.1.27.9 (tRNA-intron endonuclease)]]></doc></option>
+<option value='2.7.8.5'><doc title='description'><![CDATA[2.7.8.5 (CDP-diacylglycerol--glycerol-3-phosphate 3-phosphatidyltransferase)]]></doc></option>
+<option value='6.3.3.3'><doc title='description'><![CDATA[6.3.3.3 (Dethiobiotin synthase)]]></doc></option>
+<option value='3.4.21.53'><doc title='description'><![CDATA[3.4.21.53 (Endopeptidase La)]]></doc></option>
+<option value='3.6.1.45'><doc title='description'><![CDATA[3.6.1.45 (UDP-sugar diphosphatase)]]></doc></option>
+<option value='3.6.5.1'><doc title='description'><![CDATA[3.6.5.1 (Heterotrimeric G-protein GTPase)]]></doc></option>
+<option value='2.5.1.21'><doc title='description'><![CDATA[2.5.1.21 (Squalene synthase)]]></doc></option>
+<option value='3.4.11.1'><doc title='description'><![CDATA[3.4.11.1 (Leucyl aminopeptidase)]]></doc></option>
+<option value='2.7.1.108'><doc title='description'><![CDATA[2.7.1.108 (Dolichol kinase)]]></doc></option>
+<option value='2.7.1.123'><doc title='description'><![CDATA[2.7.1.123 (Transferred entry: 2.7.11.17)]]></doc></option>
+<option value='2.7.1.37'><doc title='description'><![CDATA[2.7.1.37 (Transferred entry: 2.7.11.1)]]></doc></option>
+<option value='3.1.3.12'><doc title='description'><![CDATA[3.1.3.12 (Trehalose-phosphatase)]]></doc></option>
+<option value='3.1.22.-'><doc title='description'><![CDATA[3.1.22.- (Endodeoxyribonucleases producing other than 5'-phosphomonoesters.)]]></doc></option>
+<option value='3.4.14.11'><doc title='description'><![CDATA[3.4.14.11 (Xaa-Pro dipeptidyl-peptidase)]]></doc></option>
+<option value='3.6.3.36'><doc title='description'><![CDATA[3.6.3.36 (Taurine-transporting ATPase)]]></doc></option>
+<option value='3.6.3.6'><doc title='description'><![CDATA[3.6.3.6 (Proton-exporting ATPase)]]></doc></option>
+<option value='6.2.1.5'><doc title='description'><![CDATA[6.2.1.5 (Succinate--CoA ligase (ADP-forming))]]></doc></option>
+<option value='6.2.1.1'><doc title='description'><![CDATA[6.2.1.1 (Acetate--CoA ligase)]]></doc></option>
+<option value='4.6.1.2'><doc title='description'><![CDATA[4.6.1.2 (Guanylate cyclase)]]></doc></option>
+<option value='3.6.5.3'><doc title='description'><![CDATA[3.6.5.3 (Protein-synthesizing GTPase)]]></doc></option>
+<option value='2.7.1.32'><doc title='description'><![CDATA[2.7.1.32 (Choline kinase)]]></doc></option>
+<option value='3.4.21.105'><doc title='description'><![CDATA[3.4.21.105 (Rhomboid protease)]]></doc></option>
+<option value='3.5.4.12'><doc title='description'><![CDATA[3.5.4.12 (dCMP deaminase)]]></doc></option>
+<option value='3.2.2.21'><doc title='description'><![CDATA[3.2.2.21 (DNA-3-methyladenine glycosylase II)]]></doc></option>
+<option value='2.5.1.18'><doc title='description'><![CDATA[2.5.1.18 (Glutathione transferase)]]></doc></option>
+<option value='2.5.1.1'><doc title='description'><![CDATA[2.5.1.1 (Dimethylallyltranstransferase)]]></doc></option>
+<option value='3.4.14.1'><doc title='description'><![CDATA[3.4.14.1 (Dipeptidyl-peptidase I)]]></doc></option>
+<option value='4.1.2.10'><doc title='description'><![CDATA[4.1.2.10 (Mandelonitrile lyase)]]></doc></option>
+<option value='2.7.9.4'><doc title='description'><![CDATA[2.7.9.4 (Alpha-glucan, water dikinase)]]></doc></option>
+<option value='2.5.1.31'><doc title='description'><![CDATA[2.5.1.31 (Di-trans,poly-cis-decaprenylcistransferase)]]></doc></option>
+<option value='2.7.3.2'><doc title='description'><![CDATA[2.7.3.2 (Creatine kinase)]]></doc></option>
+<option value='4.6.1.1'><doc title='description'><![CDATA[4.6.1.1 (Adenylate cyclase)]]></doc></option>
+<option value='3.6.1.7'><doc title='description'><![CDATA[3.6.1.7 (Acylphosphatase)]]></doc></option>
+<option value='3.4.23.1'><doc title='description'><![CDATA[3.4.23.1 (Pepsin A)]]></doc></option>
+<option value='3.6.1.6'><doc title='description'><![CDATA[3.6.1.6 (Nucleoside-diphosphatase)]]></doc></option>
+<option value='3.6.1.13'><doc title='description'><![CDATA[3.6.1.13 (ADP-ribose diphosphatase)]]></doc></option>
+<option value='6.3.5.2'><doc title='description'><![CDATA[6.3.5.2 (GMP synthase (glutamine-hydrolyzing))]]></doc></option>
+<option value='3.2.1.141'><doc title='description'><![CDATA[3.2.1.141 (4-alpha-D-((1->4)-alpha-D-glucano)trehalose trehalohydrolase)]]></doc></option>
+<option value='6.3.4.2'><doc title='description'><![CDATA[6.3.4.2 (CTP synthase)]]></doc></option>
+<option value='6.3.4.1'><doc title='description'><![CDATA[6.3.4.1 (GMP synthase)]]></doc></option>
+<option value='3.2.1.41'><doc title='description'><![CDATA[3.2.1.41 (Pullulanase)]]></doc></option>
+<option value='3.2.1.3'><doc title='description'><![CDATA[3.2.1.3 (Glucan 1,4-alpha-glucosidase)]]></doc></option>
+<option value='3.1.11.2'><doc title='description'><![CDATA[3.1.11.2 (Exodeoxyribonuclease III)]]></doc></option>
+<option value='2.7.13.3'><doc title='description'><![CDATA[2.7.13.3 (Histidine kinase)]]></doc></option>
+<option value='3.1.3.5'><doc title='description'><![CDATA[3.1.3.5 (5'-nucleotidase)]]></doc></option>
+<option value='3.1.3.56'><doc title='description'><![CDATA[3.1.3.56 (Inositol-polyphosphate 5-phosphatase)]]></doc></option>
+<option value='3.1.3.24'><doc title='description'><![CDATA[3.1.3.24 (Sucrose-phosphate phosphatase)]]></doc></option>
+<option value='3.1.3.23'><doc title='description'><![CDATA[3.1.3.23 (Sugar-phosphatase)]]></doc></option>
+<option value='3.1.1.1'><doc title='description'><![CDATA[3.1.1.1 (Carboxylesterase)]]></doc></option>
+<option value='3.1.1.3'><doc title='description'><![CDATA[3.1.1.3 (Triacylglycerol lipase)]]></doc></option>
+<option value='2.7.8.2'><doc title='description'><![CDATA[2.7.8.2 (Diacylglycerol cholinephosphotransferase)]]></doc></option>
+<option value='4.4.1.-'><doc title='description'><![CDATA[4.4.1.- (Carbon-sulfur lyases.)]]></doc></option>
+<option value='1.2.7.-'><doc title='description'><![CDATA[1.2.7.- (With an iron-sulfur protein as acceptor.)]]></doc></option>
+<option value='1.11.1.-'><doc title='description'><![CDATA[1.11.1.- (Peroxidases.)]]></doc></option>
+<option value='4.1.1.33'><doc title='description'><![CDATA[4.1.1.33 (Diphosphomevalonate decarboxylase)]]></doc></option>
+<option value='6.3.2.-'><doc title='description'><![CDATA[6.3.2.- (Acid--D-amino-acid ligases (peptide synthases).)]]></doc></option>
+<option value='4.2.1.70'><doc title='description'><![CDATA[4.2.1.70 (Pseudouridylate synthase)]]></doc></option>
+<option value='4.3.1.17'><doc title='description'><![CDATA[4.3.1.17 (L-serine ammonia-lyase)]]></doc></option>
+<option value='4.1.1.32'><doc title='description'><![CDATA[4.1.1.32 (Phosphoenolpyruvate carboxykinase (GTP))]]></doc></option>
+<option value='3.1.11.-'><doc title='description'><![CDATA[3.1.11.- (Exodeoxyribonucleases producing 5'-phosphomonoesters.)]]></doc></option>
+<option value='1.1.1.49'><doc title='description'><![CDATA[1.1.1.49 (Glucose-6-phosphate 1-dehydrogenase)]]></doc></option>
+<option value='2.4.1.11'><doc title='description'><![CDATA[2.4.1.11 (Glycogen(starch) synthase)]]></doc></option>
+<option value='1.1.1.88'><doc title='description'><![CDATA[1.1.1.88 (Hydroxymethylglutaryl-CoA reductase)]]></doc></option>
+<option value='1.1.1.44'><doc title='description'><![CDATA[1.1.1.44 (Phosphogluconate dehydrogenase (decarboxylating))]]></doc></option>
+<option value='2.1.3.3'><doc title='description'><![CDATA[2.1.3.3 (Ornithine carbamoyltransferase)]]></doc></option>
+<option value='2.7.1.40'><doc title='description'><![CDATA[2.7.1.40 (Pyruvate kinase)]]></doc></option>
+<option value='2.7.1.15'><doc title='description'><![CDATA[2.7.1.15 (Ribokinase)]]></doc></option>
+<option value='2.7.1.82'><doc title='description'><![CDATA[2.7.1.82 (Ethanolamine kinase)]]></doc></option>
+<option value='2.7.1.25'><doc title='description'><![CDATA[2.7.1.25 (Adenylyl-sulfate kinase)]]></doc></option>
+<option value='2.7.1.31'><doc title='description'><![CDATA[2.7.1.31 (Glycerate kinase)]]></doc></option>
+<option value='2.7.1.107'><doc title='description'><![CDATA[2.7.1.107 (Diacylglycerol kinase)]]></doc></option>
+<option value='2.7.1.150'><doc title='description'><![CDATA[2.7.1.150 (1-phosphatidylinositol-3-phosphate 5-kinase)]]></doc></option>
+<option value='2.8.1.7'><doc title='description'><![CDATA[2.8.1.7 (Cysteine desulfurase)]]></doc></option>
+<option value='5.4.99.15'><doc title='description'><![CDATA[5.4.99.15 ((1->4)-alpha-D-glucan 1-alpha-D-glucosylmutase)]]></doc></option>
+<option value='2.7.7.-'><doc title='description'><![CDATA[2.7.7.- (Nucleotidyltransferases.)]]></doc></option>
+<option value='2.7.1.-'><doc title='description'><![CDATA[2.7.1.- (Phosphotransferases with an alcohol group as acceptor.)]]></doc></option>
+<option value='3.4.-.-'><doc title='description'><![CDATA[3.4.-.- (Acting on peptide bonds (peptide hydrolases).)]]></doc></option>
+<option value='3.4.99.-'><doc title='description'><![CDATA[3.4.99.- (Endopeptidases of unknown catalytic mechanism.)]]></doc></option>
+<option value='3.6.3.-'><doc title='description'><![CDATA[3.6.3.- (Acting on acid anhydrides; catalyzing transmembrane movement of substances.)]]></doc></option>
+<option value='3.4.22.-'><doc title='description'><![CDATA[3.4.22.- (Cysteine endopeptidases.)]]></doc></option>
+<option value='1.5.1.3'><doc title='description'><![CDATA[1.5.1.3 (Dihydrofolate reductase)]]></doc></option>
+<option value='2.6.1.62'><doc title='description'><![CDATA[2.6.1.62 (Adenosylmethionine--8-amino-7-oxononanoate transaminase)]]></doc></option>
+<option value='4.1.1.1'><doc title='description'><![CDATA[4.1.1.1 (Pyruvate decarboxylase)]]></doc></option>
+<option value='4.1.1.35'><doc title='description'><![CDATA[4.1.1.35 (UDP-glucuronate decarboxylase)]]></doc></option>
+<option value='4.1.1.31'><doc title='description'><![CDATA[4.1.1.31 (Phosphoenolpyruvate carboxylase)]]></doc></option>
+<option value='4.1.1.65'><doc title='description'><![CDATA[4.1.1.65 (Phosphatidylserine decarboxylase)]]></doc></option>
+<option value='3.4.24.-'><doc title='description'><![CDATA[3.4.24.- (Metalloendopeptidases.)]]></doc></option>
+<option value='2.5.1.-'><doc title='description'><![CDATA[2.5.1.- (Transferring alkyl or aryl groups, other than methyl groups.)]]></doc></option>
+<option value='1.18.1.2'><doc title='description'><![CDATA[1.18.1.2 (Ferredoxin--NADP(+) reductase)]]></doc></option>
+<option value='3.4.21.-'><doc title='description'><![CDATA[3.4.21.- (Serine endopeptidases.)]]></doc></option>
+<option value='3.1.1.-'><doc title='description'><![CDATA[3.1.1.- (Carboxylic ester hydrolases.)]]></doc></option>
+<option value='2.7.8.-'><doc title='description'><![CDATA[2.7.8.- (Transferases for other substituted phosphate groups.)]]></doc></option>
+<option value='1.-.-.-'><doc title='description'><![CDATA[1.-.-.- (Oxidoreductases.)]]></doc></option>
+<option value='3.-.-.-'><doc title='description'><![CDATA[3.-.-.- (Hydrolases.)]]></doc></option>
+<option value='3.6.-.-'><doc title='description'><![CDATA[3.6.-.- (Acting on acid anhydrides.)]]></doc></option>
+<option value='3.6.1.11'><doc title='description'><![CDATA[3.6.1.11 (Exopolyphosphatase)]]></doc></option>
+<option value='1.1.1.-'><doc title='description'><![CDATA[1.1.1.- (With NAD(+) or NADP(+) as acceptor.)]]></doc></option>
+<option value='4.2.1.-'><doc title='description'><![CDATA[4.2.1.- (Hydro-lyases.)]]></doc></option>
+<option value='2.3.-.-'><doc title='description'><![CDATA[2.3.-.- (Acyltransferases.)]]></doc></option>
+<option value='2.3.1.-'><doc title='description'><![CDATA[2.3.1.- (Transferring groups other than amino-acyl groups.)]]></doc></option>
+<option value='2.7.-.-'><doc title='description'><![CDATA[2.7.-.- (Transferring phosphorous-containing groups.)]]></doc></option>
+<option value='5.-.-.-'><doc title='description'><![CDATA[5.-.-.- (Isomerases.)]]></doc></option>
+<option value='4.4.-.-'><doc title='description'><![CDATA[4.4.-.- (Carbon-sulfur lyases.)]]></doc></option>
+<option value='2.7.11.-'><doc title='description'><![CDATA[2.7.11.- (Protein-serine/threonine kinases.)]]></doc></option>
+<option value='1.1.1.22'><doc title='description'><![CDATA[1.1.1.22 (UDP-glucose 6-dehydrogenase)]]></doc></option>
+<option value='2.1.1.64'><doc title='description'><![CDATA[2.1.1.64 (3-demethylubiquinone-9 3-O-methyltransferase)]]></doc></option>
+<option value='2.3.1.15'><doc title='description'><![CDATA[2.3.1.15 (Glycerol-3-phosphate O-acyltransferase)]]></doc></option>
+<option value='1.12.1.-'><doc title='description'><![CDATA[1.12.1.- (With NAD(+) or NADP(+) as acceptor.)]]></doc></option>
+<option value='3.4.17.-'><doc title='description'><![CDATA[3.4.17.- (Metallocarboxypeptidases.)]]></doc></option>
+<option value='3.4.17.2'><doc title='description'><![CDATA[3.4.17.2 (Carboxypeptidase B)]]></doc></option>
+<option value='3.4.23.-'><doc title='description'><![CDATA[3.4.23.- (Aspartic endopeptidases.)]]></doc></option>
+<option value='3.4.24.59'><doc title='description'><![CDATA[3.4.24.59 (Mitochondrial intermediate peptidase)]]></doc></option>
+<option value='1.3.5.1'><doc title='description'><![CDATA[1.3.5.1 (Succinate dehydrogenase (ubiquinone))]]></doc></option>
+<option value='3.4.24.56'><doc title='description'><![CDATA[3.4.24.56 (Insulysin)]]></doc></option>
+<option value='6.2.1.4'><doc title='description'><![CDATA[6.2.1.4 (Succinate--CoA ligase (GDP-forming))]]></doc></option>
+<option value='1.2.1.41'><doc title='description'><![CDATA[1.2.1.41 (Glutamate-5-semialdehyde dehydrogenase)]]></doc></option>
+<option value='2.7.4.12'><doc title='description'><![CDATA[2.7.4.12 (T(2)-induced deoxynucleotide kinase)]]></doc></option>
+<option value='2.7.7.15'><doc title='description'><![CDATA[2.7.7.15 (Choline-phosphate cytidylyltransferase)]]></doc></option>
+<option value='2.7.7.13'><doc title='description'><![CDATA[2.7.7.13 (Mannose-1-phosphate guanylyltransferase)]]></doc></option>
+<option value='2.7.7.49'><doc title='description'><![CDATA[2.7.7.49 (RNA-directed DNA polymerase)]]></doc></option>
+<option value='2.7.7.63'><doc title='description'><![CDATA[2.7.7.63 (Lipoate--protein ligase)]]></doc></option>
+<option value='2.7.7.23'><doc title='description'><![CDATA[2.7.7.23 (UDP-N-acetylglucosamine diphosphorylase)]]></doc></option>
+<option value='2.7.7.21'><doc title='description'><![CDATA[2.7.7.21 (tRNA cytidylyltransferase)]]></doc></option>
+<option value='2.7.7.56'><doc title='description'><![CDATA[2.7.7.56 (tRNA nucleotidyltransferase)]]></doc></option>
+<option value='2.7.7.64'><doc title='description'><![CDATA[2.7.7.64 (UTP-monosaccharide-1-phosphate uridylyltransferase)]]></doc></option>
+<option value='2.7.7.27'><doc title='description'><![CDATA[2.7.7.27 (Glucose-1-phosphate adenylyltransferase)]]></doc></option>
+<option value='3.6.1.17'><doc title='description'><![CDATA[3.6.1.17 (Bis(5'-nucleosyl)-tetraphosphatase (asymmetrical))]]></doc></option>
+<option value='1.1.3.13'><doc title='description'><![CDATA[1.1.3.13 (Alcohol oxidase)]]></doc></option>
+<option value='4.2.1.20'><doc title='description'><![CDATA[4.2.1.20 (Tryptophan synthase)]]></doc></option>
+<option value='3.6.4.9'><doc title='description'><![CDATA[3.6.4.9 (Chaperonin ATPase)]]></doc></option>
+<option value='2.4.1.15'><doc title='description'><![CDATA[2.4.1.15 (Alpha,alpha-trehalose-phosphate synthase (UDP-forming))]]></doc></option>
+<option value='2.4.1.130'><doc title='description'><![CDATA[2.4.1.130 (Dolichyl-phosphate-mannose--glycolipid alpha-mannosyltransferase)]]></doc></option>
+<option value='2.4.1.132'><doc title='description'><![CDATA[2.4.1.132 (Glycolipid 3-alpha-mannosyltransferase)]]></doc></option>
+<option value='2.4.1.36'><doc title='description'><![CDATA[2.4.1.36 (Alpha,alpha-trehalose-phosphate synthase (GDP-forming))]]></doc></option>
+<option value='2.4.1.117'><doc title='description'><![CDATA[2.4.1.117 (Dolichyl-phosphate beta-glucosyltransferase)]]></doc></option>
+<option value='2.4.1.242'><doc title='description'><![CDATA[2.4.1.242 (NDP-glucose--starch glucosyltransferase)]]></doc></option>
+<option value='2.4.1.221'><doc title='description'><![CDATA[2.4.1.221 (Peptide-O-fucosyltransferase)]]></doc></option>
+<option value='2.4.1.141'><doc title='description'><![CDATA[2.4.1.141 (N-acetylglucosaminyldiphosphodolichol N-acetylglucosaminyltransferase)]]></doc></option>
+<option value='4.2.1.3'><doc title='description'><![CDATA[4.2.1.3 (Aconitate hydratase)]]></doc></option>
+<option value='4.2.1.32'><doc title='description'><![CDATA[4.2.1.32 (L(+)-tartrate dehydratase)]]></doc></option>
+<option value='4.2.1.47'><doc title='description'><![CDATA[4.2.1.47 (GDP-mannose 4,6-dehydratase)]]></doc></option>
+<option value='6.1.1.17'><doc title='description'><![CDATA[6.1.1.17 (Glutamate--tRNA ligase)]]></doc></option>
+<option value='3.4.24.64'><doc title='description'><![CDATA[3.4.24.64 (Mitochondrial processing peptidase)]]></doc></option>
+<option value='2.7.2.11'><doc title='description'><![CDATA[2.7.2.11 (Glutamate 5-kinase)]]></doc></option>
+<option value='2.4.1.87'><doc title='description'><![CDATA[2.4.1.87 (N-acetyllactosaminide 3-alpha-galactosyltransferase)]]></doc></option>
+<option value='2.4.1.41'><doc title='description'><![CDATA[2.4.1.41 (Polypeptide N-acetylgalactosaminyltransferase)]]></doc></option>
+<option value='2.4.2.14'><doc title='description'><![CDATA[2.4.2.14 (Amidophosphoribosyltransferase)]]></doc></option>
+<option value='2.4.2.9'><doc title='description'><![CDATA[2.4.2.9 (Uracil phosphoribosyltransferase)]]></doc></option>
+<option value='6.3.4.14'><doc title='description'><![CDATA[6.3.4.14 (Biotin carboxylase)]]></doc></option>
+<option value='5.1.3.-'><doc title='description'><![CDATA[5.1.3.- (Acting on carbohydrates and derivatives.)]]></doc></option>
+<option value='2.7.4.14'><doc title='description'><![CDATA[2.7.4.14 (Cytidylate kinase)]]></doc></option>
+<option value='2.3.1.20'><doc title='description'><![CDATA[2.3.1.20 (Diacylglycerol O-acyltransferase)]]></doc></option>
+<option value='3.1.4.17'><doc title='description'><![CDATA[3.1.4.17 (3',5'-cyclic-nucleotide phosphodiesterase)]]></doc></option>
+<option value='1.8.1.4'><doc title='description'><![CDATA[1.8.1.4 (Dihydrolipoyl dehydrogenase)]]></doc></option>
+<option value='1.8.1.7'><doc title='description'><![CDATA[1.8.1.7 (Glutathione-disulfide reductase)]]></doc></option>
+<option value='3.4.23.34'><doc title='description'><![CDATA[3.4.23.34 (Cathepsin E)]]></doc></option>
+<option value='3.1.30.-'><doc title='description'><![CDATA[3.1.30.- (Endoribonucleases active with either ribo- or deoxyribonucleic acid and producing 5'-ph...]]></doc></option>
+<option value='3.1.4.11'><doc title='description'><![CDATA[3.1.4.11 (Phosphoinositide phospholipase C)]]></doc></option>
+<option value='3.1.13.-'><doc title='description'><![CDATA[3.1.13.- (Exoribonucleases producing 5'-phosphomonoesters.)]]></doc></option>
+<option value='3.6.3.4'><doc title='description'><![CDATA[3.6.3.4 (Copper-exporting ATPase)]]></doc></option>
+<option value='2.3.1.61'><doc title='description'><![CDATA[2.3.1.61 (Dihydrolipoyllysine-residue succinyltransferase)]]></doc></option>
+<option value='1.14.11.2'><doc title='description'><![CDATA[1.14.11.2 (Procollagen-proline dioxygenase)]]></doc></option>
+<option value='1.14.13.39'><doc title='description'><![CDATA[1.14.13.39 (Nitric-oxide synthase)]]></doc></option>
+<option value='5.1.3.7'><doc title='description'><![CDATA[5.1.3.7 (UDP-N-acetylglucosamine 4-epimerase)]]></doc></option>
+<option value='5.4.2.3'><doc title='description'><![CDATA[5.4.2.3 (Phosphoacetylglucosamine mutase)]]></doc></option>
+<option value='5.3.1.8'><doc title='description'><![CDATA[5.3.1.8 (Mannose-6-phosphate isomerase)]]></doc></option>
+<option value='1.11.1.12'><doc title='description'><![CDATA[1.11.1.12 (Phospholipid-hydroperoxide glutathione peroxidase)]]></doc></option>
+<option value='3.6.4.-'><doc title='description'><![CDATA[3.6.4.- (Acting on acid anhydrides; involved in cellular and subcellular movement.)]]></doc></option>
+<option value='2.1.1.-'><doc title='description'><![CDATA[2.1.1.- (Methyltransferases.)]]></doc></option>
+<option value='3.2.2.-'><doc title='description'><![CDATA[3.2.2.- (Hydrolyzing N-glycosyl compounds.)]]></doc></option>
+<option value='2.7.11.26'><doc title='description'><![CDATA[2.7.11.26 ([Tau protein] kinase)]]></doc></option>
+<option value='3.6.1.-'><doc title='description'><![CDATA[3.6.1.- (In phosphorous-containing anhydrides.)]]></doc></option>
+<option value='3.6.1.3'><doc title='description'><![CDATA[3.6.1.3 (Adenosinetriphosphatase)]]></doc></option>
+<option value='3.1.-.-'><doc title='description'><![CDATA[3.1.-.- (Acting on ester bonds.)]]></doc></option>
+<option value='3.1.3.-'><doc title='description'><![CDATA[3.1.3.- (Phosphoric monoester hydrolases.)]]></doc></option>
+<option value='3.6.1.22'><doc title='description'><![CDATA[3.6.1.22 (NAD(+) diphosphatase)]]></doc></option>
+<option value='3.6.1.1'><doc title='description'><![CDATA[3.6.1.1 (Inorganic diphosphatase)]]></doc></option>
+<option value='3.6.1.5'><doc title='description'><![CDATA[3.6.1.5 (Apyrase)]]></doc></option>
+<option value='3.6.1.19'><doc title='description'><![CDATA[3.6.1.19 (Nucleoside-triphosphate diphosphatase)]]></doc></option>
+<option value='3.6.1.43'><doc title='description'><![CDATA[3.6.1.43 (Dolichyldiphosphatase)]]></doc></option>
+<option value='3.6.1.23'><doc title='description'><![CDATA[3.6.1.23 (dUTP diphosphatase)]]></doc></option>
+<option value='2.7.1.1'><doc title='description'><![CDATA[2.7.1.1 (Hexokinase)]]></doc></option>
+<option value='4.1.1.73'><doc title='description'><![CDATA[4.1.1.73 (Tartrate decarboxylase)]]></doc></option>
+<option value='3.6.4.6'><doc title='description'><![CDATA[3.6.4.6 (Vesicle-fusing ATPase)]]></doc></option>
+<option value='1.1.1.5'><doc title='description'><![CDATA[1.1.1.5 (Transferred entry: 1.1.1.303)]]></doc></option>
+<option value='2.4.1.-'><doc title='description'><![CDATA[2.4.1.- (Hexosyltransferases.)]]></doc></option>
+<option value='3.1.13.4'><doc title='description'><![CDATA[3.1.13.4 (Poly(A)-specific ribonuclease)]]></doc></option>
+<option value='3.1.13.1'><doc title='description'><![CDATA[3.1.13.1 (Exoribonuclease II)]]></doc></option>
+<option value='5.4.99.-'><doc title='description'><![CDATA[5.4.99.- (Transferring other groups.)]]></doc></option>
+<option value='1.3.1.-'><doc title='description'><![CDATA[1.3.1.- (With NAD(+) or NADP(+) as acceptor.)]]></doc></option>
+<option value='2.5.1.29'><doc title='description'><![CDATA[2.5.1.29 (Farnesyltranstransferase)]]></doc></option>
+<option value='2.5.1.46'><doc title='description'><![CDATA[2.5.1.46 (Deoxyhypusine synthase)]]></doc></option>
+<option value='2.5.1.8'><doc title='description'><![CDATA[2.5.1.8 (Transferred entry: 2.5.1.75)]]></doc></option>
+<option value='2.5.1.60'><doc title='description'><![CDATA[2.5.1.60 (Protein geranylgeranyltransferase type II)]]></doc></option>
+<option value='3.1.4.-'><doc title='description'><![CDATA[3.1.4.- (Phosphoric diester hydrolases.)]]></doc></option>
+<option value='1.16.1.5'><doc title='description'><![CDATA[1.16.1.5 (Aquacobalamin reductase (NADPH))]]></doc></option>
+<option value='3.5.1.89'><doc title='description'><![CDATA[3.5.1.89 (N-acetylglucosaminylphosphatidylinositol deacetylase)]]></doc></option>
+<option value='3.2.1.20'><doc title='description'><![CDATA[3.2.1.20 (Alpha-glucosidase)]]></doc></option>
+<option value='5.99.1.2'><doc title='description'><![CDATA[5.99.1.2 (DNA topoisomerase)]]></doc></option>
+<option value='5.99.1.3'><doc title='description'><![CDATA[5.99.1.3 (DNA topoisomerase (ATP-hydrolyzing))]]></doc></option>
+<option value='5.5.1.4'><doc title='description'><![CDATA[5.5.1.4 (Inositol-3-phosphate synthase)]]></doc></option>
+<option value='5.3.1.26'><doc title='description'><![CDATA[5.3.1.26 (Galactose-6-phosphate isomerase)]]></doc></option>
+<option value='5.3.1.9'><doc title='description'><![CDATA[5.3.1.9 (Glucose-6-phosphate isomerase)]]></doc></option>
+<option value='5.3.1.1'><doc title='description'><![CDATA[5.3.1.1 (Triose-phosphate isomerase)]]></doc></option>
+<option value='5.3.4.1'><doc title='description'><![CDATA[5.3.4.1 (Protein disulfide-isomerase)]]></doc></option>
+<option value='5.3.3.2'><doc title='description'><![CDATA[5.3.3.2 (Isopentenyl-diphosphate Delta-isomerase)]]></doc></option>
+<option value='5.4.2.1'><doc title='description'><![CDATA[5.4.2.1 (Phosphoglycerate mutase)]]></doc></option>
+<option value='5.4.2.8'><doc title='description'><![CDATA[5.4.2.8 (Phosphomannomutase)]]></doc></option>
+<option value='5.4.2.2'><doc title='description'><![CDATA[5.4.2.2 (Phosphoglucomutase)]]></doc></option>
+<option value='5.4.99.12'><doc title='description'><![CDATA[5.4.99.12 (tRNA-pseudouridine synthase I)]]></doc></option>
+<option value='5.2.1.8'><doc title='description'><![CDATA[5.2.1.8 (Peptidylprolyl isomerase)]]></doc></option>
+<option value='5.1.3.3'><doc title='description'><![CDATA[5.1.3.3 (Aldose 1-epimerase)]]></doc></option>
+<option value='5.1.3.2'><doc title='description'><![CDATA[5.1.3.2 (UDP-glucose 4-epimerase)]]></doc></option>
+<option value='5.1.3.1'><doc title='description'><![CDATA[5.1.3.1 (Ribulose-phosphate 3-epimerase)]]></doc></option>
+<option value='3.2.2.9'><doc title='description'><![CDATA[3.2.2.9 (Adenosylhomocysteine nucleosidase)]]></doc></option>
+<option value='2.4.1.21'><doc title='description'><![CDATA[2.4.1.21 (Starch synthase)]]></doc></option>
+<option value='2.5.1.47'><doc title='description'><![CDATA[2.5.1.47 (Cysteine synthase)]]></doc></option>
+<option value='4.4.1.11'><doc title='description'><![CDATA[4.4.1.11 (Methionine gamma-lyase)]]></doc></option>
+<option value='4.4.1.19'><doc title='description'><![CDATA[4.4.1.19 (Phosphosulfolactate synthase)]]></doc></option>
+<option value='4.4.1.1'><doc title='description'><![CDATA[4.4.1.1 (Cystathionine gamma-lyase)]]></doc></option>
+<option value='3.5.1.87'><doc title='description'><![CDATA[3.5.1.87 (N-carbamoyl-L-amino-acid hydrolase)]]></doc></option>
+<option value='2.5.1.6'><doc title='description'><![CDATA[2.5.1.6 (Methionine adenosyltransferase)]]></doc></option>
+<option value='2.5.1.59'><doc title='description'><![CDATA[2.5.1.59 (Protein geranylgeranyltransferase type I)]]></doc></option>
+<option value='2.5.1.58'><doc title='description'><![CDATA[2.5.1.58 (Protein farnesyltransferase)]]></doc></option>
+<option value='3.6.3.44'><doc title='description'><![CDATA[3.6.3.44 (Xenobiotic-transporting ATPase)]]></doc></option>
+<option value='2.7.7.4'><doc title='description'><![CDATA[2.7.7.4 (Sulfate adenylyltransferase)]]></doc></option>
+<option value='2.1.1.98'><doc title='description'><![CDATA[2.1.1.98 (Diphthine synthase)]]></doc></option>
+<option value='2.3.1.28'><doc title='description'><![CDATA[2.3.1.28 (Chloramphenicol O-acetyltransferase)]]></doc></option>
+<option value='2.7.11.20'><doc title='description'><![CDATA[2.7.11.20 ([Elongation factor 2] kinase)]]></doc></option>
+<option value='1.1.1.102'><doc title='description'><![CDATA[1.1.1.102 (3-dehydrosphinganine reductase)]]></doc></option>
+<option value='2.4.1.16'><doc title='description'><![CDATA[2.4.1.16 (Chitin synthase)]]></doc></option>
+<option value='6.1.1.15'><doc title='description'><![CDATA[6.1.1.15 (Proline--tRNA ligase)]]></doc></option>
+<option value='1.18.1.1'><doc title='description'><![CDATA[1.18.1.1 (Rubredoxin--NAD(+) reductase)]]></doc></option>
+<option value='3.5.4.6'><doc title='description'><![CDATA[3.5.4.6 (AMP deaminase)]]></doc></option>
+<option value='3.5.4.4'><doc title='description'><![CDATA[3.5.4.4 (Adenosine deaminase)]]></doc></option>
+<option value='3.5.4.3'><doc title='description'><![CDATA[3.5.4.3 (Guanine deaminase)]]></doc></option>
+<option value='3.5.4.13'><doc title='description'><![CDATA[3.5.4.13 (dCTP deaminase)]]></doc></option>
+<option value='2.6.1.42'><doc title='description'><![CDATA[2.6.1.42 (Branched-chain-amino-acid transaminase)]]></doc></option>
+<option value='2.7.1.26'><doc title='description'><![CDATA[2.7.1.26 (Riboflavin kinase)]]></doc></option>
+<option value='2.1.1.33'><doc title='description'><![CDATA[2.1.1.33 (tRNA (guanine-N(7)-)-methyltransferase)]]></doc></option>
+<option value='3.4.21.89'><doc title='description'><![CDATA[3.4.21.89 (Signal peptidase I)]]></doc></option>
+<option value='3.1.4.46'><doc title='description'><![CDATA[3.1.4.46 (Glycerophosphodiester phosphodiesterase)]]></doc></option>
+<option value='3.1.4.4'><doc title='description'><![CDATA[3.1.4.4 (Phospholipase D)]]></doc></option>
+<option value='2.4.1.1'><doc title='description'><![CDATA[2.4.1.1 (Phosphorylase)]]></doc></option>
+<option value='2.7.1.153'><doc title='description'><![CDATA[2.7.1.153 (Phosphatidylinositol-4,5-bisphosphate 3-kinase)]]></doc></option>
+<option value='6.1.1.18'><doc title='description'><![CDATA[6.1.1.18 (Glutamine--tRNA ligase)]]></doc></option>
+<option value='1.13.12.7'><doc title='description'><![CDATA[1.13.12.7 (Photinus-luciferin 4-monooxygenase (ATP-hydrolyzing))]]></doc></option>
+<option value='2.4.2.1'><doc title='description'><![CDATA[2.4.2.1 (Purine-nucleoside phosphorylase)]]></doc></option>
+<option value='2.4.2.30'><doc title='description'><![CDATA[2.4.2.30 (NAD(+) ADP-ribosyltransferase)]]></doc></option>
+<option value='2.4.2.11'><doc title='description'><![CDATA[2.4.2.11 (Nicotinate phosphoribosyltransferase)]]></doc></option>
+<option value='2.4.2.29'><doc title='description'><![CDATA[2.4.2.29 (tRNA-guanine transglycosylase)]]></doc></option>
+<option value='2.4.1.83'><doc title='description'><![CDATA[2.4.1.83 (Dolichyl-phosphate beta-D-mannosyltransferase)]]></doc></option>
+<option value='2.4.1.198'><doc title='description'><![CDATA[2.4.1.198 (Phosphatidylinositol N-acetylglucosaminyltransferase)]]></doc></option>
+<option value='2.4.1.25'><doc title='description'><![CDATA[2.4.1.25 (4-alpha-glucanotransferase)]]></doc></option>
+<option value='3.5.2.2'><doc title='description'><![CDATA[3.5.2.2 (Dihydropyrimidinase)]]></doc></option>
+<option value='3.5.99.6'><doc title='description'><![CDATA[3.5.99.6 (Glucosamine-6-phosphate deaminase)]]></doc></option>
+<option value='3.5.3.1'><doc title='description'><![CDATA[3.5.3.1 (Arginase)]]></doc></option>
+<option value='3.5.1.16'><doc title='description'><![CDATA[3.5.1.16 (Acetylornithine deacetylase)]]></doc></option>
+<option value='3.5.1.18'><doc title='description'><![CDATA[3.5.1.18 (Succinyl-diaminopimelate desuccinylase)]]></doc></option>
+<option value='6.1.1.22'><doc title='description'><![CDATA[6.1.1.22 (Asparagine--tRNA ligase)]]></doc></option>
+<option value='6.1.1.10'><doc title='description'><![CDATA[6.1.1.10 (Methionine--tRNA ligase)]]></doc></option>
+<option value='6.1.1.7'><doc title='description'><![CDATA[6.1.1.7 (Alanine--tRNA ligase)]]></doc></option>
+<option value='6.1.1.16'><doc title='description'><![CDATA[6.1.1.16 (Cysteine--tRNA ligase)]]></doc></option>
+<option value='6.1.1.6'><doc title='description'><![CDATA[6.1.1.6 (Lysine--tRNA ligase)]]></doc></option>
+<option value='6.1.1.20'><doc title='description'><![CDATA[6.1.1.20 (Phenylalanine--tRNA ligase)]]></doc></option>
+<option value='6.1.1.4'><doc title='description'><![CDATA[6.1.1.4 (Leucine--tRNA ligase)]]></doc></option>
+<option value='6.1.1.5'><doc title='description'><![CDATA[6.1.1.5 (Isoleucine--tRNA ligase)]]></doc></option>
+<option value='6.1.1.12'><doc title='description'><![CDATA[6.1.1.12 (Aspartate--tRNA ligase)]]></doc></option>
+<option value='6.1.1.9'><doc title='description'><![CDATA[6.1.1.9 (Valine--tRNA ligase)]]></doc></option>
+<option value='6.1.1.14'><doc title='description'><![CDATA[6.1.1.14 (Glycine--tRNA ligase)]]></doc></option>
+<option value='6.1.1.3'><doc title='description'><![CDATA[6.1.1.3 (Threonine--tRNA ligase)]]></doc></option>
+<option value='6.1.1.1'><doc title='description'><![CDATA[6.1.1.1 (Tyrosine--tRNA ligase)]]></doc></option>
+<option value='6.1.1.19'><doc title='description'><![CDATA[6.1.1.19 (Arginine--tRNA ligase)]]></doc></option>
+<option value='6.1.1.11'><doc title='description'><![CDATA[6.1.1.11 (Serine--tRNA ligase)]]></doc></option>
+<option value='6.1.1.2'><doc title='description'><![CDATA[6.1.1.2 (Tryptophan--tRNA ligase)]]></doc></option>
+<option value='6.1.1.21'><doc title='description'><![CDATA[6.1.1.21 (Histidine--tRNA ligase)]]></doc></option>
+<option value='3.1.2.15'><doc title='description'><![CDATA[3.1.2.15 (Ubiquitin thiolesterase)]]></doc></option>
+<option value='1.1.1.21'><doc title='description'><![CDATA[1.1.1.21 (Aldehyde reductase)]]></doc></option>
+<option value='2.7.11.22'><doc title='description'><![CDATA[2.7.11.22 (Cyclin-dependent kinase)]]></doc></option>
+<option value='2.1.1.56'><doc title='description'><![CDATA[2.1.1.56 (mRNA (guanine-N(7)-)-methyltransferase)]]></doc></option>
+<option value='3.6.3.10'><doc title='description'><![CDATA[3.6.3.10 (Hydrogen/potassium-exchanging ATPase)]]></doc></option>
+<option value='2.3.1.9'><doc title='description'><![CDATA[2.3.1.9 (Acetyl-CoA C-acetyltransferase)]]></doc></option>
+<option value='5.3.1.6'><doc title='description'><![CDATA[5.3.1.6 (Ribose-5-phosphate isomerase)]]></doc></option>
+<option value='3.1.2.6'><doc title='description'><![CDATA[3.1.2.6 (Hydroxyacylglutathione hydrolase)]]></doc></option>
+<option value='6.3.2.3'><doc title='description'><![CDATA[6.3.2.3 (Glutathione synthase)]]></doc></option>
+<option value='6.3.2.2'><doc title='description'><![CDATA[6.3.2.2 (Glutamate--cysteine ligase)]]></doc></option>
+<option value='6.3.5.4'><doc title='description'><![CDATA[6.3.5.4 (Asparagine synthase (glutamine-hydrolyzing))]]></doc></option>
+<option value='6.3.5.1'><doc title='description'><![CDATA[6.3.5.1 (NAD(+) synthase (glutamine-hydrolyzing))]]></doc></option>
+<option value='3.1.3.15'><doc title='description'><![CDATA[3.1.3.15 (Histidinol-phosphatase)]]></doc></option>
+<option value='3.1.3.18'><doc title='description'><![CDATA[3.1.3.18 (Phosphoglycolate phosphatase)]]></doc></option>
+<option value='3.4.22.1'><doc title='description'><![CDATA[3.4.22.1 (Cathepsin B)]]></doc></option>
+<option value='3.2.2.16'><doc title='description'><![CDATA[3.2.2.16 (Methylthioadenosine nucleosidase)]]></doc></option>
+<option value='3.4.21.75'><doc title='description'><![CDATA[3.4.21.75 (Furin)]]></doc></option>
+<option value='3.4.24.71'><doc title='description'><![CDATA[3.4.24.71 (Endothelin-converting enzyme 1)]]></doc></option>
+<option value='3.5.1.1'><doc title='description'><![CDATA[3.5.1.1 (Asparaginase)]]></doc></option>
+<option value='3.5.3.6'><doc title='description'><![CDATA[3.5.3.6 (Arginine deiminase)]]></doc></option>
+<option value='3.5.4.1'><doc title='description'><![CDATA[3.5.4.1 (Cytosine deaminase)]]></doc></option>
+<option value='3.5.4.5'><doc title='description'><![CDATA[3.5.4.5 (Cytidine deaminase)]]></doc></option>
+<option value='1.4.1.4'><doc title='description'><![CDATA[1.4.1.4 (Glutamate dehydrogenase (NADP(+)))]]></doc></option>
+<option value='2.7.1.36'><doc title='description'><![CDATA[2.7.1.36 (Mevalonate kinase)]]></doc></option>
+<option value='2.7.1.2'><doc title='description'><![CDATA[2.7.1.2 (Glucokinase)]]></doc></option>
+<option value='2.3.3.10'><doc title='description'><![CDATA[2.3.3.10 (Hydroxymethylglutaryl-CoA synthase)]]></doc></option>
+<option value='2.7.11.19'><doc title='description'><![CDATA[2.7.11.19 (Phosphorylase kinase)]]></doc></option>
+<option value='2.7.2.2'><doc title='description'><![CDATA[2.7.2.2 (Carbamate kinase)]]></doc></option>
+<option value='2.7.7.2'><doc title='description'><![CDATA[2.7.7.2 (FAD synthetase)]]></doc></option>
+<option value='2.8.1.1'><doc title='description'><![CDATA[2.8.1.1 (Thiosulfate sulfurtransferase)]]></doc></option>
+<option value='2.6.1.51'><doc title='description'><![CDATA[2.6.1.51 (Serine--pyruvate transaminase)]]></doc></option>
+<option value='3.4.23.39'><doc title='description'><![CDATA[3.4.23.39 (Plasmepsin II)]]></doc></option>
+<option value='3.4.21.62'><doc title='description'><![CDATA[3.4.21.62 (Subtilisin)]]></doc></option>
+<option value='3.4.21.92'><doc title='description'><![CDATA[3.4.21.92 (Endopeptidase Clp)]]></doc></option>
+<option value='3.4.17.10'><doc title='description'><![CDATA[3.4.17.10 (Carboxypeptidase E)]]></doc></option>
+<option value='3.4.22.68'><doc title='description'><![CDATA[3.4.22.68 (Ulp1 peptidase)]]></doc></option>
+<option value='3.4.22.2'><doc title='description'><![CDATA[3.4.22.2 (Papain)]]></doc></option>
+<option value='1.6.4.2'><doc title='description'><![CDATA[1.6.4.2 (Transferred entry: 1.8.1.7)]]></doc></option>
+<option value='4.6.1.4'><doc title='description'><![CDATA[4.6.1.4 (Transferred entry: 4.2.3.5)]]></doc></option>
+<option value='1.3.3.3'><doc title='description'><![CDATA[1.3.3.3 (Coproporphyrinogen oxidase)]]></doc></option>
+<option value='3.4.24.55'><doc title='description'><![CDATA[3.4.24.55 (Pitrilysin)]]></doc></option>
+<option value='3.4.24.16'><doc title='description'><![CDATA[3.4.24.16 (Neurolysin)]]></doc></option>
+<option value='2.1.1.61'><doc title='description'><![CDATA[2.1.1.61 (tRNA (5-methylaminomethyl-2-thiouridylate)-methyltransferase)]]></doc></option>
+<option value='3.6.1.47'><doc title='description'><![CDATA[3.6.1.47 (Transferred entry: 3.6.5.2)]]></doc></option>
+<option value='3.6.1.41'><doc title='description'><![CDATA[3.6.1.41 (Bis(5'-nucleosyl)-tetraphosphatase (symmetrical))]]></doc></option>
+<option value='3.6.1.29'><doc title='description'><![CDATA[3.6.1.29 (Bis(5'-adenosyl)-triphosphatase)]]></doc></option>
+<option value='3.6.1.10'><doc title='description'><![CDATA[3.6.1.10 (Endopolyphosphatase)]]></doc></option>
+<option value='3.6.1.34'><doc title='description'><![CDATA[3.6.1.34 (Transferred entry: 3.6.3.14)]]></doc></option>
+<option value='3.6.1.15'><doc title='description'><![CDATA[3.6.1.15 (Nucleoside-triphosphatase)]]></doc></option>
+<option value='3.6.4.8'><doc title='description'><![CDATA[3.6.4.8 (Proteasome ATPase)]]></doc></option>
+<option value='3.6.3.2'><doc title='description'><![CDATA[3.6.3.2 (Magnesium-importing ATPase)]]></doc></option>
+<option value='3.5.2.3'><doc title='description'><![CDATA[3.5.2.3 (Dihydroorotase)]]></doc></option>
+<option value='3.5.1.19'><doc title='description'><![CDATA[3.5.1.19 (Nicotinamidase)]]></doc></option>
+<option value='3.5.1.31'><doc title='description'><![CDATA[3.5.1.31 (Formylmethionine deformylase)]]></doc></option>
+<option value='3.5.1.98'><doc title='description'><![CDATA[3.5.1.98 (Histone deacetylase)]]></doc></option>
+<option value='3.5.1.88'><doc title='description'><![CDATA[3.5.1.88 (Peptide deformylase)]]></doc></option>
+<option value='3.5.3.4'><doc title='description'><![CDATA[3.5.3.4 (Allantoicase)]]></doc></option>
+<option value='3.5.4.9'><doc title='description'><![CDATA[3.5.4.9 (Methenyltetrahydrofolate cyclohydrolase)]]></doc></option>
+<option value='3.5.4.16'><doc title='description'><![CDATA[3.5.4.16 (GTP cyclohydrolase I)]]></doc></option>
+<option value='3.4.13.19'><doc title='description'><![CDATA[3.4.13.19 (Membrane dipeptidase)]]></doc></option>
+<option value='3.4.25.-'><doc title='description'><![CDATA[3.4.25.- (Threonine endopeptidases.)]]></doc></option>
+<option value='3.4.23.38'><doc title='description'><![CDATA[3.4.23.38 (Plasmepsin I)]]></doc></option>
+<option value='3.4.23.3'><doc title='description'><![CDATA[3.4.23.3 (Gastricsin)]]></doc></option>
+<option value='1.1.1.36'><doc title='description'><![CDATA[1.1.1.36 (Acetoacetyl-CoA reductase)]]></doc></option>
+<option value='2.7.1.14'><doc title='description'><![CDATA[2.7.1.14 (Sedoheptulokinase)]]></doc></option>
+<option value='2.7.1.148'><doc title='description'><![CDATA[2.7.1.148 (4-(cytidine 5'-diphospho)-2-C-methyl-D-erythritol kinase)]]></doc></option>
+<option value='2.7.1.50'><doc title='description'><![CDATA[2.7.1.50 (Hydroxyethylthiazole kinase)]]></doc></option>
+<option value='2.7.1.151'><doc title='description'><![CDATA[2.7.1.151 (Inositol-polyphosphate multikinase)]]></doc></option>
+<option value='2.7.1.71'><doc title='description'><![CDATA[2.7.1.71 (Shikimate kinase)]]></doc></option>
+<option value='2.7.1.49'><doc title='description'><![CDATA[2.7.1.49 (Hydroxymethylpyrimidine kinase)]]></doc></option>
+<option value='1.1.1.271'><doc title='description'><![CDATA[1.1.1.271 (GDP-L-fucose synthase)]]></doc></option>
+<option value='4.1.1.49'><doc title='description'><![CDATA[4.1.1.49 (Phosphoenolpyruvate carboxykinase (ATP))]]></doc></option>
+<option value='4.1.1.23'><doc title='description'><![CDATA[4.1.1.23 (Orotidine-5'-phosphate decarboxylase)]]></doc></option>
+<option value='4.1.1.37'><doc title='description'><![CDATA[4.1.1.37 (Uroporphyrinogen decarboxylase)]]></doc></option>
+<option value='4.1.1.50'><doc title='description'><![CDATA[4.1.1.50 (Adenosylmethionine decarboxylase)]]></doc></option>
+<option value='4.3.2.2'><doc title='description'><![CDATA[4.3.2.2 (Adenylosuccinate lyase)]]></doc></option>
+<option value='4.3.1.8'><doc title='description'><![CDATA[4.3.1.8 (Transferred entry: 2.5.1.61)]]></doc></option>
+<option value='1.14.19.1'><doc title='description'><![CDATA[1.14.19.1 (Stearoyl-CoA 9-desaturase)]]></doc></option>
+<option value='1.14.99.29'><doc title='description'><![CDATA[1.14.99.29 (Deoxyhypusine monooxygenase)]]></doc></option>
+<option value='1.14.99.3'><doc title='description'><![CDATA[1.14.99.3 (Heme oxygenase)]]></doc></option>
+<option value='1.14.11.27'><doc title='description'><![CDATA[1.14.11.27 ([Histone H3]-lysine-36 demethylase)]]></doc></option>
+<option value='1.14.11.4'><doc title='description'><![CDATA[1.14.11.4 (Procollagen-lysine 5-dioxygenase)]]></doc></option>
+<option value='1.10.2.2'><doc title='description'><![CDATA[1.10.2.2 (Ubiquinol--cytochrome-c reductase)]]></doc></option>
+<option value='1.8.3.2'><doc title='description'><![CDATA[1.8.3.2 (Thiol oxidase)]]></doc></option>
+<option value='1.4.7.1'><doc title='description'><![CDATA[1.4.7.1 (Glutamate synthase (ferredoxin))]]></doc></option>
+<option value='2.1.1.66'><doc title='description'><![CDATA[2.1.1.66 (rRNA (adenosine-2'-O-)-methyltransferase)]]></doc></option>
+<option value='1.2.4.4'><doc title='description'><![CDATA[1.2.4.4 (3-methyl-2-oxobutanoate dehydrogenase (2-methylpropanoyl-transferring))]]></doc></option>
+<option value='2.1.1.29'><doc title='description'><![CDATA[2.1.1.29 (tRNA (cytosine-5-)-methyltransferase)]]></doc></option>
+<option value='2.1.1.103'><doc title='description'><![CDATA[2.1.1.103 (Phosphoethanolamine N-methyltransferase)]]></doc></option>
+<option value='2.1.1.35'><doc title='description'><![CDATA[2.1.1.35 (tRNA (uracil-5-)-methyltransferase)]]></doc></option>
+<option value='2.1.1.77'><doc title='description'><![CDATA[2.1.1.77 (Protein-L-isoaspartate(D-aspartate) O-methyltransferase)]]></doc></option>
+<option value='2.1.1.62'><doc title='description'><![CDATA[2.1.1.62 (mRNA (2'-O-methyladenosine-N(6)-)-methyltransferase)]]></doc></option>
+<option value='1.5.1.5'><doc title='description'><![CDATA[1.5.1.5 (Methylenetetrahydrofolate dehydrogenase (NADP(+)))]]></doc></option>
+<option value='1.5.1.7'><doc title='description'><![CDATA[1.5.1.7 (Saccharopine dehydrogenase (NAD(+), L-lysine-forming))]]></doc></option>
+<option value='2.5.1.61'><doc title='description'><![CDATA[2.5.1.61 (Hydroxymethylbilane synthase)]]></doc></option>
+<option value='2.5.1.16'><doc title='description'><![CDATA[2.5.1.16 (Spermidine synthase)]]></doc></option>
+<option value='2.5.1.33'><doc title='description'><![CDATA[2.5.1.33 (Trans-pentaprenyltranstransferase)]]></doc></option>
+<option value='2.5.1.3'><doc title='description'><![CDATA[2.5.1.3 (Thiamine-phosphate diphosphorylase)]]></doc></option>
+<option value='2.5.1.39'><doc title='description'><![CDATA[2.5.1.39 (4-hydroxybenzoate nonaprenyltransferase)]]></doc></option>
+<option value='2.5.1.11'><doc title='description'><![CDATA[2.5.1.11 (Trans-octaprenyltranstransferase)]]></doc></option>
+<option value='2.5.1.15'><doc title='description'><![CDATA[2.5.1.15 (Dihydropteroate synthase)]]></doc></option>
+<option value='2.5.1.30'><doc title='description'><![CDATA[2.5.1.30 (Trans-hexaprenyltranstransferase)]]></doc></option>
+<option value='2.5.1.19'><doc title='description'><![CDATA[2.5.1.19 (3-phosphoshikimate 1-carboxyvinyltransferase)]]></doc></option>
+<option value='1.6.2.2'><doc title='description'><![CDATA[1.6.2.2 (Cytochrome-b5 reductase)]]></doc></option>
+<option value='1.3.3.4'><doc title='description'><![CDATA[1.3.3.4 (Protoporphyrinogen oxidase)]]></doc></option>
+<option value='1.3.3.1'><doc title='description'><![CDATA[1.3.3.1 (Dihydroorotate oxidase)]]></doc></option>
+<option value='2.6.1.85'><doc title='description'><![CDATA[2.6.1.85 (Aminodeoxychorismate synthase)]]></doc></option>
+<option value='2.6.1.57'><doc title='description'><![CDATA[2.6.1.57 (Aromatic-amino-acid transaminase)]]></doc></option>
+<option value='1.3.99.1'><doc title='description'><![CDATA[1.3.99.1 (Succinate dehydrogenase)]]></doc></option>
+<option value='1.7.1.1'><doc title='description'><![CDATA[1.7.1.1 (Nitrate reductase (NADH))]]></doc></option>
+<option value='1.7.1.4'><doc title='description'><![CDATA[1.7.1.4 (Nitrite reductase (NAD(P)H))]]></doc></option>
+<option value='1.7.1.3'><doc title='description'><![CDATA[1.7.1.3 (Nitrate reductase (NADPH))]]></doc></option>
+<option value='1.2.4.1'><doc title='description'><![CDATA[1.2.4.1 (Pyruvate dehydrogenase (acetyl-transferring))]]></doc></option>
+<option value='1.3.1.9'><doc title='description'><![CDATA[1.3.1.9 (Enoyl-[acyl-carrier-protein] reductase (NADH))]]></doc></option>
+<option value='1.6.6.4'><doc title='description'><![CDATA[1.6.6.4 (Transferred entry: 1.7.1.4)]]></doc></option>
+<option value='1.18.1.-'><doc title='description'><![CDATA[1.18.1.- (With NAD(+) or NADP(+) as acceptor.)]]></doc></option>
+<option value='1.4.1.2'><doc title='description'><![CDATA[1.4.1.2 (Glutamate dehydrogenase)]]></doc></option>
+<option value='1.4.3.5'><doc title='description'><![CDATA[1.4.3.5 (Pyridoxal 5'-phosphate synthase)]]></doc></option>
+<option value='1.17.4.3'><doc title='description'><![CDATA[1.17.4.3 (Transferred entry: 1.17.7.1)]]></doc></option>
+<option value='4.4.1.21'><doc title='description'><![CDATA[4.4.1.21 (S-ribosylhomocysteine lyase)]]></doc></option>
+<option value='4.4.1.5'><doc title='description'><![CDATA[4.4.1.5 (Lactoylglutathione lyase)]]></doc></option>
+<option value='4.1.3.37'><doc title='description'><![CDATA[4.1.3.37 (Transferred entry: 2.2.1.7)]]></doc></option>
+<option value='4.1.3.7'><doc title='description'><![CDATA[4.1.3.7 (Transferred entry: 2.3.3.1)]]></doc></option>
+<option value='4.1.3.38'><doc title='description'><![CDATA[4.1.3.38 (Aminodeoxychorismate lyase)]]></doc></option>
+<option value='3.2.2.17'><doc title='description'><![CDATA[3.2.2.17 (Deoxyribodipyrimidine endonucleosidase)]]></doc></option>
+<option value='3.7.1.-'><doc title='description'><![CDATA[3.7.1.- (In ketonic substances.)]]></doc></option>
+<option value='3.1.3.41'><doc title='description'><![CDATA[3.1.3.41 (4-nitrophenylphosphatase)]]></doc></option>
+<option value='1.9.3.1'><doc title='description'><![CDATA[1.9.3.1 (Cytochrome-c oxidase)]]></doc></option>
+<option value='2.2.1.7'><doc title='description'><![CDATA[2.2.1.7 (1-deoxy-D-xylulose-5-phosphate synthase)]]></doc></option>
+<option value='3.1.3.4'><doc title='description'><![CDATA[3.1.3.4 (Phosphatidate phosphatase)]]></doc></option>
+<option value='3.1.3.1'><doc title='description'><![CDATA[3.1.3.1 (Alkaline phosphatase)]]></doc></option>
+<option value='3.1.3.33'><doc title='description'><![CDATA[3.1.3.33 (Polynucleotide 5'-phosphatase)]]></doc></option>
+<option value='3.1.11.1'><doc title='description'><![CDATA[3.1.11.1 (Exodeoxyribonuclease I)]]></doc></option>
+<option value='3.1.21.-'><doc title='description'><![CDATA[3.1.21.- (Endodeoxyribonucleases producing 5'-phosphomonoesters.)]]></doc></option>
+<option value='3.1.4.3'><doc title='description'><![CDATA[3.1.4.3 (Phospholipase C)]]></doc></option>
+<option value='3.1.4.1'><doc title='description'><![CDATA[3.1.4.1 (Phosphodiesterase I)]]></doc></option>
+<option value='3.1.16.1'><doc title='description'><![CDATA[3.1.16.1 (Spleen exonuclease)]]></doc></option>
+<option value='3.1.2.4'><doc title='description'><![CDATA[3.1.2.4 (3-hydroxyisobutyryl-CoA hydrolase)]]></doc></option>
+<option value='3.1.1.31'><doc title='description'><![CDATA[3.1.1.31 (6-phosphogluconolactonase)]]></doc></option>
+<option value='3.1.1.5'><doc title='description'><![CDATA[3.1.1.5 (Lysophospholipase)]]></doc></option>
+<option value='3.1.30.1'><doc title='description'><![CDATA[3.1.30.1 (Aspergillus nuclease S(1))]]></doc></option>
+<option value='4.6.1.12'><doc title='description'><![CDATA[4.6.1.12 (2-C-methyl-D-erythritol 2,4-cyclodiphosphate synthase)]]></doc></option>
+<option value='6.2.1.2'><doc title='description'><![CDATA[6.2.1.2 (Butyrate--CoA ligase)]]></doc></option>
+<option value='5.1.3.8'><doc title='description'><![CDATA[5.1.3.8 (N-acylglucosamine 2-epimerase)]]></doc></option>
+<option value='5.1.1.1'><doc title='description'><![CDATA[5.1.1.1 (Alanine racemase)]]></doc></option>
+<option value='2.3.2.5'><doc title='description'><![CDATA[2.3.2.5 (Glutaminyl-peptide cyclotransferase)]]></doc></option>
+<option value='2.3.1.41'><doc title='description'><![CDATA[2.3.1.41 (Beta-ketoacyl-acyl-carrier-protein synthase I)]]></doc></option>
+<option value='2.3.1.168'><doc title='description'><![CDATA[2.3.1.168 (Dihydrolipoyllysine-residue (2-methylpropanoyl)transferase)]]></doc></option>
+<option value='2.3.1.12'><doc title='description'><![CDATA[2.3.1.12 (Dihydrolipoyllysine-residue acetyltransferase)]]></doc></option>
+<option value='2.3.1.39'><doc title='description'><![CDATA[2.3.1.39 ([Acyl-carrier-protein] S-malonyltransferase)]]></doc></option>
+<option value='2.3.1.16'><doc title='description'><![CDATA[2.3.1.16 (Acetyl-CoA C-acyltransferase)]]></doc></option>
+<option value='2.3.1.37'><doc title='description'><![CDATA[2.3.1.37 (5-aminolevulinate synthase)]]></doc></option>
+<option value='2.3.1.180'><doc title='description'><![CDATA[2.3.1.180 (Beta-ketoacyl-acyl-carrier-protein synthase III)]]></doc></option>
+<option value='2.3.1.1'><doc title='description'><![CDATA[2.3.1.1 (Amino-acid N-acetyltransferase)]]></doc></option>
+<option value='2.3.1.181'><doc title='description'><![CDATA[2.3.1.181 (Lipoyl(octanoyl) transferase)]]></doc></option>
+<option value='2.3.1.24'><doc title='description'><![CDATA[2.3.1.24 (Sphingosine N-acyltransferase)]]></doc></option>
+<option value='1.1.5.3'><doc title='description'><![CDATA[1.1.5.3 (Glycerol-3-phosphate dehydrogenase)]]></doc></option>
+<option value='2.6.1.13'><doc title='description'><![CDATA[2.6.1.13 (Ornithine aminotransferase)]]></doc></option>
+<option value='1.14.13.-'><doc title='description'><![CDATA[1.14.13.- (With NADH or NADPH as one donor, and incorporation of one atom of oxygen.)]]></doc></option>
+<option value='3.5.4.-'><doc title='description'><![CDATA[3.5.4.- (In cyclic amidines.)]]></doc></option>
+<option value='1.1.1.267'><doc title='description'><![CDATA[1.1.1.267 (1-deoxy-D-xylulose-5-phosphate reductoisomerase)]]></doc></option>
+<option value='4.1.3.-'><doc title='description'><![CDATA[4.1.3.- (Oxo-acid-lyases.)]]></doc></option>
+<option value='4.1.3.27'><doc title='description'><![CDATA[4.1.3.27 (Anthranilate synthase)]]></doc></option>
+<option value='2.3.1.85'><doc title='description'><![CDATA[2.3.1.85 (Fatty-acid synthase)]]></doc></option>
+<option value='6.3.5.-'><doc title='description'><![CDATA[6.3.5.- (Carbon--nitrogen ligases with glutamine as amido-N-donor.)]]></doc></option>
+<option value='4.2.1.96'><doc title='description'><![CDATA[4.2.1.96 (4a-hydroxytetrahydrobiopterin dehydratase)]]></doc></option>
+<option value='1.14.19.2'><doc title='description'><![CDATA[1.14.19.2 (Acyl-[acyl-carrier-protein] desaturase)]]></doc></option>
+<option value='1.2.1.-'><doc title='description'><![CDATA[1.2.1.- (With NAD(+) or NADP(+) as acceptor.)]]></doc></option>
+<option value='3.4.11.-'><doc title='description'><![CDATA[3.4.11.- (Aminopeptidases.)]]></doc></option>
+<option value='2.4.2.10'><doc title='description'><![CDATA[2.4.2.10 (Orotate phosphoribosyltransferase)]]></doc></option>
+<option value='2.4.2.8'><doc title='description'><![CDATA[2.4.2.8 (Hypoxanthine phosphoribosyltransferase)]]></doc></option>
+<option value='2.4.1.80'><doc title='description'><![CDATA[2.4.1.80 (Ceramide glucosyltransferase)]]></doc></option>
+<option value='3.5.1.-'><doc title='description'><![CDATA[3.5.1.- (In linear amides.)]]></doc></option>
+<option value='6.3.4.4'><doc title='description'><![CDATA[6.3.4.4 (Adenylosuccinate synthase)]]></doc></option>
+<option value='3.1.4.12'><doc title='description'><![CDATA[3.1.4.12 (Sphingomyelin phosphodiesterase)]]></doc></option>
+<option value='2.3.2.6'><doc title='description'><![CDATA[2.3.2.6 (Leucyltransferase)]]></doc></option>
+<option value='2.8.1.-'><doc title='description'><![CDATA[2.8.1.- (Sulfurtransferases.)]]></doc></option>
+<option value='3.6.1.50'><doc title='description'><![CDATA[3.6.1.50 (Transferred entry: 3.6.5.5)]]></doc></option>
+<option value='1.17.1.2'><doc title='description'><![CDATA[1.17.1.2 (4-hydroxy-3-methylbut-2-enyl diphosphate reductase)]]></doc></option>
+<option value='1.4.1.-'><doc title='description'><![CDATA[1.4.1.- (With NAD(+) or NADP(+) as acceptor.)]]></doc></option>
+<option value='4.1.99.3'><doc title='description'><![CDATA[4.1.99.3 (Deoxyribodipyrimidine photo-lyase)]]></doc></option>
+<option value='4.4.1.17'><doc title='description'><![CDATA[4.4.1.17 (Holocytochrome-c synthase)]]></doc></option>
+<option value='5.3.2.1'><doc title='description'><![CDATA[5.3.2.1 (Phenylpyruvate tautomerase)]]></doc></option>
+<option value='1.11.1.5'><doc title='description'><![CDATA[1.11.1.5 (Cytochrome-c peroxidase)]]></doc></option>
+<option value='4.2.1.24'><doc title='description'><![CDATA[4.2.1.24 (Porphobilinogen synthase)]]></doc></option>
+<option value='4.2.1.1'><doc title='description'><![CDATA[4.2.1.1 (Carbonate dehydratase)]]></doc></option>
+<option value='4.2.1.75'><doc title='description'><![CDATA[4.2.1.75 (Uroporphyrinogen-III synthase)]]></doc></option>
+<option value='2.1.2.9'><doc title='description'><![CDATA[2.1.2.9 (Methionyl-tRNA formyltransferase)]]></doc></option>
+<option value='2.1.2.10'><doc title='description'><![CDATA[2.1.2.10 (Aminomethyltransferase)]]></doc></option>
+<option value='2.7.4.10'><doc title='description'><![CDATA[2.7.4.10 (Nucleoside-triphosphate--adenylate kinase)]]></doc></option>
+<option value='2.7.4.7'><doc title='description'><![CDATA[2.7.4.7 (Phosphomethylpyrimidine kinase)]]></doc></option>
+<option value='2.1.3.2'><doc title='description'><![CDATA[2.1.3.2 (Aspartate carbamoyltransferase)]]></doc></option>
+<option value='6.3.4.16'><doc title='description'><![CDATA[6.3.4.16 (Carbamoyl-phosphate synthase (ammonia))]]></doc></option>
+<option value='6.3.5.7'><doc title='description'><![CDATA[6.3.5.7 (Glutaminyl-tRNA synthase (glutamine-hydrolyzing))]]></doc></option>
+<option value='6.3.5.5'><doc title='description'><![CDATA[6.3.5.5 (Carbamoyl-phosphate synthase (glutamine-hydrolyzing))]]></doc></option>
+<option value='6.3.2.22'><doc title='description'><![CDATA[6.3.2.22 (Diphthine--ammonia ligase)]]></doc></option>
+<option value='6.3.2.12'><doc title='description'><![CDATA[6.3.2.12 (Dihydrofolate synthase)]]></doc></option>
+<option value='6.3.2.17'><doc title='description'><![CDATA[6.3.2.17 (Tetrahydrofolate synthase)]]></doc></option>
+<option value='6.3.2.25'><doc title='description'><![CDATA[6.3.2.25 (Tubulin--tyrosine ligase)]]></doc></option>
+<option value='4.2.1.17'><doc title='description'><![CDATA[4.2.1.17 (Enoyl-CoA hydratase)]]></doc></option>
+<option value='4.99.1.1'><doc title='description'><![CDATA[4.99.1.1 (Ferrochelatase)]]></doc></option>
+<option value='2.7.7.18'><doc title='description'><![CDATA[2.7.7.18 (Nicotinate-nucleotide adenylyltransferase)]]></doc></option>
+<option value='2.7.10.-'><doc title='description'><![CDATA[2.7.10.- (Protein-tyrosine kinases.)]]></doc></option>
+<option value='2.7.6.3'><doc title='description'><![CDATA[2.7.6.3 (2-amino-4-hydroxy-6-hydroxymethyldihydropteridine diphosphokinase)]]></doc></option>
+<option value='2.7.8.3'><doc title='description'><![CDATA[2.7.8.3 (Ceramide cholinephosphotransferase)]]></doc></option>
+<option value='2.7.8.27'><doc title='description'><![CDATA[2.7.8.27 (Sphingomyelin synthase)]]></doc></option>
+<option value='2.7.8.7'><doc title='description'><![CDATA[2.7.8.7 (Holo-[acyl-carrier-protein] synthase)]]></doc></option>
+<option value='2.8.1.8'><doc title='description'><![CDATA[2.8.1.8 (Lipoyl synthase)]]></doc></option>
+<option value='2.7.9.3'><doc title='description'><![CDATA[2.7.9.3 (Selenide, water dikinase)]]></doc></option>
+<option value='2.7.7.60'><doc title='description'><![CDATA[2.7.7.60 (2-C-methyl-D-erythritol 4-phosphate cytidylyltransferase)]]></doc></option>
+<option value='4.2.3.12'><doc title='description'><![CDATA[4.2.3.12 (6-pyruvoyltetrahydropterin synthase)]]></doc></option>
+<option value='4.2.3.5'><doc title='description'><![CDATA[4.2.3.5 (Chorismate synthase)]]></doc></option>
+<option value='1.1.1.153'><doc title='description'><![CDATA[1.1.1.153 (Sepiapterin reductase)]]></doc></option>
+<option value='1.1.1.157'><doc title='description'><![CDATA[1.1.1.157 (3-hydroxybutyryl-CoA dehydrogenase)]]></doc></option>
+<option value='1.1.1.169'><doc title='description'><![CDATA[1.1.1.169 (2-dehydropantoate 2-reductase)]]></doc></option>
+<option value='1.1.1.18'><doc title='description'><![CDATA[1.1.1.18 (Inositol 2-dehydrogenase)]]></doc></option>
+<option value='1.1.1.189'><doc title='description'><![CDATA[1.1.1.189 (Prostaglandin-E(2) 9-reductase)]]></doc></option>
+<option value='1.1.1.197'><doc title='description'><![CDATA[1.1.1.197 (15-hydroxyprostaglandin dehydrogenase (NADP(+)))]]></doc></option>
+<option value='1.1.1.25'><doc title='description'><![CDATA[1.1.1.25 (Shikimate dehydrogenase)]]></doc></option>
+<option value='1.1.1.274'><doc title='description'><![CDATA[1.1.1.274 (2,5-didehydrogluconate reductase)]]></doc></option>
+<option value='1.1.1.284'><doc title='description'><![CDATA[1.1.1.284 (S-(hydroxymethyl)glutathione dehydrogenase)]]></doc></option>
+<option value='1.1.1.31'><doc title='description'><![CDATA[1.1.1.31 (3-hydroxyisobutyrate dehydrogenase)]]></doc></option>
+<option value='1.1.1.60'><doc title='description'><![CDATA[1.1.1.60 (2-hydroxy-3-oxopropionate reductase)]]></doc></option>
+<option value='1.1.1.87'><doc title='description'><![CDATA[1.1.1.87 (Homoisocitrate dehydrogenase)]]></doc></option>
+<option value='1.1.1.91'><doc title='description'><![CDATA[1.1.1.91 (Aryl-alcohol dehydrogenase (NADP(+)))]]></doc></option>
+<option value='1.1.4.1'><doc title='description'><![CDATA[1.1.4.1 (Vitamin-K-epoxide reductase (warfarin-sensitive))]]></doc></option>
+<option value='1.1.99.10'><doc title='description'><![CDATA[1.1.99.10 (Glucose dehydrogenase (acceptor))]]></doc></option>
+<option value='1.11.1.6'><doc title='description'><![CDATA[1.11.1.6 (Catalase)]]></doc></option>
+<option value='1.11.1.8'><doc title='description'><![CDATA[1.11.1.8 (Iodide peroxidase)]]></doc></option>
+<option value='1.13.12.3'><doc title='description'><![CDATA[1.13.12.3 (Tryptophan 2-monooxygenase)]]></doc></option>
+<option value='1.14.11.16'><doc title='description'><![CDATA[1.14.11.16 (Peptide-aspartate beta-dioxygenase)]]></doc></option>
+<option value='1.14.13.20'><doc title='description'><![CDATA[1.14.13.20 (2,4-dichlorophenol 6-monooxygenase)]]></doc></option>
+<option value='1.14.13.7'><doc title='description'><![CDATA[1.14.13.7 (Phenol 2-monooxygenase)]]></doc></option>
+<option value='1.14.14.1'><doc title='description'><![CDATA[1.14.14.1 (Unspecific monooxygenase)]]></doc></option>
+<option value='1.14.16.1'><doc title='description'><![CDATA[1.14.16.1 (Phenylalanine 4-monooxygenase)]]></doc></option>
+<option value='1.14.16.2'><doc title='description'><![CDATA[1.14.16.2 (Tyrosine 3-monooxygenase)]]></doc></option>
+<option value='1.14.16.4'><doc title='description'><![CDATA[1.14.16.4 (Tryptophan 5-monooxygenase)]]></doc></option>
+<option value='1.16.1.8'><doc title='description'><![CDATA[1.16.1.8 ([Methionine synthase] reductase)]]></doc></option>
+<option value='1.17.7.1'><doc title='description'><![CDATA[1.17.7.1 ((E)-4-hydroxy-3-methylbut-2-enyl-diphosphate synthase)]]></doc></option>
+<option value='1.18.1.3'><doc title='description'><![CDATA[1.18.1.3 (Ferredoxin--NAD(+) reductase)]]></doc></option>
+<option value='1.2.1.11'><doc title='description'><![CDATA[1.2.1.11 (Aspartate-semialdehyde dehydrogenase)]]></doc></option>
+<option value='1.2.1.24'><doc title='description'><![CDATA[1.2.1.24 (Succinate-semialdehyde dehydrogenase)]]></doc></option>
+<option value='1.2.1.27'><doc title='description'><![CDATA[1.2.1.27 (Methylmalonate-semialdehyde dehydrogenase (acylating))]]></doc></option>
+<option value='1.2.1.8'><doc title='description'><![CDATA[1.2.1.8 (Betaine-aldehyde dehydrogenase)]]></doc></option>
+<option value='1.3.1.26'><doc title='description'><![CDATA[1.3.1.26 (Dihydrodipicolinate reductase)]]></doc></option>
+<option value='1.3.1.33'><doc title='description'><![CDATA[1.3.1.33 (Protochlorophyllide reductase)]]></doc></option>
+<option value='1.3.1.34'><doc title='description'><![CDATA[1.3.1.34 (2,4-dienoyl-CoA reductase (NADPH))]]></doc></option>
+<option value='1.3.1.38'><doc title='description'><![CDATA[1.3.1.38 (Trans-2-enoyl-CoA reductase (NADPH))]]></doc></option>
+<option value='1.3.3.6'><doc title='description'><![CDATA[1.3.3.6 (Acyl-CoA oxidase)]]></doc></option>
+<option value='1.3.99.10'><doc title='description'><![CDATA[1.3.99.10 (Isovaleryl-CoA dehydrogenase)]]></doc></option>
+<option value='1.3.99.2'><doc title='description'><![CDATA[1.3.99.2 (Butyryl-CoA dehydrogenase)]]></doc></option>
+<option value='1.3.99.22'><doc title='description'><![CDATA[1.3.99.22 (Coproporphyrinogen dehydrogenase)]]></doc></option>
+<option value='1.3.99.7'><doc title='description'><![CDATA[1.3.99.7 (Glutaryl-CoA dehydrogenase)]]></doc></option>
+<option value='1.4.3.22'><doc title='description'><![CDATA[1.4.3.22 (Diamine oxidase)]]></doc></option>
+<option value='1.4.3.4'><doc title='description'><![CDATA[1.4.3.4 (Monoamine oxidase)]]></doc></option>
+<option value='1.5.1.-'><doc title='description'><![CDATA[1.5.1.- (With NAD(+) or NADP(+) as acceptor.)]]></doc></option>
+<option value='1.5.1.28'><doc title='description'><![CDATA[1.5.1.28 (Opine dehydrogenase)]]></doc></option>
+<option value='1.5.1.34'><doc title='description'><![CDATA[1.5.1.34 (6,7-dihydropteridine reductase)]]></doc></option>
+<option value='1.5.3.11'><doc title='description'><![CDATA[1.5.3.11 (Polyamine oxidase)]]></doc></option>
+<option value='1.5.5.1'><doc title='description'><![CDATA[1.5.5.1 (Electron-transferring-flavoprotein dehydrogenase)]]></doc></option>
+<option value='1.5.99.8'><doc title='description'><![CDATA[1.5.99.8 (Proline dehydrogenase)]]></doc></option>
+<option value='1.6.3.1'><doc title='description'><![CDATA[1.6.3.1 (NAD(P)H oxidase)]]></doc></option>
+<option value='1.6.5.4'><doc title='description'><![CDATA[1.6.5.4 (Monodehydroascorbate reductase (NADH))]]></doc></option>
+<option value='1.6.5.5'><doc title='description'><![CDATA[1.6.5.5 (NADPH:quinone reductase)]]></doc></option>
+<option value='1.8.1.8'><doc title='description'><![CDATA[1.8.1.8 (Protein-disulfide reductase)]]></doc></option>
+<option value='1.8.3.1'><doc title='description'><![CDATA[1.8.3.1 (Sulfite oxidase)]]></doc></option>
+<option value='1.8.3.5'><doc title='description'><![CDATA[1.8.3.5 (Prenylcysteine oxidase)]]></doc></option>
+<option value='1.8.4.12'><doc title='description'><![CDATA[1.8.4.12 (Peptide-methionine (R)-S-oxide reductase)]]></doc></option>
+<option value='1.8.4.9'><doc title='description'><![CDATA[1.8.4.9 (Adenylyl-sulfate reductase (glutathione))]]></doc></option>
+<option value='2.1.1.10'><doc title='description'><![CDATA[2.1.1.10 (Homocysteine S-methyltransferase)]]></doc></option>
+<option value='2.1.1.17'><doc title='description'><![CDATA[2.1.1.17 (Phosphatidylethanolamine N-methyltransferase)]]></doc></option>
+<option value='2.1.1.41'><doc title='description'><![CDATA[2.1.1.41 (Sterol 24-C-methyltransferase)]]></doc></option>
+<option value='2.1.1.52'><doc title='description'><![CDATA[2.1.1.52 (rRNA (guanine-N(2)-)-methyltransferase)]]></doc></option>
+<option value='2.1.2.11'><doc title='description'><![CDATA[2.1.2.11 (3-methyl-2-oxobutanoate hydroxymethyltransferase)]]></doc></option>
+<option value='2.2.1.2'><doc title='description'><![CDATA[2.2.1.2 (Transaldolase)]]></doc></option>
+<option value='2.3.1.161'><doc title='description'><![CDATA[2.3.1.161 (Lovastatin nonaketide synthase)]]></doc></option>
+<option value='2.3.1.165'><doc title='description'><![CDATA[2.3.1.165 (6-methylsalicylic acid synthase)]]></doc></option>
+<option value='2.3.1.176'><doc title='description'><![CDATA[2.3.1.176 (Propanoyl-CoA C-acyltransferase)]]></doc></option>
+<option value='2.3.1.179'><doc title='description'><![CDATA[2.3.1.179 (Beta-ketoacyl-acyl-carrier-protein synthase II)]]></doc></option>
+<option value='2.3.1.23'><doc title='description'><![CDATA[2.3.1.23 (1-acylglycerophosphocholine O-acyltransferase)]]></doc></option>
+<option value='2.3.1.26'><doc title='description'><![CDATA[2.3.1.26 (Sterol O-acyltransferase)]]></doc></option>
+<option value='2.3.1.31'><doc title='description'><![CDATA[2.3.1.31 (Homoserine O-acetyltransferase)]]></doc></option>
+<option value='2.3.1.42'><doc title='description'><![CDATA[2.3.1.42 (Glycerone-phosphate O-acyltransferase)]]></doc></option>
+<option value='2.3.1.94'><doc title='description'><![CDATA[2.3.1.94 (6-deoxyerythronolide-B synthase)]]></doc></option>
+<option value='2.3.3.5'><doc title='description'><![CDATA[2.3.3.5 (2-methylcitrate synthase)]]></doc></option>
+<option value='2.3.3.8'><doc title='description'><![CDATA[2.3.3.8 (ATP citrate synthase)]]></doc></option>
+<option value='2.4.1.101'><doc title='description'><![CDATA[2.4.1.101 (Alpha-1,3-mannosyl-glycoprotein 2-beta-N-acetylglucosaminyltransferase)]]></doc></option>
+<option value='2.4.1.173'><doc title='description'><![CDATA[2.4.1.173 (Sterol 3-beta-glucosyltransferase)]]></doc></option>
+<option value='2.4.1.175'><doc title='description'><![CDATA[2.4.1.175 (Glucuronosyl-N-acetylgalactosaminyl-proteoglycan 4-beta-N-acetylgalactosaminyltransfer...]]></doc></option>
+<option value='2.4.1.186'><doc title='description'><![CDATA[2.4.1.186 (Glycogenin glucosyltransferase)]]></doc></option>
+<option value='2.4.1.224'><doc title='description'><![CDATA[2.4.1.224 (Glucuronosyl-N-acetylglucosaminyl-proteoglycan 4-alpha-N-acetylglucosaminyltransferase)]]></doc></option>
+<option value='2.4.1.227'><doc title='description'><![CDATA[2.4.1.227 (Undecaprenyldiphospho-muramoylpentapeptide beta-N-acetylglucosaminyltransferase)]]></doc></option>
+<option value='2.4.1.244'><doc title='description'><![CDATA[2.4.1.244 (N-acetyl-beta-glucosaminyl-glycoprotein 4-beta-N-acetylgalactosaminyltransferase)]]></doc></option>
+<option value='2.4.1.34'><doc title='description'><![CDATA[2.4.1.34 (1,3-beta-glucan synthase)]]></doc></option>
+<option value='2.4.1.37'><doc title='description'><![CDATA[2.4.1.37 (Fucosylgalactoside 3-alpha-galactosyltransferase)]]></doc></option>
+<option value='2.4.1.67'><doc title='description'><![CDATA[2.4.1.67 (Galactinol--raffinose galactosyltransferase)]]></doc></option>
+<option value='2.4.2.3'><doc title='description'><![CDATA[2.4.2.3 (Uridine phosphorylase)]]></doc></option>
+<option value='2.4.2.31'><doc title='description'><![CDATA[2.4.2.31 (NAD(+)--protein-arginine ADP-ribosyltransferase)]]></doc></option>
+<option value='2.5.1.42'><doc title='description'><![CDATA[2.5.1.42 (Geranylgeranylglycerol-phosphate geranylgeranyltransferase)]]></doc></option>
+<option value='2.5.1.54'><doc title='description'><![CDATA[2.5.1.54 (3-deoxy-7-phosphoheptulonate synthase)]]></doc></option>
+<option value='2.7.1.106'><doc title='description'><![CDATA[2.7.1.106 (Glucose-1,6-bisphosphate synthase)]]></doc></option>
+<option value='2.7.1.149'><doc title='description'><![CDATA[2.7.1.149 (1-phosphatidylinositol-5-phosphate 4-kinase)]]></doc></option>
+<option value='2.7.1.157'><doc title='description'><![CDATA[2.7.1.157 (N-acetylgalactosamine kinase)]]></doc></option>
+<option value='2.7.1.158'><doc title='description'><![CDATA[2.7.1.158 (Inositol-pentakisphosphate 2-kinase)]]></doc></option>
+<option value='2.7.1.160'><doc title='description'><![CDATA[2.7.1.160 (2'-phosphotransferase)]]></doc></option>
+<option value='2.7.1.39'><doc title='description'><![CDATA[2.7.1.39 (Homoserine kinase)]]></doc></option>
+<option value='2.7.1.78'><doc title='description'><![CDATA[2.7.1.78 (Polynucleotide 5'-hydroxyl-kinase)]]></doc></option>
+<option value='2.7.11.2'><doc title='description'><![CDATA[2.7.11.2 ([Pyruvate dehydrogenase (acetyl-transferring)] kinase)]]></doc></option>
+<option value='2.7.11.4'><doc title='description'><![CDATA[2.7.11.4 ([3-methyl-2-oxobutanoate dehydrogenase (acetyl-transferring)] kinase)]]></doc></option>
+<option value='2.7.2.4'><doc title='description'><![CDATA[2.7.2.4 (Aspartate kinase)]]></doc></option>
+<option value='2.7.3.3'><doc title='description'><![CDATA[2.7.3.3 (Arginine kinase)]]></doc></option>
+<option value='2.7.4.24'><doc title='description'><![CDATA[2.7.4.24 (Diphosphoinositol-pentakisphosphate kinase)]]></doc></option>
+<option value='2.7.7.39'><doc title='description'><![CDATA[2.7.7.39 (Glycerol-3-phosphate cytidylyltransferase)]]></doc></option>
+<option value='2.7.7.48'><doc title='description'><![CDATA[2.7.7.48 (RNA-directed RNA polymerase)]]></doc></option>
+<option value='2.7.7.52'><doc title='description'><![CDATA[2.7.7.52 (RNA uridylyltransferase)]]></doc></option>
+<option value='2.7.7.8'><doc title='description'><![CDATA[2.7.7.8 (Polyribonucleotide nucleotidyltransferase)]]></doc></option>
+<option value='2.7.8.23'><doc title='description'><![CDATA[2.7.8.23 (Carboxyvinyl-carboxyphosphonate phosphorylmutase)]]></doc></option>
+<option value='2.7.9.5'><doc title='description'><![CDATA[2.7.9.5 (Phosphoglucan, water dikinase)]]></doc></option>
+<option value='2.8.1.2'><doc title='description'><![CDATA[2.8.1.2 (3-mercaptopyruvate sulfurtransferase)]]></doc></option>
+<option value='3.1.1.7'><doc title='description'><![CDATA[3.1.1.7 (Acetylcholinesterase)]]></doc></option>
+<option value='3.1.1.79'><doc title='description'><![CDATA[3.1.1.79 (Hormone-sensitive lipase)]]></doc></option>
+<option value='3.1.11.5'><doc title='description'><![CDATA[3.1.11.5 (Exodeoxyribonuclease V)]]></doc></option>
+<option value='3.1.13.5'><doc title='description'><![CDATA[3.1.13.5 (Ribonuclease D)]]></doc></option>
+<option value='3.1.21.2'><doc title='description'><![CDATA[3.1.21.2 (Deoxyribonuclease IV (phage-T(4)-induced))]]></doc></option>
+<option value='3.1.3.11'><doc title='description'><![CDATA[3.1.3.11 (Fructose-bisphosphatase)]]></doc></option>
+<option value='3.1.3.13'><doc title='description'><![CDATA[3.1.3.13 (Bisphosphoglycerate phosphatase)]]></doc></option>
+<option value='3.1.3.43'><doc title='description'><![CDATA[3.1.3.43 ([Pyruvate dehydrogenase (acetyl-transferring)]-phosphatase)]]></doc></option>
+<option value='3.1.3.7'><doc title='description'><![CDATA[3.1.3.7 (3'(2'),5'-bisphosphate nucleotidase)]]></doc></option>
+<option value='3.1.4.35'><doc title='description'><![CDATA[3.1.4.35 (3',5'-cyclic-GMP phosphodiesterase)]]></doc></option>
+<option value='3.1.4.45'><doc title='description'><![CDATA[3.1.4.45 (N-acetylglucosamine-1-phosphodiester alpha-N-acetylglucosaminidase)]]></doc></option>
+<option value='3.2.1.106'><doc title='description'><![CDATA[3.2.1.106 (Mannosyl-oligosaccharide glucosidase)]]></doc></option>
+<option value='3.2.1.22'><doc title='description'><![CDATA[3.2.1.22 (Alpha-galactosidase)]]></doc></option>
+<option value='3.2.1.23'><doc title='description'><![CDATA[3.2.1.23 (Beta-galactosidase)]]></doc></option>
+<option value='3.2.1.39'><doc title='description'><![CDATA[3.2.1.39 (Glucan endo-1,3-beta-D-glucosidase)]]></doc></option>
+<option value='3.2.1.6'><doc title='description'><![CDATA[3.2.1.6 (Endo-1,3(4)-beta-glucanase)]]></doc></option>
+<option value='3.2.1.60'><doc title='description'><![CDATA[3.2.1.60 (Glucan 1,4-alpha-maltotetraohydrolase)]]></doc></option>
+<option value='3.2.1.91'><doc title='description'><![CDATA[3.2.1.91 (Cellulose 1,4-beta-cellobiosidase)]]></doc></option>
+<option value='3.4.13.20'><doc title='description'><![CDATA[3.4.13.20 (Beta-Ala-His dipeptidase)]]></doc></option>
+<option value='3.4.17.1'><doc title='description'><![CDATA[3.4.17.1 (Carboxypeptidase A)]]></doc></option>
+<option value='3.4.17.3'><doc title='description'><![CDATA[3.4.17.3 (Lysine carboxypeptidase)]]></doc></option>
+<option value='3.4.19.3'><doc title='description'><![CDATA[3.4.19.3 (Pyroglutamyl-peptidase I)]]></doc></option>
+<option value='3.4.19.9'><doc title='description'><![CDATA[3.4.19.9 (Gamma-glutamyl hydrolase)]]></doc></option>
+<option value='3.4.21.10'><doc title='description'><![CDATA[3.4.21.10 (Acrosin)]]></doc></option>
+<option value='3.4.21.101'><doc title='description'><![CDATA[3.4.21.101 (Xanthomonalisin)]]></doc></option>
+<option value='3.4.21.108'><doc title='description'><![CDATA[3.4.21.108 (HtrA2 peptidase)]]></doc></option>
+<option value='3.4.21.22'><doc title='description'><![CDATA[3.4.21.22 (Coagulation factor IXa)]]></doc></option>
+<option value='3.4.21.26'><doc title='description'><![CDATA[3.4.21.26 (Prolyl oligopeptidase)]]></doc></option>
+<option value='3.4.21.27'><doc title='description'><![CDATA[3.4.21.27 (Coagulation factor XIa)]]></doc></option>
+<option value='3.4.21.34'><doc title='description'><![CDATA[3.4.21.34 (Plasma kallikrein)]]></doc></option>
+<option value='3.4.21.48'><doc title='description'><![CDATA[3.4.21.48 (Cerevisin)]]></doc></option>
+<option value='3.4.21.6'><doc title='description'><![CDATA[3.4.21.6 (Coagulation factor Xa)]]></doc></option>
+<option value='3.4.21.66'><doc title='description'><![CDATA[3.4.21.66 (Thermitase)]]></doc></option>
+<option value='3.4.21.69'><doc title='description'><![CDATA[3.4.21.69 (Protein C (activated))]]></doc></option>
+<option value='3.4.21.7'><doc title='description'><![CDATA[3.4.21.7 (Plasmin)]]></doc></option>
+<option value='3.4.21.83'><doc title='description'><![CDATA[3.4.21.83 (Oligopeptidase B)]]></doc></option>
+<option value='3.4.21.84'><doc title='description'><![CDATA[3.4.21.84 (Limulus clotting factor C)]]></doc></option>
+<option value='3.4.21.9'><doc title='description'><![CDATA[3.4.21.9 (Enteropeptidase)]]></doc></option>
+<option value='3.4.22.43'><doc title='description'><![CDATA[3.4.22.43 (Cathepsin V)]]></doc></option>
+<option value='3.4.23.2'><doc title='description'><![CDATA[3.4.23.2 (Pepsin B)]]></doc></option>
+<option value='3.4.23.45'><doc title='description'><![CDATA[3.4.23.45 (Memapsin 1)]]></doc></option>
+<option value='3.4.23.5'><doc title='description'><![CDATA[3.4.23.5 (Cathepsin D)]]></doc></option>
+<option value='3.4.24.11'><doc title='description'><![CDATA[3.4.24.11 (Neprilysin)]]></doc></option>
+<option value='3.4.24.12'><doc title='description'><![CDATA[3.4.24.12 (Envelysin)]]></doc></option>
+<option value='3.4.24.14'><doc title='description'><![CDATA[3.4.24.14 (Procollagen N-endopeptidase)]]></doc></option>
+<option value='3.4.24.35'><doc title='description'><![CDATA[3.4.24.35 (Gelatinase B)]]></doc></option>
+<option value='3.4.24.81'><doc title='description'><![CDATA[3.4.24.81 (ADAM10 endopeptidase)]]></doc></option>
+<option value='3.4.24.82'><doc title='description'><![CDATA[3.4.24.82 (ADAMTS-4 endopeptidase)]]></doc></option>
+<option value='3.4.24.85'><doc title='description'><![CDATA[3.4.24.85 (S2P endopeptidase)]]></doc></option>
+<option value='3.5.1.11'><doc title='description'><![CDATA[3.5.1.11 (Penicillin amidase)]]></doc></option>
+<option value='3.5.1.28'><doc title='description'><![CDATA[3.5.1.28 (N-acetylmuramoyl-L-alanine amidase)]]></doc></option>
+<option value='3.5.1.32'><doc title='description'><![CDATA[3.5.1.32 (Hippurate hydrolase)]]></doc></option>
+<option value='3.5.1.53'><doc title='description'><![CDATA[3.5.1.53 (N-carbamoylputrescine amidase)]]></doc></option>
+<option value='3.5.2.6'><doc title='description'><![CDATA[3.5.2.6 (Beta-lactamase)]]></doc></option>
+<option value='3.6.3.20'><doc title='description'><![CDATA[3.6.3.20 (Glycerol-3-phosphate-transporting ATPase)]]></doc></option>
+<option value='3.6.3.24'><doc title='description'><![CDATA[3.6.3.24 (Nickel-transporting ATPase)]]></doc></option>
+<option value='3.6.3.25'><doc title='description'><![CDATA[3.6.3.25 (Sulfate-transporting ATPase)]]></doc></option>
+<option value='3.6.3.29'><doc title='description'><![CDATA[3.6.3.29 (Molybdate-transporting ATPase)]]></doc></option>
+<option value='3.6.3.3'><doc title='description'><![CDATA[3.6.3.3 (Cadmium-exporting ATPase)]]></doc></option>
+<option value='3.6.3.41'><doc title='description'><![CDATA[3.6.3.41 (Heme-transporting ATPase)]]></doc></option>
+<option value='3.6.3.42'><doc title='description'><![CDATA[3.6.3.42 (Beta-glucan-transporting ATPase)]]></doc></option>
+<option value='3.6.3.9'><doc title='description'><![CDATA[3.6.3.9 (Sodium/potassium-exchanging ATPase)]]></doc></option>
+<option value='4.1.1.19'><doc title='description'><![CDATA[4.1.1.19 (Arginine decarboxylase)]]></doc></option>
+<option value='4.1.1.20'><doc title='description'><![CDATA[4.1.1.20 (Diaminopimelate decarboxylase)]]></doc></option>
+<option value='4.1.1.48'><doc title='description'><![CDATA[4.1.1.48 (Indole-3-glycerol-phosphate synthase)]]></doc></option>
+<option value='4.1.1.70'><doc title='description'><![CDATA[4.1.1.70 (Glutaconyl-CoA decarboxylase)]]></doc></option>
+<option value='4.1.1.86'><doc title='description'><![CDATA[4.1.1.86 (Diaminobutyrate decarboxylase)]]></doc></option>
+<option value='4.1.3.4'><doc title='description'><![CDATA[4.1.3.4 (Hydroxymethylglutaryl-CoA lyase)]]></doc></option>
+<option value='4.2.1.10'><doc title='description'><![CDATA[4.2.1.10 (3-dehydroquinate dehydratase)]]></doc></option>
+<option value='4.2.1.107'><doc title='description'><![CDATA[4.2.1.107 (3-alpha,7-alpha,12-alpha-trihydroxy-5-beta-cholest-24-enoyl-CoAhydratase)]]></doc></option>
+<option value='4.2.1.18'><doc title='description'><![CDATA[4.2.1.18 (Methylglutaconyl-CoA hydratase)]]></doc></option>
+<option value='4.2.1.22'><doc title='description'><![CDATA[4.2.1.22 (Cystathionine beta-synthase)]]></doc></option>
+<option value='4.2.1.52'><doc title='description'><![CDATA[4.2.1.52 (Dihydrodipicolinate synthase)]]></doc></option>
+<option value='4.2.1.79'><doc title='description'><![CDATA[4.2.1.79 (2-methylcitrate dehydratase)]]></doc></option>
+<option value='4.2.3.1'><doc title='description'><![CDATA[4.2.3.1 (Threonine synthase)]]></doc></option>
+<option value='4.2.3.4'><doc title='description'><![CDATA[4.2.3.4 (3-dehydroquinate synthase)]]></doc></option>
+<option value='4.3.3.2'><doc title='description'><![CDATA[4.3.3.2 (Strictosidine synthase)]]></doc></option>
+<option value='4.4.1.16'><doc title='description'><![CDATA[4.4.1.16 (Selenocysteine lyase)]]></doc></option>
+<option value='5.3.1.23'><doc title='description'><![CDATA[5.3.1.23 (S-methyl-5-thioribose-1-phosphate isomerase)]]></doc></option>
+<option value='5.3.99.3'><doc title='description'><![CDATA[5.3.99.3 (Prostaglandin-E synthase)]]></doc></option>
+<option value='5.4.2.10'><doc title='description'><![CDATA[5.4.2.10 (Phosphoglucosamine mutase)]]></doc></option>
+<option value='5.4.2.4'><doc title='description'><![CDATA[5.4.2.4 (Bisphosphoglycerate mutase)]]></doc></option>
+<option value='6.1.1.-'><doc title='description'><![CDATA[6.1.1.- (Ligases forming aminoacyl-tRNA and related compounds.)]]></doc></option>
+<option value='6.1.1.26'><doc title='description'><![CDATA[6.1.1.26 (Pyrrolysine--tRNA(Pyl) ligase)]]></doc></option>
+<option value='6.2.1.16'><doc title='description'><![CDATA[6.2.1.16 (Acetoacetate--CoA ligase)]]></doc></option>
+<option value='6.2.1.20'><doc title='description'><![CDATA[6.2.1.20 (Long-chain-fatty-acid--[acyl-carrier-protein] ligase)]]></doc></option>
+<option value='6.3.-.-'><doc title='description'><![CDATA[6.3.-.- (Forming carbon-nitrogen bonds.)]]></doc></option>
+<option value='6.3.2.1'><doc title='description'><![CDATA[6.3.2.1 (Pantoate--beta-alanine ligase)]]></doc></option>
+<option value='6.3.3.2'><doc title='description'><![CDATA[6.3.3.2 (5-formyltetrahydrofolate cyclo-ligase)]]></doc></option>
+<option value='6.4.1.1'><doc title='description'><![CDATA[6.4.1.1 (Pyruvate carboxylase)]]></doc></option>
+<option value='6.4.1.3'><doc title='description'><![CDATA[6.4.1.3 (Propionyl-CoA carboxylase)]]></doc></option>
+<option value='6.4.1.4'><doc title='description'><![CDATA[6.4.1.4 (Methylcrotonoyl-CoA carboxylase)]]></doc></option>
+<option value='6.5.1.2'><doc title='description'><![CDATA[6.5.1.2 (DNA ligase (NAD(+)))]]></doc></option>
+<option value='6.6.1.1'><doc title='description'><![CDATA[6.6.1.1 (Magnesium chelatase)]]></doc></option>
+<option value='6.6.1.2'><doc title='description'><![CDATA[6.6.1.2 (Cobaltochelatase)]]></doc></option>
+<option value='1.1.1.29'><doc title='description'><![CDATA[1.1.1.29 (Glycerate dehydrogenase)]]></doc></option>
+<option value='1.1.1.133'><doc title='description'><![CDATA[1.1.1.133 (dTDP-4-dehydrorhamnose reductase)]]></doc></option>
+<option value='1.1.1.193'><doc title='description'><![CDATA[1.1.1.193 (5-amino-6-(5-phosphoribosylamino)uracil reductase)]]></doc></option>
+<option value='1.1.1.204'><doc title='description'><![CDATA[1.1.1.204 (Transferred entry: 1.17.1.4)]]></doc></option>
+<option value='1.1.1.82'><doc title='description'><![CDATA[1.1.1.82 (Malate dehydrogenase (NADP(+)))]]></doc></option>
+<option value='4.1.3.3'><doc title='description'><![CDATA[4.1.3.3 (N-acetylneuraminate lyase)]]></doc></option>
+<option value='4.1.3.6'><doc title='description'><![CDATA[4.1.3.6 (Citrate (pro-3S)-lyase)]]></doc></option>
+<option value='2.7.4.2'><doc title='description'><![CDATA[2.7.4.2 (Phosphomevalonate kinase)]]></doc></option>
+<option value='5.4.2.6'><doc title='description'><![CDATA[5.4.2.6 (Beta-phosphoglucomutase)]]></doc></option>
+<option value='1.13.11.32'><doc title='description'><![CDATA[1.13.11.32 (2-nitropropane dioxygenase)]]></doc></option>
+<option value='2.7.1.45'><doc title='description'><![CDATA[2.7.1.45 (2-dehydro-3-deoxygluconokinase)]]></doc></option>
+<option value='1.12.1.2'><doc title='description'><![CDATA[1.12.1.2 (Hydrogen dehydrogenase)]]></doc></option>
+<option value='5.1.3.13'><doc title='description'><![CDATA[5.1.3.13 (dTDP-4-dehydrorhamnose 3,5-epimerase)]]></doc></option>
+<option value='2.5.1.17'><doc title='description'><![CDATA[2.5.1.17 (Cob(I)yrinic acid a,c-diamide adenosyltransferase)]]></doc></option>
+<option value='2.7.1.12'><doc title='description'><![CDATA[2.7.1.12 (Gluconokinase)]]></doc></option>
+<option value='2.6.1.5'><doc title='description'><![CDATA[2.6.1.5 (Tyrosine transaminase)]]></doc></option>
+<option value='4.1.1.5'><doc title='description'><![CDATA[4.1.1.5 (Acetolactate decarboxylase)]]></doc></option>
+<option value='4.1.1.15'><doc title='description'><![CDATA[4.1.1.15 (Glutamate decarboxylase)]]></doc></option>
+<option value='4.4.1.14'><doc title='description'><![CDATA[4.4.1.14 (1-aminocyclopropane-1-carboxylate synthase)]]></doc></option>
+<option value='1.2.3.1'><doc title='description'><![CDATA[1.2.3.1 (Aldehyde oxidase)]]></doc></option>
+<option value='3.5.1.2'><doc title='description'><![CDATA[3.5.1.2 (Glutaminase)]]></doc></option>
+<option value='1.2.1.13'><doc title='description'><![CDATA[1.2.1.13 (Glyceraldehyde-3-phosphate dehydrogenase (NADP(+)) (phosphorylating))]]></doc></option>
+<option value='3.1.6.6'><doc title='description'><![CDATA[3.1.6.6 (Choline-sulfatase)]]></doc></option>
+<option value='3.2.1.26'><doc title='description'><![CDATA[3.2.1.26 (Beta-fructofuranosidase)]]></doc></option>
+<option value='3.2.1.28'><doc title='description'><![CDATA[3.2.1.28 (Alpha,alpha-trehalase)]]></doc></option>
+<option value='3.2.1.4'><doc title='description'><![CDATA[3.2.1.4 (Cellulase)]]></doc></option>
+<option value='1.8.4.8'><doc title='description'><![CDATA[1.8.4.8 (Phosphoadenylyl-sulfate reductase (thioredoxin))]]></doc></option>
+<option value='1.3.99.16'><doc title='description'><![CDATA[1.3.99.16 (Isoquinoline 1-oxidoreductase)]]></doc></option>
+<option value='1.1.-.-'><doc title='description'><![CDATA[1.1.-.- (Acting on the CH-OH group of donors.)]]></doc></option>
+<option value='1.1.1.103'><doc title='description'><![CDATA[1.1.1.103 (L-threonine 3-dehydrogenase)]]></doc></option>
+<option value='1.1.1.188'><doc title='description'><![CDATA[1.1.1.188 (Prostaglandin-F synthase)]]></doc></option>
+<option value='1.1.1.19'><doc title='description'><![CDATA[1.1.1.19 (Glucuronate reductase)]]></doc></option>
+<option value='1.1.1.249'><doc title='description'><![CDATA[1.1.1.249 (Transferred entry: 2.5.1.46)]]></doc></option>
+<option value='1.1.1.3'><doc title='description'><![CDATA[1.1.1.3 (Homoserine dehydrogenase)]]></doc></option>
+<option value='1.1.1.34'><doc title='description'><![CDATA[1.1.1.34 (Hydroxymethylglutaryl-CoA reductase (NADPH))]]></doc></option>
+<option value='1.1.3.21'><doc title='description'><![CDATA[1.1.3.21 (Glycerol-3-phosphate oxidase)]]></doc></option>
+<option value='1.1.3.8'><doc title='description'><![CDATA[1.1.3.8 (L-gulonolactone oxidase)]]></doc></option>
+<option value='1.11.1.11'><doc title='description'><![CDATA[1.11.1.11 (L-ascorbate peroxidase)]]></doc></option>
+<option value='1.13.11.54'><doc title='description'><![CDATA[1.13.11.54 (Acireductone dioxygenase (Fe(2+)-requiring))]]></doc></option>
+<option value='1.14.-.-'><doc title='description'><![CDATA[1.14.-.- (Acting on paired donors, with incorporation or reduction of molecular oxygen.)]]></doc></option>
+<option value='1.14.11.6'><doc title='description'><![CDATA[1.14.11.6 (Thymine dioxygenase)]]></doc></option>
+<option value='1.14.13.1'><doc title='description'><![CDATA[1.14.13.1 (Salicylate 1-monooxygenase)]]></doc></option>
+<option value='1.14.13.70'><doc title='description'><![CDATA[1.14.13.70 (Sterol 14-demethylase)]]></doc></option>
+<option value='1.14.13.72'><doc title='description'><![CDATA[1.14.13.72 (Methylsterol monooxygenase)]]></doc></option>
+<option value='1.14.14.-'><doc title='description'><![CDATA[1.14.14.- (With reduced flavin or flavoprotein as one donor, and incorporation of one atom of oxy...]]></doc></option>
+<option value='1.14.99.-'><doc title='description'><![CDATA[1.14.99.- (Miscellaneous (requires further characterization).)]]></doc></option>
+<option value='1.14.99.5'><doc title='description'><![CDATA[1.14.99.5 (Transferred entry: 1.14.19.1)]]></doc></option>
+<option value='1.14.99.7'><doc title='description'><![CDATA[1.14.99.7 (Squalene monooxygenase)]]></doc></option>
+<option value='1.2.1.22'><doc title='description'><![CDATA[1.2.1.22 (Lactaldehyde dehydrogenase)]]></doc></option>
+<option value='1.2.3.-'><doc title='description'><![CDATA[1.2.3.- (With oxygen as acceptor.)]]></doc></option>
+<option value='1.2.3.4'><doc title='description'><![CDATA[1.2.3.4 (Oxalate oxidase)]]></doc></option>
+<option value='1.20.4.1'><doc title='description'><![CDATA[1.20.4.1 (Arsenate reductase (glutaredoxin))]]></doc></option>
+<option value='1.3.-.-'><doc title='description'><![CDATA[1.3.-.- (Acting on the CH-CH group of donors.)]]></doc></option>
+<option value='1.3.1.6'><doc title='description'><![CDATA[1.3.1.6 (Fumarate reductase (NADH))]]></doc></option>
+<option value='1.3.1.70'><doc title='description'><![CDATA[1.3.1.70 (Delta(14)-sterol reductase)]]></doc></option>
+<option value='1.3.1.71'><doc title='description'><![CDATA[1.3.1.71 (Delta(24(24(1)))-sterol reductase)]]></doc></option>
+<option value='1.3.3.2'><doc title='description'><![CDATA[1.3.3.2 (Transferred entry: 1.14.21.6)]]></doc></option>
+<option value='1.3.99.-'><doc title='description'><![CDATA[1.3.99.- (With other acceptors.)]]></doc></option>
+<option value='1.3.99.3'><doc title='description'><![CDATA[1.3.99.3 (Acyl-CoA dehydrogenase)]]></doc></option>
+<option value='1.4.1.3'><doc title='description'><![CDATA[1.4.1.3 (Glutamate dehydrogenase (NAD(P)(+)))]]></doc></option>
+<option value='1.4.4.2'><doc title='description'><![CDATA[1.4.4.2 (Glycine dehydrogenase (decarboxylating))]]></doc></option>
+<option value='1.5.1.12'><doc title='description'><![CDATA[1.5.1.12 (1-pyrroline-5-carboxylate dehydrogenase)]]></doc></option>
+<option value='1.5.1.20'><doc title='description'><![CDATA[1.5.1.20 (Methylenetetrahydrofolate reductase (NAD(P)H))]]></doc></option>
+<option value='1.5.1.33'><doc title='description'><![CDATA[1.5.1.33 (Pteridine reductase)]]></doc></option>
+<option value='1.5.3.-'><doc title='description'><![CDATA[1.5.3.- (With oxygen as acceptor.)]]></doc></option>
+<option value='1.6.5.-'><doc title='description'><![CDATA[1.6.5.- (With a quinone or similar compound as acceptor.)]]></doc></option>
+<option value='1.6.6.1'><doc title='description'><![CDATA[1.6.6.1 (Transferred entry: 1.7.1.1)]]></doc></option>
+<option value='1.6.99.13'><doc title='description'><![CDATA[1.6.99.13 (Transferred entry: 1.16.1.7)]]></doc></option>
+<option value='1.6.99.7'><doc title='description'><![CDATA[1.6.99.7 (Transferred entry: 1.5.1.34)]]></doc></option>
+<option value='1.7.1.7'><doc title='description'><![CDATA[1.7.1.7 (GMP reductase)]]></doc></option>
+<option value='1.8.1.12'><doc title='description'><![CDATA[1.8.1.12 (Trypanothione-disulfide reductase)]]></doc></option>
+<option value='1.8.4.6'><doc title='description'><![CDATA[1.8.4.6 (Transferred entry: 1.8.4.11)]]></doc></option>
+<option value='1.8.5.1'><doc title='description'><![CDATA[1.8.5.1 (Glutathione dehydrogenase (ascorbate))]]></doc></option>
+<option value='2.1.1.13'><doc title='description'><![CDATA[2.1.1.13 (Methionine synthase)]]></doc></option>
+<option value='2.1.1.135'><doc title='description'><![CDATA[2.1.1.135 (Transferred entry: 1.16.1.8)]]></doc></option>
+<option value='2.1.1.73'><doc title='description'><![CDATA[2.1.1.73 (Transferred entry: 2.1.1.37)]]></doc></option>
+<option value='2.3.1.119'><doc title='description'><![CDATA[2.3.1.119 (Icosanoyl-CoA synthase)]]></doc></option>
+<option value='2.3.1.158'><doc title='description'><![CDATA[2.3.1.158 (Phospholipid:diacylglycerol acyltransferase)]]></doc></option>
+<option value='2.3.1.21'><doc title='description'><![CDATA[2.3.1.21 (Carnitine O-palmitoyltransferase)]]></doc></option>
+<option value='2.3.1.29'><doc title='description'><![CDATA[2.3.1.29 (Glycine C-acetyltransferase)]]></doc></option>
+<option value='2.3.1.7'><doc title='description'><![CDATA[2.3.1.7 (Carnitine O-acetyltransferase)]]></doc></option>
+<option value='2.4.1.13'><doc title='description'><![CDATA[2.4.1.13 (Sucrose synthase)]]></doc></option>
+<option value='2.4.1.131'><doc title='description'><![CDATA[2.4.1.131 (Glycolipid 2-alpha-mannosyltransferase)]]></doc></option>
+<option value='2.4.1.14'><doc title='description'><![CDATA[2.4.1.14 (Sucrose-phosphate synthase)]]></doc></option>
+<option value='2.4.1.232'><doc title='description'><![CDATA[2.4.1.232 (Initiation-specific alpha-1,6-mannosyltransferase)]]></doc></option>
+<option value='2.4.2.-'><doc title='description'><![CDATA[2.4.2.- (Pentosyltransferases.)]]></doc></option>
+<option value='2.4.2.22'><doc title='description'><![CDATA[2.4.2.22 (Xanthine phosphoribosyltransferase)]]></doc></option>
+<option value='2.4.2.6'><doc title='description'><![CDATA[2.4.2.6 (Nucleoside deoxyribosyltransferase)]]></doc></option>
+<option value='2.4.2.7'><doc title='description'><![CDATA[2.4.2.7 (Adenine phosphoribosyltransferase)]]></doc></option>
+<option value='2.5.1.26'><doc title='description'><![CDATA[2.5.1.26 (Alkylglycerone-phosphate synthase)]]></doc></option>
+<option value='2.7.1.105'><doc title='description'><![CDATA[2.7.1.105 (6-phosphofructo-2-kinase)]]></doc></option>
+<option value='2.7.1.129'><doc title='description'><![CDATA[2.7.1.129 (Transferred entry: 2.7.11.7)]]></doc></option>
+<option value='2.7.1.16'><doc title='description'><![CDATA[2.7.1.16 (Ribulokinase)]]></doc></option>
+<option value='2.7.1.29'><doc title='description'><![CDATA[2.7.1.29 (Glycerone kinase)]]></doc></option>
+<option value='2.7.1.3'><doc title='description'><![CDATA[2.7.1.3 (Ketohexokinase)]]></doc></option>
+<option value='2.7.1.52'><doc title='description'><![CDATA[2.7.1.52 (Fucokinase)]]></doc></option>
+<option value='2.7.1.91'><doc title='description'><![CDATA[2.7.1.91 (Sphinganine kinase)]]></doc></option>
+<option value='2.7.1.99'><doc title='description'><![CDATA[2.7.1.99 (Transferred entry: 2.7.11.2)]]></doc></option>
+<option value='2.8.3.5'><doc title='description'><![CDATA[2.8.3.5 (3-oxoacid CoA-transferase)]]></doc></option>
+<option value='3.1.1.17'><doc title='description'><![CDATA[3.1.1.17 (Gluconolactonase)]]></doc></option>
+<option value='3.1.1.32'><doc title='description'><![CDATA[3.1.1.32 (Phospholipase A(1))]]></doc></option>
+<option value='3.1.1.69'><doc title='description'><![CDATA[3.1.1.69 (Transferred entry: 3.5.1.89)]]></doc></option>
+<option value='3.1.1.73'><doc title='description'><![CDATA[3.1.1.73 (Feruloyl esterase)]]></doc></option>
+<option value='3.1.26.3'><doc title='description'><![CDATA[3.1.26.3 (Ribonuclease III)]]></doc></option>
+<option value='3.1.3.37'><doc title='description'><![CDATA[3.1.3.37 (Sedoheptulose-bisphosphatase)]]></doc></option>
+<option value='3.1.3.46'><doc title='description'><![CDATA[3.1.3.46 (Fructose-2,6-bisphosphate 2-phosphatase)]]></doc></option>
+<option value='3.1.4.47'><doc title='description'><![CDATA[3.1.4.47 (Transferred entry: 4.6.1.14)]]></doc></option>
+<option value='3.2.1.-'><doc title='description'><![CDATA[3.2.1.- (Glycosidases, i.e. enzymes hydrolyzing O- and S-glycosyl compounds.)]]></doc></option>
+<option value='3.2.1.18'><doc title='description'><![CDATA[3.2.1.18 (Exo-alpha-sialidase)]]></doc></option>
+<option value='3.2.1.8'><doc title='description'><![CDATA[3.2.1.8 (Endo-1,4-beta-xylanase)]]></doc></option>
+<option value='3.2.1.96'><doc title='description'><![CDATA[3.2.1.96 (Mannosyl-glycoprotein endo-beta-N-acetylglucosaminidase)]]></doc></option>
+<option value='3.2.2.3'><doc title='description'><![CDATA[3.2.2.3 (Uridine nucleosidase)]]></doc></option>
+<option value='3.4.11.14'><doc title='description'><![CDATA[3.4.11.14 (Cytosol alanyl aminopeptidase)]]></doc></option>
+<option value='3.4.15.-'><doc title='description'><![CDATA[3.4.15.- (Peptidyl-dipeptidases.)]]></doc></option>
+<option value='3.4.16.5'><doc title='description'><![CDATA[3.4.16.5 (Carboxypeptidase C)]]></doc></option>
+<option value='3.4.17.19'><doc title='description'><![CDATA[3.4.17.19 (Carboxypeptidase Taq)]]></doc></option>
+<option value='3.4.22.17'><doc title='description'><![CDATA[3.4.22.17 (Transferred entry: 3.4.22.52 and 3.4.22.53)]]></doc></option>
+<option value='3.4.22.5'><doc title='description'><![CDATA[3.4.22.5 (Transferred entry: 3.4.22.33)]]></doc></option>
+<option value='3.4.22.51'><doc title='description'><![CDATA[3.4.22.51 (Cruzipain)]]></doc></option>
+<option value='3.4.24.15'><doc title='description'><![CDATA[3.4.24.15 (Thimet oligopeptidase)]]></doc></option>
+<option value='3.4.24.3'><doc title='description'><![CDATA[3.4.24.3 (Microbial collagenase)]]></doc></option>
+<option value='3.4.24.6'><doc title='description'><![CDATA[3.4.24.6 (Leucolysin)]]></doc></option>
+<option value='3.4.99.41'><doc title='description'><![CDATA[3.4.99.41 (Transferred entry: 3.4.24.64)]]></doc></option>
+<option value='3.5.1.14'><doc title='description'><![CDATA[3.5.1.14 (Aminoacylase)]]></doc></option>
+<option value='3.5.1.3'><doc title='description'><![CDATA[3.5.1.3 (Omega-amidase)]]></doc></option>
+<option value='3.5.1.78'><doc title='description'><![CDATA[3.5.1.78 (Glutathionylspermidine amidase)]]></doc></option>
+<option value='3.5.2.9'><doc title='description'><![CDATA[3.5.2.9 (5-oxoprolinase (ATP-hydrolyzing))]]></doc></option>
+<option value='3.5.3.11'><doc title='description'><![CDATA[3.5.3.11 (Agmatinase)]]></doc></option>
+<option value='3.5.4.2'><doc title='description'><![CDATA[3.5.4.2 (Adenine deaminase)]]></doc></option>
+<option value='3.5.5.1'><doc title='description'><![CDATA[3.5.5.1 (Nitrilase)]]></doc></option>
+<option value='3.6.1.35'><doc title='description'><![CDATA[3.6.1.35 (Transferred entry: 3.6.3.6)]]></doc></option>
+<option value='3.6.1.42'><doc title='description'><![CDATA[3.6.1.42 (Guanosine-diphosphatase)]]></doc></option>
+<option value='3.6.4.4'><doc title='description'><![CDATA[3.6.4.4 (Plus-end-directed kinesin ATPase)]]></doc></option>
+<option value='3.7.1.3'><doc title='description'><![CDATA[3.7.1.3 (Kynureninase)]]></doc></option>
+<option value='4.1.1.-'><doc title='description'><![CDATA[4.1.1.- (Carboxy-lyases.)]]></doc></option>
+<option value='4.1.1.25'><doc title='description'><![CDATA[4.1.1.25 (Tyrosine decarboxylase)]]></doc></option>
+<option value='4.1.1.74'><doc title='description'><![CDATA[4.1.1.74 (Indolepyruvate decarboxylase)]]></doc></option>
+<option value='4.1.1.9'><doc title='description'><![CDATA[4.1.1.9 (Malonyl-CoA decarboxylase)]]></doc></option>
+<option value='4.1.2.-'><doc title='description'><![CDATA[4.1.2.- (Aldehyde-lyases.)]]></doc></option>
+<option value='4.2.1.109'><doc title='description'><![CDATA[4.2.1.109 (Methylthioribulose 1-phosphate dehydratase)]]></doc></option>
+<option value='4.2.1.16'><doc title='description'><![CDATA[4.2.1.16 (Transferred entry: 4.3.1.19)]]></doc></option>
+<option value='4.4.1.7'><doc title='description'><![CDATA[4.4.1.7 (Transferred entry: 2.5.1.18)]]></doc></option>
+<option value='4.4.1.8'><doc title='description'><![CDATA[4.4.1.8 (Cystathionine beta-lyase)]]></doc></option>
+<option value='4.6.1.14'><doc title='description'><![CDATA[4.6.1.14 (Glycosylphosphatidylinositol diacylglycerol-lyase)]]></doc></option>
+<option value='5.1.99.1'><doc title='description'><![CDATA[5.1.99.1 (Methylmalonyl-CoA epimerase)]]></doc></option>
+<option value='5.3.3.5'><doc title='description'><![CDATA[5.3.3.5 (Cholestenol Delta-isomerase)]]></doc></option>
+<option value='5.3.3.8'><doc title='description'><![CDATA[5.3.3.8 (Dodecenoyl-CoA isomerase)]]></doc></option>
+<option value='5.4.2.9'><doc title='description'><![CDATA[5.4.2.9 (Phosphoenolpyruvate mutase)]]></doc></option>
+<option value='5.4.99.2'><doc title='description'><![CDATA[5.4.99.2 (Methylmalonyl-CoA mutase)]]></doc></option>
+<option value='5.4.99.8'><doc title='description'><![CDATA[5.4.99.8 (Cycloartenol synthase)]]></doc></option>
+<option value='5.4.99.9'><doc title='description'><![CDATA[5.4.99.9 (UDP-galactopyranose mutase)]]></doc></option>
+<option value='6.-.-.-'><doc title='description'><![CDATA[6.-.-.- (Ligases.)]]></doc></option>
+<option value='6.2.1.12'><doc title='description'><![CDATA[6.2.1.12 (4-coumarate--CoA ligase)]]></doc></option>
+<option value='6.3.1.8'><doc title='description'><![CDATA[6.3.1.8 (Glutathionylspermidine synthase)]]></doc></option>
+<option value='6.3.1.9'><doc title='description'><![CDATA[6.3.1.9 (Trypanothione synthase)]]></doc></option>
+<option value='6.3.4.3'><doc title='description'><![CDATA[6.3.4.3 (Formate--tetrahydrofolate ligase)]]></doc></option>
+<option value='6.3.4.5'><doc title='description'><![CDATA[6.3.4.5 (Argininosuccinate synthase)]]></doc></option>
+<option value='6.4.-.-'><doc title='description'><![CDATA[6.4.-.- (Forming carbon-carbon bonds.)]]></doc></option>
+<option value='6.5.1.3'><doc title='description'><![CDATA[6.5.1.3 (RNA ligase (ATP))]]></doc></option>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Gene]]></doc></option>
+<option value='formatted_gene_id'><doc title='description'><![CDATA[Gene Group]]></doc></option>
+<option value='sequence_id'><doc title='description'><![CDATA[Genomic Sequence ID]]></doc></option>
+<option value='chromosome'><doc title='description'><![CDATA[Chromosome]]></doc></option>
+<option value='location_text'><doc title='description'><![CDATA[Genomic Location]]></doc></option>
+<option value='strand'><doc title='description'><![CDATA[Gene Strand]]></doc></option>
+<option value='gene_type'><doc title='description'><![CDATA[Gene Type]]></doc></option>
+<option value='exon_count'><doc title='description'><![CDATA[# Exons]]></doc></option>
+<option value='transcript_length'><doc title='description'><![CDATA[Transcript Length]]></doc></option>
+<option value='cds_length'><doc title='description'><![CDATA[CDS Length]]></doc></option>
+<option value='product'><doc title='description'><![CDATA[Product Description]]></doc></option>
+<option value='protein_length'><doc title='description'><![CDATA[Protein Length]]></doc></option>
+<option value='tm_count'><doc title='description'><![CDATA[# TM Domains]]></doc></option>
+<option value='molecular_weight'><doc title='description'><![CDATA[Molecular Weight]]></doc></option>
+<option value='isoelectric_point'><doc title='description'><![CDATA[Isoelectric Point]]></doc></option>
+<option value='ec_numbers_string'><doc title='description'><![CDATA[EC Numbers]]></doc></option>
+<option value='ortholog_number'><doc title='description'><![CDATA[Ortholog count]]></doc></option>
+<option value='paralog_number'><doc title='description'><![CDATA[Paralog count]]></doc></option>
+<option value='orthomcl_name'><doc title='description'><![CDATA[Ortholog Group]]></doc></option>
+<option value='signalp_scores'><doc title='description'><![CDATA[SignalP Scores]]></doc></option>
+<option value='signalp_peptide'><doc title='description'><![CDATA[SignalP Peptide]]></doc></option>
+<option value='ann_go_function'><doc title='description'><![CDATA[Annotated GO Function]]></doc></option>
+<option value='ann_go_process'><doc title='description'><![CDATA[Annotated GO Process]]></doc></option>
+<option value='ann_go_component'><doc title='description'><![CDATA[Annotated GO Component]]></doc></option>
+<option value='pred_go_function'><doc title='description'><![CDATA[Predicted GO Function]]></doc></option>
+<option value='pred_go_process'><doc title='description'><![CDATA[Predicted GO Process]]></doc></option>
+<option value='pred_go_component'><doc title='description'><![CDATA[Predicted GO Component]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='is_pseudo'><doc title='description'><![CDATA[Is Pseudo]]></doc></option>
+<option value='protein_sequence'><doc title='description'><![CDATA[Predicted Protein Sequence]]></doc></option>
+<option value='transcript_sequence'><doc title='description'><![CDATA[Predicted RNA/mRNA Sequence (introns spliced out)]]></doc></option>
+<option value='cds'><doc title='description'><![CDATA[Coding Sequence]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+<option value='SNPs'><doc title='description'><![CDATA[SNPs Summary]]></doc></option>
+<option value='GeneModelDump'><doc title='description'><![CDATA[Gene Model]]></doc></option>
+<option value='InterPro'><doc title='description'><![CDATA[InterPro Domains]]></doc></option>
+<option value='TMHMM'><doc title='description'><![CDATA[Transmembrane Domains]]></doc></option>
+<option value='LowComplexity'><doc title='description'><![CDATA[Low Complexity Regions]]></doc></option>
+<option value='SignalP'><doc title='description'><![CDATA[Signal Peptide]]></doc></option>
+<option value='BlastP'><doc title='description'><![CDATA[BlastP Hits]]></doc></option>
+<option value='Genbank'><doc title='description'><![CDATA[Gene Location]]></doc></option>
+<option value='SageTags'><doc title='description'><![CDATA[Sage Tags]]></doc></option>
+<option value='Notes'><doc title='description'><![CDATA[Notes]]></doc></option>
+<option value='UserComments'><doc title='description'><![CDATA[User Comments]]></doc></option>
+<option value='CommunityExpComments'><doc title='description'><![CDATA[Community Annotations]]></doc></option>
+<option value='EcNumber'><doc title='description'><![CDATA[EC Number]]></doc></option>
+<option value='MassSpec'><doc title='description'><![CDATA[Mass Spec.-based Expression Evidence]]></doc></option>
+<option value='GoTerms'><doc title='description'><![CDATA[GO Terms]]></doc></option>
+<option value='Phenotype'><doc title='description'><![CDATA[Phenotype]]></doc></option>
+<option value='Y2hInteractions'><doc title='description'><![CDATA[Y2H Interactions]]></doc></option>
+<option value='Orthologs'><doc title='description'><![CDATA[Orthologs and Paralogs within EuPathDB]]></doc></option>
+<option value='MetabolicPathways'><doc title='description'><![CDATA[Metabolic Pathways]]></doc></option>
+<option value='TaskComments'><doc title='description'><![CDATA[Toxoplasma Genome Sequencing Project Annotation]]></doc></option>
+<option value='ArrayElements'><doc title='description'><![CDATA[Mapped Array Elements]]></doc></option>
+<option value='TwoChannelDiffExpr'><doc title='description'><![CDATA[P.Berghei Differential Expression - DOZI KO vs. WT]]></doc></option>
+<option value='ProteinExpression'><doc title='description'><![CDATA[P.Berghei Protein Expression]]></doc></option>
+<option value='Mr4Reagents'><doc title='description'><![CDATA[MR4 Reagents]]></doc></option>
+<option value='ProteinDatabase'><doc title='description'><![CDATA[Protein Linkouts]]></doc></option>
+<option value='GeneLinkouts'><doc title='description'><![CDATA[External Links]]></doc></option>
+<option value='3dPreds'><doc title='description'><![CDATA[3D Structure Predictions]]></doc></option>
+<option value='PdbSimilarities'><doc title='description'><![CDATA[Similarities to Protein Data Bank (PDB) Chains]]></doc></option>
+<option value='Epitopes'><doc title='description'><![CDATA[Epitopes from IEDB]]></doc></option>
+<option value='IsolateOverlap'><doc title='description'><![CDATA[Isolates]]></doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

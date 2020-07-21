@@ -1,0 +1,156 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='IsolateQuestions'>
+<resource path='IsolateByGenotypeNumber.xml'>
+<method href='#isolatebygenotypenumber'/>
+</resource>
+<resource path='IsolateByGenotypeNumber.json'>
+<method href='#isolatebygenotypenumber'/>
+</resource>
+<method name='POST' id='isolatebygenotypenumber'>
+<doc title='display_name'><![CDATA[RFLP Genotype Number]]></doc>
+<doc title='summary'><![CDATA[Find isolates by genotype number.]]></doc>
+<doc title='description'><![CDATA[Find isolates by genotype number.]]></doc>
+<request>
+<param name='genotype' type='xsd:string' required='true' default='1' repeating='true'>
+<doc title='prompt'><![CDATA[Genotype #]]></doc>
+<doc title='help'><![CDATA[Genotype #]]></doc>
+<doc title='default'><![CDATA[1]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='1'><doc title='description'><![CDATA[1]]></doc></option>
+<option value='2'><doc title='description'><![CDATA[2]]></doc></option>
+<option value='3'><doc title='description'><![CDATA[3]]></doc></option>
+<option value='4'><doc title='description'><![CDATA[4]]></doc></option>
+<option value='5'><doc title='description'><![CDATA[5]]></doc></option>
+<option value='6'><doc title='description'><![CDATA[6]]></doc></option>
+<option value='7'><doc title='description'><![CDATA[7]]></doc></option>
+<option value='8'><doc title='description'><![CDATA[8]]></doc></option>
+<option value='9'><doc title='description'><![CDATA[9]]></doc></option>
+<option value='10'><doc title='description'><![CDATA[10]]></doc></option>
+<option value='11'><doc title='description'><![CDATA[11]]></doc></option>
+<option value='12'><doc title='description'><![CDATA[12]]></doc></option>
+<option value='13'><doc title='description'><![CDATA[13]]></doc></option>
+<option value='14'><doc title='description'><![CDATA[14]]></doc></option>
+<option value='15'><doc title='description'><![CDATA[15]]></doc></option>
+<option value='17'><doc title='description'><![CDATA[17]]></doc></option>
+<option value='18'><doc title='description'><![CDATA[18]]></doc></option>
+<option value='19'><doc title='description'><![CDATA[19]]></doc></option>
+<option value='21'><doc title='description'><![CDATA[21]]></doc></option>
+<option value='23'><doc title='description'><![CDATA[23]]></doc></option>
+<option value='24'><doc title='description'><![CDATA[24]]></doc></option>
+<option value='25'><doc title='description'><![CDATA[25]]></doc></option>
+<option value='26'><doc title='description'><![CDATA[26]]></doc></option>
+<option value='28'><doc title='description'><![CDATA[28]]></doc></option>
+<option value='29'><doc title='description'><![CDATA[29]]></doc></option>
+<option value='30'><doc title='description'><![CDATA[30]]></doc></option>
+<option value='35'><doc title='description'><![CDATA[35]]></doc></option>
+<option value='38'><doc title='description'><![CDATA[38]]></doc></option>
+<option value='39'><doc title='description'><![CDATA[39]]></doc></option>
+<option value='42'><doc title='description'><![CDATA[42]]></doc></option>
+<option value='43'><doc title='description'><![CDATA[43]]></doc></option>
+<option value='44'><doc title='description'><![CDATA[44]]></doc></option>
+<option value='46'><doc title='description'><![CDATA[46]]></doc></option>
+<option value='47'><doc title='description'><![CDATA[47]]></doc></option>
+<option value='49'><doc title='description'><![CDATA[49]]></doc></option>
+<option value='52'><doc title='description'><![CDATA[52]]></doc></option>
+<option value='54'><doc title='description'><![CDATA[54]]></doc></option>
+<option value='60'><doc title='description'><![CDATA[60]]></doc></option>
+<option value='62'><doc title='description'><![CDATA[62]]></doc></option>
+<option value='66'><doc title='description'><![CDATA[66]]></doc></option>
+<option value='70'><doc title='description'><![CDATA[70]]></doc></option>
+<option value='72'><doc title='description'><![CDATA[72]]></doc></option>
+<option value='73'><doc title='description'><![CDATA[73]]></doc></option>
+<option value='74'><doc title='description'><![CDATA[74]]></doc></option>
+<option value='76'><doc title='description'><![CDATA[76]]></doc></option>
+<option value='77'><doc title='description'><![CDATA[77]]></doc></option>
+<option value='79'><doc title='description'><![CDATA[79]]></doc></option>
+<option value='80'><doc title='description'><![CDATA[80]]></doc></option>
+<option value='83'><doc title='description'><![CDATA[83]]></doc></option>
+<option value='84'><doc title='description'><![CDATA[84]]></doc></option>
+<option value='87'><doc title='description'><![CDATA[87]]></doc></option>
+<option value='90'><doc title='description'><![CDATA[90]]></doc></option>
+<option value='91'><doc title='description'><![CDATA[91]]></doc></option>
+<option value='95'><doc title='description'><![CDATA[95]]></doc></option>
+<option value='96'><doc title='description'><![CDATA[96]]></doc></option>
+<option value='97'><doc title='description'><![CDATA[97]]></doc></option>
+<option value='98'><doc title='description'><![CDATA[98]]></doc></option>
+<option value='99'><doc title='description'><![CDATA[99]]></doc></option>
+<option value='100'><doc title='description'><![CDATA[100]]></doc></option>
+<option value='101'><doc title='description'><![CDATA[101]]></doc></option>
+<option value='104'><doc title='description'><![CDATA[104]]></doc></option>
+<option value='105'><doc title='description'><![CDATA[105]]></doc></option>
+<option value='110'><doc title='description'><![CDATA[110]]></doc></option>
+<option value='112'><doc title='description'><![CDATA[112]]></doc></option>
+<option value='113'><doc title='description'><![CDATA[113]]></doc></option>
+<option value='115'><doc title='description'><![CDATA[115]]></doc></option>
+<option value='118'><doc title='description'><![CDATA[118]]></doc></option>
+<option value='119'><doc title='description'><![CDATA[119]]></doc></option>
+<option value='120'><doc title='description'><![CDATA[120]]></doc></option>
+<option value='122'><doc title='description'><![CDATA[122]]></doc></option>
+<option value='126'><doc title='description'><![CDATA[126]]></doc></option>
+<option value='127'><doc title='description'><![CDATA[127]]></doc></option>
+<option value='128'><doc title='description'><![CDATA[128]]></doc></option>
+<option value='130'><doc title='description'><![CDATA[130]]></doc></option>
+<option value='131'><doc title='description'><![CDATA[131]]></doc></option>
+<option value='132'><doc title='description'><![CDATA[132]]></doc></option>
+<option value='133'><doc title='description'><![CDATA[133]]></doc></option>
+<option value='137'><doc title='description'><![CDATA[137]]></doc></option>
+<option value='139'><doc title='description'><![CDATA[139]]></doc></option>
+<option value='141'><doc title='description'><![CDATA[141]]></doc></option>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Isolate Id]]></doc></option>
+<option value='pcr_primers'><doc title='description'><![CDATA[PCR primer]]></doc></option>
+<option value='country'><doc title='description'><![CDATA[Country]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='strain'><doc title='description'><![CDATA[Strain]]></doc></option>
+<option value='specific_host'><doc title='description'><![CDATA[Host]]></doc></option>
+<option value='isolation_source'><doc title='description'><![CDATA[Isolation Source]]></doc></option>
+<option value='description'><doc title='description'><![CDATA[Description]]></doc></option>
+<option value='note'><doc title='description'><![CDATA[Note]]></doc></option>
+<option value='product'><doc title='description'><![CDATA[Isolate Product]]></doc></option>
+<option value='data_type'><doc title='description'><![CDATA[Isolate Type]]></doc></option>
+<option value='collected_by'><doc title='description'><![CDATA[Collected By]]></doc></option>
+<option value='length'><doc title='description'><![CDATA[Length]]></doc></option>
+<option value='external_db_name'><doc title='description'><![CDATA[External DB Name]]></doc></option>
+<option value='external_db_version'><doc title='description'><![CDATA[External DB Version]]></doc></option>
+<option value='sequence'><doc title='description'><![CDATA[DNA Sequence]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+<option value='gene_type'><doc title='description'><![CDATA[Type]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+<option value='Reference'><doc title='description'><![CDATA[Reference]]></doc></option>
+<option value='GeneOverlap'><doc title='description'><![CDATA[Blast Similarity Alignments and Overlapping Genes]]></doc></option>
+<option value='IsolateComments'><doc title='description'><![CDATA[User Comments]]></doc></option>
+<option value='ProteinSequence'><doc title='description'><![CDATA[Protein Sequence]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='description'><doc title='description'><![CDATA[Description]]></doc></option>
+<option value='product'><doc title='description'><![CDATA[Product]]></doc></option>
+<option value='host'><doc title='description'><![CDATA[Host]]></doc></option>
+<option value='note'><doc title='description'><![CDATA[Note]]></doc></option>
+<option value='isolation_source'><doc title='description'><![CDATA[Isolation Source]]></doc></option>
+<option value='geographic_location'><doc title='description'><![CDATA[Geographic Location]]></doc></option>
+<option value='SNP'><doc title='description'><![CDATA[Isolates SNP Features]]></doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

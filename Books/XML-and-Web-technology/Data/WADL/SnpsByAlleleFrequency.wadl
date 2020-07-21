@@ -1,0 +1,120 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='SnpQuestions'>
+<resource path='SnpsByAlleleFrequency.xml'>
+<method href='#snpsbyallelefrequency'/>
+</resource>
+<resource path='SnpsByAlleleFrequency.json'>
+<method href='#snpsbyallelefrequency'/>
+</resource>
+<method name='POST' id='snpsbyallelefrequency'>
+<doc title='display_name'><![CDATA[Allele Frequency]]></doc>
+<doc title='summary'><![CDATA[Find <i>P. falciparum</i>  SNPs by the frequency of the minor allele]]></doc>
+<doc title='description'><![CDATA[Find <i>P. falciparum</i> SNPs by specifying the frequency of the minor allele and number of strains sequenced at the SNP position.<p>
+              SNP data was provided by <a href="showXmlDataContent.do?name=XmlQuestions.DataSources&datasets=Su_SNPs,Broad_SNPs,sangerItGhanaSnps,sangerReichenowiSnps&title=SNPs%20Summary">Broad, NIH and WTSI</a>.]]></doc>
+<request>
+<param name='organism' type='xsd:string' required='true' default='Plasmodium falciparum' repeating='true'>
+<doc title='prompt'><![CDATA[Organism]]></doc>
+<doc title='help'><![CDATA[Organism]]></doc>
+<doc title='default'><![CDATA[Plasmodium falciparum]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='Enterocytozoon bieneusi'><doc title='description'><![CDATA[Enterocytozoon bieneusi]]></doc></option>
+<option value='Plasmodium falciparum'><doc title='description'><![CDATA[Plasmodium falciparum]]></doc></option>
+<option value='Plasmodium vivax'><doc title='description'><![CDATA[Plasmodium vivax]]></doc></option>
+<option value='Plasmodium yoelii'><doc title='description'><![CDATA[Plasmodium yoelii]]></doc></option>
+<option value='Plasmodium berghei'><doc title='description'><![CDATA[Plasmodium berghei]]></doc></option>
+<option value='Plasmodium chabaudi'><doc title='description'><![CDATA[Plasmodium chabaudi]]></doc></option>
+<option value='Plasmodium knowlesi'><doc title='description'><![CDATA[Plasmodium knowlesi]]></doc></option>
+<option value='Toxoplasma gondii'><doc title='description'><![CDATA[Toxoplasma gondii]]></doc></option>
+<option value='Neospora caninum'><doc title='description'><![CDATA[Neospora caninum]]></doc></option>
+<option value='Trichomonas vaginalis'><doc title='description'><![CDATA[Trichomonas vaginalis]]></doc></option>
+<option value='Trypanosoma cruzi'><doc title='description'><![CDATA[Trypanosoma cruzi]]></doc></option>
+<option value='Leishmania braziliensis'><doc title='description'><![CDATA[Leishmania braziliensis]]></doc></option>
+<option value='Leishmania infantum'><doc title='description'><![CDATA[Leishmania infantum]]></doc></option>
+<option value='Leishmania major'><doc title='description'><![CDATA[Leishmania major]]></doc></option>
+<option value='Leishmania mexicana'><doc title='description'><![CDATA[Leishmania mexicana]]></doc></option>
+<option value='Trypanosoma brucei'><doc title='description'><![CDATA[Trypanosoma brucei]]></doc></option>
+<option value='Trypanosoma congolense'><doc title='description'><![CDATA[Trypanosoma congolense]]></doc></option>
+<option value='Trypanosoma vivax'><doc title='description'><![CDATA[Trypanosoma vivax]]></doc></option>
+<option value='Entamoeba dispar'><doc title='description'><![CDATA[Entamoeba dispar]]></doc></option>
+<option value='Entamoeba histolytica'><doc title='description'><![CDATA[Entamoeba histolytica]]></doc></option>
+<option value='Entamoeba invadens'><doc title='description'><![CDATA[Entamoeba invadens]]></doc></option>
+<option value='Cryptosporidium parvum'><doc title='description'><![CDATA[Cryptosporidium parvum]]></doc></option>
+<option value='Cryptosporidium hominis'><doc title='description'><![CDATA[Cryptosporidium hominis]]></doc></option>
+<option value='Cryptosporidium muris'><doc title='description'><![CDATA[Cryptosporidium muris]]></doc></option>
+<option value='Giardia Assemblage A isolate WB'><doc title='description'><![CDATA[Giardia Assemblage A isolate WB]]></doc></option>
+<option value='Giardia Assemblage B isolate GS'><doc title='description'><![CDATA[Giardia Assemblage B isolate GS]]></doc></option>
+<option value='Giardia Assemblage E isolate P15'><doc title='description'><![CDATA[Giardia Assemblage E isolate P15]]></doc></option>
+<option value='Encephalitozoon cuniculi'><doc title='description'><![CDATA[Encephalitozoon cuniculi]]></doc></option>
+<option value='Encephalitozoon intestinalis'><doc title='description'><![CDATA[Encephalitozoon intestinalis]]></doc></option>
+</param>
+<param name='min_strain_count' type='xsd:string' required='true' default='10' >
+<doc title='prompt'><![CDATA[Number of strains >= ]]></doc>
+<doc title='help'><![CDATA[Minimum number of strains for which there is a sequence call at this position]]></doc>
+<doc title='default'><![CDATA[10]]></doc>
+</param>
+<param name='minor_allele_min' type='xsd:string' required='true' default='.2' >
+<doc title='prompt'><![CDATA[Frequency of minor allele >= ]]></doc>
+<doc title='help'><![CDATA[Lower Bound on the frequency of strains that have the minor allele]]></doc>
+<doc title='default'><![CDATA[.2]]></doc>
+</param>
+<param name='minor_allele_max' type='xsd:string' required='true' default='.5' >
+<doc title='prompt'><![CDATA[Frequency of minor allele <= ]]></doc>
+<doc title='help'><![CDATA[Upper Bound on the frequency of strains that have the minor allele]]></doc>
+<doc title='default'><![CDATA[.5]]></doc>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[SNP Id]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='dataset'><doc title='description'><![CDATA[Dataset]]></doc></option>
+<option value='start_min_text'><doc title='description'><![CDATA[start_min_text]]></doc></option>
+<option value='snp_location'><doc title='description'><![CDATA[Location]]></doc></option>
+<option value='chromosome_order_num'><doc title='description'><![CDATA[Chromosome]]></doc></option>
+<option value='start_min'><doc title='description'><![CDATA[Position]]></doc></option>
+<option value='strains'><doc title='description'><![CDATA[Strains]]></doc></option>
+<option value='gene_source_id'><doc title='description'><![CDATA[Gene ID]]></doc></option>
+<option value='gene_strand'><doc title='description'><![CDATA[Gene strand]]></doc></option>
+<option value='is_coding'><doc title='description'><![CDATA[Coding]]></doc></option>
+<option value='position_in_CDS'><doc title='description'><![CDATA[Position in CDS]]></doc></option>
+<option value='position_in_protein'><doc title='description'><![CDATA[Position in protein]]></doc></option>
+<option value='has_nonsynonymous_allele'><doc title='description'><![CDATA[Non-synonymous]]></doc></option>
+<option value='strains_gene_strand'><doc title='description'><![CDATA[Strains (gene strand)]]></doc></option>
+<option value='lflank_gene_strand'><doc title='description'><![CDATA[Left Flank (gene strand)]]></doc></option>
+<option value='allele_gene_strand'><doc title='description'><![CDATA[3D7 Allele (gene strand)]]></doc></option>
+<option value='rflank_gene_strand'><doc title='description'><![CDATA[Right Flank (gene strand)]]></doc></option>
+<option value='major_allele_frequency'><doc title='description'><![CDATA[Major Allele Frequency]]></doc></option>
+<option value='minor_allele_frequency'><doc title='description'><![CDATA[Minor Allele Frequency]]></doc></option>
+<option value='strain_count'><doc title='description'><![CDATA[Strain Count]]></doc></option>
+<option value='major_allele'><doc title='description'><![CDATA[Major Allele]]></doc></option>
+<option value='minor_allele'><doc title='description'><![CDATA[Minor Allele]]></doc></option>
+<option value='major_product'><doc title='description'><![CDATA[Major Product]]></doc></option>
+<option value='minor_product'><doc title='description'><![CDATA[Minor Product]]></doc></option>
+<option value='major_strains'><doc title='description'><![CDATA[Major Strains]]></doc></option>
+<option value='minor_strains'><doc title='description'><![CDATA[Minor Strains]]></doc></option>
+<option value='organism_text'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

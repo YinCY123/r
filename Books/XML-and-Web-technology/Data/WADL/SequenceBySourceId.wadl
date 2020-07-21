@@ -1,0 +1,72 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='GenomicSequenceQuestions'>
+<resource path='SequenceBySourceId.xml'>
+<method href='#sequencebysourceid'/>
+</resource>
+<resource path='SequenceBySourceId.json'>
+<method href='#sequencebysourceid'/>
+</resource>
+<method name='POST' id='sequencebysourceid'>
+<doc title='display_name'><![CDATA[Genomic Sequence ID]]></doc>
+<doc title='summary'><![CDATA[Find genomic sequences by ID.]]></doc>
+<doc title='description'><![CDATA[Find genomic sequences (chromosomes or contigs) by ID. Either enter the ID list manually, 
+           or upload a file that contains the list. IDs can be delimited by a comma, 
+           a semi colon, or any white spaces. Also, the list may contain gene IDs from any of the EuPathDB organisms.  For example, a list can be in the
+           following form: "TGME49_chrIa, Pf3D7_04, AAEE01000006"]]></doc>
+<request>
+<param name='sequenceId' type='xsd:string' required='true' default='AAEL01000057,VIIb,Pf3D7_04,DS113177' >
+<doc title='prompt'><![CDATA[Genomic sequence ID]]></doc>
+<doc title='help'><![CDATA[Enter an identifier for a genomic sequence. The IDs correspond to the accession numbers in the GenBank records supplied by the sequencing centers. Wild cards are permitted in most queries, i.e. use AAEE* to ask for all <i> C.parvum </i> contigs. Genes By Chromosomal Location does not allow wildcards.]]></doc>
+<doc title='default'><![CDATA[AAEL01000057,VIIb,Pf3D7_04,DS113177]]></doc>
+</param>
+<param name='signature' type='xsd:string' required='true' default='' >
+<doc title='prompt'><![CDATA[User Signature]]></doc>
+<doc title='help'><![CDATA[Used to pass the Users Signature to the component sites]]></doc>
+<doc title='default'><![CDATA[null]]></doc>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Sequence ID]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='chromosome'><doc title='description'><![CDATA[Chromosome]]></doc></option>
+<option value='a_count'><doc title='description'><![CDATA[A Count]]></doc></option>
+<option value='c_count'><doc title='description'><![CDATA[C Count]]></doc></option>
+<option value='g_count'><doc title='description'><![CDATA[G Count]]></doc></option>
+<option value='t_count'><doc title='description'><![CDATA[T Count]]></doc></option>
+<option value='other_count'><doc title='description'><![CDATA[Other Count]]></doc></option>
+<option value='formatted_length'><doc title='description'><![CDATA[Length]]></doc></option>
+<option value='at_percent'><doc title='description'><![CDATA[AT Percent]]></doc></option>
+<option value='organism_text'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='sequence_description'><doc title='description'><![CDATA[Description]]></doc></option>
+<option value='genbank_accession'><doc title='description'><![CDATA[GenBank]]></doc></option>
+<option value='source_id'><doc title='description'><![CDATA[source_id]]></doc></option>
+<option value='project_id'><doc title='description'><![CDATA[project_id]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+<option value='SequencePieces'><doc title='description'><![CDATA[Genomic Assembly]]></doc></option>
+<option value='Aliases'><doc title='description'><![CDATA[Previous Identifiers and Aliases]]></doc></option>
+<option value='Centromere'><doc title='description'><![CDATA[Centromere]]></doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

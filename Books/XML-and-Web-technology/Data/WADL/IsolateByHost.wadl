@@ -1,0 +1,176 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='IsolateQuestions'>
+<resource path='IsolateByHost.xml'>
+<method href='#isolatebyhost'/>
+</resource>
+<resource path='IsolateByHost.json'>
+<method href='#isolatebyhost'/>
+</resource>
+<method name='POST' id='isolatebyhost'>
+<doc title='display_name'><![CDATA[Host Name]]></doc>
+<doc title='summary'><![CDATA[Find isolates by host name.]]></doc>
+<doc title='description'><![CDATA[Find isolates by host name.]]></doc>
+<request>
+<param name='specific_host' type='xsd:string' required='true' default='Mammals - Human' repeating='true'>
+<doc title='prompt'><![CDATA[Host]]></doc>
+<doc title='help'><![CDATA[Host]]></doc>
+<doc title='default'><![CDATA[Mammals - Human]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='Alpaca'><doc title='description'><![CDATA[Alpaca]]></doc></option>
+<option value='Amphibians'><doc title='description'><![CDATA[Amphibians]]></doc></option>
+<option value='Antelope'><doc title='description'><![CDATA[Antelope]]></doc></option>
+<option value='Bandicoot'><doc title='description'><![CDATA[Bandicoot]]></doc></option>
+<option value='Bears'><doc title='description'><![CDATA[Bears]]></doc></option>
+<option value='Birds'><doc title='description'><![CDATA[Birds]]></doc></option>
+<option value='Camel'><doc title='description'><![CDATA[Camel]]></doc></option>
+<option value='Cat'><doc title='description'><![CDATA[Cat]]></doc></option>
+<option value='Central Bearded Dragon'><doc title='description'><![CDATA[Central Bearded Dragon]]></doc></option>
+<option value='Chicken'><doc title='description'><![CDATA[Chicken]]></doc></option>
+<option value='Chipmunk'><doc title='description'><![CDATA[Chipmunk]]></doc></option>
+<option value='Clam'><doc title='description'><![CDATA[Clam]]></doc></option>
+<option value='Cow'><doc title='description'><![CDATA[Cow]]></doc></option>
+<option value='Coyote'><doc title='description'><![CDATA[Coyote]]></doc></option>
+<option value='Deer'><doc title='description'><![CDATA[Deer]]></doc></option>
+<option value='Dog'><doc title='description'><![CDATA[Dog]]></doc></option>
+<option value='Duck'><doc title='description'><![CDATA[Duck]]></doc></option>
+<option value='Elk'><doc title='description'><![CDATA[Elk]]></doc></option>
+<option value='Ferret'><doc title='description'><![CDATA[Ferret]]></doc></option>
+<option value='Finch'><doc title='description'><![CDATA[Finch]]></doc></option>
+<option value='Fox'><doc title='description'><![CDATA[Fox]]></doc></option>
+<option value='Goat'><doc title='description'><![CDATA[Goat]]></doc></option>
+<option value='Goose'><doc title='description'><![CDATA[Goose]]></doc></option>
+<option value='Guinea Pig'><doc title='description'><![CDATA[Guinea Pig]]></doc></option>
+<option value='Horse'><doc title='description'><![CDATA[Horse]]></doc></option>
+<option value='Iguana'><doc title='description'><![CDATA[Iguana]]></doc></option>
+<option value='Kangaroo'><doc title='description'><![CDATA[Kangaroo]]></doc></option>
+<option value='Koala'><doc title='description'><![CDATA[Koala]]></doc></option>
+<option value='Lamb'><doc title='description'><![CDATA[Lamb]]></doc></option>
+<option value='Leopard Gecko'><doc title='description'><![CDATA[Leopard Gecko]]></doc></option>
+<option value='Mallard'><doc title='description'><![CDATA[Mallard]]></doc></option>
+<option value='Mammals - Human'><doc title='description'><![CDATA[Mammals - Human]]></doc></option>
+<option value='Mammals - Non Human'><doc title='description'><![CDATA[Mammals - Non Human]]></doc></option>
+<option value='Marginated Tortoise'><doc title='description'><![CDATA[Marginated Tortoise]]></doc></option>
+<option value='Marsupial'><doc title='description'><![CDATA[Marsupial]]></doc></option>
+<option value='Mollusks'><doc title='description'><![CDATA[Mollusks]]></doc></option>
+<option value='Monitors'><doc title='description'><![CDATA[Monitors]]></doc></option>
+<option value='Monkey'><doc title='description'><![CDATA[Monkey]]></doc></option>
+<option value='Mouse'><doc title='description'><![CDATA[Mouse]]></doc></option>
+<option value='Muskrat'><doc title='description'><![CDATA[Muskrat]]></doc></option>
+<option value='Mussel'><doc title='description'><![CDATA[Mussel]]></doc></option>
+<option value='Ostrich'><doc title='description'><![CDATA[Ostrich]]></doc></option>
+<option value='Other Amphibian'><doc title='description'><![CDATA[Other Amphibian]]></doc></option>
+<option value='Other Bird'><doc title='description'><![CDATA[Other Bird]]></doc></option>
+<option value='Other Mammal'><doc title='description'><![CDATA[Other Mammal]]></doc></option>
+<option value='Oyster'><doc title='description'><![CDATA[Oyster]]></doc></option>
+<option value='Pig'><doc title='description'><![CDATA[Pig]]></doc></option>
+<option value='Possom'><doc title='description'><![CDATA[Possom]]></doc></option>
+<option value='Possum'><doc title='description'><![CDATA[Possum]]></doc></option>
+<option value='Quail'><doc title='description'><![CDATA[Quail]]></doc></option>
+<option value='Rabbit'><doc title='description'><![CDATA[Rabbit]]></doc></option>
+<option value='Rat'><doc title='description'><![CDATA[Rat]]></doc></option>
+<option value='Reindeer'><doc title='description'><![CDATA[Reindeer]]></doc></option>
+<option value='Reptiles'><doc title='description'><![CDATA[Reptiles]]></doc></option>
+<option value='Rodent'><doc title='description'><![CDATA[Rodent]]></doc></option>
+<option value='Seal'><doc title='description'><![CDATA[Seal]]></doc></option>
+<option value='Sheep'><doc title='description'><![CDATA[Sheep]]></doc></option>
+<option value='Skunk'><doc title='description'><![CDATA[Skunk]]></doc></option>
+<option value='Snakes'><doc title='description'><![CDATA[Snakes]]></doc></option>
+<option value='Squirrel'><doc title='description'><![CDATA[Squirrel]]></doc></option>
+<option value='Tortoise'><doc title='description'><![CDATA[Tortoise]]></doc></option>
+<option value='Turkey'><doc title='description'><![CDATA[Turkey]]></doc></option>
+<option value='Unknown'><doc title='description'><![CDATA[Unknown]]></doc></option>
+<option value='Vole'><doc title='description'><![CDATA[Vole]]></doc></option>
+<option value='Water Buffalo'><doc title='description'><![CDATA[Water Buffalo]]></doc></option>
+<option value='Wildebeest'><doc title='description'><![CDATA[Wildebeest]]></doc></option>
+<option value='Woodcock'><doc title='description'><![CDATA[Woodcock]]></doc></option>
+<option value='Yak'><doc title='description'><![CDATA[Yak]]></doc></option>
+<option value='Beaver'><doc title='description'><![CDATA[Beaver]]></doc></option>
+<option value='Bison'><doc title='description'><![CDATA[Bison]]></doc></option>
+<option value='Chimpanzee'><doc title='description'><![CDATA[Chimpanzee]]></doc></option>
+<option value='Dolphin'><doc title='description'><![CDATA[Dolphin]]></doc></option>
+<option value='Fish'><doc title='description'><![CDATA[Fish]]></doc></option>
+<option value='Gazelle'><doc title='description'><![CDATA[Gazelle]]></doc></option>
+<option value='Gull'><doc title='description'><![CDATA[Gull]]></doc></option>
+<option value='Lemur'><doc title='description'><![CDATA[Lemur]]></doc></option>
+<option value='Moose'><doc title='description'><![CDATA[Moose]]></doc></option>
+<option value='Shark'><doc title='description'><![CDATA[Shark]]></doc></option>
+<option value='Arthropods'><doc title='description'><![CDATA[Arthropods]]></doc></option>
+<option value='Mosquito'><doc title='description'><![CDATA[Mosquito]]></doc></option>
+<option value='Bear'><doc title='description'><![CDATA[Bear]]></doc></option>
+<option value='Boar'><doc title='description'><![CDATA[Boar]]></doc></option>
+<option value='Buffalo'><doc title='description'><![CDATA[Buffalo]]></doc></option>
+<option value='Cougar'><doc title='description'><![CDATA[Cougar]]></doc></option>
+<option value='Dove'><doc title='description'><![CDATA[Dove]]></doc></option>
+<option value='Jaguar'><doc title='description'><![CDATA[Jaguar]]></doc></option>
+<option value='Otter'><doc title='description'><![CDATA[Otter]]></doc></option>
+<option value='Raccoon'><doc title='description'><![CDATA[Raccoon]]></doc></option>
+<option value='Sparrow'><doc title='description'><![CDATA[Sparrow]]></doc></option>
+<option value='Toucan'><doc title='description'><![CDATA[Toucan]]></doc></option>
+</param>
+<param name='type' type='xsd:string' required='true' default='Sequencing Typed,3kChip,Barcode,HD_Array,RFLP Typed' repeating='true'>
+<doc title='prompt'><![CDATA[Isolate assay type]]></doc>
+<doc title='help'><![CDATA[Choose the isolate type you want to query]]></doc>
+<doc title='default'><![CDATA[Sequencing Typed,3kChip,Barcode,HD_Array,RFLP Typed]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='Sequencing Typed'><doc title='description'><![CDATA[Sequencing Typed]]></doc></option>
+<option value='3kChip'><doc title='description'><![CDATA[3kChip]]></doc></option>
+<option value='Barcode'><doc title='description'><![CDATA[Barcode]]></doc></option>
+<option value='HD_Array'><doc title='description'><![CDATA[HD_Array]]></doc></option>
+<option value='RFLP Typed'><doc title='description'><![CDATA[RFLP Typed]]></doc></option>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Isolate Id]]></doc></option>
+<option value='pcr_primers'><doc title='description'><![CDATA[PCR primer]]></doc></option>
+<option value='country'><doc title='description'><![CDATA[Country]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='strain'><doc title='description'><![CDATA[Strain]]></doc></option>
+<option value='specific_host'><doc title='description'><![CDATA[Host]]></doc></option>
+<option value='isolation_source'><doc title='description'><![CDATA[Isolation Source]]></doc></option>
+<option value='description'><doc title='description'><![CDATA[Description]]></doc></option>
+<option value='note'><doc title='description'><![CDATA[Note]]></doc></option>
+<option value='product'><doc title='description'><![CDATA[Isolate Product]]></doc></option>
+<option value='data_type'><doc title='description'><![CDATA[Isolate Type]]></doc></option>
+<option value='collected_by'><doc title='description'><![CDATA[Collected By]]></doc></option>
+<option value='length'><doc title='description'><![CDATA[Length]]></doc></option>
+<option value='external_db_name'><doc title='description'><![CDATA[External DB Name]]></doc></option>
+<option value='external_db_version'><doc title='description'><![CDATA[External DB Version]]></doc></option>
+<option value='sequence'><doc title='description'><![CDATA[DNA Sequence]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+<option value='Reference'><doc title='description'><![CDATA[Reference]]></doc></option>
+<option value='GeneOverlap'><doc title='description'><![CDATA[Blast Similarity Alignments and Overlapping Genes]]></doc></option>
+<option value='IsolateComments'><doc title='description'><![CDATA[User Comments]]></doc></option>
+<option value='ProteinSequence'><doc title='description'><![CDATA[Protein Sequence]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='description'><doc title='description'><![CDATA[Description]]></doc></option>
+<option value='product'><doc title='description'><![CDATA[Product]]></doc></option>
+<option value='host'><doc title='description'><![CDATA[Host]]></doc></option>
+<option value='note'><doc title='description'><![CDATA[Note]]></doc></option>
+<option value='isolation_source'><doc title='description'><![CDATA[Isolation Source]]></doc></option>
+<option value='geographic_location'><doc title='description'><![CDATA[Geographic Location]]></doc></option>
+<option value='SNP'><doc title='description'><![CDATA[Isolates SNP Features]]></doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

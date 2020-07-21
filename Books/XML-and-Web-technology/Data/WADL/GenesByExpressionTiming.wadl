@@ -1,0 +1,234 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='GeneQuestions'>
+<resource path='GenesByExpressionTiming.xml'>
+<method href='#genesbyexpressiontiming'/>
+</resource>
+<resource path='GenesByExpressionTiming.json'>
+<method href='#genesbyexpressiontiming'/>
+</resource>
+<method name='POST' id='genesbyexpressiontiming'>
+<doc title='display_name'><![CDATA[P.f. Intraerythrocytic Infection Cycle (exprn timing)]]></doc>
+<doc title='summary'><![CDATA[Find genes with peaks or troughs occuring within specified intervals during the intraerythrocytic infection cycle.]]></doc>
+<doc title='description'><![CDATA[Find genes with peaks or troughs occuring within specified intervals during the intraerythrocytic infection cycle. The time courses are those provided by the <a href="http://derisilab.ucsf.edu/">DeRisi Lab</a>. They are from a glass slide array and analyze HB3, 3D7, and Dd2 parasites.]]></doc>
+<request>
+<param name='minOrMax' type='xsd:string' required='true' default='Timing of maximal expression' repeating='false'>
+<doc title='prompt'><![CDATA[Query based on]]></doc>
+<doc title='help'><![CDATA[Find genes where the expression level is at its highest or lowest point in the time series.]]></doc>
+<doc title='default'><![CDATA[Timing of maximal expression]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='Timing of maximal expression'><doc title='description'><![CDATA[Timing of maximal expression]]></doc></option>
+<option value='Timing of minimal expression'><doc title='description'><![CDATA[Timing of minimal expression]]></doc></option>
+</param>
+<param name='maxExprHourFalc' type='xsd:string' required='true' default='1 hour' repeating='false'>
+<doc title='prompt'><![CDATA[Timing]]></doc>
+<doc title='help'><![CDATA[Time point where expression level was minimal or maximal]]></doc>
+<doc title='default'><![CDATA[1 hour]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='1 hour'><doc title='description'><![CDATA[1 hour]]></doc></option>
+<option value='2 hours'><doc title='description'><![CDATA[2 hours]]></doc></option>
+<option value='3 hours'><doc title='description'><![CDATA[3 hours]]></doc></option>
+<option value='4 hours'><doc title='description'><![CDATA[4 hours]]></doc></option>
+<option value='5 hours'><doc title='description'><![CDATA[5 hours]]></doc></option>
+<option value='6 hours'><doc title='description'><![CDATA[6 hours]]></doc></option>
+<option value='7 hours'><doc title='description'><![CDATA[7 hours]]></doc></option>
+<option value='8 hours'><doc title='description'><![CDATA[8 hours]]></doc></option>
+<option value='9 hours'><doc title='description'><![CDATA[9 hours]]></doc></option>
+<option value='10 hours'><doc title='description'><![CDATA[10 hours]]></doc></option>
+<option value='11 hours'><doc title='description'><![CDATA[11 hours]]></doc></option>
+<option value='12 hours'><doc title='description'><![CDATA[12 hours]]></doc></option>
+<option value='13 hours'><doc title='description'><![CDATA[13 hours]]></doc></option>
+<option value='14 hours'><doc title='description'><![CDATA[14 hours]]></doc></option>
+<option value='15 hours'><doc title='description'><![CDATA[15 hours]]></doc></option>
+<option value='16 hours'><doc title='description'><![CDATA[16 hours]]></doc></option>
+<option value='17 hours'><doc title='description'><![CDATA[17 hours]]></doc></option>
+<option value='18 hours'><doc title='description'><![CDATA[18 hours]]></doc></option>
+<option value='19 hours'><doc title='description'><![CDATA[19 hours]]></doc></option>
+<option value='20 hours'><doc title='description'><![CDATA[20 hours]]></doc></option>
+<option value='21 hours'><doc title='description'><![CDATA[21 hours]]></doc></option>
+<option value='22 hours'><doc title='description'><![CDATA[22 hours]]></doc></option>
+<option value='23 hours'><doc title='description'><![CDATA[23 hours]]></doc></option>
+<option value='24 hours'><doc title='description'><![CDATA[24 hours]]></doc></option>
+<option value='25 hours'><doc title='description'><![CDATA[25 hours]]></doc></option>
+<option value='26 hours'><doc title='description'><![CDATA[26 hours]]></doc></option>
+<option value='27 hours'><doc title='description'><![CDATA[27 hours]]></doc></option>
+<option value='28 hours'><doc title='description'><![CDATA[28 hours]]></doc></option>
+<option value='29 hours'><doc title='description'><![CDATA[29 hours]]></doc></option>
+<option value='30 hours'><doc title='description'><![CDATA[30 hours]]></doc></option>
+<option value='31 hours'><doc title='description'><![CDATA[31 hours]]></doc></option>
+<option value='32 hours'><doc title='description'><![CDATA[32 hours]]></doc></option>
+<option value='33 hours'><doc title='description'><![CDATA[33 hours]]></doc></option>
+<option value='34 hours'><doc title='description'><![CDATA[34 hours]]></doc></option>
+<option value='35 hours'><doc title='description'><![CDATA[35 hours]]></doc></option>
+<option value='36 hours'><doc title='description'><![CDATA[36 hours]]></doc></option>
+<option value='37 hours'><doc title='description'><![CDATA[37 hours]]></doc></option>
+<option value='38 hours'><doc title='description'><![CDATA[38 hours]]></doc></option>
+<option value='39 hours'><doc title='description'><![CDATA[39 hours]]></doc></option>
+<option value='40 hours'><doc title='description'><![CDATA[40 hours]]></doc></option>
+<option value='41 hours'><doc title='description'><![CDATA[41 hours]]></doc></option>
+<option value='42 hours'><doc title='description'><![CDATA[42 hours]]></doc></option>
+<option value='43 hours'><doc title='description'><![CDATA[43 hours]]></doc></option>
+<option value='44 hours'><doc title='description'><![CDATA[44 hours]]></doc></option>
+<option value='45 hours'><doc title='description'><![CDATA[45 hours]]></doc></option>
+<option value='46 hours'><doc title='description'><![CDATA[46 hours]]></doc></option>
+<option value='47 hours'><doc title='description'><![CDATA[47 hours]]></doc></option>
+<option value='48 hours'><doc title='description'><![CDATA[48 hours]]></doc></option>
+</param>
+<param name='maxPlusMinusHours' type='xsd:string' required='true' default='12 hours' repeating='false'>
+<doc title='prompt'><![CDATA[Expression time +/- ]]></doc>
+<doc title='help'><![CDATA[Increase the window for examining the maximum expression time by choosing the number of hours to go in each direction (plus / minus)]]></doc>
+<doc title='default'><![CDATA[12 hours]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='1 hour'><doc title='description'><![CDATA[1 hour]]></doc></option>
+<option value='2 hours'><doc title='description'><![CDATA[2 hours]]></doc></option>
+<option value='3 hours'><doc title='description'><![CDATA[3 hours]]></doc></option>
+<option value='4 hours'><doc title='description'><![CDATA[4 hours]]></doc></option>
+<option value='5 hours'><doc title='description'><![CDATA[5 hours]]></doc></option>
+<option value='6 hours'><doc title='description'><![CDATA[6 hours]]></doc></option>
+<option value='7 hours'><doc title='description'><![CDATA[7 hours]]></doc></option>
+<option value='8 hours'><doc title='description'><![CDATA[8 hours]]></doc></option>
+<option value='9 hours'><doc title='description'><![CDATA[9 hours]]></doc></option>
+<option value='10 hours'><doc title='description'><![CDATA[10 hours]]></doc></option>
+<option value='11 hours'><doc title='description'><![CDATA[11 hours]]></doc></option>
+<option value='12 hours'><doc title='description'><![CDATA[12 hours]]></doc></option>
+<option value='13 hours'><doc title='description'><![CDATA[13 hours]]></doc></option>
+<option value='14 hours'><doc title='description'><![CDATA[14 hours]]></doc></option>
+<option value='15 hours'><doc title='description'><![CDATA[15 hours]]></doc></option>
+<option value='16 hours'><doc title='description'><![CDATA[16 hours]]></doc></option>
+<option value='17 hours'><doc title='description'><![CDATA[17 hours]]></doc></option>
+<option value='18 hours'><doc title='description'><![CDATA[18 hours]]></doc></option>
+<option value='19 hours'><doc title='description'><![CDATA[19 hours]]></doc></option>
+<option value='20 hours'><doc title='description'><![CDATA[20 hours]]></doc></option>
+<option value='21 hours'><doc title='description'><![CDATA[21 hours]]></doc></option>
+<option value='22 hours'><doc title='description'><![CDATA[22 hours]]></doc></option>
+<option value='23 hours'><doc title='description'><![CDATA[23 hours]]></doc></option>
+<option value='24 hours'><doc title='description'><![CDATA[24 hours]]></doc></option>
+</param>
+<param name='inductionFold' type='xsd:string' required='true' default='4 fold induction' repeating='false'>
+<doc title='prompt'><![CDATA[Max/Min Expression Ratio >= ]]></doc>
+<doc title='help'><![CDATA[Expression induction ratio reflects the change between the highest and lowest expression level for each gene over the time course.]]></doc>
+<doc title='default'><![CDATA[4 fold induction]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='-- None --'><doc title='description'><![CDATA[-- None --]]></doc></option>
+<option value='2 fold induction'><doc title='description'><![CDATA[2 fold induction]]></doc></option>
+<option value='4 fold induction'><doc title='description'><![CDATA[4 fold induction]]></doc></option>
+<option value='8 fold induction'><doc title='description'><![CDATA[8 fold induction]]></doc></option>
+<option value='16 fold induction'><doc title='description'><![CDATA[16 fold induction]]></doc></option>
+<option value='32 fold induction'><doc title='description'><![CDATA[32 fold induction]]></doc></option>
+</param>
+<param name='expressionPct' type='xsd:string' required='true' default='70th percentile' repeating='false'>
+<doc title='prompt'><![CDATA[Maximum Expression percentile >= ]]></doc>
+<doc title='help'><![CDATA[Expression percentile reflects the expression level of one gene compared to other genes from the same array for one time point.  Genes are returned if ANY time point in the series has a percentile above the chosen value.]]></doc>
+<doc title='default'><![CDATA[70th percentile]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='-- None --'><doc title='description'><![CDATA[-- None --]]></doc></option>
+<option value='10th percentile'><doc title='description'><![CDATA[10th percentile]]></doc></option>
+<option value='20th percentile'><doc title='description'><![CDATA[20th percentile]]></doc></option>
+<option value='30th percentile'><doc title='description'><![CDATA[30th percentile]]></doc></option>
+<option value='40th percentile'><doc title='description'><![CDATA[40th percentile]]></doc></option>
+<option value='50th percentile'><doc title='description'><![CDATA[50th percentile]]></doc></option>
+<option value='60th percentile'><doc title='description'><![CDATA[60th percentile]]></doc></option>
+<option value='70th percentile'><doc title='description'><![CDATA[70th percentile]]></doc></option>
+<option value='80th percentile'><doc title='description'><![CDATA[80th percentile]]></doc></option>
+<option value='90th percentile'><doc title='description'><![CDATA[90th percentile]]></doc></option>
+</param>
+<param name='profileSetFalc' type='xsd:string' required='true' default='Any of the time courses' repeating='false'>
+<doc title='prompt'><![CDATA[Microarray time course(s) to query]]></doc>
+<doc title='help'><![CDATA[Choose experiment(s) to query.  Note that all of the time courses will only return genes that match the search criteria in all experiments.]]></doc>
+<doc title='default'><![CDATA[Any of the time courses]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='Dev. Series 3D7 (glass slide - DeRisi)'><doc title='description'><![CDATA[Dev. Series 3D7 (glass slide - DeRisi)]]></doc></option>
+<option value='Dev. Series Dd2 (glass slide - DeRisi)'><doc title='description'><![CDATA[Dev. Series Dd2 (glass slide - DeRisi)]]></doc></option>
+<option value='Dev. Series HB3 (glass slide - DeRisi)'><doc title='description'><![CDATA[Dev. Series HB3 (glass slide - DeRisi)]]></doc></option>
+<option value='Any of the time courses'><doc title='description'><![CDATA[Any of the time courses]]></doc></option>
+<option value='All of the time courses'><doc title='description'><![CDATA[All of the time courses]]></doc></option>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Gene]]></doc></option>
+<option value='formatted_gene_id'><doc title='description'><![CDATA[Gene Group]]></doc></option>
+<option value='sequence_id'><doc title='description'><![CDATA[Genomic Sequence ID]]></doc></option>
+<option value='chromosome'><doc title='description'><![CDATA[Chromosome]]></doc></option>
+<option value='location_text'><doc title='description'><![CDATA[Genomic Location]]></doc></option>
+<option value='strand'><doc title='description'><![CDATA[Gene Strand]]></doc></option>
+<option value='gene_type'><doc title='description'><![CDATA[Gene Type]]></doc></option>
+<option value='exon_count'><doc title='description'><![CDATA[# Exons]]></doc></option>
+<option value='transcript_length'><doc title='description'><![CDATA[Transcript Length]]></doc></option>
+<option value='cds_length'><doc title='description'><![CDATA[CDS Length]]></doc></option>
+<option value='product'><doc title='description'><![CDATA[Product Description]]></doc></option>
+<option value='protein_length'><doc title='description'><![CDATA[Protein Length]]></doc></option>
+<option value='tm_count'><doc title='description'><![CDATA[# TM Domains]]></doc></option>
+<option value='molecular_weight'><doc title='description'><![CDATA[Molecular Weight]]></doc></option>
+<option value='isoelectric_point'><doc title='description'><![CDATA[Isoelectric Point]]></doc></option>
+<option value='ec_numbers_string'><doc title='description'><![CDATA[EC Numbers]]></doc></option>
+<option value='ortholog_number'><doc title='description'><![CDATA[Ortholog count]]></doc></option>
+<option value='paralog_number'><doc title='description'><![CDATA[Paralog count]]></doc></option>
+<option value='orthomcl_name'><doc title='description'><![CDATA[Ortholog Group]]></doc></option>
+<option value='signalp_scores'><doc title='description'><![CDATA[SignalP Scores]]></doc></option>
+<option value='signalp_peptide'><doc title='description'><![CDATA[SignalP Peptide]]></doc></option>
+<option value='ann_go_function'><doc title='description'><![CDATA[Annotated GO Function]]></doc></option>
+<option value='ann_go_process'><doc title='description'><![CDATA[Annotated GO Process]]></doc></option>
+<option value='ann_go_component'><doc title='description'><![CDATA[Annotated GO Component]]></doc></option>
+<option value='pred_go_function'><doc title='description'><![CDATA[Predicted GO Function]]></doc></option>
+<option value='pred_go_process'><doc title='description'><![CDATA[Predicted GO Process]]></doc></option>
+<option value='pred_go_component'><doc title='description'><![CDATA[Predicted GO Component]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='is_pseudo'><doc title='description'><![CDATA[Is Pseudo]]></doc></option>
+<option value='protein_sequence'><doc title='description'><![CDATA[Predicted Protein Sequence]]></doc></option>
+<option value='transcript_sequence'><doc title='description'><![CDATA[Predicted RNA/mRNA Sequence (introns spliced out)]]></doc></option>
+<option value='cds'><doc title='description'><![CDATA[Coding Sequence]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+<option value='SNPs'><doc title='description'><![CDATA[SNPs Summary]]></doc></option>
+<option value='GeneModelDump'><doc title='description'><![CDATA[Gene Model]]></doc></option>
+<option value='InterPro'><doc title='description'><![CDATA[InterPro Domains]]></doc></option>
+<option value='TMHMM'><doc title='description'><![CDATA[Transmembrane Domains]]></doc></option>
+<option value='LowComplexity'><doc title='description'><![CDATA[Low Complexity Regions]]></doc></option>
+<option value='SignalP'><doc title='description'><![CDATA[Signal Peptide]]></doc></option>
+<option value='BlastP'><doc title='description'><![CDATA[BlastP Hits]]></doc></option>
+<option value='Genbank'><doc title='description'><![CDATA[Gene Location]]></doc></option>
+<option value='SageTags'><doc title='description'><![CDATA[Sage Tags]]></doc></option>
+<option value='Notes'><doc title='description'><![CDATA[Notes]]></doc></option>
+<option value='UserComments'><doc title='description'><![CDATA[User Comments]]></doc></option>
+<option value='CommunityExpComments'><doc title='description'><![CDATA[Community Annotations]]></doc></option>
+<option value='EcNumber'><doc title='description'><![CDATA[EC Number]]></doc></option>
+<option value='MassSpec'><doc title='description'><![CDATA[Mass Spec.-based Expression Evidence]]></doc></option>
+<option value='GoTerms'><doc title='description'><![CDATA[GO Terms]]></doc></option>
+<option value='Phenotype'><doc title='description'><![CDATA[Phenotype]]></doc></option>
+<option value='Y2hInteractions'><doc title='description'><![CDATA[Y2H Interactions]]></doc></option>
+<option value='Orthologs'><doc title='description'><![CDATA[Orthologs and Paralogs within EuPathDB]]></doc></option>
+<option value='MetabolicPathways'><doc title='description'><![CDATA[Metabolic Pathways]]></doc></option>
+<option value='TaskComments'><doc title='description'><![CDATA[Toxoplasma Genome Sequencing Project Annotation]]></doc></option>
+<option value='ArrayElements'><doc title='description'><![CDATA[Mapped Array Elements]]></doc></option>
+<option value='TwoChannelDiffExpr'><doc title='description'><![CDATA[P.Berghei Differential Expression - DOZI KO vs. WT]]></doc></option>
+<option value='ProteinExpression'><doc title='description'><![CDATA[P.Berghei Protein Expression]]></doc></option>
+<option value='Mr4Reagents'><doc title='description'><![CDATA[MR4 Reagents]]></doc></option>
+<option value='ProteinDatabase'><doc title='description'><![CDATA[Protein Linkouts]]></doc></option>
+<option value='GeneLinkouts'><doc title='description'><![CDATA[External Links]]></doc></option>
+<option value='3dPreds'><doc title='description'><![CDATA[3D Structure Predictions]]></doc></option>
+<option value='PdbSimilarities'><doc title='description'><![CDATA[Similarities to Protein Data Bank (PDB) Chains]]></doc></option>
+<option value='Epitopes'><doc title='description'><![CDATA[Epitopes from IEDB]]></doc></option>
+<option value='IsolateOverlap'><doc title='description'><![CDATA[Isolates]]></doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

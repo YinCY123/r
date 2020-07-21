@@ -1,0 +1,65 @@
+<programlisting contentType="XML"><![CDATA[<PMML version="3.1" 
+   xmlns="http://www.dmg.org/PMML-3_1" 
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <Header copyright="Copyright..." 
+   description="RPart decision tree model">
+   ...
+ </Header>
+ <DataDictionary numberOfFields="4">
+  <DataField name="Kyphosis" optype="categorical" 
+      dataType="string">
+   <Value value="absent"/>
+   <Value value="present"/>
+  </DataField>
+  <DataField name="Age" optype="continuous" dataType="double"/>
+  <DataField name="Number" optype="continuous" dataType="double"/>
+  <DataField name="Start" optype="continuous" dataType="double"/>
+ </DataDictionary>
+ <TreeModel modelName="RPart_Model" 
+      functionName="classification" algorithmName="rpart" 
+      splitCharacteristic="binarySplit">
+  <MiningSchema>
+   <MiningField name="Kyphosis" usageType="predicted"/>
+   <MiningField name="Age" usageType="active"/>
+   <MiningField name="Number" usageType="active"/>
+   <MiningField name="Start" usageType="active"/>
+  </MiningSchema>
+  <Node score="absent" recordCount="81">
+   <True/>
+   <Node score="absent" recordCount="62">
+    <SimplePredicate field="Start" 
+      operator="greaterOrEqual" value="8.5"/>
+    <Node score="absent" recordCount="29">
+     <SimplePredicate field="Start" 
+        operator="greaterOrEqual" value="14.5"/>
+    </Node>
+    <Node score="absent" recordCount="33">
+     <SimplePredicate field="Start"  
+         operator="lessThan" value="14.5"/>
+     <Node score="absent" recordCount="12">
+      <SimplePredicate field="Age"  
+         operator="lessThan" value="55"/>
+     </Node>
+     <Node score="absent" recordCount="21">
+      <SimplePredicate field="Age"  
+          operator="greaterOrEqual" value="55"/>
+      <Node score="absent" recordCount="14">
+       <SimplePredicate field="Age"  
+          operator="greaterOrEqual" value="111"/>
+      </Node>
+      <Node score="present" recordCount="7">
+       <SimplePredicate field="Age"
+          operator="lessThan"  value="111"/>
+      </Node>
+     </Node>
+    </Node>
+   </Node>
+   <Node score="present" recordCount="19">
+    <SimplePredicate field="Start" 
+       operator="lessThan" value="8.5"/>
+   </Node>
+  </Node>
+ </TreeModel>
+</PMML>
+]]>
+</programlisting>

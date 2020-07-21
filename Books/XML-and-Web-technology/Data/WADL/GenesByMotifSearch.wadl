@@ -1,0 +1,300 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='GeneQuestions'>
+<resource path='GenesByMotifSearch.xml'>
+<method href='#genesbymotifsearch'/>
+</resource>
+<resource path='GenesByMotifSearch.json'>
+<method href='#genesbymotifsearch'/>
+</resource>
+<method name='POST' id='genesbymotifsearch'>
+<doc title='display_name'><![CDATA[Protein Motif Pattern]]></doc>
+<doc title='summary'><![CDATA[Find genes whose protein product contains a motif pattern that you specify, e.g.: two cysteines followed by one or more hydrophobic amino acids, followed by arginine, then lysine.]]></doc>
+<doc title='description'><![CDATA[Find genes whose protein product contains a motif pattern that
+             you specify., e.g. "CC6+RK", which means "two cysteines followed
+             by one or more hydrophobic amino acids, followed by arginine,
+             then lysine". The pattern need not be well conserved. If 
+             you can describe it in
+             words, you can probably use this tool to create an "expression"
+             that can search other proteins for similar patterns.  
+             <br><br>
+
+             Another example is the pattern of the
+             <a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=15591202&query_hl=2">
+             Pexel motif</a>, which can be represented as "R.L.[EQD]", meaning
+             "an arginine, then any amino acid, then a leucine, then any amino
+             acid, then either an aspartic acid, a glutamic acid, or a
+             glutamine".
+             <br><br>
+
+             The pattern need not be well conserved. If you can describe it in
+             words, you can probably use this tool to create an "expression"
+             that can search other proteins for similar patterns.
+             <br><br>
+
+             Specify the pattern with a (Perl style) "regular expression".
+             (Regular expressions are more powerful than PROSITE patterns.)
+             For a description of how to create regular expressions,
+             please see the <a href="regexp.jsp">Regular Expression Tutorial</a>.
+             <br><br>
+
+             The following codes can be used to represent classes of amino acids.
+		<table border columns=3>
+                   <TR>
+                      <TD><B>AA property</B>
+                      </TD>
+                      <TD><B>Amino acids</B>
+                      </TD>
+                      <TD><B>Code</B>
+                      </TD>
+                   </TR>
+
+                   <TR>
+                      <TD>
+                      <B>Acidic</B>
+                      </TD>
+                      <TD><B>DE</B>
+                      </TD>
+                      <TD><B>0</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Alcohol</B>
+                      </TD>
+                      <TD><B>ST</B>
+                      </TD>
+                      <TD><B>1</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Aliphatic</B>
+                      </TD>
+                      <TD><B>ILV</B>
+                      </TD>
+                      <TD><B>2</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Aromatic</B>
+                      </TD>
+                      <TD><B>FHWY</B>
+                      </TD>
+                      <TD><B>3</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Basic</B>
+                      </TD>
+                      <TD><B>KRH</B>
+                      </TD>
+                      <TD><B>4</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Charged</B>
+                      </TD>
+                      <TD><B>DEHKR</B>
+                      </TD>
+                      <TD><B>5</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Hydrophobic</B>
+                      </TD>
+                      <TD><B>AVILMFYW</B>
+                      </TD>
+                      <TD><B>6</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Hydrophilic</B>
+                      </TD>
+                      <TD><B>KRHDENQ</B>
+                      </TD>
+                      <TD><B>7</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Polar</B>
+                      </TD>
+                      <TD><B>CDEHKNQRST</B>
+                      </TD>
+                      <TD><B>8</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Small</B>
+                      </TD>
+                      <TD><B>ACDGNPSTV</B>
+                      </TD>
+                      <TD><B>9</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Tiny</B>
+                      </TD>
+                      <TD><B>AGS</B>
+                      </TD>
+                      <TD><B>B</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Turnlike</B>
+                      </TD>
+                      <TD><B>ACDEGHKNQRST</B>
+                      </TD>
+                      <TD><B>Z</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Any</B>
+                      </TD>
+                      <TD><b>ACDEFGHIKLM<br>
+                             NPQRSTVWY</b>
+                      </TD>
+                      <TD><B>.</B>
+                      </TD>
+                   </TR>
+                   </table>]]></doc>
+<request>
+<param name='motif_organism' type='xsd:string' required='true' default='Entamoeba histolytica HM-1:IMSS' repeating='true'>
+<doc title='prompt'><![CDATA[Target Organism]]></doc>
+<doc title='help'><![CDATA[Choose one or more organisms to search with the given motif]]></doc>
+<doc title='default'><![CDATA[Entamoeba histolytica HM-1:IMSS]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='Entamoeba histolytica HM-1:IMSS'><doc title='description'><![CDATA[Entamoeba histolytica HM-1:IMSS]]></doc></option>
+<option value='Entamoeba dispar SAW760'><doc title='description'><![CDATA[Entamoeba dispar SAW760]]></doc></option>
+<option value='Entamoeba invadens IP1'><doc title='description'><![CDATA[Entamoeba invadens IP1]]></doc></option>
+<option value='Encephalitozoon intestinalis'><doc title='description'><![CDATA[Encephalitozoon intestinalis]]></doc></option>
+<option value='Encephalitozoon cuniculi GB-M1'><doc title='description'><![CDATA[Encephalitozoon cuniculi GB-M1]]></doc></option>
+<option value='Enterocytozoon bieneusi H348'><doc title='description'><![CDATA[Enterocytozoon bieneusi H348]]></doc></option>
+<option value='Cryptosporidium parvum'><doc title='description'><![CDATA[Cryptosporidium parvum]]></doc></option>
+<option value='Cryptosporidium hominis'><doc title='description'><![CDATA[Cryptosporidium hominis]]></doc></option>
+<option value='Cryptosporidium muris'><doc title='description'><![CDATA[Cryptosporidium muris]]></doc></option>
+<option value='Giardia Assemblage A isolate WB'><doc title='description'><![CDATA[Giardia Assemblage A isolate WB]]></doc></option>
+<option value='Giardia Assemblage B isolate GS'><doc title='description'><![CDATA[Giardia Assemblage B isolate GS]]></doc></option>
+<option value='Giardia Assemblage E isolate P15'><doc title='description'><![CDATA[Giardia Assemblage E isolate P15]]></doc></option>
+<option value='Giardia Assemblage A isolate WB (deprecated)'><doc title='description'><![CDATA[Giardia Assemblage A isolate WB (deprecated)]]></doc></option>
+<option value='Plasmodium falciparum'><doc title='description'><![CDATA[Plasmodium falciparum]]></doc></option>
+<option value='Plasmodium falciparum mitochondrial'><doc title='description'><![CDATA[Plasmodium falciparum mitochondrial]]></doc></option>
+<option value='Plasmodium falciparum plastid'><doc title='description'><![CDATA[Plasmodium falciparum plastid]]></doc></option>
+<option value='Plasmodium vivax'><doc title='description'><![CDATA[Plasmodium vivax]]></doc></option>
+<option value='Plasmodium vivax mitochondrial'><doc title='description'><![CDATA[Plasmodium vivax mitochondrial]]></doc></option>
+<option value='Plasmodium yoelii'><doc title='description'><![CDATA[Plasmodium yoelii]]></doc></option>
+<option value='Plasmodium berghei'><doc title='description'><![CDATA[Plasmodium berghei]]></doc></option>
+<option value='Plasmodium chabaudi'><doc title='description'><![CDATA[Plasmodium chabaudi]]></doc></option>
+<option value='Plasmodium knowlesi'><doc title='description'><![CDATA[Plasmodium knowlesi]]></doc></option>
+<option value='Toxoplasma gondii'><doc title='description'><![CDATA[Toxoplasma gondii]]></doc></option>
+<option value='Toxoplasma gondii Apicoplast'><doc title='description'><![CDATA[Toxoplasma gondii Apicoplast]]></doc></option>
+<option value='Neospora caninum'><doc title='description'><![CDATA[Neospora caninum]]></doc></option>
+<option value='Trichomonas vaginalis'><doc title='description'><![CDATA[Trichomonas vaginalis]]></doc></option>
+<option value='Trichomonas vaginalis (repeated genes)'><doc title='description'><![CDATA[Trichomonas vaginalis (repeated genes)]]></doc></option>
+<option value='Trypanosoma cruzi CL Brener Esmeraldo-like'><doc title='description'><![CDATA[Trypanosoma cruzi CL Brener Esmeraldo-like]]></doc></option>
+<option value='Trypanosoma cruzi CL Brener Non-Esmeraldo-like'><doc title='description'><![CDATA[Trypanosoma cruzi CL Brener Non-Esmeraldo-like]]></doc></option>
+<option value='Trypanosoma cruzi unassigned contigs (strain CL Brener)'><doc title='description'><![CDATA[Trypanosoma cruzi unassigned contigs (strain CL Brener)]]></doc></option>
+<option value='Trypanosoma brucei Lister strain 427'><doc title='description'><![CDATA[Trypanosoma brucei Lister strain 427]]></doc></option>
+<option value='Trypanosoma brucei TREU927'><doc title='description'><![CDATA[Trypanosoma brucei TREU927]]></doc></option>
+<option value='Trypanosoma brucei gambiense'><doc title='description'><![CDATA[Trypanosoma brucei gambiense]]></doc></option>
+<option value='Leishmania major'><doc title='description'><![CDATA[Leishmania major]]></doc></option>
+<option value='Leishmania infantum'><doc title='description'><![CDATA[Leishmania infantum]]></doc></option>
+<option value='Leishmania braziliensis'><doc title='description'><![CDATA[Leishmania braziliensis]]></doc></option>
+<option value='Trypanosoma congolense'><doc title='description'><![CDATA[Trypanosoma congolense]]></doc></option>
+<option value='Trypanosoma vivax'><doc title='description'><![CDATA[Trypanosoma vivax]]></doc></option>
+<option value='Leishmania mexicana'><doc title='description'><![CDATA[Leishmania mexicana]]></doc></option>
+</param>
+<param name='motif_expression' type='xsd:string' required='true' default='CC6+RK' >
+<doc title='prompt'><![CDATA[Pattern]]></doc>
+<doc title='help'><![CDATA[Enter a Perl regular expression describing the desired motif.  Example: 'CC6+RK' searches for two consecutive cysteine residues followed by a stretch of hydrophobic amino acids followed by the aminoacids arginine and lysine.]]></doc>
+<doc title='default'><![CDATA[CC6+RK]]></doc>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Gene]]></doc></option>
+<option value='formatted_gene_id'><doc title='description'><![CDATA[Gene Group]]></doc></option>
+<option value='sequence_id'><doc title='description'><![CDATA[Genomic Sequence ID]]></doc></option>
+<option value='chromosome'><doc title='description'><![CDATA[Chromosome]]></doc></option>
+<option value='location_text'><doc title='description'><![CDATA[Genomic Location]]></doc></option>
+<option value='strand'><doc title='description'><![CDATA[Gene Strand]]></doc></option>
+<option value='gene_type'><doc title='description'><![CDATA[Gene Type]]></doc></option>
+<option value='exon_count'><doc title='description'><![CDATA[# Exons]]></doc></option>
+<option value='transcript_length'><doc title='description'><![CDATA[Transcript Length]]></doc></option>
+<option value='cds_length'><doc title='description'><![CDATA[CDS Length]]></doc></option>
+<option value='product'><doc title='description'><![CDATA[Product Description]]></doc></option>
+<option value='protein_length'><doc title='description'><![CDATA[Protein Length]]></doc></option>
+<option value='tm_count'><doc title='description'><![CDATA[# TM Domains]]></doc></option>
+<option value='molecular_weight'><doc title='description'><![CDATA[Molecular Weight]]></doc></option>
+<option value='isoelectric_point'><doc title='description'><![CDATA[Isoelectric Point]]></doc></option>
+<option value='ec_numbers_string'><doc title='description'><![CDATA[EC Numbers]]></doc></option>
+<option value='ortholog_number'><doc title='description'><![CDATA[Ortholog count]]></doc></option>
+<option value='paralog_number'><doc title='description'><![CDATA[Paralog count]]></doc></option>
+<option value='orthomcl_name'><doc title='description'><![CDATA[Ortholog Group]]></doc></option>
+<option value='signalp_scores'><doc title='description'><![CDATA[SignalP Scores]]></doc></option>
+<option value='signalp_peptide'><doc title='description'><![CDATA[SignalP Peptide]]></doc></option>
+<option value='ann_go_function'><doc title='description'><![CDATA[Annotated GO Function]]></doc></option>
+<option value='ann_go_process'><doc title='description'><![CDATA[Annotated GO Process]]></doc></option>
+<option value='ann_go_component'><doc title='description'><![CDATA[Annotated GO Component]]></doc></option>
+<option value='pred_go_function'><doc title='description'><![CDATA[Predicted GO Function]]></doc></option>
+<option value='pred_go_process'><doc title='description'><![CDATA[Predicted GO Process]]></doc></option>
+<option value='pred_go_component'><doc title='description'><![CDATA[Predicted GO Component]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='is_pseudo'><doc title='description'><![CDATA[Is Pseudo]]></doc></option>
+<option value='protein_sequence'><doc title='description'><![CDATA[Predicted Protein Sequence]]></doc></option>
+<option value='transcript_sequence'><doc title='description'><![CDATA[Predicted RNA/mRNA Sequence (introns spliced out)]]></doc></option>
+<option value='cds'><doc title='description'><![CDATA[Coding Sequence]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+<option value='Locations'><doc title='description'><![CDATA[Match Locations]]></doc></option>
+<option value='MatchCount'><doc title='description'><![CDATA[Match Count]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+<option value='SNPs'><doc title='description'><![CDATA[SNPs Summary]]></doc></option>
+<option value='GeneModelDump'><doc title='description'><![CDATA[Gene Model]]></doc></option>
+<option value='InterPro'><doc title='description'><![CDATA[InterPro Domains]]></doc></option>
+<option value='TMHMM'><doc title='description'><![CDATA[Transmembrane Domains]]></doc></option>
+<option value='LowComplexity'><doc title='description'><![CDATA[Low Complexity Regions]]></doc></option>
+<option value='SignalP'><doc title='description'><![CDATA[Signal Peptide]]></doc></option>
+<option value='BlastP'><doc title='description'><![CDATA[BlastP Hits]]></doc></option>
+<option value='Genbank'><doc title='description'><![CDATA[Gene Location]]></doc></option>
+<option value='SageTags'><doc title='description'><![CDATA[Sage Tags]]></doc></option>
+<option value='Notes'><doc title='description'><![CDATA[Notes]]></doc></option>
+<option value='UserComments'><doc title='description'><![CDATA[User Comments]]></doc></option>
+<option value='CommunityExpComments'><doc title='description'><![CDATA[Community Annotations]]></doc></option>
+<option value='EcNumber'><doc title='description'><![CDATA[EC Number]]></doc></option>
+<option value='MassSpec'><doc title='description'><![CDATA[Mass Spec.-based Expression Evidence]]></doc></option>
+<option value='GoTerms'><doc title='description'><![CDATA[GO Terms]]></doc></option>
+<option value='Phenotype'><doc title='description'><![CDATA[Phenotype]]></doc></option>
+<option value='Y2hInteractions'><doc title='description'><![CDATA[Y2H Interactions]]></doc></option>
+<option value='Orthologs'><doc title='description'><![CDATA[Orthologs and Paralogs within EuPathDB]]></doc></option>
+<option value='MetabolicPathways'><doc title='description'><![CDATA[Metabolic Pathways]]></doc></option>
+<option value='TaskComments'><doc title='description'><![CDATA[Toxoplasma Genome Sequencing Project Annotation]]></doc></option>
+<option value='ArrayElements'><doc title='description'><![CDATA[Mapped Array Elements]]></doc></option>
+<option value='TwoChannelDiffExpr'><doc title='description'><![CDATA[P.Berghei Differential Expression - DOZI KO vs. WT]]></doc></option>
+<option value='ProteinExpression'><doc title='description'><![CDATA[P.Berghei Protein Expression]]></doc></option>
+<option value='Mr4Reagents'><doc title='description'><![CDATA[MR4 Reagents]]></doc></option>
+<option value='ProteinDatabase'><doc title='description'><![CDATA[Protein Linkouts]]></doc></option>
+<option value='GeneLinkouts'><doc title='description'><![CDATA[External Links]]></doc></option>
+<option value='3dPreds'><doc title='description'><![CDATA[3D Structure Predictions]]></doc></option>
+<option value='PdbSimilarities'><doc title='description'><![CDATA[Similarities to Protein Data Bank (PDB) Chains]]></doc></option>
+<option value='Epitopes'><doc title='description'><![CDATA[Epitopes from IEDB]]></doc></option>
+<option value='IsolateOverlap'><doc title='description'><![CDATA[Isolates]]></doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

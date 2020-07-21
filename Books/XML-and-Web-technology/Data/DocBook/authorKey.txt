@@ -1,0 +1,5 @@
+firstname:Duncan 
+surname:Temple Lang
+email:duncan@R-project.org
+orgname:University of California, Davis
+orgdiv:Department of Statistics

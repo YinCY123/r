@@ -1,0 +1,491 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='SageTagQuestions'>
+<resource path='SageTagByRStat.xml'>
+<method href='#sagetagbyrstat'/>
+</resource>
+<resource path='SageTagByRStat.json'>
+<method href='#sagetagbyrstat'/>
+</resource>
+<method name='POST' id='sagetagbyrstat'>
+<doc title='display_name'><![CDATA[Differential Expression]]></doc>
+<doc title='summary'><![CDATA[Find SAGE Tags that are differentially expressed across 2 or more libraries.]]></doc>
+<doc title='description'><![CDATA[<p>Find SAGE Tags with evidence of differential expression by choosing libraries (more than one) to compare across.  A large R value indicates differential expression.
+
+Stekel DJ, Git Y, Falciani F. <a href="http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=Retrieve&db=PubMed&list_uids=11116099">The comparison of gene expression from multiple cDNA libraries.</a>  Genome Res.  2000.  Dec:10(12):2055-61.
+</p>               
+<p>See the related <a href="showQuestion.do?questionFullName=GeneQuestions.GenesBySageTagRStat"><b>Genes by Differential Expression of SAGE Tag Evidence</b></a> query for summing SAGE tag counts within predicted genes.
+</p>]]></doc>
+<request>
+<param name='sage_tag_library_name' type='xsd:string' required='true' default='false' repeating='true'>
+<doc title='prompt'><![CDATA[Sage Tag Library Name]]></doc>
+<doc title='help'><![CDATA[Click the + to select specific experiments or use the tree box to select all for the chosen organism.]]></doc>
+<doc title='default'><![CDATA[false]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='Glamblia'><doc title='description'><![CDATA[<i>Giardia Assemblage A isolate WB</i>]]></doc></option>
+<option value='Troph1'><doc title='description'><![CDATA[Troph1]]></doc></option>
+<option value='4 hour Encystation'><doc title='description'><![CDATA[4 hour Encystation]]></doc></option>
+<option value='12 hour Encystation'><doc title='description'><![CDATA[12 hour Encystation]]></doc></option>
+<option value='21 hour Encystation'><doc title='description'><![CDATA[21 hour Encystation]]></doc></option>
+<option value='42 hour Encystation'><doc title='description'><![CDATA[42 hour Encystation]]></doc></option>
+<option value='Cyst'><doc title='description'><![CDATA[Cyst]]></doc></option>
+<option value='S1 Excystation'><doc title='description'><![CDATA[S1 Excystation]]></doc></option>
+<option value='S2 Excystation'><doc title='description'><![CDATA[S2 Excystation]]></doc></option>
+<option value='30 min Excystation'><doc title='description'><![CDATA[30 min Excystation]]></doc></option>
+<option value='60 min Excystation'><doc title='description'><![CDATA[60 min Excystation]]></doc></option>
+<option value='Tbrucei'><doc title='description'><![CDATA[<i>Trypanosome brucei TREU927</i>]]></doc></option>
+<option value='bloodstream library (gambiense)'><doc title='description'><![CDATA[bloodstream library (gambiense)]]></doc></option>
+<option value='procyclic library (gambiense)'><doc title='description'><![CDATA[procyclic library (gambiense)]]></doc></option>
+<option value='Pfalciparum'><doc title='description'><![CDATA[<i>Plasmodium falciparum</i>]]></doc></option>
+<option value='CQlibrary'><doc title='description'><![CDATA[CQlibrary]]></doc></option>
+<option value='SAGE-3D7-library1'><doc title='description'><![CDATA[SAGE-3D7-library1]]></doc></option>
+<option value='CQcontrol'><doc title='description'><![CDATA[CQcontrol]]></doc></option>
+<option value='Tgondii'><doc title='description'><![CDATA[<i>Toxoplasma gondii</i>]]></doc></option>
+<option value='sp'><doc title='description'><![CDATA[sp]]></doc></option>
+<option value='d4'><doc title='description'><![CDATA[d4]]></doc></option>
+<option value='d6'><doc title='description'><![CDATA[d6]]></doc></option>
+<option value='d7'><doc title='description'><![CDATA[d7]]></doc></option>
+<option value='d15'><doc title='description'><![CDATA[d15]]></doc></option>
+<option value='ph'><doc title='description'><![CDATA[ph]]></doc></option>
+<option value='msj'><doc title='description'><![CDATA[msj]]></doc></option>
+<option value='rh'><doc title='description'><![CDATA[rh]]></doc></option>
+<option value='b7'><doc title='description'><![CDATA[b7]]></doc></option>
+</param>
+<param name='sage_tag_min_r' type='xsd:string' required='true' default='10' >
+<doc title='prompt'><![CDATA[R statistic Greater Than:]]></doc>
+<doc title='help'><![CDATA[Choose a minimum R value to be returned. Stekel et al.???s R-statistic (Stekel, Git, and Falciani 2000) scores SAGE tags on differential expression among libraries (more variable tags have higher R values), with no assignment of significance values.]]></doc>
+<doc title='default'><![CDATA[10]]></doc>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Tag]]></doc></option>
+<option value='tag_sequence'><doc title='description'><![CDATA[Tag Sequence]]></doc></option>
+<option value='sequence_id'><doc title='description'><![CDATA[Sequence Id]]></doc></option>
+<option value='start_min'><doc title='description'><![CDATA[Tag Start]]></doc></option>
+<option value='end_max'><doc title='description'><![CDATA[Tag End]]></doc></option>
+<option value='strand'><doc title='description'><![CDATA[Strand]]></doc></option>
+<option value='context_start'><doc title='description'><![CDATA[Genomic Context Start]]></doc></option>
+<option value='context_end'><doc title='description'><![CDATA[Genomic Context End]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='rad_source_id'><doc title='description'><![CDATA[External Identifier]]></doc></option>
+<option value='project_id'><doc title='description'><![CDATA[Project Id]]></doc></option>
+<option value='gene_source_id'><doc title='description'><![CDATA[Gene]]></doc></option>
+<option value='gene_product'><doc title='description'><![CDATA[Gene Product]]></doc></option>
+<option value='feature_source_id'><doc title='description'><![CDATA[Feature source id]]></doc></option>
+<option value='location_text'><doc title='description'><![CDATA[Genomic Location]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+<resource path='SageTagByLocation.xml'>
+<method href='#sagetagbylocation'/>
+</resource>
+<resource path='SageTagByLocation.json'>
+<method href='#sagetagbylocation'/>
+</resource>
+<method name='POST' id='sagetagbylocation'>
+<doc title='display_name'><![CDATA[Genomic Location]]></doc>
+<doc title='summary'><![CDATA[Find SAGE Tags that are located in a specified genomic region.]]></doc>
+<doc title='description'><![CDATA[Find SAGE Tags that are located in a specified genomic region.]]></doc>
+<request>
+<param name='chromosomeOptional2' type='xsd:string' required='true' default='P.f. chromosome 1' repeating='true'>
+<doc title='prompt'><![CDATA[Chromosome]]></doc>
+<doc title='help'><![CDATA[Chromosome]]></doc>
+<doc title='default'><![CDATA[P.f. chromosome 1]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='P.f. chromosome 1'><doc title='description'><![CDATA[P.f. chromosome 1]]></doc></option>
+<option value='P.f. chromosome 2'><doc title='description'><![CDATA[P.f. chromosome 2]]></doc></option>
+<option value='P.f. chromosome 3'><doc title='description'><![CDATA[P.f. chromosome 3]]></doc></option>
+<option value='P.f. chromosome 4'><doc title='description'><![CDATA[P.f. chromosome 4]]></doc></option>
+<option value='P.f. chromosome 5'><doc title='description'><![CDATA[P.f. chromosome 5]]></doc></option>
+<option value='P.f. chromosome 6'><doc title='description'><![CDATA[P.f. chromosome 6]]></doc></option>
+<option value='P.f. chromosome 7'><doc title='description'><![CDATA[P.f. chromosome 7]]></doc></option>
+<option value='P.f. chromosome 8'><doc title='description'><![CDATA[P.f. chromosome 8]]></doc></option>
+<option value='P.f. chromosome 9'><doc title='description'><![CDATA[P.f. chromosome 9]]></doc></option>
+<option value='P.f. chromosome 10'><doc title='description'><![CDATA[P.f. chromosome 10]]></doc></option>
+<option value='P.f. chromosome 11'><doc title='description'><![CDATA[P.f. chromosome 11]]></doc></option>
+<option value='P.f. chromosome 12'><doc title='description'><![CDATA[P.f. chromosome 12]]></doc></option>
+<option value='P.f. chromosome 13'><doc title='description'><![CDATA[P.f. chromosome 13]]></doc></option>
+<option value='P.f. chromosome 14'><doc title='description'><![CDATA[P.f. chromosome 14]]></doc></option>
+<option value='Select:'><doc title='description'><![CDATA[Select:]]></doc></option>
+<option value='Ia'><doc title='description'><![CDATA[Ia]]></doc></option>
+<option value='Ib'><doc title='description'><![CDATA[Ib]]></doc></option>
+<option value='II'><doc title='description'><![CDATA[II]]></doc></option>
+<option value='III'><doc title='description'><![CDATA[III]]></doc></option>
+<option value='IV'><doc title='description'><![CDATA[IV]]></doc></option>
+<option value='V'><doc title='description'><![CDATA[V]]></doc></option>
+<option value='VI'><doc title='description'><![CDATA[VI]]></doc></option>
+<option value='VIIa'><doc title='description'><![CDATA[VIIa]]></doc></option>
+<option value='VIIb'><doc title='description'><![CDATA[VIIb]]></doc></option>
+<option value='VIII'><doc title='description'><![CDATA[VIII]]></doc></option>
+<option value='IX'><doc title='description'><![CDATA[IX]]></doc></option>
+<option value='X'><doc title='description'><![CDATA[X]]></doc></option>
+<option value='XI'><doc title='description'><![CDATA[XI]]></doc></option>
+<option value='XII'><doc title='description'><![CDATA[XII]]></doc></option>
+</param>
+<param name='sequenceId' type='xsd:string' required='false' default='(Example: CH991779)' >
+<doc title='prompt'><![CDATA[Genomic sequence ID]]></doc>
+<doc title='help'><![CDATA[Enter an identifier for a genomic sequence. The IDs correspond to the accession numbers in the GenBank records supplied by the sequencing centers. Wild cards are permitted in most queries, i.e. use AAEE* to ask for all <i> C.parvum </i> contigs. Genes By Chromosomal Location does not allow wildcards.]]></doc>
+<doc title='default'><![CDATA[(Example: CH991779)]]></doc>
+</param>
+<param name='start_point' type='xsd:string' required='true' default='1' >
+<doc title='prompt'><![CDATA[Start at]]></doc>
+<doc title='help'><![CDATA[Select the distance (in nucleotides) to the start]]></doc>
+<doc title='default'><![CDATA[1]]></doc>
+</param>
+<param name='end_point' type='xsd:string' required='true' default='0' >
+<doc title='prompt'><![CDATA[End Location (0 = end)]]></doc>
+<doc title='help'><![CDATA[Select the nucleotide you would like to end in. Note that 0 equals the end so you can get genes right up to the end of the sequence.  The default settings start = 1 and end = 0 will give you results from the entire sequence.]]></doc>
+<doc title='default'><![CDATA[0]]></doc>
+</param>
+<param name='is_within_gene_not' type='xsd:string' required='true' default='Yes' repeating='false'>
+<doc title='prompt'><![CDATA[Within Genes Only]]></doc>
+<doc title='help'><![CDATA[SAGE Tags are short sequences and can align to several geomic coordinates.  Choose Yes to restrict to SAGE tags falling within a gene.]]></doc>
+<doc title='default'><![CDATA[Yes]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='Yes'><doc title='description'><![CDATA[Yes]]></doc></option>
+<option value='No'><doc title='description'><![CDATA[No]]></doc></option>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Tag]]></doc></option>
+<option value='tag_sequence'><doc title='description'><![CDATA[Tag Sequence]]></doc></option>
+<option value='sequence_id'><doc title='description'><![CDATA[Sequence Id]]></doc></option>
+<option value='start_min'><doc title='description'><![CDATA[Tag Start]]></doc></option>
+<option value='end_max'><doc title='description'><![CDATA[Tag End]]></doc></option>
+<option value='strand'><doc title='description'><![CDATA[Strand]]></doc></option>
+<option value='context_start'><doc title='description'><![CDATA[Genomic Context Start]]></doc></option>
+<option value='context_end'><doc title='description'><![CDATA[Genomic Context End]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='rad_source_id'><doc title='description'><![CDATA[External Identifier]]></doc></option>
+<option value='project_id'><doc title='description'><![CDATA[Project Id]]></doc></option>
+<option value='gene_source_id'><doc title='description'><![CDATA[Gene]]></doc></option>
+<option value='gene_product'><doc title='description'><![CDATA[Gene Product]]></doc></option>
+<option value='feature_source_id'><doc title='description'><![CDATA[Feature source id]]></doc></option>
+<option value='location_text'><doc title='description'><![CDATA[Genomic Location]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+<option value='dynamic_location'><doc title='description'><![CDATA[Location]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+<resource path='SageTagBySequence.xml'>
+<method href='#sagetagbysequence'/>
+</resource>
+<resource path='SageTagBySequence.json'>
+<method href='#sagetagbysequence'/>
+</resource>
+<method name='POST' id='sagetagbysequence'>
+<doc title='display_name'><![CDATA[Sequence]]></doc>
+<doc title='summary'><![CDATA[Find SAGE Tags Alignments By their Sequence.]]></doc>
+<doc title='description'><![CDATA[Find SAGE Tags Alignments By their Sequence.]]></doc>
+<request>
+<param name='sequence' type='xsd:string' required='true' default='GTAATAAATG' >
+<doc title='prompt'><![CDATA[Tag Sequence]]></doc>
+<doc title='help'><![CDATA[Enter a SAGE Tag Sequence.]]></doc>
+<doc title='default'><![CDATA[GTAATAAATG]]></doc>
+</param>
+<param name='is_within_gene' type='xsd:string' required='true' default='Yes' repeating='false'>
+<doc title='prompt'><![CDATA[Within Genes Only]]></doc>
+<doc title='help'><![CDATA[SAGE Tags are short sequences and can align to several geomic coordinates.  Choose Yes to restrict to SAGE tags falling within a gene.]]></doc>
+<doc title='default'><![CDATA[Yes]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='Yes'><doc title='description'><![CDATA[Yes]]></doc></option>
+<option value='No'><doc title='description'><![CDATA[No]]></doc></option>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Tag]]></doc></option>
+<option value='tag_sequence'><doc title='description'><![CDATA[Tag Sequence]]></doc></option>
+<option value='sequence_id'><doc title='description'><![CDATA[Sequence Id]]></doc></option>
+<option value='start_min'><doc title='description'><![CDATA[Tag Start]]></doc></option>
+<option value='end_max'><doc title='description'><![CDATA[Tag End]]></doc></option>
+<option value='strand'><doc title='description'><![CDATA[Strand]]></doc></option>
+<option value='context_start'><doc title='description'><![CDATA[Genomic Context Start]]></doc></option>
+<option value='context_end'><doc title='description'><![CDATA[Genomic Context End]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='rad_source_id'><doc title='description'><![CDATA[External Identifier]]></doc></option>
+<option value='project_id'><doc title='description'><![CDATA[Project Id]]></doc></option>
+<option value='gene_source_id'><doc title='description'><![CDATA[Gene]]></doc></option>
+<option value='gene_product'><doc title='description'><![CDATA[Gene Product]]></doc></option>
+<option value='feature_source_id'><doc title='description'><![CDATA[Feature source id]]></doc></option>
+<option value='location_text'><doc title='description'><![CDATA[Genomic Location]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+<resource path='SageTagByGeneSourceId.xml'>
+<method href='#sagetagbygenesourceid'/>
+</resource>
+<resource path='SageTagByGeneSourceId.json'>
+<method href='#sagetagbygenesourceid'/>
+</resource>
+<method name='POST' id='sagetagbygenesourceid'>
+<doc title='display_name'><![CDATA[GeneSource Id]]></doc>
+<doc title='summary'><![CDATA[Find SAGE Tags in GiardiaDB, PlasmoDB and ToxoDB By Gene Identifier]]></doc>
+<doc title='description'><![CDATA[Find SAGE Tags in GiardiaDB, TriTrypDB, PlasmoDB and ToxoDB By Gene Identifier]]></doc>
+<request>
+<param name='single_gene_id' type='xsd:string' required='true' default='TGME49_039250' >
+<doc title='prompt'><![CDATA[Gene ID]]></doc>
+<doc title='help'><![CDATA[Gene IDs (locus tags) are quite different for each species. We use the gene IDs provided by the sequence generator.]]></doc>
+<doc title='default'><![CDATA[TGME49_039250]]></doc>
+</param>
+<param name='st_max_five_prime_distance' type='xsd:string' required='true' default='0' >
+<doc title='prompt'><![CDATA[Maximum distance from 5' gene end]]></doc>
+<doc title='help'><![CDATA[Enter the maximum distance you want to allow the tag to be from the 5' end of the gene.  This is assuming that the gene model does  not contain the entire transcribed region which is frequently the case.  Note that the larger the value entered here (1000 bp maximum) the greater the chance for aberrant results.]]></doc>
+<doc title='default'><![CDATA[0]]></doc>
+</param>
+<param name='st_max_three_prime_distance' type='xsd:string' required='true' default='0' >
+<doc title='prompt'><![CDATA[Maximum distance from 3' gene end]]></doc>
+<doc title='help'><![CDATA[Enter the maximum distance you want to allow the tag to be from the 3' end of the gene.  This is assuming that the gene model does  not contain the entire transcribed region which is frequently the case.  Note that the larger the value entered here (1000 bp maximum) the greater the chance for aberrant results.]]></doc>
+<doc title='default'><![CDATA[0]]></doc>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Tag]]></doc></option>
+<option value='tag_sequence'><doc title='description'><![CDATA[Tag Sequence]]></doc></option>
+<option value='sequence_id'><doc title='description'><![CDATA[Sequence Id]]></doc></option>
+<option value='start_min'><doc title='description'><![CDATA[Tag Start]]></doc></option>
+<option value='end_max'><doc title='description'><![CDATA[Tag End]]></doc></option>
+<option value='strand'><doc title='description'><![CDATA[Strand]]></doc></option>
+<option value='context_start'><doc title='description'><![CDATA[Genomic Context Start]]></doc></option>
+<option value='context_end'><doc title='description'><![CDATA[Genomic Context End]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='rad_source_id'><doc title='description'><![CDATA[External Identifier]]></doc></option>
+<option value='project_id'><doc title='description'><![CDATA[Project Id]]></doc></option>
+<option value='gene_source_id'><doc title='description'><![CDATA[Gene]]></doc></option>
+<option value='gene_product'><doc title='description'><![CDATA[Gene Product]]></doc></option>
+<option value='feature_source_id'><doc title='description'><![CDATA[Feature source id]]></doc></option>
+<option value='location_text'><doc title='description'><![CDATA[Genomic Location]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+<resource path='SageTagByExpressionLevel.xml'>
+<method href='#sagetagbyexpressionlevel'/>
+</resource>
+<resource path='SageTagByExpressionLevel.json'>
+<method href='#sagetagbyexpressionlevel'/>
+</resource>
+<method name='POST' id='sagetagbyexpressionlevel'>
+<doc title='display_name'><![CDATA[Expression Level]]></doc>
+<doc title='summary'><![CDATA[Find SAGE Tags By Expression Level in a given library.]]></doc>
+<doc title='description'><![CDATA[<p>Find SAGE Tags By Expression Level in a given library.</p>  <p>See the related <a href="showQuestion.do?questionFullName=GeneQuestions.GenesBySageTag"><b>Genes by SAGE Tag Evidence</b></a> query for summing SAGE tag counts within predicted genes.
+</p>]]></doc>
+<request>
+<param name='st_min_count' type='xsd:string' required='true' default='2' >
+<doc title='prompt'><![CDATA[Minimum tag count]]></doc>
+<doc title='help'><![CDATA[Enter the minimum frequency of the SAGE tags meeting your criteria (raw/normalized).  Tags must have this minimum frequency in at least one selected SAGE library.]]></doc>
+<doc title='default'><![CDATA[2]]></doc>
+</param>
+<param name='raw_normalized' type='xsd:string' required='true' default='Normalized' repeating='false'>
+<doc title='prompt'><![CDATA[Data Type]]></doc>
+<doc title='help'><![CDATA[Choose normalized or raw data.]]></doc>
+<doc title='default'><![CDATA[Normalized]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='Normalized'><doc title='description'><![CDATA[Normalized]]></doc></option>
+<option value='Raw'><doc title='description'><![CDATA[Raw]]></doc></option>
+</param>
+<param name='sage_experiment' type='xsd:string' required='true' default='Troph1' repeating='false'>
+<doc title='prompt'><![CDATA[Experiment Name]]></doc>
+<doc title='help'><![CDATA[Choose SAGE tag experiment name.]]></doc>
+<doc title='default'><![CDATA[Troph1]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='Troph1'><doc title='description'><![CDATA[Troph1]]></doc></option>
+<option value='4 hour Encystation'><doc title='description'><![CDATA[4 hour Encystation]]></doc></option>
+<option value='12 hour Encystation'><doc title='description'><![CDATA[12 hour Encystation]]></doc></option>
+<option value='21 hour Encystation'><doc title='description'><![CDATA[21 hour Encystation]]></doc></option>
+<option value='42 hour Encystation'><doc title='description'><![CDATA[42 hour Encystation]]></doc></option>
+<option value='Cyst'><doc title='description'><![CDATA[Cyst]]></doc></option>
+<option value='S1 Excystation'><doc title='description'><![CDATA[S1 Excystation]]></doc></option>
+<option value='S2 Excystation'><doc title='description'><![CDATA[S2 Excystation]]></doc></option>
+<option value='30 min Excystation'><doc title='description'><![CDATA[30 min Excystation]]></doc></option>
+<option value='60 min Excystation'><doc title='description'><![CDATA[60 min Excystation]]></doc></option>
+<option value='CQlibrary'><doc title='description'><![CDATA[CQlibrary]]></doc></option>
+<option value='SAGE-3D7-library1'><doc title='description'><![CDATA[SAGE-3D7-library1]]></doc></option>
+<option value='CQcontrol'><doc title='description'><![CDATA[CQcontrol]]></doc></option>
+<option value='sp'><doc title='description'><![CDATA[sp]]></doc></option>
+<option value='d4'><doc title='description'><![CDATA[d4]]></doc></option>
+<option value='d6'><doc title='description'><![CDATA[d6]]></doc></option>
+<option value='d7'><doc title='description'><![CDATA[d7]]></doc></option>
+<option value='d17'><doc title='description'><![CDATA[d17]]></doc></option>
+<option value='ph'><doc title='description'><![CDATA[ph]]></doc></option>
+<option value='msj'><doc title='description'><![CDATA[msj]]></doc></option>
+<option value='rh'><doc title='description'><![CDATA[rh]]></doc></option>
+<option value='b7'><doc title='description'><![CDATA[b7]]></doc></option>
+<option value='bloodstream_library'><doc title='description'><![CDATA[bloodstream_library]]></doc></option>
+<option value='procyclic_library'><doc title='description'><![CDATA[procyclic_library]]></doc></option>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Tag]]></doc></option>
+<option value='tag_sequence'><doc title='description'><![CDATA[Tag Sequence]]></doc></option>
+<option value='sequence_id'><doc title='description'><![CDATA[Sequence Id]]></doc></option>
+<option value='start_min'><doc title='description'><![CDATA[Tag Start]]></doc></option>
+<option value='end_max'><doc title='description'><![CDATA[Tag End]]></doc></option>
+<option value='strand'><doc title='description'><![CDATA[Strand]]></doc></option>
+<option value='context_start'><doc title='description'><![CDATA[Genomic Context Start]]></doc></option>
+<option value='context_end'><doc title='description'><![CDATA[Genomic Context End]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='rad_source_id'><doc title='description'><![CDATA[External Identifier]]></doc></option>
+<option value='project_id'><doc title='description'><![CDATA[Project Id]]></doc></option>
+<option value='gene_source_id'><doc title='description'><![CDATA[Gene]]></doc></option>
+<option value='gene_product'><doc title='description'><![CDATA[Gene Product]]></doc></option>
+<option value='feature_source_id'><doc title='description'><![CDATA[Feature source id]]></doc></option>
+<option value='location_text'><doc title='description'><![CDATA[Genomic Location]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+<option value='tag_count'><doc title='description'><![CDATA[Normalized Tag Count]]></doc></option>
+<option value='tag_percentage'><doc title='description'><![CDATA[Normalized Tag Percentage]]></doc></option>
+<option value='raw_count'><doc title='description'><![CDATA[Raw Tag Count]]></doc></option>
+<option value='raw_percentage'><doc title='description'><![CDATA[RawTag Percentage]]></doc></option>
+<option value='SAGE_library'><doc title='description'><![CDATA[Experiment Name]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+<resource path='SageTagByRadSourceId.xml'>
+<method href='#sagetagbyradsourceid'/>
+</resource>
+<resource path='SageTagByRadSourceId.json'>
+<method href='#sagetagbyradsourceid'/>
+</resource>
+<method name='POST' id='sagetagbyradsourceid'>
+<doc title='display_name'><![CDATA[ID]]></doc>
+<doc title='summary'><![CDATA[Find SAGE Tags in GiardiaDB, PlasmoDB and ToxoDB by ID]]></doc>
+<doc title='description'><![CDATA[Find SAGE Tags in GiardiaDB, PlasmoDB and ToxoDB by ID.]]></doc>
+<request>
+<param name='rad_source_id' type='xsd:string' required='true' default='670,Pf3D7_11-1353439-1353453.1' >
+<doc title='prompt'><![CDATA[SAGE Tag ID input set]]></doc>
+<doc title='help'><![CDATA[Input a comma delimited set of SAGE Tag IDs, or upload a file. Wildcards (*) are allowed.]]></doc>
+<doc title='default'><![CDATA[670,Pf3D7_11-1353439-1353453.1]]></doc>
+</param>
+<param name='signature' type='xsd:string' required='true' default='' >
+<doc title='prompt'><![CDATA[User Signature]]></doc>
+<doc title='help'><![CDATA[Used to pass the Users Signature to the component sites]]></doc>
+<doc title='default'><![CDATA[null]]></doc>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Tag]]></doc></option>
+<option value='tag_sequence'><doc title='description'><![CDATA[Tag Sequence]]></doc></option>
+<option value='sequence_id'><doc title='description'><![CDATA[Sequence Id]]></doc></option>
+<option value='start_min'><doc title='description'><![CDATA[Tag Start]]></doc></option>
+<option value='end_max'><doc title='description'><![CDATA[Tag End]]></doc></option>
+<option value='strand'><doc title='description'><![CDATA[Strand]]></doc></option>
+<option value='context_start'><doc title='description'><![CDATA[Genomic Context Start]]></doc></option>
+<option value='context_end'><doc title='description'><![CDATA[Genomic Context End]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='rad_source_id'><doc title='description'><![CDATA[External Identifier]]></doc></option>
+<option value='project_id'><doc title='description'><![CDATA[Project Id]]></doc></option>
+<option value='gene_source_id'><doc title='description'><![CDATA[Gene]]></doc></option>
+<option value='gene_product'><doc title='description'><![CDATA[Gene Product]]></doc></option>
+<option value='feature_source_id'><doc title='description'><![CDATA[Feature source id]]></doc></option>
+<option value='location_text'><doc title='description'><![CDATA[Genomic Location]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

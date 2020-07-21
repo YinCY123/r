@@ -1,0 +1,105 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='SnpQuestions'>
+<resource path='SnpsByIsolatePattern.xml'>
+<method href='#snpsbyisolatepattern'/>
+</resource>
+<resource path='SnpsByIsolatePattern.json'>
+<method href='#snpsbyisolatepattern'/>
+</resource>
+<method name='POST' id='snpsbyisolatepattern'>
+<doc title='display_name'><![CDATA[Isolate Comparison]]></doc>
+<doc title='summary'><![CDATA[Find SNPs that distinguish two sets of isolates.]]></doc>
+<doc title='description'><![CDATA[Find SNPs that distinguish two sets of isolates.  Note that you can determine the specificity of the SNPs. For the most specific SNPs, you should make the number of isolates equal to the number of identifiers you are querying for in each set.   The default ids for Set A are the result of a query for isolates from Malawi (8 isolates) and Set B are the result of a query for isolates from Brazil (12 isolates).]]></doc>
+<request>
+<param name='organism' type='xsd:string' required='true' default='Plasmodium falciparum' repeating='true'>
+<doc title='prompt'><![CDATA[Organism]]></doc>
+<doc title='help'><![CDATA[Organism]]></doc>
+<doc title='default'><![CDATA[Plasmodium falciparum]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='Plasmodium falciparum'><doc title='description'><![CDATA[Plasmodium falciparum]]></doc></option>
+</param>
+<param name='signature' type='xsd:string' required='true' default='' >
+<doc title='prompt'><![CDATA[User Signature]]></doc>
+<doc title='help'><![CDATA[Used to pass the Users Signature to the component sites]]></doc>
+<doc title='default'><![CDATA[null]]></doc>
+</param>
+<param name='isolate_set_a' type='xsd:string' required='true' default='CPHD.479021,CPHD.479043,CPHD.479048,CPHD.479052' >
+<doc title='prompt'><![CDATA[Set A isolate identifiers]]></doc>
+<doc title='help'><![CDATA[input a comma delimited set of isolate ids, or upload a file.]]></doc>
+<doc title='default'><![CDATA[CPHD.479021,CPHD.479043,CPHD.479048,CPHD.479052]]></doc>
+</param>
+<param name='set_a_percent' type='xsd:string' required='true' default='100' >
+<doc title='prompt'><![CDATA[Minimum percentage of isolates in Set A with same allele >= ]]></doc>
+<doc title='help'><![CDATA[Lower Bound on the percentage of isolates in set A that have the same allele at any SNP position.  Note: for the highest confidence SNPs, this percentage should be 100.]]></doc>
+<doc title='default'><![CDATA[100]]></doc>
+</param>
+<param name='isolate_set_b' type='xsd:string' required='true' default='CP3.479010,CP3.479012,CP3.479014' >
+<doc title='prompt'><![CDATA[Set B isolate identifiers]]></doc>
+<doc title='help'><![CDATA[input a comma delimited set of isolate ids, or upload a file.]]></doc>
+<doc title='default'><![CDATA[CP3.479010,CP3.479012,CP3.479014]]></doc>
+</param>
+<param name='set_b_percent' type='xsd:string' required='true' default='100' >
+<doc title='prompt'><![CDATA[Minimum percentage of isolates in Set B with same allele >= ]]></doc>
+<doc title='help'><![CDATA[Lower Bound on the percentage of isolates in set B that have the same allele at any SNP position.  Note: for the highest confidence SNPs, this percentage should be 100.]]></doc>
+<doc title='default'><![CDATA[100]]></doc>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[SNP Id]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='dataset'><doc title='description'><![CDATA[Dataset]]></doc></option>
+<option value='start_min_text'><doc title='description'><![CDATA[start_min_text]]></doc></option>
+<option value='snp_location'><doc title='description'><![CDATA[Location]]></doc></option>
+<option value='chromosome_order_num'><doc title='description'><![CDATA[Chromosome]]></doc></option>
+<option value='start_min'><doc title='description'><![CDATA[Position]]></doc></option>
+<option value='strains'><doc title='description'><![CDATA[Strains]]></doc></option>
+<option value='gene_source_id'><doc title='description'><![CDATA[Gene ID]]></doc></option>
+<option value='gene_strand'><doc title='description'><![CDATA[Gene strand]]></doc></option>
+<option value='is_coding'><doc title='description'><![CDATA[Coding]]></doc></option>
+<option value='position_in_CDS'><doc title='description'><![CDATA[Position in CDS]]></doc></option>
+<option value='position_in_protein'><doc title='description'><![CDATA[Position in protein]]></doc></option>
+<option value='has_nonsynonymous_allele'><doc title='description'><![CDATA[Non-synonymous]]></doc></option>
+<option value='strains_gene_strand'><doc title='description'><![CDATA[Strains (gene strand)]]></doc></option>
+<option value='lflank_gene_strand'><doc title='description'><![CDATA[Left Flank (gene strand)]]></doc></option>
+<option value='allele_gene_strand'><doc title='description'><![CDATA[3D7 Allele (gene strand)]]></doc></option>
+<option value='rflank_gene_strand'><doc title='description'><![CDATA[Right Flank (gene strand)]]></doc></option>
+<option value='major_allele_frequency'><doc title='description'><![CDATA[Major Allele Frequency]]></doc></option>
+<option value='minor_allele_frequency'><doc title='description'><![CDATA[Minor Allele Frequency]]></doc></option>
+<option value='strain_count'><doc title='description'><![CDATA[Strain Count]]></doc></option>
+<option value='major_allele'><doc title='description'><![CDATA[Major Allele]]></doc></option>
+<option value='minor_allele'><doc title='description'><![CDATA[Minor Allele]]></doc></option>
+<option value='major_product'><doc title='description'><![CDATA[Major Product]]></doc></option>
+<option value='minor_product'><doc title='description'><![CDATA[Minor Product]]></doc></option>
+<option value='major_strains'><doc title='description'><![CDATA[Major Strains]]></doc></option>
+<option value='minor_strains'><doc title='description'><![CDATA[Minor Strains]]></doc></option>
+<option value='organism_text'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+<option value='set_a_allele'><doc title='description'><![CDATA[Set A allele]]></doc></option>
+<option value='set_b_allele'><doc title='description'><![CDATA[Set B allele]]></doc></option>
+<option value='set_a_count'><doc title='description'><![CDATA[Set A count]]></doc></option>
+<option value='set_b_count'><doc title='description'><![CDATA[Set B count]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

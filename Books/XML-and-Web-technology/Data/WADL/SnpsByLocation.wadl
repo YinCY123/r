@@ -1,0 +1,243 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='SnpQuestions'>
+<resource path='SnpsByLocation.xml'>
+<method href='#snpsbylocation'/>
+</resource>
+<resource path='SnpsByLocation.json'>
+<method href='#snpsbylocation'/>
+</resource>
+<method name='POST' id='snpsbylocation'>
+<doc title='display_name'><![CDATA[Genomic Location]]></doc>
+<doc title='summary'><![CDATA[Find SNPs by chromosomal location]]></doc>
+<doc title='description'><![CDATA[Find SNPs by chromosomal location. <br>P.f. SNP data was provided by <a href="http://plasmodb.org/plasmo/showXmlDataContent.do?name=XmlQuestions.DataSources&datasets=Su_SNPs,Broad_SNPs,sangerItGhanaSnps,sangerReichenowiSnps&title=SNPs%20Summary">Broad, NIH and WTSI</a>. <br> T.g. SNP data was provided by <a href="http://toxodb.org/toxo/showXmlDataContent.do?name=XmlQuestions.DataSources&datasets=ME49_SNPs,AmitAlignmentSnps,Lindstrom454Snps,GeneticMarkers_Sibley&title=SNPs%20Summary ">Boothroyd, Sibley, Roos, Bontell and Smith</a>.]]></doc>
+<request>
+<param name='organism' type='xsd:string' required='true' default='Plasmodium falciparum' repeating='false'>
+<doc title='prompt'><![CDATA[Organism]]></doc>
+<doc title='help'><![CDATA[Organism]]></doc>
+<doc title='default'><![CDATA[Plasmodium falciparum]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='Cryptosporidium parvum'><doc title='description'><![CDATA[Cryptosporidium parvum]]></doc></option>
+<option value='Plasmodium falciparum'><doc title='description'><![CDATA[Plasmodium falciparum]]></doc></option>
+<option value='Toxoplasma gondii'><doc title='description'><![CDATA[Toxoplasma gondii]]></doc></option>
+</param>
+<param name='chromosomeOptional' type='xsd:string' required='true' default='Choose chromosome' repeating='false'>
+<doc title='prompt'><![CDATA[Chromosome]]></doc>
+<doc title='help'><![CDATA[Select chromosome for a selected organism or enter genomic sequence ID. If you provide both you will get both.]]></doc>
+<doc title='default'><![CDATA[Choose chromosome]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='41'><doc title='description'><![CDATA[41]]></doc></option>
+<option value='40'><doc title='description'><![CDATA[40]]></doc></option>
+<option value='39'><doc title='description'><![CDATA[39]]></doc></option>
+<option value='38'><doc title='description'><![CDATA[38]]></doc></option>
+<option value='37'><doc title='description'><![CDATA[37]]></doc></option>
+<option value='36'><doc title='description'><![CDATA[36]]></doc></option>
+<option value='35'><doc title='description'><![CDATA[35]]></doc></option>
+<option value='34'><doc title='description'><![CDATA[34]]></doc></option>
+<option value='33'><doc title='description'><![CDATA[33]]></doc></option>
+<option value='32'><doc title='description'><![CDATA[32]]></doc></option>
+<option value='31'><doc title='description'><![CDATA[31]]></doc></option>
+<option value='30'><doc title='description'><![CDATA[30]]></doc></option>
+<option value='29'><doc title='description'><![CDATA[29]]></doc></option>
+<option value='28'><doc title='description'><![CDATA[28]]></doc></option>
+<option value='27'><doc title='description'><![CDATA[27]]></doc></option>
+<option value='26'><doc title='description'><![CDATA[26]]></doc></option>
+<option value='25'><doc title='description'><![CDATA[25]]></doc></option>
+<option value='24'><doc title='description'><![CDATA[24]]></doc></option>
+<option value='23'><doc title='description'><![CDATA[23]]></doc></option>
+<option value='22'><doc title='description'><![CDATA[22]]></doc></option>
+<option value='21'><doc title='description'><![CDATA[21]]></doc></option>
+<option value='2'><doc title='description'><![CDATA[2]]></doc></option>
+<option value='1'><doc title='description'><![CDATA[1]]></doc></option>
+<option value='chromosome 11'><doc title='description'><![CDATA[chromosome 11]]></doc></option>
+<option value='chromosome 10'><doc title='description'><![CDATA[chromosome 10]]></doc></option>
+<option value='chromosome 9'><doc title='description'><![CDATA[chromosome 9]]></doc></option>
+<option value='XI'><doc title='description'><![CDATA[XI]]></doc></option>
+<option value='X'><doc title='description'><![CDATA[X]]></doc></option>
+<option value='IX'><doc title='description'><![CDATA[IX]]></doc></option>
+<option value='VIII'><doc title='description'><![CDATA[VIII]]></doc></option>
+<option value='VII'><doc title='description'><![CDATA[VII]]></doc></option>
+<option value='VI'><doc title='description'><![CDATA[VI]]></doc></option>
+<option value='V'><doc title='description'><![CDATA[V]]></doc></option>
+<option value='Choose chromosome'><doc title='description'><![CDATA[Choose chromosome]]></doc></option>
+<option value='chromosome 1'><doc title='description'><![CDATA[chromosome 1]]></doc></option>
+<option value='chromosome 2'><doc title='description'><![CDATA[chromosome 2]]></doc></option>
+<option value='chromosome 3'><doc title='description'><![CDATA[chromosome 3]]></doc></option>
+<option value='chromosome 4'><doc title='description'><![CDATA[chromosome 4]]></doc></option>
+<option value='chromosome 5'><doc title='description'><![CDATA[chromosome 5]]></doc></option>
+<option value='chromosome 6'><doc title='description'><![CDATA[chromosome 6]]></doc></option>
+<option value='chromosome 7'><doc title='description'><![CDATA[chromosome 7]]></doc></option>
+<option value='chromosome 8'><doc title='description'><![CDATA[chromosome 8]]></doc></option>
+<option value='I'><doc title='description'><![CDATA[I]]></doc></option>
+<option value='II'><doc title='description'><![CDATA[II]]></doc></option>
+<option value='III'><doc title='description'><![CDATA[III]]></doc></option>
+<option value='IV'><doc title='description'><![CDATA[IV]]></doc></option>
+<option value='3'><doc title='description'><![CDATA[3]]></doc></option>
+<option value='4'><doc title='description'><![CDATA[4]]></doc></option>
+<option value='5'><doc title='description'><![CDATA[5]]></doc></option>
+<option value='6'><doc title='description'><![CDATA[6]]></doc></option>
+<option value='7'><doc title='description'><![CDATA[7]]></doc></option>
+<option value='8'><doc title='description'><![CDATA[8]]></doc></option>
+<option value='9'><doc title='description'><![CDATA[9]]></doc></option>
+<option value='10'><doc title='description'><![CDATA[10]]></doc></option>
+<option value='11'><doc title='description'><![CDATA[11]]></doc></option>
+<option value='12'><doc title='description'><![CDATA[12]]></doc></option>
+<option value='13'><doc title='description'><![CDATA[13]]></doc></option>
+<option value='14'><doc title='description'><![CDATA[14]]></doc></option>
+<option value='un'><doc title='description'><![CDATA[un]]></doc></option>
+<option value='Ia'><doc title='description'><![CDATA[Ia]]></doc></option>
+<option value='Ib'><doc title='description'><![CDATA[Ib]]></doc></option>
+<option value='VIIb'><doc title='description'><![CDATA[VIIb]]></doc></option>
+<option value='VIIa'><doc title='description'><![CDATA[VIIa]]></doc></option>
+<option value='XII'><doc title='description'><![CDATA[XII]]></doc></option>
+<option value='15'><doc title='description'><![CDATA[15]]></doc></option>
+<option value='16'><doc title='description'><![CDATA[16]]></doc></option>
+<option value='17'><doc title='description'><![CDATA[17]]></doc></option>
+<option value='18'><doc title='description'><![CDATA[18]]></doc></option>
+<option value='19'><doc title='description'><![CDATA[19]]></doc></option>
+<option value='20'><doc title='description'><![CDATA[20]]></doc></option>
+</param>
+<param name='start_point' type='xsd:string' required='true' default='1' >
+<doc title='prompt'><![CDATA[Start at]]></doc>
+<doc title='help'><![CDATA[Select the distance (in nucleotides) to the start]]></doc>
+<doc title='default'><![CDATA[1]]></doc>
+</param>
+<param name='end_point' type='xsd:string' required='true' default='0' >
+<doc title='prompt'><![CDATA[End Location (0 = end)]]></doc>
+<doc title='help'><![CDATA[Select the nucleotide you would like to end in. Note that 0 equals the end so you can get genes right up to the end of the sequence.  The default settings start = 1 and end = 0 will give you results from the entire sequence.]]></doc>
+<doc title='default'><![CDATA[0]]></doc>
+</param>
+<param name='snp_strain_a' type='xsd:string' required='true' default='Cp-IOWA II' repeating='false'>
+<doc title='prompt'><![CDATA[Reference]]></doc>
+<doc title='help'><![CDATA[Choose a reference from the list of strains.  Strains are sorted by number of SNPs in descending order.]]></doc>
+<doc title='default'><![CDATA[Cp-IOWA II]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='Cp-IOWA II'><doc title='description'><![CDATA[Cp-IOWA II]]></doc></option>
+<option value='Cp-TU114'><doc title='description'><![CDATA[Cp-TU114]]></doc></option>
+<option value='Cp-MD'><doc title='description'><![CDATA[Cp-MD]]></doc></option>
+<option value='Pf-3D7'><doc title='description'><![CDATA[Pf-3D7]]></doc></option>
+<option value='P. reichenowi (vs. 3D7 only)'><doc title='description'><![CDATA[P. reichenowi (vs. 3D7 only)]]></doc></option>
+<option value='Pf-HB3'><doc title='description'><![CDATA[Pf-HB3]]></doc></option>
+<option value='Pf-GHANA1'><doc title='description'><![CDATA[Pf-GHANA1]]></doc></option>
+<option value='Pf-V1_S'><doc title='description'><![CDATA[Pf-V1_S]]></doc></option>
+<option value='Pf-Dd2'><doc title='description'><![CDATA[Pf-Dd2]]></doc></option>
+<option value='Pf-7G8'><doc title='description'><![CDATA[Pf-7G8]]></doc></option>
+<option value='Pf-RO-33'><doc title='description'><![CDATA[Pf-RO-33]]></doc></option>
+<option value='Pf-D10'><doc title='description'><![CDATA[Pf-D10]]></doc></option>
+<option value='Pf-K1'><doc title='description'><![CDATA[Pf-K1]]></doc></option>
+<option value='Pf-D6'><doc title='description'><![CDATA[Pf-D6]]></doc></option>
+<option value='Pf-FCC-2'><doc title='description'><![CDATA[Pf-FCC-2]]></doc></option>
+<option value='Pf-Senegal3404'><doc title='description'><![CDATA[Pf-Senegal3404]]></doc></option>
+<option value='Pf-IT'><doc title='description'><![CDATA[Pf-IT]]></doc></option>
+<option value='Pf-SantaLucia'><doc title='description'><![CDATA[Pf-SantaLucia]]></doc></option>
+<option value='Pf-FCB'><doc title='description'><![CDATA[Pf-FCB]]></doc></option>
+<option value='Pf-FCR3'><doc title='description'><![CDATA[Pf-FCR3]]></doc></option>
+<option value='Pf-106_1'><doc title='description'><![CDATA[Pf-106_1]]></doc></option>
+<option value='Pf-Senegal3504'><doc title='description'><![CDATA[Pf-Senegal3504]]></doc></option>
+<option value='Pf-Senegal3101'><doc title='description'><![CDATA[Pf-Senegal3101]]></doc></option>
+<option value='Pf-Senegal5102'><doc title='description'><![CDATA[Pf-Senegal5102]]></doc></option>
+<option value='Pf-Malayan'><doc title='description'><![CDATA[Pf-Malayan]]></doc></option>
+<option value='Tg-ME49 (type II)'><doc title='description'><![CDATA[Tg-ME49 (type II)]]></doc></option>
+<option value='Tg-VEG (type III)'><doc title='description'><![CDATA[Tg-VEG (type III)]]></doc></option>
+<option value='Tg-GT1 (type I)'><doc title='description'><![CDATA[Tg-GT1 (type I)]]></doc></option>
+<option value='Tg-RH (type I)'><doc title='description'><![CDATA[Tg-RH (type I)]]></doc></option>
+<option value='TgCkUg2'><doc title='description'><![CDATA[TgCkUg2]]></doc></option>
+</param>
+<param name='snp_strain_m' type='xsd:string' required='true' default='Tg-VEG (type III)' repeating='true'>
+<doc title='prompt'><![CDATA[Comparator(s)]]></doc>
+<doc title='help'><![CDATA[Choose a comparator(s) from the list  to compare to your reference.  Strains are ordered by number of SNPs in descending order.]]></doc>
+<doc title='default'><![CDATA[Tg-VEG (type III)]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='Cp-IOWA II'><doc title='description'><![CDATA[Cp-IOWA II]]></doc></option>
+<option value='Cp-TU114'><doc title='description'><![CDATA[Cp-TU114]]></doc></option>
+<option value='Cp-MD'><doc title='description'><![CDATA[Cp-MD]]></doc></option>
+<option value='Pf-3D7'><doc title='description'><![CDATA[Pf-3D7]]></doc></option>
+<option value='P. reichenowi (vs. 3D7 only)'><doc title='description'><![CDATA[P. reichenowi (vs. 3D7 only)]]></doc></option>
+<option value='Pf-HB3'><doc title='description'><![CDATA[Pf-HB3]]></doc></option>
+<option value='Pf-GHANA1'><doc title='description'><![CDATA[Pf-GHANA1]]></doc></option>
+<option value='Pf-V1_S'><doc title='description'><![CDATA[Pf-V1_S]]></doc></option>
+<option value='Pf-Dd2'><doc title='description'><![CDATA[Pf-Dd2]]></doc></option>
+<option value='Pf-7G8'><doc title='description'><![CDATA[Pf-7G8]]></doc></option>
+<option value='Pf-RO-33'><doc title='description'><![CDATA[Pf-RO-33]]></doc></option>
+<option value='Pf-D10'><doc title='description'><![CDATA[Pf-D10]]></doc></option>
+<option value='Pf-K1'><doc title='description'><![CDATA[Pf-K1]]></doc></option>
+<option value='Pf-D6'><doc title='description'><![CDATA[Pf-D6]]></doc></option>
+<option value='Pf-FCC-2'><doc title='description'><![CDATA[Pf-FCC-2]]></doc></option>
+<option value='Pf-Senegal3404'><doc title='description'><![CDATA[Pf-Senegal3404]]></doc></option>
+<option value='Pf-IT'><doc title='description'><![CDATA[Pf-IT]]></doc></option>
+<option value='Pf-SantaLucia'><doc title='description'><![CDATA[Pf-SantaLucia]]></doc></option>
+<option value='Pf-FCB'><doc title='description'><![CDATA[Pf-FCB]]></doc></option>
+<option value='Pf-FCR3'><doc title='description'><![CDATA[Pf-FCR3]]></doc></option>
+<option value='Pf-106_1'><doc title='description'><![CDATA[Pf-106_1]]></doc></option>
+<option value='Pf-Senegal3504'><doc title='description'><![CDATA[Pf-Senegal3504]]></doc></option>
+<option value='Pf-Senegal3101'><doc title='description'><![CDATA[Pf-Senegal3101]]></doc></option>
+<option value='Pf-Senegal5102'><doc title='description'><![CDATA[Pf-Senegal5102]]></doc></option>
+<option value='Pf-Malayan'><doc title='description'><![CDATA[Pf-Malayan]]></doc></option>
+<option value='Tg-ME49 (type II)'><doc title='description'><![CDATA[Tg-ME49 (type II)]]></doc></option>
+<option value='Tg-VEG (type III)'><doc title='description'><![CDATA[Tg-VEG (type III)]]></doc></option>
+<option value='Tg-GT1 (type I)'><doc title='description'><![CDATA[Tg-GT1 (type I)]]></doc></option>
+<option value='Tg-RH (type I)'><doc title='description'><![CDATA[Tg-RH (type I)]]></doc></option>
+<option value='TgCkUg2'><doc title='description'><![CDATA[TgCkUg2]]></doc></option>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[SNP Id]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='dataset'><doc title='description'><![CDATA[Dataset]]></doc></option>
+<option value='start_min_text'><doc title='description'><![CDATA[start_min_text]]></doc></option>
+<option value='snp_location'><doc title='description'><![CDATA[Location]]></doc></option>
+<option value='chromosome_order_num'><doc title='description'><![CDATA[Chromosome]]></doc></option>
+<option value='start_min'><doc title='description'><![CDATA[Position]]></doc></option>
+<option value='strains'><doc title='description'><![CDATA[Strains]]></doc></option>
+<option value='gene_source_id'><doc title='description'><![CDATA[Gene ID]]></doc></option>
+<option value='gene_strand'><doc title='description'><![CDATA[Gene strand]]></doc></option>
+<option value='is_coding'><doc title='description'><![CDATA[Coding]]></doc></option>
+<option value='position_in_CDS'><doc title='description'><![CDATA[Position in CDS]]></doc></option>
+<option value='position_in_protein'><doc title='description'><![CDATA[Position in protein]]></doc></option>
+<option value='has_nonsynonymous_allele'><doc title='description'><![CDATA[Non-synonymous]]></doc></option>
+<option value='strains_gene_strand'><doc title='description'><![CDATA[Strains (gene strand)]]></doc></option>
+<option value='lflank_gene_strand'><doc title='description'><![CDATA[Left Flank (gene strand)]]></doc></option>
+<option value='allele_gene_strand'><doc title='description'><![CDATA[3D7 Allele (gene strand)]]></doc></option>
+<option value='rflank_gene_strand'><doc title='description'><![CDATA[Right Flank (gene strand)]]></doc></option>
+<option value='major_allele_frequency'><doc title='description'><![CDATA[Major Allele Frequency]]></doc></option>
+<option value='minor_allele_frequency'><doc title='description'><![CDATA[Minor Allele Frequency]]></doc></option>
+<option value='strain_count'><doc title='description'><![CDATA[Strain Count]]></doc></option>
+<option value='major_allele'><doc title='description'><![CDATA[Major Allele]]></doc></option>
+<option value='minor_allele'><doc title='description'><![CDATA[Minor Allele]]></doc></option>
+<option value='major_product'><doc title='description'><![CDATA[Major Product]]></doc></option>
+<option value='minor_product'><doc title='description'><![CDATA[Minor Product]]></doc></option>
+<option value='major_strains'><doc title='description'><![CDATA[Major Strains]]></doc></option>
+<option value='minor_strains'><doc title='description'><![CDATA[Minor Strains]]></doc></option>
+<option value='organism_text'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+<option value='ref_strain'><doc title='description'><![CDATA[Like Reference]]></doc></option>
+<option value='comp_strains'><doc title='description'><![CDATA[SNP Strains]]></doc></option>
+<option value='ref_allele'><doc title='description'><![CDATA[Reference allele]]></doc></option>
+<option value='comp_alleles'><doc title='description'><![CDATA[SNP allele]]></doc></option>
+<option value='comp_products'><doc title='description'><![CDATA[SNP Product]]></doc></option>
+<option value='ref_product'><doc title='description'><![CDATA[Reference Product]]></doc></option>
+<option value='phenotype'><doc title='description'><![CDATA[Phenotype]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

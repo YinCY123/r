@@ -1,0 +1,18 @@
+<?xml  version="1.0" encoding="UTF-8"?>
+<article xmlns="http://docbook.org/ns/docbook"
+         xmlns:r="http://www.r-project.org">
+
+<title>A Title</title>
+<!-- A comment -->
+<section>
+<para>
+This paragraph includes text and a comment
+<!-- a comment in a paragraph -->
+and a processing instruction <?R sum( 1, 3, 5) ?>
+This paragraph also includes some code in a CDATA node 
+<r:code><![CDATA[
+x <- (y > 1 & z < 0) 
+]]></r:code> 
+</para>
+</section>
+</article>

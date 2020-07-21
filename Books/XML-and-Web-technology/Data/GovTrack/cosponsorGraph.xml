@@ -1,0 +1,197 @@
+<article xmlns:r="http://www.r-project.org">
+<title>
+</title>
+<section><title>The Concept</title>
+<para>
+We are going to use the data from <ulink
+url="http://www.GovTrack.us"/> to find which members of congress
+co-sponsored bills with each other.  The goal is to draw a graph with
+the nodes being the members of congress and the edges representing the
+individual bills, or an aggregate of the co-sponsored bills. We can
+draw this in SVG and make it interactive.  It is then interesting to
+look at the voting records of the different members and see who are
+aligned and not!  We might even allow the viewer to select a bill by
+clicking on an edge, or clicking on an edge for all the shared bills
+and having a popup that allows the viewer to select one of interest.
+Then we would highlight the members that voted for and against, using
+color to indicate the category.
+</para>
+</section>
+<section>
+<title>Getting the Data</title>
+<para>
+See <ulink url="http://www.govtrack.us/developers/data.xpd"/>
+</para>
+</section>
+<section>
+<title>Reading the Data</title>
+<para>
+This is most exploratory. So we'll discard this later on if it is irrelevant.
+</para>
+<para>
+We start by looking at the bills.index.xml file.
+<r:code>
+doc = xmlParse("~/Data/GovTrack/bills.index.xml")
+</r:code>
+We look at the attributes of each bill.
+<r:code>
+table(unlist(xmlApply(xmlRoot(doc), function(x) names(xmlAttrs(x)))))
+<r:output>
+
+   last-action         number official-title         status          title 
+           531            531            531            531            531 
+          type 
+           531 
+</r:output>
+</r:code>
+So this tells us that all the elements have the same attributes.
+</para>
+<para>
+Let's get the last-action and status of each
+<r:code>
+bill = as.data.frame(t(xmlSApply(xmlRoot(doc), function(x) xmlAttrs(x)[c("last-action", "status")])))
+bill$"last-action" = as.POSIXct(strptime(bill$"last-action", "%Y-%m-%d")) 
+</r:code>
+</para>
+<para>
+Let's move to the directory of bills.
+<r:code>
+bills = list.files("~/Data/GovTrack/bills/", full.names = TRUE)
+length(bills)
+</r:code>
+</para>
+<para>
+For each of these, let's get the sponsor and co-sponsor ids.
+We'll resolve these later!
+<r:function>
+getBillSponsors =
+function(x)
+{
+  if(is.character(x))
+     dd = xmlParse(x)
+  else
+     dd = x
+  unlist(getNodeSet(dd, "/*/sponsor/@id|/*/cosponsors/cosponsor/@id"))
+}
+</r:function>
+</para>
+<para>
+Now we can apply this to each bill.
+<r:code>
+bb = lapply(bills, getBillSponsors)
+names(bb) = bills
+</r:code>
+and we end up with a collection of character vectors.
+(This takes about 15 seconds on my MacBook Pro.)
+</para>
+<para>
+Let's look at the distribution of the number of co-sponsors.
+<r:plot>
+n = sapply(bb, length)
+hist(n - 1)
+</r:plot>
+</para>
+<para>
+Which bill has more than 400 sponsors (i.e. sponsors &amp; co-sponsors)
+<r:code>
+xmlValue(getNodeSet(xmlParse(names(bb)[which.max(n)]), "//title[@type = 'official' and @as='introduced']")[[1]])
+</r:code>
+<r:code>
+sapply(names(bb) [ n > 300],
+        function(x)
+          xmlValue(getNodeSet(xmlParse(x), "//title[@type = 'official' and @as='introduced']")[[1]]))
+</r:code>
+</para>
+<para>
+Let's resolve these sponsor/co-sponsor ids.
+<r:code>
+people = xmlParse("~/Data/GovTrack/people.xml")
+info = t(xmlSApply(xmlRoot(people), 
+            function(x) {
+               xmlAttrs(x)[c("id", "lastname", "firstname", "gender", "state")]
+             }))
+</r:code>
+Now let's check all the sponsors/co-sponors are in the 
+people dataset:
+<r:code>
+all(unlist(bb) %in% info[,"id"])
+</r:code>
+</para>
+<para>
+Let's create a graph.
+We'll look only at the senate  to make things smaller.
+<r:code>
+senate = bb[ grep("bills//s.*xml", names(bb), value = TRUE) ]
+senators = unique(unlist(senate))
+</r:code>
+(or we could look at the type on each bill, i.e. <r:expr>xmlGetAttr(xmlRoot(bill), "type")</r:expr>)
+
+We can build a graphNEL (nodes and edges) object, or alternatively an adjacency matrix.
+The NEL is done something like...
+</para>
+<section r:eval="false">
+<title>NEL graphs</title>
+<para>
+<r:code><![CDATA[
+edges = structure(vector("list", length(senators)), names = senators)
+invisible(sapply(names(senate), 
+                  function(id) {
+                     sp = senate[[id]]
+                     edges[[ sp[1] ]] <<- c(edges[[ sp[1] ]], structure(sp[-1], names = rep(id, length(sp) - 1)))
+                  }))
+]]></r:code>
+Let's check the number of bills each of the senators sponsored,
+i.e. main sponsor
+<r:code>
+sapply(edges, function(x) length(unique(names(x))))
+</r:code>
+Now we have to reorganize the edges in the following way.
+We need a list with an edges component.
+We also want a weights component.
+The edges should only have one entry for each node.
+The weights should 
+<r:code>
+xedges = lapply(edges, function(x) {
+                tb = table(x)
+                i = match(names(tb), senators)
+                list(edges = structure(i, names = senators[i]), weights = tb)
+              })
+</r:code>
+<r:code>
+library(graph)
+g = new("graphNEL", nodes = senators, edgeL = xedges)
+</r:code>
+</para>
+</section>
+
+<para>
+The adjacency matrix is constructed as 
+<r:code><![CDATA[
+coSponsoredWith = matrix(FALSE, length(senators), length(senators), 
+                           dimnames = list(senators, senators))
+
+invisible(sapply(senate, 
+                  function(sponsors) 
+                    coSponsoredWith[sponsors[1], sponsors[-1]] <<- TRUE ))
+]]></r:code>
+</para>
+<para>
+Let's check this makes sense
+<r:code>
+sum(coSponsoredWith)
+prod(dim(coSponsoredWith))
+</r:code>
+</para>
+<para>
+<r:code>
+library(graph)
+g = new("graphAM", adjMat = coSponsoredWith, edgemode = "directed")
+</r:code>
+Now we can layout the graph and this will take a very long time.
+<r:code eval="false">
+library(Rgraphviz)
+ll = layoutGraph(g)
+</r:code>
+</para>
+</section>
+</article>

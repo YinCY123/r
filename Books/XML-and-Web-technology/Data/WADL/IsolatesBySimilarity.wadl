@@ -1,0 +1,192 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='IsolateQuestions'>
+<resource path='IsolatesBySimilarity.xml'>
+<method href='#isolatesbysimilarity'/>
+</resource>
+<resource path='IsolatesBySimilarity.json'>
+<method href='#isolatesbysimilarity'/>
+</resource>
+<method name='POST' id='isolatesbysimilarity'>
+<doc title='display_name'><![CDATA[BLAST]]></doc>
+<doc title='summary'><![CDATA[Find Isolates that have BLAST similarity to your input sequence.]]></doc>
+<doc title='description'><![CDATA[Find Isolates that have BLAST similarity to your input query sequence.  <p>The search uses <a href="http://blast.wustl.edu/" target="_blank">WU BLAST</a>.]]></doc>
+<request>
+<param name='BlastDatabaseType' type='xsd:string' required='true' default='Transcripts' repeating='false'>
+<doc title='prompt'><![CDATA[Target Data Type]]></doc>
+<doc title='help'><![CDATA[Select the data type that you want to blast against.]]></doc>
+<doc title='default'><![CDATA[Transcripts]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='Transcripts'><doc title='description'><![CDATA[Transcripts]]></doc></option>
+<option value='Proteins'><doc title='description'><![CDATA[Proteins]]></doc></option>
+<option value='Genome'><doc title='description'><![CDATA[Genome]]></doc></option>
+<option value='ORF'><doc title='description'><![CDATA[ORF]]></doc></option>
+<option value='EST'><doc title='description'><![CDATA[EST]]></doc></option>
+<option value='Assemblies'><doc title='description'><![CDATA[Assemblies]]></doc></option>
+<option value='Isolates'><doc title='description'><![CDATA[Isolates]]></doc></option>
+<option value='Genome Survey Sequences'><doc title='description'><![CDATA[Genome Survey Sequences]]></doc></option>
+</param>
+<param name='BlastAlgorithm' type='xsd:string' required='true' default='blastn' repeating='false'>
+<doc title='prompt'><![CDATA[BLAST Program]]></doc>
+<doc title='help'><![CDATA[The Blast Program that will be executed: <b> blastp </b>  compares an aminoacid query sequence against a protein sequence database;  <b> blastn  </b> compares a nucleotide query sequence against a nucleotide sequence database; <b> blastx  </b> compares the six-frame conceptual translation products of a nucleotide query sequence (both strands) against a protein sequence database;  <b>tblastn  </b> compares a protein query sequence against a nucleotide sequence database dynamically translated in all six reading frames (both strands);  <b>tblastx  </b>  compares the six-frame translations of a nucleotide query sequence against the six-frame translations of a nucleotide sequence database.]]></doc>
+<doc title='default'><![CDATA[blastn]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='blastn'><doc title='description'><![CDATA[blastn]]></doc></option>
+<option value='blastp'><doc title='description'><![CDATA[blastp]]></doc></option>
+<option value='blastx'><doc title='description'><![CDATA[blastx]]></doc></option>
+<option value='tblastn'><doc title='description'><![CDATA[tblastn]]></doc></option>
+<option value='tblastx'><doc title='description'><![CDATA[tblastx]]></doc></option>
+</param>
+<param name='BlastDatabaseOrganism' type='xsd:string' required='true' default='Entamoeba histolytica DS4' repeating='true'>
+<doc title='prompt'><![CDATA[Target Organism]]></doc>
+<doc title='help'><![CDATA[Organism(s) from which the sequences in the BLAST database originated]]></doc>
+<doc title='default'><![CDATA[Entamoeba histolytica DS4]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='Entamoeba histolytica DS4'><doc title='description'><![CDATA[Entamoeba histolytica DS4]]></doc></option>
+<option value='Entamoeba histolytica HM-1:CA'><doc title='description'><![CDATA[Entamoeba histolytica HM-1:CA]]></doc></option>
+<option value='Entamoeba histolytica KU27'><doc title='description'><![CDATA[Entamoeba histolytica KU27]]></doc></option>
+<option value='Entamoeba histolytica KU48'><doc title='description'><![CDATA[Entamoeba histolytica KU48]]></doc></option>
+<option value='Entamoeba histolytica KU50'><doc title='description'><![CDATA[Entamoeba histolytica KU50]]></doc></option>
+<option value='Entamoeba histolytica MS96'><doc title='description'><![CDATA[Entamoeba histolytica MS96]]></doc></option>
+<option value='Entamoeba histolytica HM-1:IMSS'><doc title='description'><![CDATA[Entamoeba histolytica HM-1:IMSS]]></doc></option>
+<option value='Entamoeba dispar SAW760'><doc title='description'><![CDATA[Entamoeba dispar SAW760]]></doc></option>
+<option value='Entamoeba invadens IP1'><doc title='description'><![CDATA[Entamoeba invadens IP1]]></doc></option>
+<option value='Encephalitozoon intestinalis'><doc title='description'><![CDATA[Encephalitozoon intestinalis]]></doc></option>
+<option value='Encephalitozoon cuniculi GB-M1'><doc title='description'><![CDATA[Encephalitozoon cuniculi GB-M1]]></doc></option>
+<option value='Enterocytozoon bieneusi H348'><doc title='description'><![CDATA[Enterocytozoon bieneusi H348]]></doc></option>
+<option value='Nematocida parisii'><doc title='description'><![CDATA[Nematocida parisii]]></doc></option>
+<option value='Octosporea bayeri OER-3-3'><doc title='description'><![CDATA[Octosporea bayeri OER-3-3]]></doc></option>
+<option value='Leishmania major'><doc title='description'><![CDATA[Leishmania major]]></doc></option>
+<option value='Leishmania major strain SD 75.1'><doc title='description'><![CDATA[Leishmania major strain SD 75.1]]></doc></option>
+<option value='Leishmania infantum'><doc title='description'><![CDATA[Leishmania infantum]]></doc></option>
+<option value='Leishmania braziliensis'><doc title='description'><![CDATA[Leishmania braziliensis]]></doc></option>
+<option value='Leishmania tarentolae'><doc title='description'><![CDATA[Leishmania tarentolae]]></doc></option>
+<option value='Crithidia fasciculata'><doc title='description'><![CDATA[Crithidia fasciculata]]></doc></option>
+<option value='Trypanosoma brucei gambiense'><doc title='description'><![CDATA[Trypanosoma brucei gambiense]]></doc></option>
+<option value='Trypanosoma brucei Lister strain 427'><doc title='description'><![CDATA[Trypanosoma brucei Lister strain 427]]></doc></option>
+<option value='Trypanosoma brucei TREU927'><doc title='description'><![CDATA[Trypanosoma brucei TREU927]]></doc></option>
+<option value='Trypanosoma cruzi strain Esmeraldo'><doc title='description'><![CDATA[Trypanosoma cruzi strain Esmeraldo]]></doc></option>
+<option value='Trypanosoma cruzi CL Brener Esmeraldo-like'><doc title='description'><![CDATA[Trypanosoma cruzi CL Brener Esmeraldo-like]]></doc></option>
+<option value='Trypanosoma cruzi CL Brener Non-Esmeraldo-like'><doc title='description'><![CDATA[Trypanosoma cruzi CL Brener Non-Esmeraldo-like]]></doc></option>
+<option value='Trypanosoma cruzi unassigned contigs (strain CL Brener)'><doc title='description'><![CDATA[Trypanosoma cruzi unassigned contigs (strain CL Brener)]]></doc></option>
+<option value='Leishmania mexicana'><doc title='description'><![CDATA[Leishmania mexicana]]></doc></option>
+<option value='Trypanosoma congolense'><doc title='description'><![CDATA[Trypanosoma congolense]]></doc></option>
+<option value='Trypanosoma vivax'><doc title='description'><![CDATA[Trypanosoma vivax]]></doc></option>
+<option value='Theileria parva'><doc title='description'><![CDATA[Theileria parva]]></doc></option>
+<option value='Theileria annulata'><doc title='description'><![CDATA[Theileria annulata]]></doc></option>
+<option value='Plasmodium berghei'><doc title='description'><![CDATA[Plasmodium berghei]]></doc></option>
+<option value='Plasmodium chabaudi'><doc title='description'><![CDATA[Plasmodium chabaudi]]></doc></option>
+<option value='Plasmodium falciparum'><doc title='description'><![CDATA[Plasmodium falciparum]]></doc></option>
+<option value='Plasmodium falciparum mitochondrial'><doc title='description'><![CDATA[Plasmodium falciparum mitochondrial]]></doc></option>
+<option value='Plasmodium falciparum plastid'><doc title='description'><![CDATA[Plasmodium falciparum plastid]]></doc></option>
+<option value='Plasmodium gallinaceum'><doc title='description'><![CDATA[Plasmodium gallinaceum]]></doc></option>
+<option value='Plasmodium knowlesi'><doc title='description'><![CDATA[Plasmodium knowlesi]]></doc></option>
+<option value='Plasmodium reichenowi'><doc title='description'><![CDATA[Plasmodium reichenowi]]></doc></option>
+<option value='Plasmodium vivax'><doc title='description'><![CDATA[Plasmodium vivax]]></doc></option>
+<option value='Plasmodium vivax mitochondrial'><doc title='description'><![CDATA[Plasmodium vivax mitochondrial]]></doc></option>
+<option value='Plasmodium yoelii'><doc title='description'><![CDATA[Plasmodium yoelii]]></doc></option>
+<option value='Toxoplasma gondii TgCkUg2'><doc title='description'><![CDATA[Toxoplasma gondii TgCkUg2]]></doc></option>
+<option value='Toxoplasma gondii GT1'><doc title='description'><![CDATA[Toxoplasma gondii GT1]]></doc></option>
+<option value='Toxoplasma gondii ME49'><doc title='description'><![CDATA[Toxoplasma gondii ME49]]></doc></option>
+<option value='Toxoplasma gondii VEG'><doc title='description'><![CDATA[Toxoplasma gondii VEG]]></doc></option>
+<option value='Toxoplasma gondii RH (chr Ia and chr Ib)'><doc title='description'><![CDATA[Toxoplasma gondii RH (chr Ia and chr Ib)]]></doc></option>
+<option value='Toxoplasma gondii apicoplast'><doc title='description'><![CDATA[Toxoplasma gondii apicoplast]]></doc></option>
+<option value='Neospora caninum'><doc title='description'><![CDATA[Neospora caninum]]></doc></option>
+<option value='Cryptosporidium parvum'><doc title='description'><![CDATA[Cryptosporidium parvum]]></doc></option>
+<option value='Cryptosporidium parvum Chr6'><doc title='description'><![CDATA[Cryptosporidium parvum Chr6]]></doc></option>
+<option value='Cryptosporidium hominis'><doc title='description'><![CDATA[Cryptosporidium hominis]]></doc></option>
+<option value='Cryptosporidium muris'><doc title='description'><![CDATA[Cryptosporidium muris]]></doc></option>
+<option value='Cryptosporidium Isolates minus Reference'><doc title='description'><![CDATA[Cryptosporidium Isolates minus Reference]]></doc></option>
+<option value='Cryptosporidium Reference Isolates'><doc title='description'><![CDATA[Cryptosporidium Reference Isolates]]></doc></option>
+<option value='All Giardia Isolates'><doc title='description'><![CDATA[All Giardia Isolates]]></doc></option>
+<option value='Plasmodium Barcode Isolates'><doc title='description'><![CDATA[Plasmodium Barcode Isolates]]></doc></option>
+<option value='Plasmodium Popset/Genbank Isolates'><doc title='description'><![CDATA[Plasmodium Popset/Genbank Isolates]]></doc></option>
+<option value='All Toxoplasma Isolates'><doc title='description'><![CDATA[All Toxoplasma Isolates]]></doc></option>
+<option value='Giardia Assemblage A isolate WB'><doc title='description'><![CDATA[Giardia Assemblage A isolate WB]]></doc></option>
+<option value='Giardia Assemblage B isolate GS'><doc title='description'><![CDATA[Giardia Assemblage B isolate GS]]></doc></option>
+<option value='Giardia Assemblage E isolate P15'><doc title='description'><![CDATA[Giardia Assemblage E isolate P15]]></doc></option>
+<option value='Trichomonas vaginalis'><doc title='description'><![CDATA[Trichomonas vaginalis]]></doc></option>
+</param>
+<param name='BlastQuerySequence' type='xsd:string' required='true' default='' >
+<doc title='prompt'><![CDATA[Input Sequence]]></doc>
+<doc title='help'><![CDATA[BLAST Input Sequence (upto 2MB)]]></doc>
+<doc title='default'><![CDATA[null]]></doc>
+</param>
+<param name='-e' type='xsd:string' required='true' default='10' >
+<doc title='prompt'><![CDATA[Expectation value]]></doc>
+<doc title='help'><![CDATA[Expected number of hits with at least this score. The lower the e- value the more significant the hit.]]></doc>
+<doc title='default'><![CDATA[10]]></doc>
+</param>
+<param name='-v' type='xsd:string' required='true' default='50' >
+<doc title='prompt'><![CDATA[Maximum descriptions (V)]]></doc>
+<doc title='help'><![CDATA[Number of one-line descriptions to show]]></doc>
+<doc title='default'><![CDATA[50]]></doc>
+</param>
+<param name='-b' type='xsd:string' required='true' default='50' >
+<doc title='prompt'><![CDATA[Maximum alignments (B)]]></doc>
+<doc title='help'><![CDATA[Number of alignments to show]]></doc>
+<doc title='default'><![CDATA[50]]></doc>
+</param>
+<param name='-filter' type='xsd:string' required='true' default='yes' repeating='false'>
+<doc title='prompt'><![CDATA[Low complexity filter]]></doc>
+<doc title='help'><![CDATA[If this filter is set to yes, you will omit results which contain repetitive and low complexity sequence.]]></doc>
+<doc title='default'><![CDATA[yes]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='yes'><doc title='description'><![CDATA[yes]]></doc></option>
+<option value='no'><doc title='description'><![CDATA[no]]></doc></option>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Isolate Id]]></doc></option>
+<option value='pcr_primers'><doc title='description'><![CDATA[PCR primer]]></doc></option>
+<option value='country'><doc title='description'><![CDATA[Country]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='strain'><doc title='description'><![CDATA[Strain]]></doc></option>
+<option value='specific_host'><doc title='description'><![CDATA[Host]]></doc></option>
+<option value='isolation_source'><doc title='description'><![CDATA[Isolation Source]]></doc></option>
+<option value='description'><doc title='description'><![CDATA[Description]]></doc></option>
+<option value='note'><doc title='description'><![CDATA[Note]]></doc></option>
+<option value='product'><doc title='description'><![CDATA[Isolate Product]]></doc></option>
+<option value='data_type'><doc title='description'><![CDATA[Isolate Type]]></doc></option>
+<option value='collected_by'><doc title='description'><![CDATA[Collected By]]></doc></option>
+<option value='length'><doc title='description'><![CDATA[Length]]></doc></option>
+<option value='external_db_name'><doc title='description'><![CDATA[External DB Name]]></doc></option>
+<option value='external_db_version'><doc title='description'><![CDATA[External DB Version]]></doc></option>
+<option value='sequence'><doc title='description'><![CDATA[DNA Sequence]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+<option value='Reference'><doc title='description'><![CDATA[Reference]]></doc></option>
+<option value='GeneOverlap'><doc title='description'><![CDATA[Blast Similarity Alignments and Overlapping Genes]]></doc></option>
+<option value='IsolateComments'><doc title='description'><![CDATA[User Comments]]></doc></option>
+<option value='ProteinSequence'><doc title='description'><![CDATA[Protein Sequence]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='description'><doc title='description'><![CDATA[Description]]></doc></option>
+<option value='product'><doc title='description'><![CDATA[Product]]></doc></option>
+<option value='host'><doc title='description'><![CDATA[Host]]></doc></option>
+<option value='note'><doc title='description'><![CDATA[Note]]></doc></option>
+<option value='isolation_source'><doc title='description'><![CDATA[Isolation Source]]></doc></option>
+<option value='geographic_location'><doc title='description'><![CDATA[Geographic Location]]></doc></option>
+<option value='SNP'><doc title='description'><![CDATA[Isolates SNP Features]]></doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

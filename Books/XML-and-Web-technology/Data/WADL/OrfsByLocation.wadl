@@ -1,0 +1,180 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='OrfQuestions'>
+<resource path='OrfsByLocation.xml'>
+<method href='#orfsbylocation'/>
+</resource>
+<resource path='OrfsByLocation.json'>
+<method href='#orfsbylocation'/>
+</resource>
+<method name='POST' id='orfsbylocation'>
+<doc title='display_name'><![CDATA[Genomic Location]]></doc>
+<doc title='summary'><![CDATA[Find Orfs that are located in a specified genomic region.]]></doc>
+<doc title='description'><![CDATA[Find ORFs within a given genomic region.<br>
+          Either select an organism and a genomic sequence from the
+          pull-down menu or enter a genomic sequence ID from any EuPathDB
+          species (e.g. "AAEL01000057", "Pf3D7_04", "TGME49_chrIa", "ctg02_305", "DS170425").
+          
+          The Start and End locations correspond to the coordinates of
+          the ORF(s) on the chromosome.]]></doc>
+<request>
+<param name='organism' type='xsd:string' required='true' default='Plasmodium knowlesi' repeating='false'>
+<doc title='prompt'><![CDATA[Organism]]></doc>
+<doc title='help'><![CDATA[Organism]]></doc>
+<doc title='default'><![CDATA[Plasmodium knowlesi]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='Cryptosporidium parvum'><doc title='description'><![CDATA[Cryptosporidium parvum]]></doc></option>
+<option value='Encephalitozoon cuniculi'><doc title='description'><![CDATA[Encephalitozoon cuniculi]]></doc></option>
+<option value='Encephalitozoon intestinalis'><doc title='description'><![CDATA[Encephalitozoon intestinalis]]></doc></option>
+<option value='Plasmodium berghei'><doc title='description'><![CDATA[Plasmodium berghei]]></doc></option>
+<option value='Plasmodium chabaudi'><doc title='description'><![CDATA[Plasmodium chabaudi]]></doc></option>
+<option value='Plasmodium falciparum'><doc title='description'><![CDATA[Plasmodium falciparum]]></doc></option>
+<option value='Plasmodium knowlesi'><doc title='description'><![CDATA[Plasmodium knowlesi]]></doc></option>
+<option value='Plasmodium vivax'><doc title='description'><![CDATA[Plasmodium vivax]]></doc></option>
+<option value='Neospora caninum'><doc title='description'><![CDATA[Neospora caninum]]></doc></option>
+<option value='Toxoplasma gondii GT1'><doc title='description'><![CDATA[Toxoplasma gondii GT1]]></doc></option>
+<option value='Toxoplasma gondii ME49'><doc title='description'><![CDATA[Toxoplasma gondii ME49]]></doc></option>
+<option value='Toxoplasma gondii VEG'><doc title='description'><![CDATA[Toxoplasma gondii VEG]]></doc></option>
+<option value='Leishmania braziliensis'><doc title='description'><![CDATA[Leishmania braziliensis]]></doc></option>
+<option value='Leishmania infantum'><doc title='description'><![CDATA[Leishmania infantum]]></doc></option>
+<option value='Leishmania major'><doc title='description'><![CDATA[Leishmania major]]></doc></option>
+<option value='Leishmania mexicana'><doc title='description'><![CDATA[Leishmania mexicana]]></doc></option>
+<option value='Trypanosoma brucei Lister str...'><doc title='description'><![CDATA[Trypanosoma brucei Lister str...]]></doc></option>
+<option value='Trypanosoma brucei TREU927'><doc title='description'><![CDATA[Trypanosoma brucei TREU927]]></doc></option>
+<option value='Trypanosoma brucei gambiense'><doc title='description'><![CDATA[Trypanosoma brucei gambiense]]></doc></option>
+<option value='Trypanosoma congolense'><doc title='description'><![CDATA[Trypanosoma congolense]]></doc></option>
+<option value='Trypanosoma cruzi CL Brener E...'><doc title='description'><![CDATA[Trypanosoma cruzi CL Brener E...]]></doc></option>
+<option value='Trypanosoma cruzi CL Brener N...'><doc title='description'><![CDATA[Trypanosoma cruzi CL Brener N...]]></doc></option>
+<option value='Trypanosoma vivax'><doc title='description'><![CDATA[Trypanosoma vivax]]></doc></option>
+</param>
+<param name='chromosomeOptional' type='xsd:string' required='true' default='Choose chromosome' repeating='false'>
+<doc title='prompt'><![CDATA[Chromosome]]></doc>
+<doc title='help'><![CDATA[Select chromosome for a selected organism or enter genomic sequence ID. If you provide both you will get both.]]></doc>
+<doc title='default'><![CDATA[Choose chromosome]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='36'><doc title='description'><![CDATA[36]]></doc></option>
+<option value='35'><doc title='description'><![CDATA[35]]></doc></option>
+<option value='34'><doc title='description'><![CDATA[34]]></doc></option>
+<option value='33'><doc title='description'><![CDATA[33]]></doc></option>
+<option value='32'><doc title='description'><![CDATA[32]]></doc></option>
+<option value='31'><doc title='description'><![CDATA[31]]></doc></option>
+<option value='30'><doc title='description'><![CDATA[30]]></doc></option>
+<option value='29'><doc title='description'><![CDATA[29]]></doc></option>
+<option value='28'><doc title='description'><![CDATA[28]]></doc></option>
+<option value='27'><doc title='description'><![CDATA[27]]></doc></option>
+<option value='26'><doc title='description'><![CDATA[26]]></doc></option>
+<option value='25'><doc title='description'><![CDATA[25]]></doc></option>
+<option value='24'><doc title='description'><![CDATA[24]]></doc></option>
+<option value='23'><doc title='description'><![CDATA[23]]></doc></option>
+<option value='22'><doc title='description'><![CDATA[22]]></doc></option>
+<option value='21'><doc title='description'><![CDATA[21]]></doc></option>
+<option value='2'><doc title='description'><![CDATA[2]]></doc></option>
+<option value='1'><doc title='description'><![CDATA[1]]></doc></option>
+<option value='chromosome 11'><doc title='description'><![CDATA[chromosome 11]]></doc></option>
+<option value='chromosome 10'><doc title='description'><![CDATA[chromosome 10]]></doc></option>
+<option value='chromosome 9'><doc title='description'><![CDATA[chromosome 9]]></doc></option>
+<option value='XI'><doc title='description'><![CDATA[XI]]></doc></option>
+<option value='X'><doc title='description'><![CDATA[X]]></doc></option>
+<option value='IX'><doc title='description'><![CDATA[IX]]></doc></option>
+<option value='VIII'><doc title='description'><![CDATA[VIII]]></doc></option>
+<option value='VII'><doc title='description'><![CDATA[VII]]></doc></option>
+<option value='VI'><doc title='description'><![CDATA[VI]]></doc></option>
+<option value='V'><doc title='description'><![CDATA[V]]></doc></option>
+<option value='Choose chromosome'><doc title='description'><![CDATA[Choose chromosome]]></doc></option>
+<option value='chromosome 1'><doc title='description'><![CDATA[chromosome 1]]></doc></option>
+<option value='chromosome 2'><doc title='description'><![CDATA[chromosome 2]]></doc></option>
+<option value='chromosome 3'><doc title='description'><![CDATA[chromosome 3]]></doc></option>
+<option value='chromosome 4'><doc title='description'><![CDATA[chromosome 4]]></doc></option>
+<option value='chromosome 5'><doc title='description'><![CDATA[chromosome 5]]></doc></option>
+<option value='chromosome 6'><doc title='description'><![CDATA[chromosome 6]]></doc></option>
+<option value='chromosome 7'><doc title='description'><![CDATA[chromosome 7]]></doc></option>
+<option value='chromosome 8'><doc title='description'><![CDATA[chromosome 8]]></doc></option>
+<option value='I'><doc title='description'><![CDATA[I]]></doc></option>
+<option value='II'><doc title='description'><![CDATA[II]]></doc></option>
+<option value='III'><doc title='description'><![CDATA[III]]></doc></option>
+<option value='IV'><doc title='description'><![CDATA[IV]]></doc></option>
+<option value='3'><doc title='description'><![CDATA[3]]></doc></option>
+<option value='4'><doc title='description'><![CDATA[4]]></doc></option>
+<option value='5'><doc title='description'><![CDATA[5]]></doc></option>
+<option value='6'><doc title='description'><![CDATA[6]]></doc></option>
+<option value='7'><doc title='description'><![CDATA[7]]></doc></option>
+<option value='8'><doc title='description'><![CDATA[8]]></doc></option>
+<option value='9'><doc title='description'><![CDATA[9]]></doc></option>
+<option value='10'><doc title='description'><![CDATA[10]]></doc></option>
+<option value='11'><doc title='description'><![CDATA[11]]></doc></option>
+<option value='12'><doc title='description'><![CDATA[12]]></doc></option>
+<option value='13'><doc title='description'><![CDATA[13]]></doc></option>
+<option value='14'><doc title='description'><![CDATA[14]]></doc></option>
+<option value='un'><doc title='description'><![CDATA[un]]></doc></option>
+<option value='Ia'><doc title='description'><![CDATA[Ia]]></doc></option>
+<option value='Ib'><doc title='description'><![CDATA[Ib]]></doc></option>
+<option value='VIIa'><doc title='description'><![CDATA[VIIa]]></doc></option>
+<option value='VIIb'><doc title='description'><![CDATA[VIIb]]></doc></option>
+<option value='XII'><doc title='description'><![CDATA[XII]]></doc></option>
+<option value='15'><doc title='description'><![CDATA[15]]></doc></option>
+<option value='16'><doc title='description'><![CDATA[16]]></doc></option>
+<option value='17'><doc title='description'><![CDATA[17]]></doc></option>
+<option value='18'><doc title='description'><![CDATA[18]]></doc></option>
+<option value='19'><doc title='description'><![CDATA[19]]></doc></option>
+<option value='20'><doc title='description'><![CDATA[20]]></doc></option>
+</param>
+<param name='sequenceId' type='xsd:string' required='false' default='(Example: AAEL01000057)' >
+<doc title='prompt'><![CDATA[Genomic sequence ID]]></doc>
+<doc title='help'><![CDATA[Enter an identifier for a genomic sequence. The IDs correspond to the accession numbers in the GenBank records supplied by the sequencing centers. Wild cards are permitted in most queries, i.e. use AAEE* to ask for all <i> C.parvum </i> contigs. Genes By Chromosomal Location does not allow wildcards.]]></doc>
+<doc title='default'><![CDATA[(Example: AAEL01000057)]]></doc>
+</param>
+<param name='start_point' type='xsd:string' required='true' default='1' >
+<doc title='prompt'><![CDATA[Start at]]></doc>
+<doc title='help'><![CDATA[Select the distance (in nucleotides) to the start]]></doc>
+<doc title='default'><![CDATA[1]]></doc>
+</param>
+<param name='end_point' type='xsd:string' required='true' default='0' >
+<doc title='prompt'><![CDATA[End Location (0 = end)]]></doc>
+<doc title='help'><![CDATA[Select the nucleotide you would like to end in. Note that 0 equals the end so you can get genes right up to the end of the sequence.  The default settings start = 1 and end = 0 will give you results from the entire sequence.]]></doc>
+<doc title='default'><![CDATA[0]]></doc>
+</param>
+<param name='min_orf_length' type='xsd:string' required='true' default='50' >
+<doc title='prompt'><![CDATA[Minimum ORF length]]></doc>
+<doc title='help'><![CDATA[Enter the minimum length of ORF to return (NOTE: 50 aa is the shortest that have been computed).]]></doc>
+<doc title='default'><![CDATA[50]]></doc>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[ORF Id]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='orf_location_text'><doc title='description'><![CDATA[Location]]></doc></option>
+<option value='nas_id'><doc title='description'><![CDATA[Sequence ID]]></doc></option>
+<option value='orf_start'><doc title='description'><![CDATA[orf_start]]></doc></option>
+<option value='orf_end'><doc title='description'><![CDATA[orf_end]]></doc></option>
+<option value='orf_start_text'><doc title='description'><![CDATA[Start]]></doc></option>
+<option value='orf_end_text'><doc title='description'><![CDATA[End]]></doc></option>
+<option value='orf_strand'><doc title='description'><![CDATA[Strand]]></doc></option>
+<option value='length'><doc title='description'><![CDATA[Length]]></doc></option>
+<option value='organism_text'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='sequence'><doc title='description'><![CDATA[Sequence]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+<option value='dynamic_location'><doc title='description'><![CDATA[Location]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

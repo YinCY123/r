@@ -1,0 +1,10 @@
+<!-- Ordered (numbered) list -->
+<!ELEMENT ol (li)+>
+<!ATTLIST ol
+  %attrs;
+  >
+<!-- list item -->
+<!ELEMENT li %Flow;>
+<!ATTLIST li
+  %attrs;
+  >

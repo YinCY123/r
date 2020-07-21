@@ -1,0 +1,238 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='OrfQuestions'>
+<resource path='OrfsByMotifSearch.xml'>
+<method href='#orfsbymotifsearch'/>
+</resource>
+<resource path='OrfsByMotifSearch.json'>
+<method href='#orfsbymotifsearch'/>
+</resource>
+<method name='POST' id='orfsbymotifsearch'>
+<doc title='display_name'><![CDATA[Protein Motif Search]]></doc>
+<doc title='summary'><![CDATA[Find orfs with a motif pattern that you specify, e.g.: two cysteines followed by one or more hydrophobic amino acids, followed by arginine, then lysine.]]></doc>
+<doc title='description'><![CDATA[Find genes whose protein product contains a motif pattern that you specify.<p>
+
+           Specify the pattern with a (Perl style) "regular expression".
+           (Regular expressions are more powerful than PROSITE patterns.) For
+           a description of how to create regular expressions, please see 
+           the  <a href="regexp.jsp">Regular Expression
+           Tutorial</a>.
+            <br><br>
+             The following codes can be used to represent classes of amino acids.
+        <table border columns=3>
+                   <TR>
+                      <TD><B>AA property</B>
+                      </TD>
+                      <TD><B>Amino acids</B>
+                      </TD>
+                      <TD><B>Code</B>
+                      </TD>
+                   </TR>
+
+                   <TR>
+                      <TD>
+                      <B>Acidic</B>
+                      </TD>
+                      <TD><B>DE</B>
+                      </TD>
+                      <TD><B>0</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Alcohol</B>
+                      </TD>
+                      <TD><B>ST</B>
+                      </TD>
+                      <TD><B>1</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Aliphatic</B>
+                      </TD>
+                      <TD><B>ILV</B>
+                      </TD>
+                      <TD><B>2</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Aromatic</B>
+                      </TD>
+                      <TD><B>FHWY</B>
+                      </TD>
+                      <TD><B>3</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Basic</B>
+                      </TD>
+                      <TD><B>KRH</B>
+                      </TD>
+                      <TD><B>4</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Charged</B>
+                      </TD>
+                      <TD><B>DEHKR</B>
+                      </TD>
+                      <TD><B>5</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Hydrophobic</B>
+                      </TD>
+                      <TD><B>AVILMFYW</B>
+                      </TD>
+                      <TD><B>6</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Hydrophilic</B>
+                      </TD>
+                      <TD><B>KRHDENQ</B>
+                      </TD>
+                      <TD><B>7</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Polar</B>
+                      </TD>
+                      <TD><B>CDEHKNQRST</B>
+                      </TD>
+                      <TD><B>8</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Small</B>
+                      </TD>
+                      <TD><B>ACDGNPSTV</B>
+                      </TD>
+                      <TD><B>9</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Tiny</B>
+                      </TD>
+                      <TD><B>AGS</B>
+                      </TD>
+                      <TD><B>B</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Turnlike</B>
+                      </TD>
+                      <TD><B>ACDEGHKNQRST</B>
+                      </TD>
+                      <TD><B>Z</B>
+                      </TD>
+                   </TR>
+                   <TR>
+                      <TD><B>Any</B>
+                      </TD>
+                      <TD><b>ACDEFGHIKLM<br>
+                             NPQRSTVWY</b>
+                      </TD>
+                      <TD><B>.</B>
+                      </TD>
+                   </TR>
+                   </table>]]></doc>
+<request>
+<param name='motif_organism' type='xsd:string' required='true' default='Entamoeba histolytica HM-1:IMSS' repeating='true'>
+<doc title='prompt'><![CDATA[Organism]]></doc>
+<doc title='help'><![CDATA[Choose one or more organisms to search with the given motif]]></doc>
+<doc title='default'><![CDATA[Entamoeba histolytica HM-1:IMSS]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='Entamoeba histolytica HM-1:IMSS'><doc title='description'><![CDATA[Entamoeba histolytica HM-1:IMSS]]></doc></option>
+<option value='Entamoeba dispar SAW760'><doc title='description'><![CDATA[Entamoeba dispar SAW760]]></doc></option>
+<option value='Entamoeba invadens IP1'><doc title='description'><![CDATA[Entamoeba invadens IP1]]></doc></option>
+<option value='Encephalitozoon intestinalis'><doc title='description'><![CDATA[Encephalitozoon intestinalis]]></doc></option>
+<option value='Encephalitozoon cuniculi GB-M1'><doc title='description'><![CDATA[Encephalitozoon cuniculi GB-M1]]></doc></option>
+<option value='Enterocytozoon bieneusi H348'><doc title='description'><![CDATA[Enterocytozoon bieneusi H348]]></doc></option>
+<option value='Nematocida parisii'><doc title='description'><![CDATA[Nematocida parisii]]></doc></option>
+<option value='Octosporea bayeri OER-3-3'><doc title='description'><![CDATA[Octosporea bayeri OER-3-3]]></doc></option>
+<option value='Cryptosporidium parvum'><doc title='description'><![CDATA[Cryptosporidium parvum]]></doc></option>
+<option value='Cryptosporidium hominis'><doc title='description'><![CDATA[Cryptosporidium hominis]]></doc></option>
+<option value='Cryptosporidium muris'><doc title='description'><![CDATA[Cryptosporidium muris]]></doc></option>
+<option value='Cryptosporidium parvum ESTs'><doc title='description'><![CDATA[Cryptosporidium parvum ESTs]]></doc></option>
+<option value='Cryptosporidium muris ESTs'><doc title='description'><![CDATA[Cryptosporidium muris ESTs]]></doc></option>
+<option value='Giardia Assemblage A isolate WB'><doc title='description'><![CDATA[Giardia Assemblage A isolate WB]]></doc></option>
+<option value='Giardia Assemblage B isolate GS'><doc title='description'><![CDATA[Giardia Assemblage B isolate GS]]></doc></option>
+<option value='Giardia Assemblage E isolate P15'><doc title='description'><![CDATA[Giardia Assemblage E isolate P15]]></doc></option>
+<option value='Plasmodium falciparum'><doc title='description'><![CDATA[Plasmodium falciparum]]></doc></option>
+<option value='Plasmodium falciparum mitochondrial'><doc title='description'><![CDATA[Plasmodium falciparum mitochondrial]]></doc></option>
+<option value='Plasmodium falciparum plastid'><doc title='description'><![CDATA[Plasmodium falciparum plastid]]></doc></option>
+<option value='Plasmodium vivax'><doc title='description'><![CDATA[Plasmodium vivax]]></doc></option>
+<option value='Plasmodium vivax mitochondrial'><doc title='description'><![CDATA[Plasmodium vivax mitochondrial]]></doc></option>
+<option value='Plasmodium yoelii'><doc title='description'><![CDATA[Plasmodium yoelii]]></doc></option>
+<option value='Plasmodium berghei'><doc title='description'><![CDATA[Plasmodium berghei]]></doc></option>
+<option value='Plasmodium chabaudi'><doc title='description'><![CDATA[Plasmodium chabaudi]]></doc></option>
+<option value='Plasmodium knowlesi'><doc title='description'><![CDATA[Plasmodium knowlesi]]></doc></option>
+<option value='Plasmodium gallinaceum'><doc title='description'><![CDATA[Plasmodium gallinaceum]]></doc></option>
+<option value='Plasmodium reichenowi'><doc title='description'><![CDATA[Plasmodium reichenowi]]></doc></option>
+<option value='Toxoplasma gondii TgCkUg2'><doc title='description'><![CDATA[Toxoplasma gondii TgCkUg2]]></doc></option>
+<option value='Toxoplasma gondii GT1'><doc title='description'><![CDATA[Toxoplasma gondii GT1]]></doc></option>
+<option value='Toxoplasma gondii ME49'><doc title='description'><![CDATA[Toxoplasma gondii ME49]]></doc></option>
+<option value='Toxoplasma gondii VEG'><doc title='description'><![CDATA[Toxoplasma gondii VEG]]></doc></option>
+<option value='Toxoplasma gondii Apicoplast'><doc title='description'><![CDATA[Toxoplasma gondii Apicoplast]]></doc></option>
+<option value='Neospora caninum'><doc title='description'><![CDATA[Neospora caninum]]></doc></option>
+<option value='Trichomonas vaginalis'><doc title='description'><![CDATA[Trichomonas vaginalis]]></doc></option>
+<option value='Trypanosoma cruzi strain Esmeraldo'><doc title='description'><![CDATA[Trypanosoma cruzi strain Esmeraldo]]></doc></option>
+<option value='Trypanosoma cruzi CL Brener Esmeraldo-like'><doc title='description'><![CDATA[Trypanosoma cruzi CL Brener Esmeraldo-like]]></doc></option>
+<option value='Trypanosoma cruzi CL Brener Non-Esmeraldo-like'><doc title='description'><![CDATA[Trypanosoma cruzi CL Brener Non-Esmeraldo-like]]></doc></option>
+<option value='Trypanosoma cruzi unassigned contigs (strain CL Brener)'><doc title='description'><![CDATA[Trypanosoma cruzi unassigned contigs (strain CL Brener)]]></doc></option>
+<option value='Trypanosoma brucei gambiense'><doc title='description'><![CDATA[Trypanosoma brucei gambiense]]></doc></option>
+<option value='Trypanosoma brucei Lister strain 427'><doc title='description'><![CDATA[Trypanosoma brucei Lister strain 427]]></doc></option>
+<option value='Trypanosoma brucei TREU927'><doc title='description'><![CDATA[Trypanosoma brucei TREU927]]></doc></option>
+<option value='Leishmania major'><doc title='description'><![CDATA[Leishmania major]]></doc></option>
+<option value='Leishmania infantum'><doc title='description'><![CDATA[Leishmania infantum]]></doc></option>
+<option value='Leishmania braziliensis'><doc title='description'><![CDATA[Leishmania braziliensis]]></doc></option>
+<option value='Leishmania tarentolae'><doc title='description'><![CDATA[Leishmania tarentolae]]></doc></option>
+<option value='Crithidia fasciculata'><doc title='description'><![CDATA[Crithidia fasciculata]]></doc></option>
+<option value='Leishmania mexicana'><doc title='description'><![CDATA[Leishmania mexicana]]></doc></option>
+<option value='Trypanosoma congolense'><doc title='description'><![CDATA[Trypanosoma congolense]]></doc></option>
+<option value='Trypanosoma vivax'><doc title='description'><![CDATA[Trypanosoma vivax]]></doc></option>
+</param>
+<param name='motif_expression' type='xsd:string' required='true' default='CC6+RK' >
+<doc title='prompt'><![CDATA[Pattern]]></doc>
+<doc title='help'><![CDATA[Enter a Perl regular expression describing the desired motif.  Example: 'CC6+RK' searches for two consecutive cysteine residues followed by a stretch of hydrophobic amino acids followed by the aminoacids arginine and lysine.]]></doc>
+<doc title='default'><![CDATA[CC6+RK]]></doc>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[ORF Id]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='orf_location_text'><doc title='description'><![CDATA[Location]]></doc></option>
+<option value='nas_id'><doc title='description'><![CDATA[Sequence ID]]></doc></option>
+<option value='orf_start'><doc title='description'><![CDATA[orf_start]]></doc></option>
+<option value='orf_end'><doc title='description'><![CDATA[orf_end]]></doc></option>
+<option value='orf_start_text'><doc title='description'><![CDATA[Start]]></doc></option>
+<option value='orf_end_text'><doc title='description'><![CDATA[End]]></doc></option>
+<option value='orf_strand'><doc title='description'><![CDATA[Strand]]></doc></option>
+<option value='length'><doc title='description'><![CDATA[Length]]></doc></option>
+<option value='organism_text'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='sequence'><doc title='description'><![CDATA[Sequence]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

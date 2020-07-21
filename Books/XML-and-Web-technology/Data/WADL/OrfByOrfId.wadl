@@ -1,0 +1,70 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='OrfQuestions'>
+<resource path='OrfByOrfId.xml'>
+<method href='#orfbyorfid'/>
+</resource>
+<resource path='OrfByOrfId.json'>
+<method href='#orfbyorfid'/>
+</resource>
+<method name='POST' id='orfbyorfid'>
+<doc title='display_name'><![CDATA[Orfs by ID]]></doc>
+<doc title='summary'><![CDATA[Find ORFs by ID.]]></doc>
+<doc title='description'><![CDATA[Find open reading frames (ORFs) by ID. The ORF ID and sequences may change from release to release if the genomic sequence changes.
+             The ORF naming system is designed to:
+             <ul>
+             <li>Specify the name of the DNA sequence producing the ORF, e.g. AAEL01000259</li>
+             <li>The Frame (1-6) the ORF was found in, e.g. 5</li>
+             <li>The span, in nucleotides, encoding the ORF, e.g. 3339-3085</li>
+             <li>Putting it all together: AAEL01000259-5-3339-3085</li>
+             </ul>]]></doc>
+<request>
+<param name='orf_id' type='xsd:string' required='true' default='AAEL01000259-5-3339-3085,Pf3D7_01-1-105160-105438,Ia-1-1000180-1000404,AACB02000007-6-227160-226945,DS113375-1-114214-114468' >
+<doc title='prompt'><![CDATA[ORF ID input set]]></doc>
+<doc title='help'><![CDATA[Input a comma delimited set of ORF ids, or upload a file]]></doc>
+<doc title='default'><![CDATA[AAEL01000259-5-3339-3085,Pf3D7_01-1-105160-105438,Ia-1-1000180-1000404,AACB02000007-6-227160-226945,DS113375-1-114214-114468]]></doc>
+</param>
+<param name='signature' type='xsd:string' required='true' default='' >
+<doc title='prompt'><![CDATA[User Signature]]></doc>
+<doc title='help'><![CDATA[Used to pass the Users Signature to the component sites]]></doc>
+<doc title='default'><![CDATA[null]]></doc>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[ORF Id]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='orf_location_text'><doc title='description'><![CDATA[Location]]></doc></option>
+<option value='nas_id'><doc title='description'><![CDATA[Sequence ID]]></doc></option>
+<option value='orf_start'><doc title='description'><![CDATA[orf_start]]></doc></option>
+<option value='orf_end'><doc title='description'><![CDATA[orf_end]]></doc></option>
+<option value='orf_start_text'><doc title='description'><![CDATA[Start]]></doc></option>
+<option value='orf_end_text'><doc title='description'><![CDATA[End]]></doc></option>
+<option value='orf_strand'><doc title='description'><![CDATA[Strand]]></doc></option>
+<option value='length'><doc title='description'><![CDATA[Length]]></doc></option>
+<option value='organism_text'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='sequence'><doc title='description'><![CDATA[Sequence]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

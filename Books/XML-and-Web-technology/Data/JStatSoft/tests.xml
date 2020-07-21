@@ -1,0 +1,169 @@
+<example xmlns:r="http://www.r-project.org" 
+         xmlns:xp="http://www.w3.org/TR/xpath"
+         xmlns:sh="http://www.shell.org"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         id="sec:XPath">
+
+<r:code>
+jss = xmlParse("../Data/JStatSoft/shortJStatSoft.xml")
+jssR = xmlRoot(jss)
+</r:code>
+
+<r:code>
+length(getNodeSet(jssR, "/modsCollection/mods"))
+<r:output>
+[1] 4
+</r:output>
+</r:code>
+
+<r:code><![CDATA[
+length(getNodeSet(jssR, "/modsCollection/mods/name/namePart[@type='family']"))
+]]><r:output>
+[1] 5
+</r:output><![CDATA[
+length(getNodeSet(jssR, "/modsCollection/mods/name/namePart[@type='family']/text()"))
+]]><r:output>
+[1] 5
+</r:output><![CDATA[
+length(getNodeSet(jssR, "//namePart[@type='family']/text()"))
+]]><r:output>
+[1] 5
+</r:output>
+</r:code>
+
+<r:code><![CDATA[
+getNodeSet(jssR, "//mods/name[position() = 1]/namePart[@type='family']/text()")
+]]><r:output>
+[[1]]
+Doss 
+
+[[2]]
+Narasimhan 
+
+[[3]]
+Tierney 
+
+[[4]]
+Lumley 
+
+attr(,"class")
+[1] "XMLNodeSet"
+</r:output><![CDATA[
+getNodeSet(jssR, "//mods/name[1]/namePart[@type='family']/text()")
+]]><r:output>
+[[1]]
+Doss 
+
+[[2]]
+Narasimhan 
+
+[[3]]
+Tierney 
+
+[[4]]
+Lumley 
+
+attr(,"class")
+[1] "XMLNodeSet"
+</r:output>
+</r:code>
+
+<r:code><![CDATA[
+getNodeSet(jssR, "//mods/name/namePart[@type='family' and position()=1]/text()")
+]]><r:output>
+NULL
+</r:output>
+</r:code>
+
+<r:code><![CDATA[
+getNodeSet(jssR, "//namePart[@type='family' and string(.)='Narasimhan']/text()")
+]]><r:output>
+[[1]]
+Narasimhan 
+
+[[2]]
+Narasimhan 
+
+attr(,"class")
+[1] "XMLNodeSet"
+</r:output><![CDATA[
+getNodeSet(jssR, "//namePart[@type='family' and string(.)='Narasimhan']")
+]]><r:output><![CDATA[
+[[1]]
+<namePart type="family">Narasimhan</namePart> 
+
+[[2]]
+<namePart type="family">Narasimhan</namePart> 
+
+attr(,"class")
+[1] "XMLNodeSet"
+]]></r:output>
+</r:code>
+
+<r:code><![CDATA[
+getNodeSet(jssR, "//namePart[@type='family' and
+          string(.)='Narasimhan']/ancestor::mods/name/namePart[@type = 'family']/text()")
+]]><r:output>
+[[1]]
+Doss 
+
+[[2]]
+Narasimhan 
+
+[[3]]
+Narasimhan 
+
+attr(,"class")
+[1] "XMLNodeSet"
+</r:output></r:code>
+
+<r:code><![CDATA[
+getNodeSet(jssR, "//namePart[@type='family' and string(.)='Narasimhan']/ancestor::mods/name/namePart[@type = 'family' and not(./text() = 'Narasimhan')]/text()")
+]]><r:output>
+[[1]]
+Doss 
+
+attr(,"class")
+[1] "XMLNodeSet"
+</r:output></r:code>
+
+<r:code><![CDATA[
+getNodeSet(jssR, "//namePart[@type='family' and ./text()='Narasimhan']/parent::name/preceding-sibling::name/namePart[@type='family']/text() | //namePart[@type='family' and ./text()='Narasimhan']/parent::name/following-sibling::name/namePart[@type='family']/text()")
+]]><r:output>
+[[1]]
+Doss 
+
+attr(,"class")
+[1] "XMLNodeSet"
+</r:output></r:code>
+
+<r:code><![CDATA[
+getNodeSet(jssR, "//name/namePart[text()='Lumley']/ancestor::mods/identifier[@type='citekey']/text()")
+]]><r:output>
+[[1]]
+Lumley:2004:ACS 
+
+attr(,"class")
+[1] "XMLNodeSet"
+</r:output></r:code>
+
+<r:code><![CDATA[
+getNodeSet(jssR, "//name/namePart[text()='Lumley']/parent::*/parent::*/identifier[@type='citekey']/text()")
+]]><r:output>
+[[1]]
+Lumley:2004:ACS 
+
+attr(,"class")
+[1] "XMLNodeSet"
+</r:output></r:code>
+
+<r:code><![CDATA[
+getNodeSet(jssR, "//mods[name/namePart[@type='family']/text()='Lumley']/identifier[@type='citekey']/text()")
+]]><r:output>
+[[1]]
+Lumley:2004:ACS 
+
+attr(,"class")
+[1] "XMLNodeSet"
+</r:output></r:code>
+</example>

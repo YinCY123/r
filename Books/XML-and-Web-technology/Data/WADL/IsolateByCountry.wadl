@@ -1,0 +1,203 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='IsolateQuestions'>
+<resource path='IsolateByCountry.xml'>
+<method href='#isolatebycountry'/>
+</resource>
+<resource path='IsolateByCountry.json'>
+<method href='#isolatebycountry'/>
+</resource>
+<method name='POST' id='isolatebycountry'>
+<doc title='display_name'><![CDATA[Geographic Location]]></doc>
+<doc title='summary'><![CDATA[Find isolates by country and/or continent.]]></doc>
+<doc title='description'><![CDATA[To identify isolates by geographic location, select either continent and/or country and isolate assay type (Sequencing Typed, RFLP Typed, HD Array, 3k chip and/or Barcode).  Note that results are always the union of all selected countries and/or continents.  Multiple countries may be selected by clicking while holding down the shift or ctrl/command keys.]]></doc>
+<request>
+<param name='country' type='xsd:string' required='true' default='Africa,Asia,Australia,Belgium,Brazil,Canada,Chile,China,Colombia,Cuba,Cyprus,Czech Republic,Denmark,Ecuador,Egypt,Europe,France,Germany,Hungary,India,Iran,Ireland,Italy,Jamaica,Japan,Kenya,Kuwait,Lithuania,Malawi,Malaysia,Mexico,Mongolia,N. America,Nepal,Netherlands,Norway,Oceania/Australia,Peru,Poland,Portugal,S. America,Saudi Arabia,Serbia,Slovenia,South Africa,Spain,Sri Lanka,Switzerland,Taiwan,Thailand,Tunisia,Uganda,United Kingdom,Unknown,Usa,Vietnam,Israel,Palestine,Sweden,Afghanistan,Azerbaijan,Bangladesh,Benin,Burkina,Burma (Myanmar),Burundi,Cambodia,Cameroon,Cape Verde,Central African Republic,Chad,Comoros,Congo (Dem. Rep.),East Timor,El Salvador,Equatorial Guinea,Gabon,Gambia,Ghana,Guinea,Guinea-Bissau,Guyana,Haiti,Honduras,Indonesia,Korea (North),Korea (South),Liberia,Madagascar,Mali,Mozambique,Namibia,Niger,Nigeria,Pakistan,Papua New Guinea,Philippines,Republic Of Cote D&apos;Ivoire,Senegal,Sierra Leone,Solomon Islands,Sudan,Suriname,Tanzania,Togo,Turkey,Vanuatu,Venezuela,Yemen,Zambia,Zimbabwe,Barbados,Congo,Costa Rica,Panama,St. Kitts And Nevis,Uruguay' repeating='true'>
+<doc title='prompt'><![CDATA[Geographic Locations]]></doc>
+<doc title='help'><![CDATA[Geographic Locations]]></doc>
+<doc title='default'><![CDATA[Africa,Asia,Australia,Belgium,Brazil,Canada,Chile,China,Colombia,Cuba,Cyprus,Czech Republic,Denmark,Ecuador,Egypt,Europe,France,Germany,Hungary,India,Iran,Ireland,Italy,Jamaica,Japan,Kenya,Kuwait,Lithuania,Malawi,Malaysia,Mexico,Mongolia,N. America,Nepal,Netherlands,Norway,Oceania/Australia,Peru,Poland,Portugal,S. America,Saudi Arabia,Serbia,Slovenia,South Africa,Spain,Sri Lanka,Switzerland,Taiwan,Thailand,Tunisia,Uganda,United Kingdom,Unknown,Usa,Vietnam,Israel,Palestine,Sweden,Afghanistan,Azerbaijan,Bangladesh,Benin,Burkina,Burma (Myanmar),Burundi,Cambodia,Cameroon,Cape Verde,Central African Republic,Chad,Comoros,Congo (Dem. Rep.),East Timor,El Salvador,Equatorial Guinea,Gabon,Gambia,Ghana,Guinea,Guinea-Bissau,Guyana,Haiti,Honduras,Indonesia,Korea (North),Korea (South),Liberia,Madagascar,Mali,Mozambique,Namibia,Niger,Nigeria,Pakistan,Papua New Guinea,Philippines,Republic Of Cote D'Ivoire,Senegal,Sierra Leone,Solomon Islands,Sudan,Suriname,Tanzania,Togo,Turkey,Vanuatu,Venezuela,Yemen,Zambia,Zimbabwe,Barbados,Congo,Costa Rica,Panama,St. Kitts And Nevis,Uruguay]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='Africa'><doc title='description'><![CDATA[Africa]]></doc></option>
+<option value='Asia'><doc title='description'><![CDATA[Asia]]></doc></option>
+<option value='Australia'><doc title='description'><![CDATA[Australia]]></doc></option>
+<option value='Belgium'><doc title='description'><![CDATA[Belgium]]></doc></option>
+<option value='Brazil'><doc title='description'><![CDATA[Brazil]]></doc></option>
+<option value='Canada'><doc title='description'><![CDATA[Canada]]></doc></option>
+<option value='Chile'><doc title='description'><![CDATA[Chile]]></doc></option>
+<option value='China'><doc title='description'><![CDATA[China]]></doc></option>
+<option value='Colombia'><doc title='description'><![CDATA[Colombia]]></doc></option>
+<option value='Cuba'><doc title='description'><![CDATA[Cuba]]></doc></option>
+<option value='Cyprus'><doc title='description'><![CDATA[Cyprus]]></doc></option>
+<option value='Czech Republic'><doc title='description'><![CDATA[Czech Republic]]></doc></option>
+<option value='Denmark'><doc title='description'><![CDATA[Denmark]]></doc></option>
+<option value='Ecuador'><doc title='description'><![CDATA[Ecuador]]></doc></option>
+<option value='Egypt'><doc title='description'><![CDATA[Egypt]]></doc></option>
+<option value='Europe'><doc title='description'><![CDATA[Europe]]></doc></option>
+<option value='France'><doc title='description'><![CDATA[France]]></doc></option>
+<option value='Germany'><doc title='description'><![CDATA[Germany]]></doc></option>
+<option value='Hungary'><doc title='description'><![CDATA[Hungary]]></doc></option>
+<option value='India'><doc title='description'><![CDATA[India]]></doc></option>
+<option value='Iran'><doc title='description'><![CDATA[Iran]]></doc></option>
+<option value='Ireland'><doc title='description'><![CDATA[Ireland]]></doc></option>
+<option value='Italy'><doc title='description'><![CDATA[Italy]]></doc></option>
+<option value='Jamaica'><doc title='description'><![CDATA[Jamaica]]></doc></option>
+<option value='Japan'><doc title='description'><![CDATA[Japan]]></doc></option>
+<option value='Kenya'><doc title='description'><![CDATA[Kenya]]></doc></option>
+<option value='Kuwait'><doc title='description'><![CDATA[Kuwait]]></doc></option>
+<option value='Lithuania'><doc title='description'><![CDATA[Lithuania]]></doc></option>
+<option value='Malawi'><doc title='description'><![CDATA[Malawi]]></doc></option>
+<option value='Malaysia'><doc title='description'><![CDATA[Malaysia]]></doc></option>
+<option value='Mexico'><doc title='description'><![CDATA[Mexico]]></doc></option>
+<option value='Mongolia'><doc title='description'><![CDATA[Mongolia]]></doc></option>
+<option value='N. America'><doc title='description'><![CDATA[N. America]]></doc></option>
+<option value='Nepal'><doc title='description'><![CDATA[Nepal]]></doc></option>
+<option value='Netherlands'><doc title='description'><![CDATA[Netherlands]]></doc></option>
+<option value='Norway'><doc title='description'><![CDATA[Norway]]></doc></option>
+<option value='Oceania/Australia'><doc title='description'><![CDATA[Oceania/Australia]]></doc></option>
+<option value='Peru'><doc title='description'><![CDATA[Peru]]></doc></option>
+<option value='Poland'><doc title='description'><![CDATA[Poland]]></doc></option>
+<option value='Portugal'><doc title='description'><![CDATA[Portugal]]></doc></option>
+<option value='S. America'><doc title='description'><![CDATA[S. America]]></doc></option>
+<option value='Saudi Arabia'><doc title='description'><![CDATA[Saudi Arabia]]></doc></option>
+<option value='Serbia'><doc title='description'><![CDATA[Serbia]]></doc></option>
+<option value='Slovenia'><doc title='description'><![CDATA[Slovenia]]></doc></option>
+<option value='South Africa'><doc title='description'><![CDATA[South Africa]]></doc></option>
+<option value='Spain'><doc title='description'><![CDATA[Spain]]></doc></option>
+<option value='Sri Lanka'><doc title='description'><![CDATA[Sri Lanka]]></doc></option>
+<option value='Switzerland'><doc title='description'><![CDATA[Switzerland]]></doc></option>
+<option value='Taiwan'><doc title='description'><![CDATA[Taiwan]]></doc></option>
+<option value='Thailand'><doc title='description'><![CDATA[Thailand]]></doc></option>
+<option value='Tunisia'><doc title='description'><![CDATA[Tunisia]]></doc></option>
+<option value='Uganda'><doc title='description'><![CDATA[Uganda]]></doc></option>
+<option value='United Kingdom'><doc title='description'><![CDATA[United Kingdom]]></doc></option>
+<option value='Unknown'><doc title='description'><![CDATA[Unknown]]></doc></option>
+<option value='Usa'><doc title='description'><![CDATA[Usa]]></doc></option>
+<option value='Vietnam'><doc title='description'><![CDATA[Vietnam]]></doc></option>
+<option value='Israel'><doc title='description'><![CDATA[Israel]]></doc></option>
+<option value='Palestine'><doc title='description'><![CDATA[Palestine]]></doc></option>
+<option value='Sweden'><doc title='description'><![CDATA[Sweden]]></doc></option>
+<option value='Afghanistan'><doc title='description'><![CDATA[Afghanistan]]></doc></option>
+<option value='Azerbaijan'><doc title='description'><![CDATA[Azerbaijan]]></doc></option>
+<option value='Bangladesh'><doc title='description'><![CDATA[Bangladesh]]></doc></option>
+<option value='Benin'><doc title='description'><![CDATA[Benin]]></doc></option>
+<option value='Burkina'><doc title='description'><![CDATA[Burkina]]></doc></option>
+<option value='Burma (Myanmar)'><doc title='description'><![CDATA[Burma (Myanmar)]]></doc></option>
+<option value='Burundi'><doc title='description'><![CDATA[Burundi]]></doc></option>
+<option value='Cambodia'><doc title='description'><![CDATA[Cambodia]]></doc></option>
+<option value='Cameroon'><doc title='description'><![CDATA[Cameroon]]></doc></option>
+<option value='Cape Verde'><doc title='description'><![CDATA[Cape Verde]]></doc></option>
+<option value='Central African Republic'><doc title='description'><![CDATA[Central African Republic]]></doc></option>
+<option value='Chad'><doc title='description'><![CDATA[Chad]]></doc></option>
+<option value='Comoros'><doc title='description'><![CDATA[Comoros]]></doc></option>
+<option value='Congo (Dem. Rep.)'><doc title='description'><![CDATA[Congo (Dem. Rep.)]]></doc></option>
+<option value='East Timor'><doc title='description'><![CDATA[East Timor]]></doc></option>
+<option value='El Salvador'><doc title='description'><![CDATA[El Salvador]]></doc></option>
+<option value='Equatorial Guinea'><doc title='description'><![CDATA[Equatorial Guinea]]></doc></option>
+<option value='Gabon'><doc title='description'><![CDATA[Gabon]]></doc></option>
+<option value='Gambia'><doc title='description'><![CDATA[Gambia]]></doc></option>
+<option value='Ghana'><doc title='description'><![CDATA[Ghana]]></doc></option>
+<option value='Guinea'><doc title='description'><![CDATA[Guinea]]></doc></option>
+<option value='Guinea-Bissau'><doc title='description'><![CDATA[Guinea-Bissau]]></doc></option>
+<option value='Guyana'><doc title='description'><![CDATA[Guyana]]></doc></option>
+<option value='Haiti'><doc title='description'><![CDATA[Haiti]]></doc></option>
+<option value='Honduras'><doc title='description'><![CDATA[Honduras]]></doc></option>
+<option value='Indonesia'><doc title='description'><![CDATA[Indonesia]]></doc></option>
+<option value='Korea (North)'><doc title='description'><![CDATA[Korea (North)]]></doc></option>
+<option value='Korea (South)'><doc title='description'><![CDATA[Korea (South)]]></doc></option>
+<option value='Liberia'><doc title='description'><![CDATA[Liberia]]></doc></option>
+<option value='Madagascar'><doc title='description'><![CDATA[Madagascar]]></doc></option>
+<option value='Mali'><doc title='description'><![CDATA[Mali]]></doc></option>
+<option value='Mozambique'><doc title='description'><![CDATA[Mozambique]]></doc></option>
+<option value='Namibia'><doc title='description'><![CDATA[Namibia]]></doc></option>
+<option value='Niger'><doc title='description'><![CDATA[Niger]]></doc></option>
+<option value='Nigeria'><doc title='description'><![CDATA[Nigeria]]></doc></option>
+<option value='Pakistan'><doc title='description'><![CDATA[Pakistan]]></doc></option>
+<option value='Papua New Guinea'><doc title='description'><![CDATA[Papua New Guinea]]></doc></option>
+<option value='Philippines'><doc title='description'><![CDATA[Philippines]]></doc></option>
+<option value='Republic Of Cote D&apos;Ivoire'><doc title='description'><![CDATA[Republic Of Cote D'Ivoire]]></doc></option>
+<option value='Senegal'><doc title='description'><![CDATA[Senegal]]></doc></option>
+<option value='Sierra Leone'><doc title='description'><![CDATA[Sierra Leone]]></doc></option>
+<option value='Solomon Islands'><doc title='description'><![CDATA[Solomon Islands]]></doc></option>
+<option value='Sudan'><doc title='description'><![CDATA[Sudan]]></doc></option>
+<option value='Suriname'><doc title='description'><![CDATA[Suriname]]></doc></option>
+<option value='Tanzania'><doc title='description'><![CDATA[Tanzania]]></doc></option>
+<option value='Togo'><doc title='description'><![CDATA[Togo]]></doc></option>
+<option value='Turkey'><doc title='description'><![CDATA[Turkey]]></doc></option>
+<option value='Vanuatu'><doc title='description'><![CDATA[Vanuatu]]></doc></option>
+<option value='Venezuela'><doc title='description'><![CDATA[Venezuela]]></doc></option>
+<option value='Yemen'><doc title='description'><![CDATA[Yemen]]></doc></option>
+<option value='Zambia'><doc title='description'><![CDATA[Zambia]]></doc></option>
+<option value='Zimbabwe'><doc title='description'><![CDATA[Zimbabwe]]></doc></option>
+<option value='Barbados'><doc title='description'><![CDATA[Barbados]]></doc></option>
+<option value='Congo'><doc title='description'><![CDATA[Congo]]></doc></option>
+<option value='Costa Rica'><doc title='description'><![CDATA[Costa Rica]]></doc></option>
+<option value='Panama'><doc title='description'><![CDATA[Panama]]></doc></option>
+<option value='St. Kitts And Nevis'><doc title='description'><![CDATA[St. Kitts And Nevis]]></doc></option>
+<option value='Uruguay'><doc title='description'><![CDATA[Uruguay]]></doc></option>
+</param>
+<param name='type' type='xsd:string' required='true' default='Sequencing Typed,3kChip,Barcode,HD_Array,RFLP Typed' repeating='true'>
+<doc title='prompt'><![CDATA[Isolate assay type]]></doc>
+<doc title='help'><![CDATA[Choose the isolate type you want to query]]></doc>
+<doc title='default'><![CDATA[Sequencing Typed,3kChip,Barcode,HD_Array,RFLP Typed]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='Sequencing Typed'><doc title='description'><![CDATA[Sequencing Typed]]></doc></option>
+<option value='3kChip'><doc title='description'><![CDATA[3kChip]]></doc></option>
+<option value='Barcode'><doc title='description'><![CDATA[Barcode]]></doc></option>
+<option value='HD_Array'><doc title='description'><![CDATA[HD_Array]]></doc></option>
+<option value='RFLP Typed'><doc title='description'><![CDATA[RFLP Typed]]></doc></option>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Isolate Id]]></doc></option>
+<option value='pcr_primers'><doc title='description'><![CDATA[PCR primer]]></doc></option>
+<option value='country'><doc title='description'><![CDATA[Country]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='strain'><doc title='description'><![CDATA[Strain]]></doc></option>
+<option value='specific_host'><doc title='description'><![CDATA[Host]]></doc></option>
+<option value='isolation_source'><doc title='description'><![CDATA[Isolation Source]]></doc></option>
+<option value='description'><doc title='description'><![CDATA[Description]]></doc></option>
+<option value='note'><doc title='description'><![CDATA[Note]]></doc></option>
+<option value='product'><doc title='description'><![CDATA[Isolate Product]]></doc></option>
+<option value='data_type'><doc title='description'><![CDATA[Isolate Type]]></doc></option>
+<option value='collected_by'><doc title='description'><![CDATA[Collected By]]></doc></option>
+<option value='length'><doc title='description'><![CDATA[Length]]></doc></option>
+<option value='external_db_name'><doc title='description'><![CDATA[External DB Name]]></doc></option>
+<option value='external_db_version'><doc title='description'><![CDATA[External DB Version]]></doc></option>
+<option value='sequence'><doc title='description'><![CDATA[DNA Sequence]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+<option value='Reference'><doc title='description'><![CDATA[Reference]]></doc></option>
+<option value='GeneOverlap'><doc title='description'><![CDATA[Blast Similarity Alignments and Overlapping Genes]]></doc></option>
+<option value='IsolateComments'><doc title='description'><![CDATA[User Comments]]></doc></option>
+<option value='ProteinSequence'><doc title='description'><![CDATA[Protein Sequence]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='description'><doc title='description'><![CDATA[Description]]></doc></option>
+<option value='product'><doc title='description'><![CDATA[Product]]></doc></option>
+<option value='host'><doc title='description'><![CDATA[Host]]></doc></option>
+<option value='note'><doc title='description'><![CDATA[Note]]></doc></option>
+<option value='isolation_source'><doc title='description'><![CDATA[Isolation Source]]></doc></option>
+<option value='geographic_location'><doc title='description'><![CDATA[Geographic Location]]></doc></option>
+<option value='SNP'><doc title='description'><![CDATA[Isolates SNP Features]]></doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

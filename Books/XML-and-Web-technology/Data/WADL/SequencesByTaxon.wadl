@@ -1,0 +1,121 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='GenomicSequenceQuestions'>
+<resource path='SequencesByTaxon.xml'>
+<method href='#sequencesbytaxon'/>
+</resource>
+<resource path='SequencesByTaxon.json'>
+<method href='#sequencesbytaxon'/>
+</resource>
+<method name='POST' id='sequencesbytaxon'>
+<doc title='display_name'><![CDATA[Organism]]></doc>
+<doc title='summary'><![CDATA[Find genomic sequences of a species.]]></doc>
+<doc title='description'><![CDATA[Find genomic sequences (chromosomes or contigs) for one or more species.]]></doc>
+<request>
+<param name='organism' type='xsd:string' required='true' default='Entamoeba dispar SAW760,Entamoeba histolytica DS4,Entamoeba histolytica HM-1:CA,Entamoeba histolytica HM-1:IMSS,Entamoeba histolytica KU27,Entamoeba histolytica KU48,Entamoeba histolytica KU50,Entamoeba histolytica MS96,Entamoeba invadens IP1,Cryptosporidium hominis,Cryptosporidium muris,Cryptosporidium parvum,Cryptosporidium parvum Iowa II,Giardia intestinalis ATCC 50581,Giardia lamblia ATCC 50803,Giardia lamblia P15,Anncaliia algerae,Edhazardia aedis,Encephalitozoon cuniculi GB-M1,Encephalitozoon intestinalis,Enterocytozoon bieneusi H348,Nematocida parisii ERTm1,Nosema bombycis,Octosporea bayeri OER-3-3,Vittaforma corneae,Plasmodium berghei str. ANKA,Plasmodium chabaudi chabaudi,Plasmodium falciparum 3D7,Plasmodium gallinaceum,Plasmodium knowlesi strain H,Plasmodium reichenowi,Plasmodium vivax SaI-1,Plasmodium yoelii yoelii str....,Neospora caninum,Toxoplasma gondii GT1,Toxoplasma gondii ME49,Toxoplasma gondii RH,Toxoplasma gondii TgCkUg2,Toxoplasma gondii VEG,Trichomonas vaginalis G3,Crithidia fasciculata,Leishmania braziliensis,Leishmania infantum,Leishmania major strain Friedlin,Leishmania major strain SD 75.1,Leishmania mexicana,Leishmania tarentolae,Trypanosoma brucei Lister str...,Trypanosoma brucei TREU927,Trypanosoma brucei gambiense,Trypanosoma congolense,Trypanosoma cruzi CL Brener E...,Trypanosoma cruzi CL Brener N...,Trypanosoma cruzi strain CL B...,Trypanosoma cruzi strain esme...,Trypanosoma vivax' repeating='true'>
+<doc title='prompt'><![CDATA[Organism]]></doc>
+<doc title='help'><![CDATA[Organism]]></doc>
+<doc title='default'><![CDATA[Entamoeba dispar SAW760,Entamoeba histolytica DS4,Entamoeba histolytica HM-1:CA,Entamoeba histolytica HM-1:IMSS,Entamoeba histolytica KU27,Entamoeba histolytica KU48,Entamoeba histolytica KU50,Entamoeba histolytica MS96,Entamoeba invadens IP1,Cryptosporidium hominis,Cryptosporidium muris,Cryptosporidium parvum,Cryptosporidium parvum Iowa II,Giardia intestinalis ATCC 50581,Giardia lamblia ATCC 50803,Giardia lamblia P15,Anncaliia algerae,Edhazardia aedis,Encephalitozoon cuniculi GB-M1,Encephalitozoon intestinalis,Enterocytozoon bieneusi H348,Nematocida parisii ERTm1,Nosema bombycis,Octosporea bayeri OER-3-3,Vittaforma corneae,Plasmodium berghei str. ANKA,Plasmodium chabaudi chabaudi,Plasmodium falciparum 3D7,Plasmodium gallinaceum,Plasmodium knowlesi strain H,Plasmodium reichenowi,Plasmodium vivax SaI-1,Plasmodium yoelii yoelii str....,Neospora caninum,Toxoplasma gondii GT1,Toxoplasma gondii ME49,Toxoplasma gondii RH,Toxoplasma gondii TgCkUg2,Toxoplasma gondii VEG,Trichomonas vaginalis G3,Crithidia fasciculata,Leishmania braziliensis,Leishmania infantum,Leishmania major strain Friedlin,Leishmania major strain SD 75.1,Leishmania mexicana,Leishmania tarentolae,Trypanosoma brucei Lister str...,Trypanosoma brucei TREU927,Trypanosoma brucei gambiense,Trypanosoma congolense,Trypanosoma cruzi CL Brener E...,Trypanosoma cruzi CL Brener N...,Trypanosoma cruzi strain CL B...,Trypanosoma cruzi strain esme...,Trypanosoma vivax]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='Entamoeba dispar SAW760'><doc title='description'><![CDATA[Entamoeba dispar SAW760]]></doc></option>
+<option value='Entamoeba histolytica DS4'><doc title='description'><![CDATA[Entamoeba histolytica DS4]]></doc></option>
+<option value='Entamoeba histolytica HM-1:CA'><doc title='description'><![CDATA[Entamoeba histolytica HM-1:CA]]></doc></option>
+<option value='Entamoeba histolytica HM-1:IMSS'><doc title='description'><![CDATA[Entamoeba histolytica HM-1:IMSS]]></doc></option>
+<option value='Entamoeba histolytica KU27'><doc title='description'><![CDATA[Entamoeba histolytica KU27]]></doc></option>
+<option value='Entamoeba histolytica KU48'><doc title='description'><![CDATA[Entamoeba histolytica KU48]]></doc></option>
+<option value='Entamoeba histolytica KU50'><doc title='description'><![CDATA[Entamoeba histolytica KU50]]></doc></option>
+<option value='Entamoeba histolytica MS96'><doc title='description'><![CDATA[Entamoeba histolytica MS96]]></doc></option>
+<option value='Entamoeba invadens IP1'><doc title='description'><![CDATA[Entamoeba invadens IP1]]></doc></option>
+<option value='Cryptosporidium hominis'><doc title='description'><![CDATA[Cryptosporidium hominis]]></doc></option>
+<option value='Cryptosporidium muris'><doc title='description'><![CDATA[Cryptosporidium muris]]></doc></option>
+<option value='Cryptosporidium parvum'><doc title='description'><![CDATA[Cryptosporidium parvum]]></doc></option>
+<option value='Cryptosporidium parvum Iowa II'><doc title='description'><![CDATA[Cryptosporidium parvum Iowa II]]></doc></option>
+<option value='Giardia intestinalis ATCC 50581'><doc title='description'><![CDATA[Giardia intestinalis ATCC 50581]]></doc></option>
+<option value='Giardia lamblia ATCC 50803'><doc title='description'><![CDATA[Giardia lamblia ATCC 50803]]></doc></option>
+<option value='Giardia lamblia P15'><doc title='description'><![CDATA[Giardia lamblia P15]]></doc></option>
+<option value='Anncaliia algerae'><doc title='description'><![CDATA[Anncaliia algerae]]></doc></option>
+<option value='Edhazardia aedis'><doc title='description'><![CDATA[Edhazardia aedis]]></doc></option>
+<option value='Encephalitozoon cuniculi GB-M1'><doc title='description'><![CDATA[Encephalitozoon cuniculi GB-M1]]></doc></option>
+<option value='Encephalitozoon intestinalis'><doc title='description'><![CDATA[Encephalitozoon intestinalis]]></doc></option>
+<option value='Enterocytozoon bieneusi H348'><doc title='description'><![CDATA[Enterocytozoon bieneusi H348]]></doc></option>
+<option value='Nematocida parisii ERTm1'><doc title='description'><![CDATA[Nematocida parisii ERTm1]]></doc></option>
+<option value='Nosema bombycis'><doc title='description'><![CDATA[Nosema bombycis]]></doc></option>
+<option value='Octosporea bayeri OER-3-3'><doc title='description'><![CDATA[Octosporea bayeri OER-3-3]]></doc></option>
+<option value='Vittaforma corneae'><doc title='description'><![CDATA[Vittaforma corneae]]></doc></option>
+<option value='Plasmodium berghei str. ANKA'><doc title='description'><![CDATA[Plasmodium berghei str. ANKA]]></doc></option>
+<option value='Plasmodium chabaudi chabaudi'><doc title='description'><![CDATA[Plasmodium chabaudi chabaudi]]></doc></option>
+<option value='Plasmodium falciparum 3D7'><doc title='description'><![CDATA[Plasmodium falciparum 3D7]]></doc></option>
+<option value='Plasmodium gallinaceum'><doc title='description'><![CDATA[Plasmodium gallinaceum]]></doc></option>
+<option value='Plasmodium knowlesi strain H'><doc title='description'><![CDATA[Plasmodium knowlesi strain H]]></doc></option>
+<option value='Plasmodium reichenowi'><doc title='description'><![CDATA[Plasmodium reichenowi]]></doc></option>
+<option value='Plasmodium vivax SaI-1'><doc title='description'><![CDATA[Plasmodium vivax SaI-1]]></doc></option>
+<option value='Plasmodium yoelii yoelii str....'><doc title='description'><![CDATA[Plasmodium yoelii yoelii str....]]></doc></option>
+<option value='Neospora caninum'><doc title='description'><![CDATA[Neospora caninum]]></doc></option>
+<option value='Toxoplasma gondii GT1'><doc title='description'><![CDATA[Toxoplasma gondii GT1]]></doc></option>
+<option value='Toxoplasma gondii ME49'><doc title='description'><![CDATA[Toxoplasma gondii ME49]]></doc></option>
+<option value='Toxoplasma gondii RH'><doc title='description'><![CDATA[Toxoplasma gondii RH]]></doc></option>
+<option value='Toxoplasma gondii TgCkUg2'><doc title='description'><![CDATA[Toxoplasma gondii TgCkUg2]]></doc></option>
+<option value='Toxoplasma gondii VEG'><doc title='description'><![CDATA[Toxoplasma gondii VEG]]></doc></option>
+<option value='Trichomonas vaginalis G3'><doc title='description'><![CDATA[Trichomonas vaginalis G3]]></doc></option>
+<option value='Crithidia fasciculata'><doc title='description'><![CDATA[Crithidia fasciculata]]></doc></option>
+<option value='Leishmania braziliensis'><doc title='description'><![CDATA[Leishmania braziliensis]]></doc></option>
+<option value='Leishmania infantum'><doc title='description'><![CDATA[Leishmania infantum]]></doc></option>
+<option value='Leishmania major strain Friedlin'><doc title='description'><![CDATA[Leishmania major strain Friedlin]]></doc></option>
+<option value='Leishmania major strain SD 75.1'><doc title='description'><![CDATA[Leishmania major strain SD 75.1]]></doc></option>
+<option value='Leishmania mexicana'><doc title='description'><![CDATA[Leishmania mexicana]]></doc></option>
+<option value='Leishmania tarentolae'><doc title='description'><![CDATA[Leishmania tarentolae]]></doc></option>
+<option value='Trypanosoma brucei Lister str...'><doc title='description'><![CDATA[Trypanosoma brucei Lister str...]]></doc></option>
+<option value='Trypanosoma brucei TREU927'><doc title='description'><![CDATA[Trypanosoma brucei TREU927]]></doc></option>
+<option value='Trypanosoma brucei gambiense'><doc title='description'><![CDATA[Trypanosoma brucei gambiense]]></doc></option>
+<option value='Trypanosoma congolense'><doc title='description'><![CDATA[Trypanosoma congolense]]></doc></option>
+<option value='Trypanosoma cruzi CL Brener E...'><doc title='description'><![CDATA[Trypanosoma cruzi CL Brener E...]]></doc></option>
+<option value='Trypanosoma cruzi CL Brener N...'><doc title='description'><![CDATA[Trypanosoma cruzi CL Brener N...]]></doc></option>
+<option value='Trypanosoma cruzi strain CL B...'><doc title='description'><![CDATA[Trypanosoma cruzi strain CL B...]]></doc></option>
+<option value='Trypanosoma cruzi strain esme...'><doc title='description'><![CDATA[Trypanosoma cruzi strain esme...]]></doc></option>
+<option value='Trypanosoma vivax'><doc title='description'><![CDATA[Trypanosoma vivax]]></doc></option>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Sequence ID]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='chromosome'><doc title='description'><![CDATA[Chromosome]]></doc></option>
+<option value='a_count'><doc title='description'><![CDATA[A Count]]></doc></option>
+<option value='c_count'><doc title='description'><![CDATA[C Count]]></doc></option>
+<option value='g_count'><doc title='description'><![CDATA[G Count]]></doc></option>
+<option value='t_count'><doc title='description'><![CDATA[T Count]]></doc></option>
+<option value='other_count'><doc title='description'><![CDATA[Other Count]]></doc></option>
+<option value='formatted_length'><doc title='description'><![CDATA[Length]]></doc></option>
+<option value='at_percent'><doc title='description'><![CDATA[AT Percent]]></doc></option>
+<option value='organism_text'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='sequence_description'><doc title='description'><![CDATA[Description]]></doc></option>
+<option value='genbank_accession'><doc title='description'><![CDATA[GenBank]]></doc></option>
+<option value='source_id'><doc title='description'><![CDATA[source_id]]></doc></option>
+<option value='project_id'><doc title='description'><![CDATA[project_id]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+<option value='SequencePieces'><doc title='description'><![CDATA[Genomic Assembly]]></doc></option>
+<option value='Aliases'><doc title='description'><![CDATA[Previous Identifiers and Aliases]]></doc></option>
+<option value='Centromere'><doc title='description'><![CDATA[Centromere]]></doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

@@ -1,0 +1,100 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='SageTagQuestions'>
+<resource path='SageTagByRStat.xml'>
+<method href='#sagetagbyrstat'/>
+</resource>
+<resource path='SageTagByRStat.json'>
+<method href='#sagetagbyrstat'/>
+</resource>
+<method name='POST' id='sagetagbyrstat'>
+<doc title='display_name'><![CDATA[Differential Expression]]></doc>
+<doc title='summary'><![CDATA[Find SAGE Tags that are differentially expressed across 2 or more libraries.]]></doc>
+<doc title='description'><![CDATA[<p>Find SAGE Tags with evidence of differential expression by choosing libraries (more than one) to compare across.  A large R value indicates differential expression.
+
+Stekel DJ, Git Y, Falciani F. <a href="http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=Retrieve&db=PubMed&list_uids=11116099">The comparison of gene expression from multiple cDNA libraries.</a>  Genome Res.  2000.  Dec:10(12):2055-61.
+</p>               
+<p>See the related <a href="showQuestion.do?questionFullName=GeneQuestions.GenesBySageTagRStat"><b>Genes by Differential Expression of SAGE Tag Evidence</b></a> query for summing SAGE tag counts within predicted genes.
+</p>]]></doc>
+<request>
+<param name='sage_tag_library_name' type='xsd:string' required='true' default='false' repeating='true'>
+<doc title='prompt'><![CDATA[Sage Tag Library Name]]></doc>
+<doc title='help'><![CDATA[Click the + to select specific experiments or use the tree box to select all for the chosen organism.]]></doc>
+<doc title='default'><![CDATA[false]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='Glamblia'><doc title='description'><![CDATA[<i>Giardia Assemblage A isolate WB</i>]]></doc></option>
+<option value='Troph1'><doc title='description'><![CDATA[Troph1]]></doc></option>
+<option value='4 hour Encystation'><doc title='description'><![CDATA[4 hour Encystation]]></doc></option>
+<option value='12 hour Encystation'><doc title='description'><![CDATA[12 hour Encystation]]></doc></option>
+<option value='21 hour Encystation'><doc title='description'><![CDATA[21 hour Encystation]]></doc></option>
+<option value='42 hour Encystation'><doc title='description'><![CDATA[42 hour Encystation]]></doc></option>
+<option value='Cyst'><doc title='description'><![CDATA[Cyst]]></doc></option>
+<option value='S1 Excystation'><doc title='description'><![CDATA[S1 Excystation]]></doc></option>
+<option value='S2 Excystation'><doc title='description'><![CDATA[S2 Excystation]]></doc></option>
+<option value='30 min Excystation'><doc title='description'><![CDATA[30 min Excystation]]></doc></option>
+<option value='60 min Excystation'><doc title='description'><![CDATA[60 min Excystation]]></doc></option>
+<option value='Tbrucei'><doc title='description'><![CDATA[<i>Trypanosome brucei TREU927</i>]]></doc></option>
+<option value='bloodstream library (gambiense)'><doc title='description'><![CDATA[bloodstream library (gambiense)]]></doc></option>
+<option value='procyclic library (gambiense)'><doc title='description'><![CDATA[procyclic library (gambiense)]]></doc></option>
+<option value='Pfalciparum'><doc title='description'><![CDATA[<i>Plasmodium falciparum</i>]]></doc></option>
+<option value='CQlibrary'><doc title='description'><![CDATA[CQlibrary]]></doc></option>
+<option value='SAGE-3D7-library1'><doc title='description'><![CDATA[SAGE-3D7-library1]]></doc></option>
+<option value='CQcontrol'><doc title='description'><![CDATA[CQcontrol]]></doc></option>
+<option value='Tgondii'><doc title='description'><![CDATA[<i>Toxoplasma gondii</i>]]></doc></option>
+<option value='sp'><doc title='description'><![CDATA[sp]]></doc></option>
+<option value='d4'><doc title='description'><![CDATA[d4]]></doc></option>
+<option value='d6'><doc title='description'><![CDATA[d6]]></doc></option>
+<option value='d7'><doc title='description'><![CDATA[d7]]></doc></option>
+<option value='d15'><doc title='description'><![CDATA[d15]]></doc></option>
+<option value='ph'><doc title='description'><![CDATA[ph]]></doc></option>
+<option value='msj'><doc title='description'><![CDATA[msj]]></doc></option>
+<option value='rh'><doc title='description'><![CDATA[rh]]></doc></option>
+<option value='b7'><doc title='description'><![CDATA[b7]]></doc></option>
+</param>
+<param name='sage_tag_min_r' type='xsd:string' required='true' default='10' >
+<doc title='prompt'><![CDATA[R statistic Greater Than:]]></doc>
+<doc title='help'><![CDATA[Choose a minimum R value to be returned. Stekel et al.???s R-statistic (Stekel, Git, and Falciani 2000) scores SAGE tags on differential expression among libraries (more variable tags have higher R values), with no assignment of significance values.]]></doc>
+<doc title='default'><![CDATA[10]]></doc>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Tag]]></doc></option>
+<option value='tag_sequence'><doc title='description'><![CDATA[Tag Sequence]]></doc></option>
+<option value='sequence_id'><doc title='description'><![CDATA[Sequence Id]]></doc></option>
+<option value='start_min'><doc title='description'><![CDATA[Tag Start]]></doc></option>
+<option value='end_max'><doc title='description'><![CDATA[Tag End]]></doc></option>
+<option value='strand'><doc title='description'><![CDATA[Strand]]></doc></option>
+<option value='context_start'><doc title='description'><![CDATA[Genomic Context Start]]></doc></option>
+<option value='context_end'><doc title='description'><![CDATA[Genomic Context End]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='rad_source_id'><doc title='description'><![CDATA[External Identifier]]></doc></option>
+<option value='project_id'><doc title='description'><![CDATA[Project Id]]></doc></option>
+<option value='gene_source_id'><doc title='description'><![CDATA[Gene]]></doc></option>
+<option value='gene_product'><doc title='description'><![CDATA[Gene Product]]></doc></option>
+<option value='feature_source_id'><doc title='description'><![CDATA[Feature source id]]></doc></option>
+<option value='location_text'><doc title='description'><![CDATA[Genomic Location]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

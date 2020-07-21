@@ -1,0 +1,132 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='GeneQuestions'>
+<resource path='GenesByRNASeqPfRBCExprnPercentile.xml'>
+<method href='#genesbyrnaseqpfrbcexprnpercentile'/>
+</resource>
+<resource path='GenesByRNASeqPfRBCExprnPercentile.json'>
+<method href='#genesbyrnaseqpfrbcexprnpercentile'/>
+</resource>
+<method name='POST' id='genesbyrnaseqpfrbcexprnpercentile'>
+<doc title='display_name'><![CDATA[P.f. post infection (RBC) RNA-seq time series (percentile)]]></doc>
+<doc title='summary'><![CDATA[Find <i>P. falciparum</i> genes based on percentile expression at different time points post infection. Data is based on RNA sequence profiles. <br>]]></doc>
+<doc title='description'><![CDATA[Find <i>P. falciparum</i> genes based on percentile expression at different time points post infection. 
+<br><br><img src="images/stunnenberg_iRBC_scaling.jpg"/>
+<br><br>Normalisation methods presume equal transcriptional activity across stages (i.e. normalise to total signal intensity of arrays or to total RNA-seq tag number for sequencing). However, transcriptional activity has been shown to significantly vary, being low after invasion of a red blood cell and reaching the highest level at trophozoite stage (Sims et al. Eukaryotic Cell, 2009). We observed this variation in overall transcriptional activity in the RNA yield from these stages (see Figure above). Therefore, to provide a better approximation of the true transcriptional activity, tag density (per 1000bp) values at each stage should be adjusted by a scaling factor (see table). This scaling factor is derived from total RNA yield divided by the number of nuclei per infected RBC, to yield a value for the total transcriptional activity per parasite nucleus.  Note that the current search does not take this into account but may be implemented in a subsequent release.
+<br><br>Total RNA was collected from one synchronous 3D7 parasite population at 5, 10, 15, 20, 25, 30, 35 and 40 hours post-invasion of intraerythrocytic development. mRNAs were enriched using polyA-selection (Oligotex dT, Qiagen), fragmented and converted to double-stranded cDNA. All samples were prepared for Illumina sequencing using a customized bias-free sample preparation protocol (developed at Stunnenberg lab, which prevents sequence bias) and sequenced for 76bp from one side of each fragment on an Illumina GAII machine.
+<br><br><br><br>B&aacute;rtfai R, Hoeijmakers WAM, Salcedo-Amaya AM, Smits AH, Janssen-Megens E, et al. (2010). H2A.Z Demarcates Intergenic Regions of the Plasmodium falciparum Epigenome That Are Dynamically Marked by H3K9ac & H3K4me3. PLoS Pathog 6(12): e1001223. doi:10.1371/journal.ppat.1001223]]></doc>
+<request>
+<param name='exprnPercentilePfRBCRnaSeqTP' type='xsd:string' required='true' default='5h' repeating='true'>
+<doc title='prompt'><![CDATA[Time point post infection]]></doc>
+<doc title='help'><![CDATA[Choose a Time Point]]></doc>
+<doc title='default'><![CDATA[5h]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='5h'><doc title='description'><![CDATA[5 hours]]></doc></option>
+<option value='10h'><doc title='description'><![CDATA[10 hours]]></doc></option>
+<option value='15h'><doc title='description'><![CDATA[15 hours]]></doc></option>
+<option value='20h'><doc title='description'><![CDATA[20 hours]]></doc></option>
+<option value='25h'><doc title='description'><![CDATA[25 hours]]></doc></option>
+<option value='30h'><doc title='description'><![CDATA[30 hours]]></doc></option>
+<option value='35h'><doc title='description'><![CDATA[35 hours]]></doc></option>
+<option value='40h'><doc title='description'><![CDATA[40 hours]]></doc></option>
+</param>
+<param name='min_expression_percentile' type='xsd:string' required='true' default='80' >
+<doc title='prompt'><![CDATA[Minimum expression percentile]]></doc>
+<doc title='help'><![CDATA[Lower bound on expression percentile.]]></doc>
+<doc title='default'><![CDATA[80]]></doc>
+</param>
+<param name='max_expression_percentile' type='xsd:string' required='true' default='100' >
+<doc title='prompt'><![CDATA[Maximum expression percentile]]></doc>
+<doc title='help'><![CDATA[Upper bound on expression percentile.]]></doc>
+<doc title='default'><![CDATA[100]]></doc>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Gene]]></doc></option>
+<option value='formatted_gene_id'><doc title='description'><![CDATA[Gene Group]]></doc></option>
+<option value='sequence_id'><doc title='description'><![CDATA[Genomic Sequence ID]]></doc></option>
+<option value='chromosome'><doc title='description'><![CDATA[Chromosome]]></doc></option>
+<option value='location_text'><doc title='description'><![CDATA[Genomic Location]]></doc></option>
+<option value='strand'><doc title='description'><![CDATA[Gene Strand]]></doc></option>
+<option value='gene_type'><doc title='description'><![CDATA[Gene Type]]></doc></option>
+<option value='exon_count'><doc title='description'><![CDATA[# Exons]]></doc></option>
+<option value='transcript_length'><doc title='description'><![CDATA[Transcript Length]]></doc></option>
+<option value='cds_length'><doc title='description'><![CDATA[CDS Length]]></doc></option>
+<option value='product'><doc title='description'><![CDATA[Product Description]]></doc></option>
+<option value='protein_length'><doc title='description'><![CDATA[Protein Length]]></doc></option>
+<option value='tm_count'><doc title='description'><![CDATA[# TM Domains]]></doc></option>
+<option value='molecular_weight'><doc title='description'><![CDATA[Molecular Weight]]></doc></option>
+<option value='isoelectric_point'><doc title='description'><![CDATA[Isoelectric Point]]></doc></option>
+<option value='ec_numbers_string'><doc title='description'><![CDATA[EC Numbers]]></doc></option>
+<option value='ortholog_number'><doc title='description'><![CDATA[Ortholog count]]></doc></option>
+<option value='paralog_number'><doc title='description'><![CDATA[Paralog count]]></doc></option>
+<option value='orthomcl_name'><doc title='description'><![CDATA[Ortholog Group]]></doc></option>
+<option value='signalp_scores'><doc title='description'><![CDATA[SignalP Scores]]></doc></option>
+<option value='signalp_peptide'><doc title='description'><![CDATA[SignalP Peptide]]></doc></option>
+<option value='ann_go_function'><doc title='description'><![CDATA[Annotated GO Function]]></doc></option>
+<option value='ann_go_process'><doc title='description'><![CDATA[Annotated GO Process]]></doc></option>
+<option value='ann_go_component'><doc title='description'><![CDATA[Annotated GO Component]]></doc></option>
+<option value='pred_go_function'><doc title='description'><![CDATA[Predicted GO Function]]></doc></option>
+<option value='pred_go_process'><doc title='description'><![CDATA[Predicted GO Process]]></doc></option>
+<option value='pred_go_component'><doc title='description'><![CDATA[Predicted GO Component]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='is_pseudo'><doc title='description'><![CDATA[Is Pseudo]]></doc></option>
+<option value='protein_sequence'><doc title='description'><![CDATA[Predicted Protein Sequence]]></doc></option>
+<option value='transcript_sequence'><doc title='description'><![CDATA[Predicted RNA/mRNA Sequence (introns spliced out)]]></doc></option>
+<option value='cds'><doc title='description'><![CDATA[Coding Sequence]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+<option value='percentile'><doc title='description'><![CDATA[Percentile]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+<option value='SNPs'><doc title='description'><![CDATA[SNPs Summary]]></doc></option>
+<option value='GeneModelDump'><doc title='description'><![CDATA[Gene Model]]></doc></option>
+<option value='InterPro'><doc title='description'><![CDATA[InterPro Domains]]></doc></option>
+<option value='TMHMM'><doc title='description'><![CDATA[Transmembrane Domains]]></doc></option>
+<option value='LowComplexity'><doc title='description'><![CDATA[Low Complexity Regions]]></doc></option>
+<option value='SignalP'><doc title='description'><![CDATA[Signal Peptide]]></doc></option>
+<option value='BlastP'><doc title='description'><![CDATA[BlastP Hits]]></doc></option>
+<option value='Genbank'><doc title='description'><![CDATA[Gene Location]]></doc></option>
+<option value='SageTags'><doc title='description'><![CDATA[Sage Tags]]></doc></option>
+<option value='Notes'><doc title='description'><![CDATA[Notes]]></doc></option>
+<option value='UserComments'><doc title='description'><![CDATA[User Comments]]></doc></option>
+<option value='CommunityExpComments'><doc title='description'><![CDATA[Community Annotations]]></doc></option>
+<option value='EcNumber'><doc title='description'><![CDATA[EC Number]]></doc></option>
+<option value='MassSpec'><doc title='description'><![CDATA[Mass Spec.-based Expression Evidence]]></doc></option>
+<option value='GoTerms'><doc title='description'><![CDATA[GO Terms]]></doc></option>
+<option value='Phenotype'><doc title='description'><![CDATA[Phenotype]]></doc></option>
+<option value='Y2hInteractions'><doc title='description'><![CDATA[Y2H Interactions]]></doc></option>
+<option value='Orthologs'><doc title='description'><![CDATA[Orthologs and Paralogs within EuPathDB]]></doc></option>
+<option value='MetabolicPathways'><doc title='description'><![CDATA[Metabolic Pathways]]></doc></option>
+<option value='TaskComments'><doc title='description'><![CDATA[Toxoplasma Genome Sequencing Project Annotation]]></doc></option>
+<option value='ArrayElements'><doc title='description'><![CDATA[Mapped Array Elements]]></doc></option>
+<option value='TwoChannelDiffExpr'><doc title='description'><![CDATA[P.Berghei Differential Expression - DOZI KO vs. WT]]></doc></option>
+<option value='ProteinExpression'><doc title='description'><![CDATA[P.Berghei Protein Expression]]></doc></option>
+<option value='Mr4Reagents'><doc title='description'><![CDATA[MR4 Reagents]]></doc></option>
+<option value='ProteinDatabase'><doc title='description'><![CDATA[Protein Linkouts]]></doc></option>
+<option value='GeneLinkouts'><doc title='description'><![CDATA[External Links]]></doc></option>
+<option value='3dPreds'><doc title='description'><![CDATA[3D Structure Predictions]]></doc></option>
+<option value='PdbSimilarities'><doc title='description'><![CDATA[Similarities to Protein Data Bank (PDB) Chains]]></doc></option>
+<option value='Epitopes'><doc title='description'><![CDATA[Epitopes from IEDB]]></doc></option>
+<option value='IsolateOverlap'><doc title='description'><![CDATA[Isolates]]></doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

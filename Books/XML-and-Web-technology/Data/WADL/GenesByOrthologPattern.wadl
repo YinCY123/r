@@ -1,0 +1,574 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='GeneQuestions'>
+<resource path='GenesByOrthologPattern.xml'>
+<method href='#genesbyorthologpattern'/>
+</resource>
+<resource path='GenesByOrthologPattern.json'>
+<method href='#genesbyorthologpattern'/>
+</resource>
+<method name='POST' id='genesbyorthologpattern'>
+<doc title='display_name'><![CDATA[Orthology Phylogenetic Profile]]></doc>
+<doc title='summary'><![CDATA[Find genes that have a specified orthology-based phylogenetic profile.]]></doc>
+<doc title='description'><![CDATA[Find genes that have a specified orthology-based phylogenetic profile. The phylogenetic profile of a gene is a series of "present" or "absent" calls, reflecting the presence or absence of a putative ortholog in all genomes used.
+           <br><br>
+
+           An <a href="http://orthomcl.org/">OrthoMCL</a> analysis of the proteins of select species which are each placed in an ortholog group. 
+           From your favorite gene's perspective, the other species that are included in that gene's ortholog group can be thought of as a phylogenetic profile.
+            <br><br>
+            Use this search to define a pattern
+            across those ortholog groups, and find genes that match that pattern.  The pattern is a
+            specification, for each species, of "include", "exclude", or "don't care."  Click on the
+            radio button next to a species to toggle through the three states.  (A
+            <img src="images/yes.gif"> means
+            "include", an <img src="images/no.gif"> means "exclude"
+            and <img src="images/dc.gif"> means "don't care".)
+            <br> <br>
+            For example, to find genes
+            that are present in Apicomplexa but not in humans, click on Apicomplexa until you see
+            a <img src="images/yes.gif"> and click on <i>Homo
+            sapiens</i> until you see an
+            <img src="images/no.gif">.]]></doc>
+<request>
+<param name='profile_pattern' type='xsd:string' required='true' default='%hsap:N%pfal:Y%' >
+<doc title='prompt'><![CDATA[Profile Pattern]]></doc>
+<doc title='help'><![CDATA[Example: '%hsa:N%pfa:Y%']]></doc>
+<doc title='default'><![CDATA[%hsap:N%pfal:Y%]]></doc>
+</param>
+<param name='included_species' type='xsd:string' required='true' default='' >
+<doc title='prompt'><![CDATA[Included Species]]></doc>
+<doc title='help'><![CDATA[List of included species (for documentation only)]]></doc>
+<doc title='default'><![CDATA[null]]></doc>
+</param>
+<param name='excluded_species' type='xsd:string' required='true' default='' >
+<doc title='prompt'><![CDATA[Excluded Species]]></doc>
+<doc title='help'><![CDATA[List of excluded species (for documentation only)]]></doc>
+<doc title='default'><![CDATA[null]]></doc>
+</param>
+<param name='organism' type='xsd:string' required='true' default='Entamoeba dispar,Entamoeba histolytica,Entamoeba invadens,Cryptosporidium parvum,Cryptosporidium hominis,Cryptosporidium muris,Giardia Assemblage A isolate WB,Giardia Assemblage B isolate GS,Giardia Assemblage E isolate P15,Encephalitozoon cuniculi,Encephalitozoon intestinalis,Enterocytozoon bieneusi,Plasmodium falciparum,Plasmodium vivax,Plasmodium yoelii,Plasmodium berghei,Plasmodium chabaudi,Plasmodium knowlesi,Toxoplasma gondii,Neospora caninum,Trichomonas vaginalis,Trypanosoma cruzi,Leishmania braziliensis,Leishmania infantum,Leishmania major,Leishmania mexicana,Trypanosoma brucei,Trypanosoma congolense,Trypanosoma vivax' repeating='true'>
+<doc title='prompt'><![CDATA[Organism]]></doc>
+<doc title='help'><![CDATA[Organism]]></doc>
+<doc title='default'><![CDATA[Entamoeba dispar,Entamoeba histolytica,Entamoeba invadens,Cryptosporidium parvum,Cryptosporidium hominis,Cryptosporidium muris,Giardia Assemblage A isolate WB,Giardia Assemblage B isolate GS,Giardia Assemblage E isolate P15,Encephalitozoon cuniculi,Encephalitozoon intestinalis,Enterocytozoon bieneusi,Plasmodium falciparum,Plasmodium vivax,Plasmodium yoelii,Plasmodium berghei,Plasmodium chabaudi,Plasmodium knowlesi,Toxoplasma gondii,Neospora caninum,Trichomonas vaginalis,Trypanosoma cruzi,Leishmania braziliensis,Leishmania infantum,Leishmania major,Leishmania mexicana,Trypanosoma brucei,Trypanosoma congolense,Trypanosoma vivax]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='Entamoeba dispar'><doc title='description'><![CDATA[Entamoeba dispar]]></doc></option>
+<option value='Entamoeba histolytica'><doc title='description'><![CDATA[Entamoeba histolytica]]></doc></option>
+<option value='Entamoeba invadens'><doc title='description'><![CDATA[Entamoeba invadens]]></doc></option>
+<option value='Cryptosporidium parvum'><doc title='description'><![CDATA[Cryptosporidium parvum]]></doc></option>
+<option value='Cryptosporidium hominis'><doc title='description'><![CDATA[Cryptosporidium hominis]]></doc></option>
+<option value='Cryptosporidium muris'><doc title='description'><![CDATA[Cryptosporidium muris]]></doc></option>
+<option value='Giardia Assemblage A isolate WB'><doc title='description'><![CDATA[Giardia Assemblage A isolate WB]]></doc></option>
+<option value='Giardia Assemblage B isolate GS'><doc title='description'><![CDATA[Giardia Assemblage B isolate GS]]></doc></option>
+<option value='Giardia Assemblage E isolate P15'><doc title='description'><![CDATA[Giardia Assemblage E isolate P15]]></doc></option>
+<option value='Encephalitozoon cuniculi'><doc title='description'><![CDATA[Encephalitozoon cuniculi]]></doc></option>
+<option value='Encephalitozoon intestinalis'><doc title='description'><![CDATA[Encephalitozoon intestinalis]]></doc></option>
+<option value='Enterocytozoon bieneusi'><doc title='description'><![CDATA[Enterocytozoon bieneusi]]></doc></option>
+<option value='Plasmodium falciparum'><doc title='description'><![CDATA[Plasmodium falciparum]]></doc></option>
+<option value='Plasmodium vivax'><doc title='description'><![CDATA[Plasmodium vivax]]></doc></option>
+<option value='Plasmodium yoelii'><doc title='description'><![CDATA[Plasmodium yoelii]]></doc></option>
+<option value='Plasmodium berghei'><doc title='description'><![CDATA[Plasmodium berghei]]></doc></option>
+<option value='Plasmodium chabaudi'><doc title='description'><![CDATA[Plasmodium chabaudi]]></doc></option>
+<option value='Plasmodium knowlesi'><doc title='description'><![CDATA[Plasmodium knowlesi]]></doc></option>
+<option value='Toxoplasma gondii'><doc title='description'><![CDATA[Toxoplasma gondii]]></doc></option>
+<option value='Neospora caninum'><doc title='description'><![CDATA[Neospora caninum]]></doc></option>
+<option value='Trichomonas vaginalis'><doc title='description'><![CDATA[Trichomonas vaginalis]]></doc></option>
+<option value='Trypanosoma cruzi'><doc title='description'><![CDATA[Trypanosoma cruzi]]></doc></option>
+<option value='Leishmania braziliensis'><doc title='description'><![CDATA[Leishmania braziliensis]]></doc></option>
+<option value='Leishmania infantum'><doc title='description'><![CDATA[Leishmania infantum]]></doc></option>
+<option value='Leishmania major'><doc title='description'><![CDATA[Leishmania major]]></doc></option>
+<option value='Leishmania mexicana'><doc title='description'><![CDATA[Leishmania mexicana]]></doc></option>
+<option value='Trypanosoma brucei'><doc title='description'><![CDATA[Trypanosoma brucei]]></doc></option>
+<option value='Trypanosoma congolense'><doc title='description'><![CDATA[Trypanosoma congolense]]></doc></option>
+<option value='Trypanosoma vivax'><doc title='description'><![CDATA[Trypanosoma vivax]]></doc></option>
+</param>
+<param name='phyletic_indent_map' type='xsd:string' required='true' default='' repeating='true'>
+<doc title='prompt'><![CDATA[phyletic_indent_map]]></doc>
+<doc title='help'><![CDATA[Results will be sorted ascending or descending order]]></doc>
+<doc title='default'><![CDATA[null]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='BACT'><doc title='description'><![CDATA[BACT]]></doc></option>
+<option value='FIRM'><doc title='description'><![CDATA[FIRM]]></doc></option>
+<option value='bant'><doc title='description'><![CDATA[bant]]></doc></option>
+<option value='cbot'><doc title='description'><![CDATA[cbot]]></doc></option>
+<option value='cper'><doc title='description'><![CDATA[cper]]></doc></option>
+<option value='lmon'><doc title='description'><![CDATA[lmon]]></doc></option>
+<option value='saur'><doc title='description'><![CDATA[saur]]></doc></option>
+<option value='spne'><doc title='description'><![CDATA[spne]]></doc></option>
+<option value='PROT'><doc title='description'><![CDATA[PROT]]></doc></option>
+<option value='PROA'><doc title='description'><![CDATA[PROA]]></doc></option>
+<option value='atum'><doc title='description'><![CDATA[atum]]></doc></option>
+<option value='bsui'><doc title='description'><![CDATA[bsui]]></doc></option>
+<option value='rpro'><doc title='description'><![CDATA[rpro]]></doc></option>
+<option value='rtyp'><doc title='description'><![CDATA[rtyp]]></doc></option>
+<option value='PROB'><doc title='description'><![CDATA[PROB]]></doc></option>
+<option value='bmal'><doc title='description'><![CDATA[bmal]]></doc></option>
+<option value='bpse'><doc title='description'><![CDATA[bpse]]></doc></option>
+<option value='rsol'><doc title='description'><![CDATA[rsol]]></doc></option>
+<option value='PROD'><doc title='description'><![CDATA[PROD]]></doc></option>
+<option value='gsul'><doc title='description'><![CDATA[gsul]]></doc></option>
+<option value='PROG'><doc title='description'><![CDATA[PROG]]></doc></option>
+<option value='cbur'><doc title='description'><![CDATA[cbur]]></doc></option>
+<option value='ecol'><doc title='description'><![CDATA[ecol]]></doc></option>
+<option value='ftul'><doc title='description'><![CDATA[ftul]]></doc></option>
+<option value='sent'><doc title='description'><![CDATA[sent]]></doc></option>
+<option value='sfle'><doc title='description'><![CDATA[sfle]]></doc></option>
+<option value='vcho'><doc title='description'><![CDATA[vcho]]></doc></option>
+<option value='yent'><doc title='description'><![CDATA[yent]]></doc></option>
+<option value='ypes'><doc title='description'><![CDATA[ypes]]></doc></option>
+<option value='PROE'><doc title='description'><![CDATA[PROE]]></doc></option>
+<option value='cjej'><doc title='description'><![CDATA[cjej]]></doc></option>
+<option value='wsuc'><doc title='description'><![CDATA[wsuc]]></doc></option>
+<option value='OBAC'><doc title='description'><![CDATA[OBAC]]></doc></option>
+<option value='aaeo'><doc title='description'><![CDATA[aaeo]]></doc></option>
+<option value='cpne'><doc title='description'><![CDATA[cpne]]></doc></option>
+<option value='ctep'><doc title='description'><![CDATA[ctep]]></doc></option>
+<option value='deth'><doc title='description'><![CDATA[deth]]></doc></option>
+<option value='drad'><doc title='description'><![CDATA[drad]]></doc></option>
+<option value='mtub'><doc title='description'><![CDATA[mtub]]></doc></option>
+<option value='rbal'><doc title='description'><![CDATA[rbal]]></doc></option>
+<option value='syne'><doc title='description'><![CDATA[syne]]></doc></option>
+<option value='tmar'><doc title='description'><![CDATA[tmar]]></doc></option>
+<option value='tpal'><doc title='description'><![CDATA[tpal]]></doc></option>
+<option value='ARCH'><doc title='description'><![CDATA[ARCH]]></doc></option>
+<option value='EURY'><doc title='description'><![CDATA[EURY]]></doc></option>
+<option value='aful'><doc title='description'><![CDATA[aful]]></doc></option>
+<option value='halo'><doc title='description'><![CDATA[halo]]></doc></option>
+<option value='hwal'><doc title='description'><![CDATA[hwal]]></doc></option>
+<option value='mjan'><doc title='description'><![CDATA[mjan]]></doc></option>
+<option value='mmar'><doc title='description'><![CDATA[mmar]]></doc></option>
+<option value='msmi'><doc title='description'><![CDATA[msmi]]></doc></option>
+<option value='tvol'><doc title='description'><![CDATA[tvol]]></doc></option>
+<option value='CREN'><doc title='description'><![CDATA[CREN]]></doc></option>
+<option value='cmaq'><doc title='description'><![CDATA[cmaq]]></doc></option>
+<option value='hbut'><doc title='description'><![CDATA[hbut]]></doc></option>
+<option value='ihos'><doc title='description'><![CDATA[ihos]]></doc></option>
+<option value='msed'><doc title='description'><![CDATA[msed]]></doc></option>
+<option value='nmar'><doc title='description'><![CDATA[nmar]]></doc></option>
+<option value='smar'><doc title='description'><![CDATA[smar]]></doc></option>
+<option value='ssol'><doc title='description'><![CDATA[ssol]]></doc></option>
+<option value='NANO'><doc title='description'><![CDATA[NANO]]></doc></option>
+<option value='nequ'><doc title='description'><![CDATA[nequ]]></doc></option>
+<option value='KORA'><doc title='description'><![CDATA[KORA]]></doc></option>
+<option value='ckor'><doc title='description'><![CDATA[ckor]]></doc></option>
+<option value='EUKA'><doc title='description'><![CDATA[EUKA]]></doc></option>
+<option value='ALVE'><doc title='description'><![CDATA[ALVE]]></doc></option>
+<option value='CILI'><doc title='description'><![CDATA[CILI]]></doc></option>
+<option value='tthe'><doc title='description'><![CDATA[tthe]]></doc></option>
+<option value='APIC'><doc title='description'><![CDATA[APIC]]></doc></option>
+<option value='COCC'><doc title='description'><![CDATA[COCC]]></doc></option>
+<option value='chom'><doc title='description'><![CDATA[chom]]></doc></option>
+<option value='cmur'><doc title='description'><![CDATA[cmur]]></doc></option>
+<option value='cpar'><doc title='description'><![CDATA[cpar]]></doc></option>
+<option value='ncan'><doc title='description'><![CDATA[ncan]]></doc></option>
+<option value='tgon'><doc title='description'><![CDATA[tgon]]></doc></option>
+<option value='ACON'><doc title='description'><![CDATA[ACON]]></doc></option>
+<option value='HAEM'><doc title='description'><![CDATA[HAEM]]></doc></option>
+<option value='pber'><doc title='description'><![CDATA[pber]]></doc></option>
+<option value='pcha'><doc title='description'><![CDATA[pcha]]></doc></option>
+<option value='pfal'><doc title='description'><![CDATA[pfal]]></doc></option>
+<option value='pkno'><doc title='description'><![CDATA[pkno]]></doc></option>
+<option value='pviv'><doc title='description'><![CDATA[pviv]]></doc></option>
+<option value='pyoe'><doc title='description'><![CDATA[pyoe]]></doc></option>
+<option value='PIRO'><doc title='description'><![CDATA[PIRO]]></doc></option>
+<option value='bbov'><doc title='description'><![CDATA[bbov]]></doc></option>
+<option value='tann'><doc title='description'><![CDATA[tann]]></doc></option>
+<option value='tpar'><doc title='description'><![CDATA[tpar]]></doc></option>
+<option value='AMOE'><doc title='description'><![CDATA[AMOE]]></doc></option>
+<option value='ddis'><doc title='description'><![CDATA[ddis]]></doc></option>
+<option value='edis'><doc title='description'><![CDATA[edis]]></doc></option>
+<option value='ehis'><doc title='description'><![CDATA[ehis]]></doc></option>
+<option value='einv'><doc title='description'><![CDATA[einv]]></doc></option>
+<option value='EUGL'><doc title='description'><![CDATA[EUGL]]></doc></option>
+<option value='lbra'><doc title='description'><![CDATA[lbra]]></doc></option>
+<option value='linf'><doc title='description'><![CDATA[linf]]></doc></option>
+<option value='lmaj'><doc title='description'><![CDATA[lmaj]]></doc></option>
+<option value='lmex'><doc title='description'><![CDATA[lmex]]></doc></option>
+<option value='tbrg'><doc title='description'><![CDATA[tbrg]]></doc></option>
+<option value='tbru'><doc title='description'><![CDATA[tbru]]></doc></option>
+<option value='tcon'><doc title='description'><![CDATA[tcon]]></doc></option>
+<option value='tcru'><doc title='description'><![CDATA[tcru]]></doc></option>
+<option value='tviv'><doc title='description'><![CDATA[tviv]]></doc></option>
+<option value='VIRI'><doc title='description'><![CDATA[VIRI]]></doc></option>
+<option value='STRE'><doc title='description'><![CDATA[STRE]]></doc></option>
+<option value='atha'><doc title='description'><![CDATA[atha]]></doc></option>
+<option value='osat'><doc title='description'><![CDATA[osat]]></doc></option>
+<option value='ppat'><doc title='description'><![CDATA[ppat]]></doc></option>
+<option value='rcom'><doc title='description'><![CDATA[rcom]]></doc></option>
+<option value='CHLO'><doc title='description'><![CDATA[CHLO]]></doc></option>
+<option value='crei'><doc title='description'><![CDATA[crei]]></doc></option>
+<option value='otau'><doc title='description'><![CDATA[otau]]></doc></option>
+<option value='RHOD'><doc title='description'><![CDATA[RHOD]]></doc></option>
+<option value='cmer'><doc title='description'><![CDATA[cmer]]></doc></option>
+<option value='CRYP'><doc title='description'><![CDATA[CRYP]]></doc></option>
+<option value='gthe'><doc title='description'><![CDATA[gthe]]></doc></option>
+<option value='BACI'><doc title='description'><![CDATA[BACI]]></doc></option>
+<option value='tpse'><doc title='description'><![CDATA[tpse]]></doc></option>
+<option value='FUNG'><doc title='description'><![CDATA[FUNG]]></doc></option>
+<option value='MICR'><doc title='description'><![CDATA[MICR]]></doc></option>
+<option value='ecun'><doc title='description'><![CDATA[ecun]]></doc></option>
+<option value='eint'><doc title='description'><![CDATA[eint]]></doc></option>
+<option value='BASI'><doc title='description'><![CDATA[BASI]]></doc></option>
+<option value='cneo'><doc title='description'><![CDATA[cneo]]></doc></option>
+<option value='lbic'><doc title='description'><![CDATA[lbic]]></doc></option>
+<option value='pchr'><doc title='description'><![CDATA[pchr]]></doc></option>
+<option value='ASCO'><doc title='description'><![CDATA[ASCO]]></doc></option>
+<option value='afum'><doc title='description'><![CDATA[afum]]></doc></option>
+<option value='aory'><doc title='description'><![CDATA[aory]]></doc></option>
+<option value='cgla'><doc title='description'><![CDATA[cgla]]></doc></option>
+<option value='cimm'><doc title='description'><![CDATA[cimm]]></doc></option>
+<option value='cpos'><doc title='description'><![CDATA[cpos]]></doc></option>
+<option value='dhan'><doc title='description'><![CDATA[dhan]]></doc></option>
+<option value='egos'><doc title='description'><![CDATA[egos]]></doc></option>
+<option value='gzea'><doc title='description'><![CDATA[gzea]]></doc></option>
+<option value='klac'><doc title='description'><![CDATA[klac]]></doc></option>
+<option value='mgri'><doc title='description'><![CDATA[mgri]]></doc></option>
+<option value='ncra'><doc title='description'><![CDATA[ncra]]></doc></option>
+<option value='psti'><doc title='description'><![CDATA[psti]]></doc></option>
+<option value='scer'><doc title='description'><![CDATA[scer]]></doc></option>
+<option value='spom'><doc title='description'><![CDATA[spom]]></doc></option>
+<option value='ylip'><doc title='description'><![CDATA[ylip]]></doc></option>
+<option value='META'><doc title='description'><![CDATA[META]]></doc></option>
+<option value='PLAT'><doc title='description'><![CDATA[PLAT]]></doc></option>
+<option value='sman'><doc title='description'><![CDATA[sman]]></doc></option>
+<option value='NEMA'><doc title='description'><![CDATA[NEMA]]></doc></option>
+<option value='bmaa'><doc title='description'><![CDATA[bmaa]]></doc></option>
+<option value='cbri'><doc title='description'><![CDATA[cbri]]></doc></option>
+<option value='cele'><doc title='description'><![CDATA[cele]]></doc></option>
+<option value='ARTH'><doc title='description'><![CDATA[ARTH]]></doc></option>
+<option value='aaeg'><doc title='description'><![CDATA[aaeg]]></doc></option>
+<option value='agam'><doc title='description'><![CDATA[agam]]></doc></option>
+<option value='amel'><doc title='description'><![CDATA[amel]]></doc></option>
+<option value='apis'><doc title='description'><![CDATA[apis]]></doc></option>
+<option value='bmor'><doc title='description'><![CDATA[bmor]]></doc></option>
+<option value='cpip'><doc title='description'><![CDATA[cpip]]></doc></option>
+<option value='dmel'><doc title='description'><![CDATA[dmel]]></doc></option>
+<option value='phum'><doc title='description'><![CDATA[phum]]></doc></option>
+<option value='CHOR'><doc title='description'><![CDATA[CHOR]]></doc></option>
+<option value='ACTI'><doc title='description'><![CDATA[ACTI]]></doc></option>
+<option value='drer'><doc title='description'><![CDATA[drer]]></doc></option>
+<option value='tnig'><doc title='description'><![CDATA[tnig]]></doc></option>
+<option value='trub'><doc title='description'><![CDATA[trub]]></doc></option>
+<option value='AVES'><doc title='description'><![CDATA[AVES]]></doc></option>
+<option value='ggal'><doc title='description'><![CDATA[ggal]]></doc></option>
+<option value='MAMM'><doc title='description'><![CDATA[MAMM]]></doc></option>
+<option value='clup'><doc title='description'><![CDATA[clup]]></doc></option>
+<option value='hsap'><doc title='description'><![CDATA[hsap]]></doc></option>
+<option value='mdom'><doc title='description'><![CDATA[mdom]]></doc></option>
+<option value='mmus'><doc title='description'><![CDATA[mmus]]></doc></option>
+<option value='oana'><doc title='description'><![CDATA[oana]]></doc></option>
+<option value='ptro'><doc title='description'><![CDATA[ptro]]></doc></option>
+<option value='rnor'><doc title='description'><![CDATA[rnor]]></doc></option>
+<option value='TUNI'><doc title='description'><![CDATA[TUNI]]></doc></option>
+<option value='cint'><doc title='description'><![CDATA[cint]]></doc></option>
+<option value='OMET'><doc title='description'><![CDATA[OMET]]></doc></option>
+<option value='nvec'><doc title='description'><![CDATA[nvec]]></doc></option>
+<option value='tadh'><doc title='description'><![CDATA[tadh]]></doc></option>
+<option value='OEUK'><doc title='description'><![CDATA[OEUK]]></doc></option>
+<option value='glab'><doc title='description'><![CDATA[glab]]></doc></option>
+<option value='glae'><doc title='description'><![CDATA[glae]]></doc></option>
+<option value='glam'><doc title='description'><![CDATA[glam]]></doc></option>
+<option value='mbre'><doc title='description'><![CDATA[mbre]]></doc></option>
+<option value='pram'><doc title='description'><![CDATA[pram]]></doc></option>
+<option value='tvag'><doc title='description'><![CDATA[tvag]]></doc></option>
+<option value='wend'><doc title='description'><![CDATA[wend]]></doc></option>
+<option value='mlep'><doc title='description'><![CDATA[mlep]]></doc></option>
+<option value='micr'><doc title='description'><![CDATA[micr]]></doc></option>
+<option value='vcar'><doc title='description'><![CDATA[vcar]]></doc></option>
+<option value='ebie'><doc title='description'><![CDATA[ebie]]></doc></option>
+<option value='cneg'><doc title='description'><![CDATA[cneg]]></doc></option>
+<option value='anid'><doc title='description'><![CDATA[anid]]></doc></option>
+<option value='calb'><doc title='description'><![CDATA[calb]]></doc></option>
+<option value='isca'><doc title='description'><![CDATA[isca]]></doc></option>
+<option value='ecab'><doc title='description'><![CDATA[ecab]]></doc></option>
+<option value='mmul'><doc title='description'><![CDATA[mmul]]></doc></option>
+</param>
+<param name='phyletic_term_map' type='xsd:string' required='true' default='' repeating='true'>
+<doc title='prompt'><![CDATA[phyletic_term_map]]></doc>
+<doc title='help'><![CDATA[Results will be sorted ascending or descending order]]></doc>
+<doc title='default'><![CDATA[null]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='ecol'><doc title='description'><![CDATA[ecol]]></doc></option>
+<option value='nmar'><doc title='description'><![CDATA[nmar]]></doc></option>
+<option value='ckor'><doc title='description'><![CDATA[ckor]]></doc></option>
+<option value='osat'><doc title='description'><![CDATA[osat]]></doc></option>
+<option value='wend'><doc title='description'><![CDATA[wend]]></doc></option>
+<option value='mlep'><doc title='description'><![CDATA[mlep]]></doc></option>
+<option value='pber'><doc title='description'><![CDATA[pber]]></doc></option>
+<option value='pcha'><doc title='description'><![CDATA[pcha]]></doc></option>
+<option value='lbra'><doc title='description'><![CDATA[lbra]]></doc></option>
+<option value='linf'><doc title='description'><![CDATA[linf]]></doc></option>
+<option value='tbru'><doc title='description'><![CDATA[tbru]]></doc></option>
+<option value='micr'><doc title='description'><![CDATA[micr]]></doc></option>
+<option value='vcar'><doc title='description'><![CDATA[vcar]]></doc></option>
+<option value='ebie'><doc title='description'><![CDATA[ebie]]></doc></option>
+<option value='cneg'><doc title='description'><![CDATA[cneg]]></doc></option>
+<option value='cneo'><doc title='description'><![CDATA[cneo]]></doc></option>
+<option value='pchr'><doc title='description'><![CDATA[pchr]]></doc></option>
+<option value='anid'><doc title='description'><![CDATA[anid]]></doc></option>
+<option value='calb'><doc title='description'><![CDATA[calb]]></doc></option>
+<option value='isca'><doc title='description'><![CDATA[isca]]></doc></option>
+<option value='ecab'><doc title='description'><![CDATA[ecab]]></doc></option>
+<option value='mmul'><doc title='description'><![CDATA[mmul]]></doc></option>
+<option value='ALL'><doc title='description'><![CDATA[ALL]]></doc></option>
+<option value='BACT'><doc title='description'><![CDATA[BACT]]></doc></option>
+<option value='FIRM'><doc title='description'><![CDATA[FIRM]]></doc></option>
+<option value='bant'><doc title='description'><![CDATA[bant]]></doc></option>
+<option value='cbot'><doc title='description'><![CDATA[cbot]]></doc></option>
+<option value='cper'><doc title='description'><![CDATA[cper]]></doc></option>
+<option value='lmon'><doc title='description'><![CDATA[lmon]]></doc></option>
+<option value='saur'><doc title='description'><![CDATA[saur]]></doc></option>
+<option value='spne'><doc title='description'><![CDATA[spne]]></doc></option>
+<option value='PROT'><doc title='description'><![CDATA[PROT]]></doc></option>
+<option value='PROA'><doc title='description'><![CDATA[PROA]]></doc></option>
+<option value='atum'><doc title='description'><![CDATA[atum]]></doc></option>
+<option value='bsui'><doc title='description'><![CDATA[bsui]]></doc></option>
+<option value='rpro'><doc title='description'><![CDATA[rpro]]></doc></option>
+<option value='rtyp'><doc title='description'><![CDATA[rtyp]]></doc></option>
+<option value='PROB'><doc title='description'><![CDATA[PROB]]></doc></option>
+<option value='bmal'><doc title='description'><![CDATA[bmal]]></doc></option>
+<option value='bpse'><doc title='description'><![CDATA[bpse]]></doc></option>
+<option value='rsol'><doc title='description'><![CDATA[rsol]]></doc></option>
+<option value='PROD'><doc title='description'><![CDATA[PROD]]></doc></option>
+<option value='gsul'><doc title='description'><![CDATA[gsul]]></doc></option>
+<option value='PROG'><doc title='description'><![CDATA[PROG]]></doc></option>
+<option value='cbur'><doc title='description'><![CDATA[cbur]]></doc></option>
+<option value='ftul'><doc title='description'><![CDATA[ftul]]></doc></option>
+<option value='sent'><doc title='description'><![CDATA[sent]]></doc></option>
+<option value='sfle'><doc title='description'><![CDATA[sfle]]></doc></option>
+<option value='vcho'><doc title='description'><![CDATA[vcho]]></doc></option>
+<option value='yent'><doc title='description'><![CDATA[yent]]></doc></option>
+<option value='ypes'><doc title='description'><![CDATA[ypes]]></doc></option>
+<option value='PROE'><doc title='description'><![CDATA[PROE]]></doc></option>
+<option value='cjej'><doc title='description'><![CDATA[cjej]]></doc></option>
+<option value='wsuc'><doc title='description'><![CDATA[wsuc]]></doc></option>
+<option value='OBAC'><doc title='description'><![CDATA[OBAC]]></doc></option>
+<option value='aaeo'><doc title='description'><![CDATA[aaeo]]></doc></option>
+<option value='cpne'><doc title='description'><![CDATA[cpne]]></doc></option>
+<option value='ctep'><doc title='description'><![CDATA[ctep]]></doc></option>
+<option value='deth'><doc title='description'><![CDATA[deth]]></doc></option>
+<option value='drad'><doc title='description'><![CDATA[drad]]></doc></option>
+<option value='mtub'><doc title='description'><![CDATA[mtub]]></doc></option>
+<option value='rbal'><doc title='description'><![CDATA[rbal]]></doc></option>
+<option value='syne'><doc title='description'><![CDATA[syne]]></doc></option>
+<option value='tmar'><doc title='description'><![CDATA[tmar]]></doc></option>
+<option value='tpal'><doc title='description'><![CDATA[tpal]]></doc></option>
+<option value='ARCH'><doc title='description'><![CDATA[ARCH]]></doc></option>
+<option value='EURY'><doc title='description'><![CDATA[EURY]]></doc></option>
+<option value='aful'><doc title='description'><![CDATA[aful]]></doc></option>
+<option value='halo'><doc title='description'><![CDATA[halo]]></doc></option>
+<option value='hwal'><doc title='description'><![CDATA[hwal]]></doc></option>
+<option value='mjan'><doc title='description'><![CDATA[mjan]]></doc></option>
+<option value='mmar'><doc title='description'><![CDATA[mmar]]></doc></option>
+<option value='msmi'><doc title='description'><![CDATA[msmi]]></doc></option>
+<option value='tvol'><doc title='description'><![CDATA[tvol]]></doc></option>
+<option value='CREN'><doc title='description'><![CDATA[CREN]]></doc></option>
+<option value='cmaq'><doc title='description'><![CDATA[cmaq]]></doc></option>
+<option value='hbut'><doc title='description'><![CDATA[hbut]]></doc></option>
+<option value='ihos'><doc title='description'><![CDATA[ihos]]></doc></option>
+<option value='msed'><doc title='description'><![CDATA[msed]]></doc></option>
+<option value='smar'><doc title='description'><![CDATA[smar]]></doc></option>
+<option value='ssol'><doc title='description'><![CDATA[ssol]]></doc></option>
+<option value='NANO'><doc title='description'><![CDATA[NANO]]></doc></option>
+<option value='nequ'><doc title='description'><![CDATA[nequ]]></doc></option>
+<option value='KORA'><doc title='description'><![CDATA[KORA]]></doc></option>
+<option value='EUKA'><doc title='description'><![CDATA[EUKA]]></doc></option>
+<option value='ALVE'><doc title='description'><![CDATA[ALVE]]></doc></option>
+<option value='CILI'><doc title='description'><![CDATA[CILI]]></doc></option>
+<option value='tthe'><doc title='description'><![CDATA[tthe]]></doc></option>
+<option value='APIC'><doc title='description'><![CDATA[APIC]]></doc></option>
+<option value='COCC'><doc title='description'><![CDATA[COCC]]></doc></option>
+<option value='chom'><doc title='description'><![CDATA[chom]]></doc></option>
+<option value='cmur'><doc title='description'><![CDATA[cmur]]></doc></option>
+<option value='cpar'><doc title='description'><![CDATA[cpar]]></doc></option>
+<option value='ncan'><doc title='description'><![CDATA[ncan]]></doc></option>
+<option value='tgon'><doc title='description'><![CDATA[tgon]]></doc></option>
+<option value='ACON'><doc title='description'><![CDATA[ACON]]></doc></option>
+<option value='HAEM'><doc title='description'><![CDATA[HAEM]]></doc></option>
+<option value='pfal'><doc title='description'><![CDATA[pfal]]></doc></option>
+<option value='pkno'><doc title='description'><![CDATA[pkno]]></doc></option>
+<option value='pviv'><doc title='description'><![CDATA[pviv]]></doc></option>
+<option value='pyoe'><doc title='description'><![CDATA[pyoe]]></doc></option>
+<option value='PIRO'><doc title='description'><![CDATA[PIRO]]></doc></option>
+<option value='bbov'><doc title='description'><![CDATA[bbov]]></doc></option>
+<option value='tann'><doc title='description'><![CDATA[tann]]></doc></option>
+<option value='tpar'><doc title='description'><![CDATA[tpar]]></doc></option>
+<option value='AMOE'><doc title='description'><![CDATA[AMOE]]></doc></option>
+<option value='ddis'><doc title='description'><![CDATA[ddis]]></doc></option>
+<option value='edis'><doc title='description'><![CDATA[edis]]></doc></option>
+<option value='ehis'><doc title='description'><![CDATA[ehis]]></doc></option>
+<option value='einv'><doc title='description'><![CDATA[einv]]></doc></option>
+<option value='EUGL'><doc title='description'><![CDATA[EUGL]]></doc></option>
+<option value='lmaj'><doc title='description'><![CDATA[lmaj]]></doc></option>
+<option value='lmex'><doc title='description'><![CDATA[lmex]]></doc></option>
+<option value='tbrg'><doc title='description'><![CDATA[tbrg]]></doc></option>
+<option value='tcon'><doc title='description'><![CDATA[tcon]]></doc></option>
+<option value='tcru'><doc title='description'><![CDATA[tcru]]></doc></option>
+<option value='tviv'><doc title='description'><![CDATA[tviv]]></doc></option>
+<option value='VIRI'><doc title='description'><![CDATA[VIRI]]></doc></option>
+<option value='STRE'><doc title='description'><![CDATA[STRE]]></doc></option>
+<option value='atha'><doc title='description'><![CDATA[atha]]></doc></option>
+<option value='ppat'><doc title='description'><![CDATA[ppat]]></doc></option>
+<option value='rcom'><doc title='description'><![CDATA[rcom]]></doc></option>
+<option value='CHLO'><doc title='description'><![CDATA[CHLO]]></doc></option>
+<option value='crei'><doc title='description'><![CDATA[crei]]></doc></option>
+<option value='otau'><doc title='description'><![CDATA[otau]]></doc></option>
+<option value='RHOD'><doc title='description'><![CDATA[RHOD]]></doc></option>
+<option value='cmer'><doc title='description'><![CDATA[cmer]]></doc></option>
+<option value='CRYP'><doc title='description'><![CDATA[CRYP]]></doc></option>
+<option value='gthe'><doc title='description'><![CDATA[gthe]]></doc></option>
+<option value='BACI'><doc title='description'><![CDATA[BACI]]></doc></option>
+<option value='tpse'><doc title='description'><![CDATA[tpse]]></doc></option>
+<option value='FUNG'><doc title='description'><![CDATA[FUNG]]></doc></option>
+<option value='MICR'><doc title='description'><![CDATA[MICR]]></doc></option>
+<option value='ecun'><doc title='description'><![CDATA[ecun]]></doc></option>
+<option value='eint'><doc title='description'><![CDATA[eint]]></doc></option>
+<option value='BASI'><doc title='description'><![CDATA[BASI]]></doc></option>
+<option value='lbic'><doc title='description'><![CDATA[lbic]]></doc></option>
+<option value='ASCO'><doc title='description'><![CDATA[ASCO]]></doc></option>
+<option value='afum'><doc title='description'><![CDATA[afum]]></doc></option>
+<option value='aory'><doc title='description'><![CDATA[aory]]></doc></option>
+<option value='cgla'><doc title='description'><![CDATA[cgla]]></doc></option>
+<option value='cimm'><doc title='description'><![CDATA[cimm]]></doc></option>
+<option value='cpos'><doc title='description'><![CDATA[cpos]]></doc></option>
+<option value='dhan'><doc title='description'><![CDATA[dhan]]></doc></option>
+<option value='egos'><doc title='description'><![CDATA[egos]]></doc></option>
+<option value='gzea'><doc title='description'><![CDATA[gzea]]></doc></option>
+<option value='klac'><doc title='description'><![CDATA[klac]]></doc></option>
+<option value='mgri'><doc title='description'><![CDATA[mgri]]></doc></option>
+<option value='ncra'><doc title='description'><![CDATA[ncra]]></doc></option>
+<option value='psti'><doc title='description'><![CDATA[psti]]></doc></option>
+<option value='scer'><doc title='description'><![CDATA[scer]]></doc></option>
+<option value='spom'><doc title='description'><![CDATA[spom]]></doc></option>
+<option value='ylip'><doc title='description'><![CDATA[ylip]]></doc></option>
+<option value='META'><doc title='description'><![CDATA[META]]></doc></option>
+<option value='PLAT'><doc title='description'><![CDATA[PLAT]]></doc></option>
+<option value='sman'><doc title='description'><![CDATA[sman]]></doc></option>
+<option value='NEMA'><doc title='description'><![CDATA[NEMA]]></doc></option>
+<option value='bmaa'><doc title='description'><![CDATA[bmaa]]></doc></option>
+<option value='cbri'><doc title='description'><![CDATA[cbri]]></doc></option>
+<option value='cele'><doc title='description'><![CDATA[cele]]></doc></option>
+<option value='ARTH'><doc title='description'><![CDATA[ARTH]]></doc></option>
+<option value='aaeg'><doc title='description'><![CDATA[aaeg]]></doc></option>
+<option value='agam'><doc title='description'><![CDATA[agam]]></doc></option>
+<option value='amel'><doc title='description'><![CDATA[amel]]></doc></option>
+<option value='apis'><doc title='description'><![CDATA[apis]]></doc></option>
+<option value='bmor'><doc title='description'><![CDATA[bmor]]></doc></option>
+<option value='cpip'><doc title='description'><![CDATA[cpip]]></doc></option>
+<option value='dmel'><doc title='description'><![CDATA[dmel]]></doc></option>
+<option value='phum'><doc title='description'><![CDATA[phum]]></doc></option>
+<option value='CHOR'><doc title='description'><![CDATA[CHOR]]></doc></option>
+<option value='ACTI'><doc title='description'><![CDATA[ACTI]]></doc></option>
+<option value='drer'><doc title='description'><![CDATA[drer]]></doc></option>
+<option value='tnig'><doc title='description'><![CDATA[tnig]]></doc></option>
+<option value='trub'><doc title='description'><![CDATA[trub]]></doc></option>
+<option value='AVES'><doc title='description'><![CDATA[AVES]]></doc></option>
+<option value='ggal'><doc title='description'><![CDATA[ggal]]></doc></option>
+<option value='MAMM'><doc title='description'><![CDATA[MAMM]]></doc></option>
+<option value='clup'><doc title='description'><![CDATA[clup]]></doc></option>
+<option value='hsap'><doc title='description'><![CDATA[hsap]]></doc></option>
+<option value='mdom'><doc title='description'><![CDATA[mdom]]></doc></option>
+<option value='mmus'><doc title='description'><![CDATA[mmus]]></doc></option>
+<option value='oana'><doc title='description'><![CDATA[oana]]></doc></option>
+<option value='ptro'><doc title='description'><![CDATA[ptro]]></doc></option>
+<option value='rnor'><doc title='description'><![CDATA[rnor]]></doc></option>
+<option value='TUNI'><doc title='description'><![CDATA[TUNI]]></doc></option>
+<option value='cint'><doc title='description'><![CDATA[cint]]></doc></option>
+<option value='OMET'><doc title='description'><![CDATA[OMET]]></doc></option>
+<option value='nvec'><doc title='description'><![CDATA[nvec]]></doc></option>
+<option value='tadh'><doc title='description'><![CDATA[tadh]]></doc></option>
+<option value='OEUK'><doc title='description'><![CDATA[OEUK]]></doc></option>
+<option value='glab'><doc title='description'><![CDATA[glab]]></doc></option>
+<option value='glae'><doc title='description'><![CDATA[glae]]></doc></option>
+<option value='glam'><doc title='description'><![CDATA[glam]]></doc></option>
+<option value='mbre'><doc title='description'><![CDATA[mbre]]></doc></option>
+<option value='pram'><doc title='description'><![CDATA[pram]]></doc></option>
+<option value='tvag'><doc title='description'><![CDATA[tvag]]></doc></option>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Gene]]></doc></option>
+<option value='formatted_gene_id'><doc title='description'><![CDATA[Gene Group]]></doc></option>
+<option value='sequence_id'><doc title='description'><![CDATA[Genomic Sequence ID]]></doc></option>
+<option value='chromosome'><doc title='description'><![CDATA[Chromosome]]></doc></option>
+<option value='location_text'><doc title='description'><![CDATA[Genomic Location]]></doc></option>
+<option value='strand'><doc title='description'><![CDATA[Gene Strand]]></doc></option>
+<option value='gene_type'><doc title='description'><![CDATA[Gene Type]]></doc></option>
+<option value='exon_count'><doc title='description'><![CDATA[# Exons]]></doc></option>
+<option value='transcript_length'><doc title='description'><![CDATA[Transcript Length]]></doc></option>
+<option value='cds_length'><doc title='description'><![CDATA[CDS Length]]></doc></option>
+<option value='product'><doc title='description'><![CDATA[Product Description]]></doc></option>
+<option value='protein_length'><doc title='description'><![CDATA[Protein Length]]></doc></option>
+<option value='tm_count'><doc title='description'><![CDATA[# TM Domains]]></doc></option>
+<option value='molecular_weight'><doc title='description'><![CDATA[Molecular Weight]]></doc></option>
+<option value='isoelectric_point'><doc title='description'><![CDATA[Isoelectric Point]]></doc></option>
+<option value='ec_numbers_string'><doc title='description'><![CDATA[EC Numbers]]></doc></option>
+<option value='ortholog_number'><doc title='description'><![CDATA[Ortholog count]]></doc></option>
+<option value='paralog_number'><doc title='description'><![CDATA[Paralog count]]></doc></option>
+<option value='orthomcl_name'><doc title='description'><![CDATA[Ortholog Group]]></doc></option>
+<option value='signalp_scores'><doc title='description'><![CDATA[SignalP Scores]]></doc></option>
+<option value='signalp_peptide'><doc title='description'><![CDATA[SignalP Peptide]]></doc></option>
+<option value='ann_go_function'><doc title='description'><![CDATA[Annotated GO Function]]></doc></option>
+<option value='ann_go_process'><doc title='description'><![CDATA[Annotated GO Process]]></doc></option>
+<option value='ann_go_component'><doc title='description'><![CDATA[Annotated GO Component]]></doc></option>
+<option value='pred_go_function'><doc title='description'><![CDATA[Predicted GO Function]]></doc></option>
+<option value='pred_go_process'><doc title='description'><![CDATA[Predicted GO Process]]></doc></option>
+<option value='pred_go_component'><doc title='description'><![CDATA[Predicted GO Component]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='is_pseudo'><doc title='description'><![CDATA[Is Pseudo]]></doc></option>
+<option value='protein_sequence'><doc title='description'><![CDATA[Predicted Protein Sequence]]></doc></option>
+<option value='transcript_sequence'><doc title='description'><![CDATA[Predicted RNA/mRNA Sequence (introns spliced out)]]></doc></option>
+<option value='cds'><doc title='description'><![CDATA[Coding Sequence]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+<option value='SNPs'><doc title='description'><![CDATA[SNPs Summary]]></doc></option>
+<option value='GeneModelDump'><doc title='description'><![CDATA[Gene Model]]></doc></option>
+<option value='InterPro'><doc title='description'><![CDATA[InterPro Domains]]></doc></option>
+<option value='TMHMM'><doc title='description'><![CDATA[Transmembrane Domains]]></doc></option>
+<option value='LowComplexity'><doc title='description'><![CDATA[Low Complexity Regions]]></doc></option>
+<option value='SignalP'><doc title='description'><![CDATA[Signal Peptide]]></doc></option>
+<option value='BlastP'><doc title='description'><![CDATA[BlastP Hits]]></doc></option>
+<option value='Genbank'><doc title='description'><![CDATA[Gene Location]]></doc></option>
+<option value='SageTags'><doc title='description'><![CDATA[Sage Tags]]></doc></option>
+<option value='Notes'><doc title='description'><![CDATA[Notes]]></doc></option>
+<option value='UserComments'><doc title='description'><![CDATA[User Comments]]></doc></option>
+<option value='CommunityExpComments'><doc title='description'><![CDATA[Community Annotations]]></doc></option>
+<option value='EcNumber'><doc title='description'><![CDATA[EC Number]]></doc></option>
+<option value='MassSpec'><doc title='description'><![CDATA[Mass Spec.-based Expression Evidence]]></doc></option>
+<option value='GoTerms'><doc title='description'><![CDATA[GO Terms]]></doc></option>
+<option value='Phenotype'><doc title='description'><![CDATA[Phenotype]]></doc></option>
+<option value='Y2hInteractions'><doc title='description'><![CDATA[Y2H Interactions]]></doc></option>
+<option value='Orthologs'><doc title='description'><![CDATA[Orthologs and Paralogs within EuPathDB]]></doc></option>
+<option value='MetabolicPathways'><doc title='description'><![CDATA[Metabolic Pathways]]></doc></option>
+<option value='TaskComments'><doc title='description'><![CDATA[Toxoplasma Genome Sequencing Project Annotation]]></doc></option>
+<option value='ArrayElements'><doc title='description'><![CDATA[Mapped Array Elements]]></doc></option>
+<option value='TwoChannelDiffExpr'><doc title='description'><![CDATA[P.Berghei Differential Expression - DOZI KO vs. WT]]></doc></option>
+<option value='ProteinExpression'><doc title='description'><![CDATA[P.Berghei Protein Expression]]></doc></option>
+<option value='Mr4Reagents'><doc title='description'><![CDATA[MR4 Reagents]]></doc></option>
+<option value='ProteinDatabase'><doc title='description'><![CDATA[Protein Linkouts]]></doc></option>
+<option value='GeneLinkouts'><doc title='description'><![CDATA[External Links]]></doc></option>
+<option value='3dPreds'><doc title='description'><![CDATA[3D Structure Predictions]]></doc></option>
+<option value='PdbSimilarities'><doc title='description'><![CDATA[Similarities to Protein Data Bank (PDB) Chains]]></doc></option>
+<option value='Epitopes'><doc title='description'><![CDATA[Epitopes from IEDB]]></doc></option>
+<option value='IsolateOverlap'><doc title='description'><![CDATA[Isolates]]></doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

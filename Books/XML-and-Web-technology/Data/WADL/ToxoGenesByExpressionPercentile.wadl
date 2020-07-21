@@ -1,0 +1,152 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='GeneQuestions'>
+<resource path='ToxoGenesByExpressionPercentile.xml'>
+<method href='#toxogenesbyexpressionpercentile'/>
+</resource>
+<resource path='ToxoGenesByExpressionPercentile.json'>
+<method href='#toxogenesbyexpressionpercentile'/>
+</resource>
+<method name='POST' id='toxogenesbyexpressionpercentile'>
+<doc title='display_name'><![CDATA[T.g. Tachyzoite or Bradyzoite Expression Percentiles]]></doc>
+<doc title='summary'><![CDATA[Identify genes by microarray expression percentile rank (non-time series data only).]]></doc>
+<doc title='description'><![CDATA[Find genes which are expressed over a given percentile in a particular strain, within one of the studies. 
+	     <br><br><b>T.g. Tachyzoite Expression among Individual Strains</b>
+             <br>Tachyzoite genes. Strains used in this study: RH, Pru, GT1, VEG, ME49 and CTG. 
+             <br> <br>
+                <div align="center">
+                <img src="images/toxo_percentile_lineages.PNG">
+                </div>
+
+             <br><br><b>T.g. Bradyzoite Induction 48-hr (Multi strain and method)</b>
+             <br>Bradyzoite genes were induced following a 48 hour treatment with compound 1 or alkaline condition.  Strains used in this study:  Type I-GT1, Type II-Me49B7 and Type III-CTG.
+             <br><br>
+	     For further information on the strains, refer to: <BR>
+	     Howe, D. K., and L. D. Sibley. 1995. Toxoplasma gondii comprises three clonal lineages:
+	     correlation of parasite genotype with human disease. J. Infect. Dis. 172:1561-1566 
+	     <BR>&nbsp;<BR>]]></doc>
+<request>
+<param name='toxo_expr_studies' type='xsd:string' required='true' default='Tachyzoite Strains' repeating='false'>
+<doc title='prompt'><![CDATA[Study]]></doc>
+<doc title='help'><![CDATA[Select a study.]]></doc>
+<doc title='default'><![CDATA[Tachyzoite Strains]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='Tachyzoite Strains'><doc title='description'><![CDATA[Tachyzoite Strains]]></doc></option>
+<option value='Tachyzoite or Differentiated Bradyzoite'><doc title='description'><![CDATA[Tachyzoite or Differentiated Bradyzoite]]></doc></option>
+</param>
+<param name='toxo_expr_sample' type='xsd:string' required='true' default='GT1(Type I)' repeating='false'>
+<doc title='prompt'><![CDATA[Expression of]]></doc>
+<doc title='help'><![CDATA[Select a study.]]></doc>
+<doc title='default'><![CDATA[GT1(Type I)]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='ME49-tachyzoite'><doc title='description'><![CDATA[ME49-tachyzoite]]></doc></option>
+<option value='ME49-pH8.2'><doc title='description'><![CDATA[ME49-pH8.2]]></doc></option>
+<option value='GT1(Type I)'><doc title='description'><![CDATA[GT1(Type I)]]></doc></option>
+<option value='ME49(Type II)'><doc title='description'><![CDATA[ME49(Type II)]]></doc></option>
+<option value='Prugniaud(Type II)'><doc title='description'><![CDATA[Prugniaud(Type II)]]></doc></option>
+<option value='RH(Type I)'><doc title='description'><![CDATA[RH(Type I)]]></doc></option>
+<option value='VEG(Type III)'><doc title='description'><![CDATA[VEG(Type III)]]></doc></option>
+<option value='CTG(Type III)'><doc title='description'><![CDATA[CTG(Type III)]]></doc></option>
+<option value='CTGara-Compound1'><doc title='description'><![CDATA[CTGara-Compound1]]></doc></option>
+<option value='CTGara-pH8.2'><doc title='description'><![CDATA[CTGara-pH8.2]]></doc></option>
+<option value='CTGara-tachyzoite'><doc title='description'><![CDATA[CTGara-tachyzoite]]></doc></option>
+<option value='GT1-Compound1'><doc title='description'><![CDATA[GT1-Compound1]]></doc></option>
+<option value='GT1-pH8.2'><doc title='description'><![CDATA[GT1-pH8.2]]></doc></option>
+<option value='GT1-tachyzoite'><doc title='description'><![CDATA[GT1-tachyzoite]]></doc></option>
+<option value='ME49-Compound1'><doc title='description'><![CDATA[ME49-Compound1]]></doc></option>
+</param>
+<param name='percentile' type='xsd:string' required='true' default='90' >
+<doc title='prompt'><![CDATA[Percentile >=]]></doc>
+<doc title='help'><![CDATA[Expression percentile reflects the expression level of one gene compared to other genes from the same array for one time point.  Genes are returned if ANY time point in the series has a percentile above the chosen value.]]></doc>
+<doc title='default'><![CDATA[90]]></doc>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Gene]]></doc></option>
+<option value='formatted_gene_id'><doc title='description'><![CDATA[Gene Group]]></doc></option>
+<option value='sequence_id'><doc title='description'><![CDATA[Genomic Sequence ID]]></doc></option>
+<option value='chromosome'><doc title='description'><![CDATA[Chromosome]]></doc></option>
+<option value='location_text'><doc title='description'><![CDATA[Genomic Location]]></doc></option>
+<option value='strand'><doc title='description'><![CDATA[Gene Strand]]></doc></option>
+<option value='gene_type'><doc title='description'><![CDATA[Gene Type]]></doc></option>
+<option value='exon_count'><doc title='description'><![CDATA[# Exons]]></doc></option>
+<option value='transcript_length'><doc title='description'><![CDATA[Transcript Length]]></doc></option>
+<option value='cds_length'><doc title='description'><![CDATA[CDS Length]]></doc></option>
+<option value='product'><doc title='description'><![CDATA[Product Description]]></doc></option>
+<option value='protein_length'><doc title='description'><![CDATA[Protein Length]]></doc></option>
+<option value='tm_count'><doc title='description'><![CDATA[# TM Domains]]></doc></option>
+<option value='molecular_weight'><doc title='description'><![CDATA[Molecular Weight]]></doc></option>
+<option value='isoelectric_point'><doc title='description'><![CDATA[Isoelectric Point]]></doc></option>
+<option value='ec_numbers_string'><doc title='description'><![CDATA[EC Numbers]]></doc></option>
+<option value='ortholog_number'><doc title='description'><![CDATA[Ortholog count]]></doc></option>
+<option value='paralog_number'><doc title='description'><![CDATA[Paralog count]]></doc></option>
+<option value='orthomcl_name'><doc title='description'><![CDATA[Ortholog Group]]></doc></option>
+<option value='signalp_scores'><doc title='description'><![CDATA[SignalP Scores]]></doc></option>
+<option value='signalp_peptide'><doc title='description'><![CDATA[SignalP Peptide]]></doc></option>
+<option value='ann_go_function'><doc title='description'><![CDATA[Annotated GO Function]]></doc></option>
+<option value='ann_go_process'><doc title='description'><![CDATA[Annotated GO Process]]></doc></option>
+<option value='ann_go_component'><doc title='description'><![CDATA[Annotated GO Component]]></doc></option>
+<option value='pred_go_function'><doc title='description'><![CDATA[Predicted GO Function]]></doc></option>
+<option value='pred_go_process'><doc title='description'><![CDATA[Predicted GO Process]]></doc></option>
+<option value='pred_go_component'><doc title='description'><![CDATA[Predicted GO Component]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='is_pseudo'><doc title='description'><![CDATA[Is Pseudo]]></doc></option>
+<option value='protein_sequence'><doc title='description'><![CDATA[Predicted Protein Sequence]]></doc></option>
+<option value='transcript_sequence'><doc title='description'><![CDATA[Predicted RNA/mRNA Sequence (introns spliced out)]]></doc></option>
+<option value='cds'><doc title='description'><![CDATA[Coding Sequence]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+<option value='percentile'><doc title='description'><![CDATA[Percentile]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+<option value='SNPs'><doc title='description'><![CDATA[SNPs Summary]]></doc></option>
+<option value='GeneModelDump'><doc title='description'><![CDATA[Gene Model]]></doc></option>
+<option value='InterPro'><doc title='description'><![CDATA[InterPro Domains]]></doc></option>
+<option value='TMHMM'><doc title='description'><![CDATA[Transmembrane Domains]]></doc></option>
+<option value='LowComplexity'><doc title='description'><![CDATA[Low Complexity Regions]]></doc></option>
+<option value='SignalP'><doc title='description'><![CDATA[Signal Peptide]]></doc></option>
+<option value='BlastP'><doc title='description'><![CDATA[BlastP Hits]]></doc></option>
+<option value='Genbank'><doc title='description'><![CDATA[Gene Location]]></doc></option>
+<option value='SageTags'><doc title='description'><![CDATA[Sage Tags]]></doc></option>
+<option value='Notes'><doc title='description'><![CDATA[Notes]]></doc></option>
+<option value='UserComments'><doc title='description'><![CDATA[User Comments]]></doc></option>
+<option value='CommunityExpComments'><doc title='description'><![CDATA[Community Annotations]]></doc></option>
+<option value='EcNumber'><doc title='description'><![CDATA[EC Number]]></doc></option>
+<option value='MassSpec'><doc title='description'><![CDATA[Mass Spec.-based Expression Evidence]]></doc></option>
+<option value='GoTerms'><doc title='description'><![CDATA[GO Terms]]></doc></option>
+<option value='Phenotype'><doc title='description'><![CDATA[Phenotype]]></doc></option>
+<option value='Y2hInteractions'><doc title='description'><![CDATA[Y2H Interactions]]></doc></option>
+<option value='Orthologs'><doc title='description'><![CDATA[Orthologs and Paralogs within EuPathDB]]></doc></option>
+<option value='MetabolicPathways'><doc title='description'><![CDATA[Metabolic Pathways]]></doc></option>
+<option value='TaskComments'><doc title='description'><![CDATA[Toxoplasma Genome Sequencing Project Annotation]]></doc></option>
+<option value='ArrayElements'><doc title='description'><![CDATA[Mapped Array Elements]]></doc></option>
+<option value='TwoChannelDiffExpr'><doc title='description'><![CDATA[P.Berghei Differential Expression - DOZI KO vs. WT]]></doc></option>
+<option value='ProteinExpression'><doc title='description'><![CDATA[P.Berghei Protein Expression]]></doc></option>
+<option value='Mr4Reagents'><doc title='description'><![CDATA[MR4 Reagents]]></doc></option>
+<option value='ProteinDatabase'><doc title='description'><![CDATA[Protein Linkouts]]></doc></option>
+<option value='GeneLinkouts'><doc title='description'><![CDATA[External Links]]></doc></option>
+<option value='3dPreds'><doc title='description'><![CDATA[3D Structure Predictions]]></doc></option>
+<option value='PdbSimilarities'><doc title='description'><![CDATA[Similarities to Protein Data Bank (PDB) Chains]]></doc></option>
+<option value='Epitopes'><doc title='description'><![CDATA[Epitopes from IEDB]]></doc></option>
+<option value='IsolateOverlap'><doc title='description'><![CDATA[Isolates]]></doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

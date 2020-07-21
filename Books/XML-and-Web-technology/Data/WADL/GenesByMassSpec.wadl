@@ -1,0 +1,351 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='GeneQuestions'>
+<resource path='GenesByMassSpec.xml'>
+<method href='#genesbymassspec'/>
+</resource>
+<resource path='GenesByMassSpec.json'>
+<method href='#genesbymassspec'/>
+</resource>
+<method name='POST' id='genesbymassspec'>
+<doc title='display_name'><![CDATA[Mass Spec. Evidence]]></doc>
+<doc title='summary'><![CDATA[Find <i>E. histolytica</i>, <i>C. parvum</i>,<i>G. lamblia</i>, <i>P. berghei</i> , <i>P. falciparum</i>, <i>P. yoelii</i> and <i>T. gondii</i> genes that have evidence for protein expression.]]></doc>
+<doc title='description'><![CDATA[Find genes that have evidence for protein expression.  Please refer to the original papers for more information on the experiments and experimental conditions.
+             <p>See the related <a href="showQuestion.do?questionFullName=OrfQuestions.OrfsByMassSpec"><b>ORFs with Mass Spec. Evidence</b></a> search to find genomic open reading frames which have mapped MS/MS peptides 
+             that do not correspond to current gene models.
+             <br><hr>
+             <p><b><i>C. parvum</i></b>
+             <br><sup><b>1</b></sup>
+   <!-- description by J. Wastling -->
+             <i> S.J. Sanderson, D. Xia, H. Prieto, J. Yates, M. Heiges. J. Kissinger & J.M. Wastling (submitted). <b>Contact: Jonathan Wastling for details (<a href="mailto:j.wastling@liv.ac.uk">j.wastling@liv.ac.uk</a>)</b></i>.
+             <br>Mass spectrometry data were obtained from two-dimensional gel electrophoretic protein separations, one-dimensional gel LC-MS/MS and 
+             MudPIT analysis of a sporozoite/oocyst excystation mixture of <i>Cryptosporidium parvum</i>.  A total of approximately 3,500 protein 
+             hits were obtained resulting in 1,252 non-redundant protein identifications. In addition a further 100 hits were obtained to sequences 
+             which matched a predicted open reading frame, but for which no gene model currently exists. In total these protein identifications 
+             represent nearly one third of the entire predicted proteome of <i>C. parvum</i>, although it is unlikely that the entire proteome 
+             from all life-stages will be expressed at any one time.
+             <br>
+             <sup><b>2</b></sup> <i>
+             William J. Snelling<sup>A</sup>, Qishan Lin<sup>B</sup>, John E. Moore<sup>C</sup>, B. Cherie Millar<sup>D</sup>, 
+             Fabio Tosini<sup>D</sup>, Edoardo Pozio<sup>D</sup>, James S.G. Dooley<sup>A</sup>, and Colm J. Lowery<sup>A</sup><br> 
+             <sup>A</sup>Centre for Molecular Biosciences, School of Biomedical Sciences, University of Ulster, Cromore Road, Coleraine, County 
+             Londonderry, N. Ireland, BT52 1SA. <sup>B</sup>UAlbany Proteomics Facility, Centre for Functional Genomics, University of Albany, 
+             One Discovery Drive, Rensselaer, NY 12144. <sup>C</sup>Northern Ireland Public Health Laboratory, Department of Bacteriology, 
+             Belfast City Hospital, Belfast, N. Ireland, BT9 7AD. <sup>D</sup>Department of Infectious, Parasitic, and Immunomediated 
+             Diseases, Istituto Superiore di Sanit&#224;, Rome, Italy.<br> 
+             <a href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=17124246"> Proteomics analysis and protein expression during sporozoite excystation of Cryptosporidium parvum (Coccidia, Apicomplexa). Mol. Cell Proteomics 2007 Feb;6(2):346-55 </a></i>
+             <br>
+             <sup><b>3</b></sup>
+   <!-- description by Andras Fiser -->
+             <i>Joseph M. Dybas, Carlos J. Madrid-Aliste, Fa-Yun Che, Edward Nieves, Louis M. Weiss, Kami Kim, Andr&#225;s Fiser and Ruth Hogue Angeletti<br>
+             <a href="http://toro.aecom.yu.edu/biodefense/">Einstein Biodefense Proteomics Research Center</a><br>
+             Albert Einstein College of Medicine, 1300 Morris Park Avenue, Bronx, NY 10461, USA</i><br>
+             <a href="http://www.fiserlab.org/biodefense">Fiser Lab</a><br><br>
+             Enriched cytoskeletal and membrane fractions were separated by 1D-SDS-PAGE or 2D gel electrophoresis. The bands/spots were digested with trypsin. The resulting peptides analyzed by nanoLC-MS/MS on a ThermoFinnigan linear ion trap (LTQ) mass spectrometer.  MASCOT was used to search the merged DTA mass spectrometry data file against the appropriate database to obtained unique peptide hits.  In order to extend the dynamic range of the membrane fractions, high pH sodium carbonate was used to remove the peripheral membrane proteins. For a few experiments, the remaining cytosolic fractions were also analyzed. 
+<br>
+             <sup><b>4</b></sup>
+   <!-- description for Belinda ferrari data -->
+             <i>Data provided by Belinda Ferrari and Quach Truong at the Department of Biological Sciences, Macquarie University, Sydney, Australia.</i><br><br>
+Subcellular proteomic analysis of <i>C. parvum</i> oocysts. Proteome analysis was carried out on two components of the oocyst after excystation. (1) the proteins identified in the sporozoites and (2) the proteins identified belonging to residual oocyst wall.  Furthermore, proteome analysis was also carried on the intact oocyst.  Consequently, the aim of this study was to identify proteins unique to each subcellular component, and also to identify proteins shared between fractions.
+<br><br>
+             <sup><b>5</b></sup>
+   <!-- description for Lorenza Putignani data -->
+             Data provided by Putignani Lorenza, Microbiology Unit, Children Hospital and Research Institute Bambino Gesu, Rome, Italy, in collaboration with the Mass Spectrometry Laboratory of Jan Tachezy, Faculty of Science, Charles University, Prague, Czech Republic.<br><br>
+Oocysts from Cryptosporidium parvum, strain name C162, subgenotype A15G2, after cow propagation and purification, were provided by Edoardo Pozio Laboratory, Public Health Institute of Rome, Italy.<br><br>
+After excystation from 2 x 108 oocysts, sporozoites were purified by DEAE cellulose chromatography and collected: differential lysis and centrifugation were performed to provide two sub-cellular fractions corresponding to enriched mitochondria (fraction A) and to mitochondria plus endoplasmic reticulum plus nucleus (fraction B).<br>
+The two fractions underwent iTRAQ 116 and 115 isotopic labelling, respectively, and were further analysed by RP-HPLC/MS-MS.<br><br>
+Each peptide, was matched against CryptoDB database. The protein list was analysed for EC and GO classification, and then submitted to the motif prediction SignalP (www.cbs.dtu.dk/services/SignalP/), TMHMM (www.cbs.dtu.dk/services/TMHMM/) and mitochondrial localization MITOPROT (www.ihg2.helmholtz-muenchen.de/ihg/mitoprot.html) algorithms. Lastly proteins were annotated according to literature and homology data and to biochemical criteria.<br>
+            <br><br>
+            <p><b><i>G. lamblia</i></b>
+            <br><sup>1</sup> WB (genome project strain) Giardia lamblia grown axenically in TYI-S-33 medium supplemented with bile salts.  Adherent trophozoites were harvested during log-phase growth (60-70% confluent) and proteins extracted in 8M Urea and SDS.  1 mg of extracted protein was digested with sequencing-grade modified trypsin and fractionated via strong cation exchange chromatography into 90 fractions.  Each fraction was run via C-18 reverse phase chromatography and analyzed using an LTQ ProteomeX ion trap mass spectrometer (Thermo Finnigan).  Peptide assignments were made using SEQUEST, and the individual runs were compiled using DTASelect.
+             <p><i>Daniel M. Ratner, Michael Lubrano, Martin Steffen, John Samuelson. University of Washington, Department of Bioengineering.</i>
+             <p>Protocol adapted from Jaffe, J.D., Berg, H.C, Church, G. M. Proteogenomic mapping as a complementary method to perform genome annotation. <i>Proteomics</i>, <b>2004</b>, 4, 59-7<br><br>
+             <p><sup>2</sup>
+<i>G. intestinalis mitosome enriched fraction - nanoLC/MALDI TOF/TOF</i>.  For additional details please click <a href="http://www.ncbi.nlm.nih.gov/pubmed/19717741">here</a>
+</p>
+            <br><br>
+            <p><b><i>P. falciparum </i></b>
+            <p><sup>1</sup> In this study, the proteomes of merozoite, trophozoite, gametocyte and sporozoite stages of <i>P. falciparum</i> were analyzed using multidimensional protein identification technology (MudPIT). Click <a href="http://www.ncbi.nlm.nih.gov/pubmed/12368866">here</a> for more information.
+            <p><sup>2</sup> <i>P. falciparum</i> merozoites were purified and collected (NIMR, London, UK) in sufficient quantity to perform high-throughput LC-MSMS.  Over 1000 proteins were identified (most peptides have a MASCOT score >30). (Leiden Malaria Group, unpublished).              
+            <p><sup>3</sup> OOCYST (OOC): oocysts (1-2 x 10^4) were collected from midguts of Anopheles stephensi mosquitoes (Sind-Kasur strain, 3-5 days old) 7-8 days after infection with <i>P. falciparum</i> gametocytes (NF54 strain). OOCYST-DERIVED SPOROZOITES (ODS): oocyst-derived sporozoites (1.4-3.8 x10^7) were collected from midguts of Anopheles stephensi mosquitoes (Sind-Kasur strain, 3-5 days old) 13-14 days after infection with <i>P. falciparum</i> gametocytes (NF54 strain). SALIVARY GLAND SPOROZOITES (SGS): Salivary gland sporozoites (1.3-2.5 x10^7) were collected from salivary glands of Anopheles stephensi mosquitoes (Sind-Kasur strain, 3-5 days old) 18-22 days after infection with <i>P. falciparum</i> gametocytes (NF54 strain).     
+            <p><sup>4</sup> Mass spec data from fractionated parasite-infected erythrocytes. iRBC = infected red blood cell.  PIESPs = parasite-infected erythrocyte surface proteins. Click <a href="http://www.ncbi.nlm.nih.gov/pubmed/15287581">here</a> for more information.
+            </p>
+            <p><sup>7</sup> Data produced by proteomics analysis of clinical isolates of early stages of <i>P. falciparum</i>. Patient derived malarial parasites were directly processed and analyzed using shotgun proteomics approach using high sensitivity mass spectrometry for protein identification. Utpal Tatu, Department of Biochemistry, Indian Institute of Science, Bangalore, 560012, karnataka, India.  
+            </p>
+            <p><sup>8</sup><i>P. falciparum</i> mass spec peptides from 42 and 48 hrs post infection, provided by the Bogyo Lab, Departments of Pathology and Microbiology and Immunology, Stanford University School of Medicine, 300 Pasteur Dr. Stanford, CA 94305 USA.  Further analysis of this data can be performed using the <a href="http://www.scripps.edu/chemphys/cravatt/Bowyer2010">PROTOMAP</a> data base.
+            </p>
+            <p><b><sup>10</sup></b> Gametocyte-free trophozoites of <i>P. falciparum</i> were obtained from clone F12, a 3D7A derivative which fails to produce the early gametocyte stages. <br>
+Early developing gametocytes (Early stage I-II gametocytes) were obtained using a three-step purification process of transgenic 3D7A parasites expressing a Pfg27-GFP fusion protein (expressed early in sexual differentiation).<br>
+Mature gametocytes (Late stage V gametocytes) were obtained by Percoll purification of mature gametocyte cultures previously treated with N-acetylglucosamine to clear residual asexual parasites.<br>
+Protein samples were analyzed by high mass accuracy nano-LC-MS/MS. Click <a href="http://www.ncbi.nlm.nih.gov/pubmed/20332084">here</a> for more information.
+            <br><br>
+            <p><b><i>P. berghei</i></b>
+            <br><sup>5</sup> Two transgenic lines were generated of the rodent malaria parasite, <i>Plasmodium berghei</i>, one which specifically expressed green fluorescent protein (GFP) in female gametocytes (PbPFPcon) and another which exclusively expressed GFP in male gametocytes (PbGFPtub). The sex-specific expression of GFP in these clones was exploited to collect highly purified male or female gametocytes by Fluorescent Assisted Cell Sorting (FACS), in sufficient quantity to perform high-throughput liquid chromatography tandem mass spectrometry (LC-MSMS). The male proteome contained 650 proteins of which 36% (i.e. 236) were specific to the male gametocyte. The female proteome contained 541 proteins of which 19% (i.e. 101) were female-specific. However, when only the gametocyte proteome was analyzed (i.e. the 351 proteins which were also expressed in asexual stages were removed) it was observed that only 69 proteins were commonly expressed in male and female gametocytes, emphasizing the diverged features of the sexes. Of all the malaria life-cycle stages analyzed, the male gametocyte has the most distinct proteome, containing many proteins involved in flagella-based motility and rapid genome replication. See <a href="http://www.ncbi.nlm.nih.gov/pubmed/15935755">Khan et al. Cell (2005) <b>121</b>(5):675-87</a> for more details.
+            <br><br>
+            <p><b><i>P. vivax</i></b>
+            <br><br>
+            <sup>8</sup> Data produced by proteomics analysis of clinical isolates of early stages of <i>P. vivax</i>. Patient derived malarial parasites were directly processed and analyzed using shotgun proteomics approach using high sensitivity mass spectrometry for protein identification. Utpal Tatu, Department of Biochemistry, Indian Institute of Science, Bangalore, 560012, karnataka, India.  
+            <br><br>
+            <br><p><b><i>P. yoelii</i></b>
+            <br><sup>6</sup> Mass Spec of <i>Plasmodium yoelii</i> proteins identified in LS-infected hepatocytes isolated 40 and 50 hrs post-infection (LS40 and LS50).             Publication: Tarun et al. A combined transcriptome and proteome survey of malaria parasite liver stages. <a href="http://www.ncbi.nlm.nih.gov/pubmed/18172196">Proc. Natl. Acad. Sci. U.S.A. (2008) vol. 105 (1) pp. 305-10</a>.
+            <br><br>
+            <p><b><i>T. gondii</i></b>
+             <br><sup>1</sup> 
+<i>Dong Xia, Sanya J Sanderson, Andrew R Jones, Judith H Prieto, John R Yates III, Elizabeth Bromley, Fiona M Tomley, Kalpana Lal, Robert E Sinden, Brian P Brunk, David S Roos and Jonathan M Wastling. (July 2008) The proteome of Toxoplasma gondii: integration with the genome provides novel insights into gene expression and annotation.</i> <a href="http://genomebiology.com/2008/9/7/R116" target="new">Genome Biology, 2008 <b>9</b>:R116</a>.
+             <br>Mass spectrometry data were obtained from one-dimensional gel LC-MS/MS and MudPIT analysis of Toxoplasma gondii tachyzoites. 6,546 protein hits were obtained resulting in 2217 non-redundant protein identifications. A further 318 hits were obtained to sequences which matched 226 predicted open reading frames for which no gene model currently exists.  Additionally, 163 gene predictions were hit that did not have an overlapping gene model to which at least 50% of the peptides could be mapped.  In total these protein identifications from one stage represent nearly one third of the entire predicted proteome of T. gondii.
+             <br><i>Bradley PJ, Ward C, Cheng SJ, Alexander DL, Coller S, Coombs GH, Dunn JD, Ferguson DJ, Sanderson SJ, Wastling JM,Boothroyd JC. 
+             Proteomic analysis of rhoptry organelles reveals many novel constituents for host-parasite interactions in Toxoplasma gondii. 
+             J Biol Chem. 2005 Oct 7;280(<b>40</b>):34245-58</i>
+             <br><sup>2</sup><i>Hu K, Johnson J, Florens L, Fraunholz M, Suravajjala S, DiLullo C, Yates JR, Roos DS, Murray JM. (2006) 
+	     Cytoskeletal Components of an Invasion Machine - The Apical Complex of Toxoplasma gondii. PLoS Pathog <b>2</b>:121-138.</i><br>
+             1,887 protein hits were obtained resulting in 1,166 non-redundant protein identifications. A further 498 hits were obtained to sequences which matched 446 predicted open reading frames for which no gene model currently exists.  
+             <br>Taken together, these two datasets result in 8,433 protein hits to 2,436 non-redundant Toxoplasma proteins and 816 hits to 634 non-redundant ORFs that contain peptides that couldn't be mapped to annotated proteins. With the additional evidence from the predicted gene models, nearly 40% of the predicted proteome from T. gondii is represented.  The data provide evidence that often corroborates the annotated gene models and in some instances the peptides mapping to ORFs and predicted gene models provide evidence for alternatives to the current annotations.
+             <br><sup>3</sup>
+    <!-- description by Andras Fiser -->
+             <i>Joseph Dybas, Dmitry Rykunov, Carlos Madrid, Edward Nieves, Fa-Yun Che, Hui Xiao, Kami Kim, Louis Weiss, Ruth Hogue Angeletti, Andr&#225;s Fiser (<a href="http://toro.aecom.yu.edu/biodefense/">Einstein Biodefense Proteomics Research Center</a>)</i>
+             <br>Enriched cytoskeletal and membrane fractions of T. gondii were separated by 1D-SDS-PAGE or 2D gel electrophoresis.  The bands/spots were digested with trypsin. The resulting peptides analyzed by nanoLC-MS/MS on a ThermoFinnigan linear ion trap (LTQ) mass spectrometer.  MASCOT was used to search the merged DTA mass spectrometry data file against the appropriate database to obtained unique peptide hits.  In order to extend the dynamic range of the membrane fractions, high pH sodium carbonate was used to remove the peripheral membrane proteins. For a few experiments, the remaining cytosolic fractions were also analyzed. A total of 2604 proteins were identified by mass spectrometry in T. gondii to date. The 2604 predicted proteins cluster into 1534 groups of overlapping gene predictions that were identified by 14455 mass spectrometry peptide hits that gave an average 13.2% sequence coverage.
+             <br><sup>4</sup>
+   <!-- description by Andras Fiser -->
+             <i> Vern Carruthers </i>
+             <br>Carruthers lab analyzed a large cohort of freely released Toxoplasma secretory proteins by using two complementary methodologies, two-dimensional electrophoresis/mass spectrometry and liquid chromatography/electrospray ionization-tandem mass spectrometry (MudPIT, shotgun proteomics). <a href="http://www.ncbi.nlm.nih.gov/pubmed/16002397">J Biol Chem. 2005 Oct 7;280(40):34233-44.</a>
+             <br><sup>5</sup>
+   <!-- description by Andras Fiser -->
+             <i>Silvia Moreno </i>
+             <br>The samples were prepared by Silvia Moreno's laboratory at the University of Georgia, Athens, GA and analyzed by James Thompson and  John  Yates, III  at The Scripps Research Institute, La Jolla, CA
+            <br><br>            
+            <p><b><i>T.brucei</i></b>
+            <br><sup>2</sup> MS/MS analysis of <i>T. brucei</i> proteins from procyclic form (PF) and a mitochondrial enriched fraction.  This data was provided by Kenneth Stuart and Aswini Panigrahi at the Seattle Biomedical Research Institute, Seattle, Washington. Additional informations regarding this study may be accessed <a href="http://www.ncbi.nlm.nih.gov/pubmed/19105172" target="_blank">here</a>. This data may also be accessed <a href="http://www.trypsproteome.org" target="_blank">here</a>.
+            <br><br>            
+            <p><b><i>T. cruzi</i></b>
+            <br><sup>1</sup> Protein expression evidence from different stages of <i>T. cruzi</i> provided by <a href="http://paige.cb.uga.edu/" target="_blank">Rick Tarleton's group</a> at the University of Georgia, Athens, Georgia.
+<sup>5</sup> Subcellular proteomics of <i>Trypanosoma cruzi</i> reservosomes (<a href="http://www.ncbi.nlm.nih.gov/pubmed/19288526">Sant'Anna et. al.)</a>. <br><br>
+<sup>6</sup> Proteomic Analysis of Detergent-Solubilized Membrane Proteins from Insect-Developmental Forms of <i>Trypanosoma cruzi</i> (<a href="http://www.ncbi.nlm.nih.gov/pubmed/19374451">Cordero et. al.</a>)<br><br>
+            <p><b><i>L. infantum</i></b>
+            <br><sup>3</sup> This data represents peptides with post-translational modifications as described by <a href="http://www.ncbi.nlm.nih.gov/pubmed/18398879">Rosenzweig <i>et. al.</i></a>.<br>
+            <br><sup>4</sup> Evidence of protein expression in <i>L. infantum</i> from <a href="http://www.mcgill.ca/chpi/members/ouellette/" target="_blank">Marc Ouellette's group</a> at the Centre de Recheche en Infectiologie de l'Universit&#233; Laval, Quebec, Canada.  <b>Note: All experiments were performed with <i>L. infantum</i> parasites and an "<sup>*</sup>"  indicates where mass spec results were analyzed against predicted proteins from other <i>Leishmania</i> species as indicated. This does not provide proof that these proteins are expressed in species other than <i>L. infantum</i>.</b> <br>
+<sup>7</sup> Evidence of protein expression in <i>L. infantum</i> proteins in the metacyclic stage.  Parasites were analyzed on 2D gel, followed by prefractionaltion by free-flow electrophoresis and Mass Spec analysis by <a href="http://www.mcgill.ca/chpi/members/ouellette">Marc Ouellette's group</a> at the Centre de Recheche en Infectiologie de l'Universite Laval, Quebec, Canada.]]></doc>
+<request>
+<param name='ms_assay' type='xsd:string' required='true' default='false' repeating='true'>
+<doc title='prompt'><![CDATA[Experiments]]></doc>
+<doc title='help'><![CDATA[Click the + to select specific experiments or use the tree box to select all for the chosen organism.]]></doc>
+<doc title='default'><![CDATA[false]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='Ehistolytica'><doc title='description'><![CDATA[<i>Entamoeba histolytica</i>]]></doc></option>
+<option value='Phagosome Proteomics data from Huston - 0 mins'><doc title='description'><![CDATA[Phagosome proteins at 0 mins]]></doc></option>
+<option value='Phagosome Proteomics data from Huston - 5 mins'><doc title='description'><![CDATA[Phagosome proteins at 5 mins]]></doc></option>
+<option value='Phagosome Proteomics data from Huston - 10 mins'><doc title='description'><![CDATA[Phagosome proteins at 10 mins]]></doc></option>
+<option value='Phagosome Proteomics data from Huston - 30 mins'><doc title='description'><![CDATA[Phagosome proteins at 30 mins]]></doc></option>
+<option value='Phagosome Proteomics data from Huston - 60 mins'><doc title='description'><![CDATA[Phagosome proteins at 60 mins]]></doc></option>
+<option value='Cparvum'><doc title='description'><![CDATA[<i>Cryptosporidium parvum</i>]]></doc></option>
+<option value='Wastling MassSpec 1D Gel LC-MS/MS'><doc title='description'><![CDATA[1D Gel LC-MS/MS <sup>1</sup>]]></doc></option>
+<option value='Wastling MassSpec 2D Gel LC-MS/MS'><doc title='description'><![CDATA[2D Gel LC-MS/MS <sup>1</sup>]]></doc></option>
+<option value='Wastling MassSpec MudPit Soluble'><doc title='description'><![CDATA[MudPit Soluble fractions <sup>1</sup>]]></doc></option>
+<option value='Wastling MassSpec MudPit Insoluble'><doc title='description'><![CDATA[MudPit Insoluble fractions <sup>1</sup>]]></doc></option>
+<option value='Lowery MassSpec LC-MS/MS Insoluble Excysted Fraction'><doc title='description'><![CDATA[Insoluble Excysted Fraction LC-MS/MS <sup>2</sup>]]></doc></option>
+<option value='Lowery MassSpec LC-MS/MS Insoluble Non-excysted fraction'><doc title='description'><![CDATA[Insoluble Non-excysted Fraction LC-MS/MS <sup>2</sup>]]></doc></option>
+<option value='Lowery MassSpec LC-MS/MS Soluble Excysted and Non-excysted fractions'><doc title='description'><![CDATA[Soluble Excysted and Non-excysted Fraction LC-MS/MS <sup>2</sup>]]></doc></option>
+<option value='Fiser_Proteomics_14Aug2006_1D_gel'><doc title='description'><![CDATA[1D Gel 14Aug2006 <sup>3</sup>]]></doc></option>
+<option value='Fiser_Proteomics_16May2006_1D_gel'><doc title='description'><![CDATA[1D Gel 16May2006 <sup>3</sup>]]></doc></option>
+<option value='Fiser_Proteomics_24Jun2006_1D_gel'><doc title='description'><![CDATA[1D Gel 24Jun2006 <sup>3</sup>]]></doc></option>
+<option value='Ferrari_Proteomics_LTQ_Oocyst_walls'><doc title='description'><![CDATA[Oocyst walls <sup>4</sup>]]></doc></option>
+<option value='Ferrari_Proteomics_LTQ_intact_oocysts_merged'><doc title='description'><![CDATA[Intact Oocysts <sup>4</sup>]]></doc></option>
+<option value='Ferrari_Proteomics_LTQ_Sporozoites merged'><doc title='description'><![CDATA[Sporozoites <sup>4</sup>]]></doc></option>
+<option value='C. parvum mass spec data from Lorenza Putignani'><doc title='description'><![CDATA[Mitochondrial Fraction<sup>5</sup>]]></doc></option>
+<option value='Pfalciparum'><doc title='description'><![CDATA[<i>Plasmodium falciparum</i>]]></doc></option>
+<option value='Pberghei'><doc title='description'><![CDATA[<i>Plasmodium berghei</i>]]></doc></option>
+<option value='Pvivax'><doc title='description'><![CDATA[<i>Plasmodium vivax</i>]]></doc></option>
+<option value='Pyoelii'><doc title='description'><![CDATA[<i>Plasmodium yoelii</i>]]></doc></option>
+<option value='Merozoite'><doc title='description'><![CDATA[Merozoite <sup>1</sup>]]></doc></option>
+<option value='Trophozoite'><doc title='description'><![CDATA[Trophozoite <sup>1</sup>]]></doc></option>
+<option value='Gametocyte'><doc title='description'><![CDATA[Gametocyte <sup>1</sup>]]></doc></option>
+<option value='Sporozoite'><doc title='description'><![CDATA[Sporozoite <sup>1</sup>]]></doc></option>
+<option value='Shahid Khan Merozoite Peptides'><doc title='description'><![CDATA[Merozoite Peptides <sup>2</sup>]]></doc></option>
+<option value='Mosquito Oocyst Peptides'><doc title='description'><![CDATA[Mosquito Oocyst Peptides <sup>3</sup>]]></doc></option>
+<option value='Mosquito Oocyst-derived Sporozoite Peptides'><doc title='description'><![CDATA[Mosquito Oocyst-derived Sporozoite Peptides <sup>3</sup>]]></doc></option>
+<option value='Mosquito Salivary Gland Sporozoite Peptides'><doc title='description'><![CDATA[Mosquito Salivary Gland Sporozoite Peptides <sup>3</sup>]]></doc></option>
+<option value='iRBC Membrane'><doc title='description'><![CDATA[iRBC Membrane (PIESPs) / Schizont  <sup>4</sup>]]></doc></option>
+<option value='P.falciparum Clinical Proteomics'><doc title='description'><![CDATA[Clinical Proteomics <sup>7</sup>]]></doc></option>
+<option value='Pfalciparum_Bowyer_Proteomics_42hrs_Post_Infection'><doc title='description'><![CDATA[Proteome 42 hrs Post Infection <sup>8</sup>]]></doc></option>
+<option value='Pfalciparum_Bowyer_Proteomics_48hrs_Post_Infection'><doc title='description'><![CDATA[Proteome 48 hrs Post Infection <sup>8</sup>]]></doc></option>
+<option value='Waters Female Gametes'><doc title='description'><![CDATA[Female Gametocytes <sup>5</sup>]]></doc></option>
+<option value='Waters Male Gametes'><doc title='description'><![CDATA[Male Gametocytes <sup>5</sup>]]></doc></option>
+<option value='Waters Mixed  Gametes'><doc title='description'><![CDATA[Mixed Gametocytes <sup>5</sup>]]></doc></option>
+<option value='Clinical Proteomics'><doc title='description'><![CDATA[P.vivax Clinical Proteomics <sup>9</sup>]]></doc></option>
+<option value='Pf_Lasonder_Proteomics_Blood_Stages_trophozoites_RSRC'><doc title='description'><![CDATA[Blood Stage Proteome - Trophozoites<sup>10</sup>]]></doc></option>
+<option value='Pf_Lasonder_Proteomics_Blood_Stages_early_gametocytes_RSRC'><doc title='description'><![CDATA[Blood Stage Proteome - Early Gametocytes (gct I/II)<sup>10</sup>]]></doc></option>
+<option value='Pf_Lasonder_Proteomics_Blood_Stages_late_gametocytes_RSRC'><doc title='description'><![CDATA[Blood Stage Proteome - Mature Gametocytes (gct V)<sup>10</sup>]]></doc></option>
+<option value='Liver Stage LS40'><doc title='description'><![CDATA[Liver Stage LS40 <sup>6</sup>]]></doc></option>
+<option value='Liver Stage LS50'><doc title='description'><![CDATA[Liver Stage LS50 <sup>6</sup>]]></doc></option>
+<option value='Tvaginalis'><doc title='description'><![CDATA[<i>Trichomonas vaginalis</i>]]></doc></option>
+<option value='Hayes-Johnson_Tvag_Proteomics'><doc title='description'><![CDATA[T. vaginalis subcellular fraction<sup>1</sup>]]></doc></option>
+<option value='Tgondii'><doc title='description'><![CDATA[<i>Toxoplasma gondii</i>]]></doc></option>
+<option value='Wastling 1-D SDS PAGE'><doc title='description'><![CDATA[1-D SDS PAGE<sup>1</sup>]]></doc></option>
+<option value='Wastling 1-D SDS PAGE Soluble'><doc title='description'><![CDATA[1-D SDS PAGE Soluble Fraction<sup>1</sup>]]></doc></option>
+<option value='Wastling 1-D SDS PAGE Insoluble'><doc title='description'><![CDATA[1-D SDS PAGE Insoluble Fraction<sup>1</sup>]]></doc></option>
+<option value='Wastling MudPIT Soluble'><doc title='description'><![CDATA[MudPIT Soluble Fraction<sup>1</sup>]]></doc></option>
+<option value='Wastling MudPIT Insoluble'><doc title='description'><![CDATA[MudPIT Insoluble Fraction<sup>1</sup>]]></doc></option>
+<option value='Wastling Rhoptry'><doc title='description'><![CDATA[Rhoptry Fraction<sup>1*</sup>]]></doc></option>
+<option value='Wastling Murray Conoid-enriched Fraction'><doc title='description'><![CDATA[Conoid-enriched Fraction<sup>2</sup>]]></doc></option>
+<option value='Wastling Murray Conoid-depleted Fraction'><doc title='description'><![CDATA[Conoid-depleted Fraction<sup>2</sup>]]></doc></option>
+<option value='1D Gel Tachyzoite Membrane fraction 12-2006'><doc title='description'><![CDATA[1D Gel Tachyzoite Membrane fraction 12-2006<sup>3</sup>]]></doc></option>
+<option value='1D Gel Tachyzoite Membrane fraction 10-2006'><doc title='description'><![CDATA[1D Gel Tachyzoite Membrane fraction 10-2006<sup>3</sup>]]></doc></option>
+<option value='2DLC MS/MS Tachyzoite Membrane fraction'><doc title='description'><![CDATA[2DLC MS/MS Tachyzoite Membrane fraction<sup>3</sup>]]></doc></option>
+<option value='MS Tachyzoite Cytosolic Protein Fractions 05-2007'><doc title='description'><![CDATA[MS Tachyzoite Cytosolic fraction 05-2007<sup>3</sup>]]></doc></option>
+<option value='MS Tachyzoite Membrane fraction 05-02-2006'><doc title='description'><![CDATA[MS Tachyzoite Membrane fraction 05-02-2006<sup>3</sup>]]></doc></option>
+<option value='MS Tachyzoite Membrane fraction 06-2006'><doc title='description'><![CDATA[MS Tachyzoite Membrane fraction 06-2006<sup>3</sup>]]></doc></option>
+<option value='MS Tachyzoite Membrane fraction 05-10-2006'><doc title='description'><![CDATA[MS Tachyzoite Membrane fraction 05-10-2006<sup>3</sup>]]></doc></option>
+<option value='MS Tachyzoite Membrane fraction 02-03-2006'><doc title='description'><![CDATA[MS Tachyzoite Membrane fraction 02-03-2006<sup>3</sup>]]></doc></option>
+<option value='MS Tachyzoite Membrane Protein with  Biotinlyation Purification 05-22-2007'><doc title='description'><![CDATA[MS Tachyzoite Membrane Protein with  Biotinlyation Purification 05-22-2007<sup>3</sup>]]></doc></option>
+<option value='MS Carruthers 2destinct peptides'><doc title='description'><![CDATA[MS RH Secretome fraction 2destinct peptides<sup>4</sup>]]></doc></option>
+<option value='MS Carruthers MudPIT Twinscan hits'><doc title='description'><![CDATA[MS RH Secretome fraction MudPIT Twinscan hits<sup>4</sup>]]></doc></option>
+<option value='RH Mass Spec Data (sample A)'><doc title='description'><![CDATA[RH Mass Spec Data (sample A)<sup>5</sup>]]></doc></option>
+<option value='RH Mass Spec Data (sample G)'><doc title='description'><![CDATA[RH Mass Spec Data (sample G)<sup>5</sup>]]></doc></option>
+<option value='Glamblia'><doc title='description'><![CDATA[<i>Giardia Assemblage A isolate WB</i>]]></doc></option>
+<option value='DTASelect-filter_032108_Proteomics'><doc title='description'><![CDATA[DTA-Select Filter <sup>1</sup>]]></doc></option>
+<option value='Giardia proteomics data from Tachezy lab'><doc title='description'><![CDATA[G. intestinalis mitosome enriched fraction - nanoLC/MALDI TOF/TOF <sup>2</sup>]]></doc></option>
+<option value='Tcruzi'><doc title='description'><![CDATA[<i>Trypanosoma cruzi</i>]]></doc></option>
+<option value='Esmeraldo-like'><doc title='description'><![CDATA[Esmeraldo-like]]></doc></option>
+<option value='Non-Esmeraldo-like'><doc title='description'><![CDATA[Non-Esmeraldo-like]]></doc></option>
+<option value='Tcruzi Esmeraldo-like Proteomics-Amastigote'><doc title='description'><![CDATA[<i>T. cruzi</i> Esmeraldo-like Amastigote <sup>1</sup>]]></doc></option>
+<option value='Tcruzi Non-Esmeraldo-like Proteomics-Amastigote'><doc title='description'><![CDATA[<i>T. cruzi</i> Non-Esmeraldo-like Amastigote <sup>1</sup>]]></doc></option>
+<option value='Tcruzi Esmeraldo-like Proteomics-Epimastigote'><doc title='description'><![CDATA[<i>T. cruzi</i> Esmeraldo-like Epimastigote <sup>1</sup>]]></doc></option>
+<option value='Tcruzi Non-Esmeraldo-like Proteomics-Epimastigote'><doc title='description'><![CDATA[<i>T. cruzi</i> Non-Esmeraldo-like Epimastigote <sup>1</sup>]]></doc></option>
+<option value='Tcruzi Esmeraldo-like Proteomics-Metacyclic'><doc title='description'><![CDATA[<i>T. cruzi</i> Esmeraldo-like Metacyclic <sup>1</sup>]]></doc></option>
+<option value='Tcruzi Non-Esmeraldo-like Proteomics-Metacyclic'><doc title='description'><![CDATA[<i>T. cruzi</i> Non-Esmeraldo-like Metacyclic <sup>1</sup>]]></doc></option>
+<option value='Tcruzi Esmeraldo-like Proteomics-Trypomastigote'><doc title='description'><![CDATA[<i>T. cruzi</i> Esmeraldo-like Trypomastigote <sup>1</sup>]]></doc></option>
+<option value='Tcruzi Non-Esmeraldo-like Proteomics-Trypomastigote'><doc title='description'><![CDATA[<i>T. cruzi</i> Non-Esmeraldo-like Trypomastigote <sup>1</sup>]]></doc></option>
+<option value='Tcruzi Esmeraldo-like reservosomes-B1 fraction digested with trypsin and endoproteinase Glu-C'><doc title='description'><![CDATA[<i>T. cruzi</i> Esmeraldo-like reservosomes-B1 fraction digested with trypsin and endoproteinase Glu-C <sup>5</sup>]]></doc></option>
+<option value='Tcruzi NonEsmeraldo-like reservosomes-B1 fraction digested with trypsin and endoproteinase Glu-C'><doc title='description'><![CDATA[<i>T. cruzi</i> Non-Esmeraldo-like reservosomes-B1 fraction digested with trypsin and endoproteinase Glu-C <sup>5</sup>]]></doc></option>
+<option value='Tcruzi Esmeraldo-like reservosomes-B1 fraction digested with trypsin'><doc title='description'><![CDATA[<i>T. cruzi</i> Esmeraldo-like reservosomes-B1 fraction digested with trypsin <sup>5</sup>]]></doc></option>
+<option value='Tcruzi Non-Esmeraldo-like reservosomes-B1 fraction digested with trypsin'><doc title='description'><![CDATA[<i>T. cruzi</i> Non-Esmeraldo-like reservosomes-B1 fraction digested with trypsin <sup>5</sup>]]></doc></option>
+<option value='Tcruzi Esmeraldo-like reservosomes-B1M fraction digested with trypsin'><doc title='description'><![CDATA[<i>T. cruzi</i> Esmeraldo-like reservosomes-B1M fraction digested with trypsin <sup>5</sup>]]></doc></option>
+<option value='Tcruzi Non-Esmeraldo-like reservosomes-B1M fraction digested with trypsin'><doc title='description'><![CDATA[<i>T. cruzi</i> Non-Esmeraldo-like reservosomes-B1M fraction digested with trypsin <sup>5</sup>]]></doc></option>
+<option value='Tcruzi Esmeraldo-like Proteomics-Membrane Protein'><doc title='description'><![CDATA[<i>T. cruzi</i> Esmeraldo-like Proteomic Analysis of Detergent-Solubilized Membrane Proteins from Insect-Developmental Forms <sup>6</sup>]]></doc></option>
+<option value='Tcruzi Non-Esmeraldo-like Proteomics-Membrane Protein'><doc title='description'><![CDATA[<i>T. cruzi</i> Non-Esmeraldo-like Proteomic Analysis of Detergent-Solubilized Membrane Proteins from Insect-Developmental Forms <sup>6</sup>]]></doc></option>
+<option value='Tbrucei'><doc title='description'><![CDATA[<i>Trypansoma brucei</i>]]></doc></option>
+<option value='Tbrucei Proteomics Procyclic Form'><doc title='description'><![CDATA[<i>T. brucei</i> Procyclic Form <sup>2</sup>]]></doc></option>
+<option value='Tbrucei Proteomics Bloodstream Form Cytosolic Phosphoproteome'><doc title='description'><![CDATA[<i>T. brucei</i> Bloodstream Form Cytosolic Phosphoproteome<sup>10</sup>]]></doc></option>
+<option value='Linfantum'><doc title='description'><![CDATA[<i>Leishmania infantum</i>]]></doc></option>
+<option value='Amastigote'><doc title='description'><![CDATA[Amastigote]]></doc></option>
+<option value='Promastigote'><doc title='description'><![CDATA[Promastigote]]></doc></option>
+<option value='ptl'><doc title='description'><![CDATA[Post translational modification]]></doc></option>
+<option value='Linfantum Proteomics PTM-glycosylation'><doc title='description'><![CDATA[<i>L. infantum</i> - glycosylated <sup>3</sup>]]></doc></option>
+<option value='Linfantum Proteomics PTM-acetylation'><doc title='description'><![CDATA[<i>L. infantum</i> - acetylated <sup>3</sup>]]></doc></option>
+<option value='Linfantum Proteomics PTM-methylation'><doc title='description'><![CDATA[<i>L. infantum</i> - methylated <sup>3</sup>]]></doc></option>
+<option value='Linfantum Proteomics PTM-phosphorylation'><doc title='description'><![CDATA[<i>L. infantum</i> - phosphorylated <sup>3</sup><br>]]></doc></option>
+<option value='Linfantum Proteomics SDS Amastigote'><doc title='description'><![CDATA[<i>L. infantum</i> Amastigote (1DGel) <sup>4</sup>]]></doc></option>
+<option value='Linfantum Proteomics 2DGel 6-9 Amastigote'><doc title='description'><![CDATA[<i>L. infantum</i> Amastigote (2DGel pH6-9) <sup>4</sup>]]></doc></option>
+<option value='Linfantum Proteomics 2DGel 6-11 Amastigote'><doc title='description'><![CDATA[<i>L. infantum</i>  Amastigote (2DGel pH6-11) <sup>4</sup>]]></doc></option>
+<option value='Linfantum Proteomics 2DGel 6-9 Promastigote'><doc title='description'><![CDATA[<i>L. infantum</i> Promastigote (2DGel pH6-9) <sup>4</sup>]]></doc></option>
+<option value='Linfantum Proteomics 2DGel 6-11 Promastigote'><doc title='description'><![CDATA[<i>L. infantum</i> Promastigote (2DGel pH6-11) <sup>4</sup>]]></doc></option>
+<option value='Linfantum Proteomics data from Marc Ouellette'><doc title='description'><![CDATA[Metacyclogenesis (pH 5-6)<sup>7</sup>]]></doc></option>
+<option value='Linfantum Proteomics Promastigote temperature and pH non-stressed'><doc title='description'><![CDATA[<i>L. infantum</i>  Promastigote temperature and pH Control <sup>4</sup>]]></doc></option>
+<option value='Linfantum Proteomics Promastigote temperature and pH stressed'><doc title='description'><![CDATA[<i>L. infantum</i>  Promastigote temperature and pH stressed <sup>4</sup>]]></doc></option>
+<option value='Linfantum Proteomics Amastigote Secreted Protein'><doc title='description'><![CDATA[<i>L. infantum</i> Amastigote (Secreted) <sup>4</sup>]]></doc></option>
+<option value='Linfantum Proteomics Promastigote Secreted Protein'><doc title='description'><![CDATA[<i>L. infantum</i> Promastigote (Secreted) <sup>4</sup>]]></doc></option>
+<option value='Lmajor'><doc title='description'><![CDATA[<i>Leishmania major</i>]]></doc></option>
+<option value='L.major Proteomics-Exosomes'><doc title='description'><![CDATA[<i>L. major</i> Exosome Proteins <sup>8</sup>]]></doc></option>
+<option value='Lbraziliensis'><doc title='description'><![CDATA[<i>Leishmania braziliensis</i>]]></doc></option>
+<option value='L. braziliensis Promastigote (secreted)'><doc title='description'><![CDATA[Promastigote (secreted) <sup>9</sup>]]></doc></option>
+</param>
+<param name='min_sequence_count' type='xsd:string' required='true' default='1' >
+<doc title='prompt'><![CDATA[Minimum Number of<br>Unique Peptide Sequences]]></doc>
+<doc title='help'><![CDATA[Use this parameter to set a minimum for the number of unique peptide sequences found that must match a gene in order for it to be returned by the query. Roughly speaking this parameter provides a measure of the abundance of the protein product in question, at least within a particular experiment.]]></doc>
+<doc title='default'><![CDATA[1]]></doc>
+</param>
+<param name='min_spectrum_count' type='xsd:string' required='true' default='1' >
+<doc title='prompt'><![CDATA[Minimum Number of Spectra]]></doc>
+<doc title='help'><![CDATA[Use this parameter to set a minimum for the number of mass spectra found that must match a gene in order for it to be returned by the query. Roughly speaking this parameter provides a measure of the abundance of the protein product in question, at least within a particular experiment.]]></doc>
+<doc title='default'><![CDATA[1]]></doc>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Gene]]></doc></option>
+<option value='formatted_gene_id'><doc title='description'><![CDATA[Gene Group]]></doc></option>
+<option value='sequence_id'><doc title='description'><![CDATA[Genomic Sequence ID]]></doc></option>
+<option value='chromosome'><doc title='description'><![CDATA[Chromosome]]></doc></option>
+<option value='location_text'><doc title='description'><![CDATA[Genomic Location]]></doc></option>
+<option value='strand'><doc title='description'><![CDATA[Gene Strand]]></doc></option>
+<option value='gene_type'><doc title='description'><![CDATA[Gene Type]]></doc></option>
+<option value='exon_count'><doc title='description'><![CDATA[# Exons]]></doc></option>
+<option value='transcript_length'><doc title='description'><![CDATA[Transcript Length]]></doc></option>
+<option value='cds_length'><doc title='description'><![CDATA[CDS Length]]></doc></option>
+<option value='product'><doc title='description'><![CDATA[Product Description]]></doc></option>
+<option value='protein_length'><doc title='description'><![CDATA[Protein Length]]></doc></option>
+<option value='tm_count'><doc title='description'><![CDATA[# TM Domains]]></doc></option>
+<option value='molecular_weight'><doc title='description'><![CDATA[Molecular Weight]]></doc></option>
+<option value='isoelectric_point'><doc title='description'><![CDATA[Isoelectric Point]]></doc></option>
+<option value='ec_numbers_string'><doc title='description'><![CDATA[EC Numbers]]></doc></option>
+<option value='ortholog_number'><doc title='description'><![CDATA[Ortholog count]]></doc></option>
+<option value='paralog_number'><doc title='description'><![CDATA[Paralog count]]></doc></option>
+<option value='orthomcl_name'><doc title='description'><![CDATA[Ortholog Group]]></doc></option>
+<option value='signalp_scores'><doc title='description'><![CDATA[SignalP Scores]]></doc></option>
+<option value='signalp_peptide'><doc title='description'><![CDATA[SignalP Peptide]]></doc></option>
+<option value='ann_go_function'><doc title='description'><![CDATA[Annotated GO Function]]></doc></option>
+<option value='ann_go_process'><doc title='description'><![CDATA[Annotated GO Process]]></doc></option>
+<option value='ann_go_component'><doc title='description'><![CDATA[Annotated GO Component]]></doc></option>
+<option value='pred_go_function'><doc title='description'><![CDATA[Predicted GO Function]]></doc></option>
+<option value='pred_go_process'><doc title='description'><![CDATA[Predicted GO Process]]></doc></option>
+<option value='pred_go_component'><doc title='description'><![CDATA[Predicted GO Component]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='is_pseudo'><doc title='description'><![CDATA[Is Pseudo]]></doc></option>
+<option value='protein_sequence'><doc title='description'><![CDATA[Predicted Protein Sequence]]></doc></option>
+<option value='transcript_sequence'><doc title='description'><![CDATA[Predicted RNA/mRNA Sequence (introns spliced out)]]></doc></option>
+<option value='cds'><doc title='description'><![CDATA[Coding Sequence]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+<option value='sum_sequence_count'><doc title='description'><![CDATA[Number of Peptide Sequences]]></doc></option>
+<option value='sum_spectrum_count'><doc title='description'><![CDATA[Number of Spectra]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+<option value='SNPs'><doc title='description'><![CDATA[SNPs Summary]]></doc></option>
+<option value='GeneModelDump'><doc title='description'><![CDATA[Gene Model]]></doc></option>
+<option value='InterPro'><doc title='description'><![CDATA[InterPro Domains]]></doc></option>
+<option value='TMHMM'><doc title='description'><![CDATA[Transmembrane Domains]]></doc></option>
+<option value='LowComplexity'><doc title='description'><![CDATA[Low Complexity Regions]]></doc></option>
+<option value='SignalP'><doc title='description'><![CDATA[Signal Peptide]]></doc></option>
+<option value='BlastP'><doc title='description'><![CDATA[BlastP Hits]]></doc></option>
+<option value='Genbank'><doc title='description'><![CDATA[Gene Location]]></doc></option>
+<option value='SageTags'><doc title='description'><![CDATA[Sage Tags]]></doc></option>
+<option value='Notes'><doc title='description'><![CDATA[Notes]]></doc></option>
+<option value='UserComments'><doc title='description'><![CDATA[User Comments]]></doc></option>
+<option value='CommunityExpComments'><doc title='description'><![CDATA[Community Annotations]]></doc></option>
+<option value='EcNumber'><doc title='description'><![CDATA[EC Number]]></doc></option>
+<option value='MassSpec'><doc title='description'><![CDATA[Mass Spec.-based Expression Evidence]]></doc></option>
+<option value='GoTerms'><doc title='description'><![CDATA[GO Terms]]></doc></option>
+<option value='Phenotype'><doc title='description'><![CDATA[Phenotype]]></doc></option>
+<option value='Y2hInteractions'><doc title='description'><![CDATA[Y2H Interactions]]></doc></option>
+<option value='Orthologs'><doc title='description'><![CDATA[Orthologs and Paralogs within EuPathDB]]></doc></option>
+<option value='MetabolicPathways'><doc title='description'><![CDATA[Metabolic Pathways]]></doc></option>
+<option value='TaskComments'><doc title='description'><![CDATA[Toxoplasma Genome Sequencing Project Annotation]]></doc></option>
+<option value='ArrayElements'><doc title='description'><![CDATA[Mapped Array Elements]]></doc></option>
+<option value='TwoChannelDiffExpr'><doc title='description'><![CDATA[P.Berghei Differential Expression - DOZI KO vs. WT]]></doc></option>
+<option value='ProteinExpression'><doc title='description'><![CDATA[P.Berghei Protein Expression]]></doc></option>
+<option value='Mr4Reagents'><doc title='description'><![CDATA[MR4 Reagents]]></doc></option>
+<option value='ProteinDatabase'><doc title='description'><![CDATA[Protein Linkouts]]></doc></option>
+<option value='GeneLinkouts'><doc title='description'><![CDATA[External Links]]></doc></option>
+<option value='3dPreds'><doc title='description'><![CDATA[3D Structure Predictions]]></doc></option>
+<option value='PdbSimilarities'><doc title='description'><![CDATA[Similarities to Protein Data Bank (PDB) Chains]]></doc></option>
+<option value='Epitopes'><doc title='description'><![CDATA[Epitopes from IEDB]]></doc></option>
+<option value='IsolateOverlap'><doc title='description'><![CDATA[Isolates]]></doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>

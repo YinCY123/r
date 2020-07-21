@@ -1,0 +1,69 @@
+<?xml version='1.0'?>
+<application xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://wadl.dev.java.net/2009/02 wadl.xsd' xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns='http://wadl.dev.java.net/2009/02'>
+<resources base='http://eupathdb.org/webservices/'>
+<resource path='SageTagQuestions'>
+<resource path='SageTagBySequence.xml'>
+<method href='#sagetagbysequence'/>
+</resource>
+<resource path='SageTagBySequence.json'>
+<method href='#sagetagbysequence'/>
+</resource>
+<method name='POST' id='sagetagbysequence'>
+<doc title='display_name'><![CDATA[Sequence]]></doc>
+<doc title='summary'><![CDATA[Find SAGE Tags Alignments By their Sequence.]]></doc>
+<doc title='description'><![CDATA[Find SAGE Tags Alignments By their Sequence.]]></doc>
+<request>
+<param name='sequence' type='xsd:string' required='true' default='GTAATAAATG' >
+<doc title='prompt'><![CDATA[Tag Sequence]]></doc>
+<doc title='help'><![CDATA[Enter a SAGE Tag Sequence.]]></doc>
+<doc title='default'><![CDATA[GTAATAAATG]]></doc>
+</param>
+<param name='is_within_gene' type='xsd:string' required='true' default='Yes' repeating='false'>
+<doc title='prompt'><![CDATA[Within Genes Only]]></doc>
+<doc title='help'><![CDATA[SAGE Tags are short sequences and can align to several geomic coordinates.  Choose Yes to restrict to SAGE tags falling within a gene.]]></doc>
+<doc title='default'><![CDATA[Yes]]></doc>
+<doc title='SingleValued'>Choose at most one value from the options</doc>
+<option value='Yes'><doc title='description'><![CDATA[Yes]]></doc></option>
+<option value='No'><doc title='description'><![CDATA[No]]></doc></option>
+</param>
+<param name='o-fields' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Fields]]></doc>
+<doc title='help'><![CDATA[Single valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all attributes</doc></option>
+<option value='none'><doc title='description'>Show no attributes</doc></option>
+<option value='primary_key'><doc title='description'><![CDATA[Tag]]></doc></option>
+<option value='tag_sequence'><doc title='description'><![CDATA[Tag Sequence]]></doc></option>
+<option value='sequence_id'><doc title='description'><![CDATA[Sequence Id]]></doc></option>
+<option value='start_min'><doc title='description'><![CDATA[Tag Start]]></doc></option>
+<option value='end_max'><doc title='description'><![CDATA[Tag End]]></doc></option>
+<option value='strand'><doc title='description'><![CDATA[Strand]]></doc></option>
+<option value='context_start'><doc title='description'><![CDATA[Genomic Context Start]]></doc></option>
+<option value='context_end'><doc title='description'><![CDATA[Genomic Context End]]></doc></option>
+<option value='organism'><doc title='description'><![CDATA[Organism]]></doc></option>
+<option value='rad_source_id'><doc title='description'><![CDATA[External Identifier]]></doc></option>
+<option value='project_id'><doc title='description'><![CDATA[Project Id]]></doc></option>
+<option value='gene_source_id'><doc title='description'><![CDATA[Gene]]></doc></option>
+<option value='gene_product'><doc title='description'><![CDATA[Gene Product]]></doc></option>
+<option value='feature_source_id'><doc title='description'><![CDATA[Feature source id]]></doc></option>
+<option value='location_text'><doc title='description'><![CDATA[Genomic Location]]></doc></option>
+<option value='wdk_weight'><doc title='description'><![CDATA[Weight]]></doc></option>
+</param>
+<param name='o-tables' type='xsd:string' required='false' default='none' repeating='true'>
+<doc title='prompt'><![CDATA[Output Tables]]></doc>
+<doc title='help'><![CDATA[Multi-valued attributes of the feature.]]></doc>
+<doc title='default'><![CDATA[none]]></doc>
+<doc title='MultiValued'>Provide one or more values. Use comma as a delimter.</doc>
+<option value='all'><doc title='description'>Show all tables</doc></option>
+<option value='none'><doc title='description'>Show no tables</doc></option>
+</param>
+</request>
+<response>
+<representation mediaType='text/xml'/>
+<representation mediaType='text/plain'/>
+</response>
+</method>
+</resource>
+</resources>
+</application>
