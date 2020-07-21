@@ -285,11 +285,54 @@ getEncoding(obj = rdbRoot)
 ```
 
 
+# Chapter 4 XPath, XPointer, and XInclude  
+```{r}
+doc <- htmlParse(file = "http://www.bioconductor.org/packages/release/bioc/vignettes/TCGAbiolinks/inst/doc/subtypes.html")
+listOfNodes <- getNodeSet(doc = doc, path = "//a[@href]")
+```
+
+```{r}
+xpathSApply(doc, path = "//a[@href]", fun = xmlGetAttr, name = "href") %>% head()
+```
+
+```{r}
+getNodeSet(doc, path = "//a/@href") %>% .[10:20]
+```
 
 
+```{r}
+mil <- xmlParse(file = "files/sweat_metabolites.xml")
+
+mol <- getNodeSet(doc = mil, path = "/*/metabolite/accession/text()")
+xpexpr <- ".//metabolite/accession/text()"
+lapply(mil, function(node) xpathSApply(node, xpexpr, xmlValue))
+```
 
 
+## XPath and the XML Tree  
+```{r}
+doc <- xmlParse(file = "Data/eurofxref-hist.xml")
+root <- xmlRoot(x = doc)
+root %>% xmlSize()
+```
 
+```{r}
+xpexpr <- "/Envelope/Sender/name"
+nm <- getNodeSet(doc = root, path = xpexpr)
+nm %>% xmlToDataFrame()
+```
+
+```{r}
+mn <- getNodeSet(doc = root, path = "//Cube[@currency = 'JPY']")
+mn %>% xmlToDataFrame()
+```
+
+```{r}
+getNodeSet(doc = doc, path = "//Cube[@currency = 'CZK' and @rate < 25]")
+```
+
+
+## XPath Syntax  
 
 
 
