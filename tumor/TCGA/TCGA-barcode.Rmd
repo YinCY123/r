@@ -23,14 +23,14 @@ Currently the BCR is assigning both a TCGA barcode and a UUID to samples. The UU
 ### Creating Barcodes  
 All TCGA barcodes are created by the BCR. The following figure illustrates how a sample is processed and assigned a TCGA barcode at each step. Starting from the Tissue Source Site (TSS) and the participant (who donated a tissue sample to the TSS), the barcodes TCGA-02 and TCGA-02-001 are assigned respectively. The sample itself is also assigned a barcode: TCGA-02-0001-01. The sample is split into vials (e.g. TCGA-02-0001-01B) which are divided into portions (e.g. TCGA-02-0002-01B-02). Analytes (e.g. TCGA-02-0001-01B-02D) are extracted from each portion and distributed across one or more plates (e.g. TCGA-02-0001-01B-02D-0182), where each well is identified as an aliquot (e.g. TCGA-02-0001-01B-02D-0182-06). These plates are sent to GCCs or GSCs for characterization and sequencing.   
 ```{r}
-knitr::include_graphics("creation-barcode.PNG")
+knitr::include_graphics("figures/creation-barcode.PNG")
 ```
 
 
 ### Reading Barcodes  
 A TCGA barcode is composed of a collection of identifiers. Each specifically identifies a TCGA data element. Refer to the following figure for an illustration of how metadata identifiers comprise a barcode. An aliquot barcode, an example of which shows in the illustration, contains the highest number of identifiers.  
-```{r}
-knitr::include_graphics("reading-barcode.png")
+```{r, fig.align='center'}
+knitr::include_graphics("figures/reading-barcode.png")
 ```
 
 **Label**      | **Identifier for**                     | **Value**    | **Value Description**      | **Posiible Values**   
@@ -48,8 +48,8 @@ TSS|Tissue source site|2|GBM (brain tumor) Anderson|See Code Tables Report
 
 ### Barocde Types  
 Barcodes can also be visualized hierarchically, with TSS barcodes at the top of the tree and aliquot barcodes at the bottom. A parent barcode prefixes any of its descendent barcodes, reflecting the derivation of one biospecimen type from another. For example, sample are collected from a participant and so the corresponding sample barcodes contain the participant barcode from which they were derived.  
-```{r}
-knitr::include_graphics("barcode-tree.PNG")
+```{r, fig.align='center'}
+knitr::include_graphics("figures/barcode-tree.PNG")
 ```
 
 Using the aliquot barcode example from the figure in Reading Barcodes, the following table displays a possible set of related barcodes at each level of the hierarchy.  
