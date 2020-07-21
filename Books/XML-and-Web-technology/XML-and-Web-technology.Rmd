@@ -45,20 +45,14 @@ The data are typically in <td> elements, and we simply extract the contents of e
 The <th> elements in a table typically indicate column header, and is used for variable names when appropriate.  
 
 
-# Chapter 2 An Introduction to XML  
-XML is not itself a language for representing data. Rather, it is a very general structure with which we can define any number of new formats to represent arbitrary data.  
+# Chapter 3 Parsing XML Content  
+```{r}
+doc <- xmlParse("files/sweat_metabolites.xml")
 
+node <- xmlRoot(x = doc)[["metabolite"]]
 
-## Essentials of XML  
-### Element Names  
-Each element begins with the start-tag, e.g., <title> or <article>, and must close with a corre- sponding end-tag, e.g., </title> or </article>, respectively.  
-
-
-
-
-
-
-
+sapply(xmlChildren(node), function(node) xmlValue(node[["status"]])) 
+```
 
 
 
