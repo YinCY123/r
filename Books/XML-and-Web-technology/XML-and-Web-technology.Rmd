@@ -155,6 +155,11 @@ mags <- getNodeSet(doc = root,
            path = "/merge/event/param[@name='magnitude']/@value") %>% 
     unlist() %>% 
     as.numeric()
+
+time_stamp <- getNodeSet(doc = root, 
+                         path = "/merge/event[@version = '1']") %>% 
+    xmlSApply(xmlGetAttr, name = "time-stamp")
+
 mags %>% table() %>% barplot()
 ```
 
@@ -333,35 +338,112 @@ getNodeSet(doc = doc, path = "//Cube[@currency = 'CZK' and @rate < 25]")
 
 
 ## XPath Syntax  
+An XPath expression is made up of one or more location steps, separated by a / character. An individual location step has three distinct parts, the axis, node-test, and an optional predicate, which we specify in the following format:  
+```
+axis::node-test[predicate]
+```
+
+### The Axis  
+The axis provides both the direction to look for nodes (from the current context) and also how to look along that direction. Directions are expressed using the family relationship terminology from the document hierarchy, e.g., child, parent, sibling, ancestor, desendant.  
+
+The `child` axis looks down the tree one level (from the current location or context) to the immediate child nodes.  
+
+The `parent` and `ancestor` axes look up the node while the `ancestor` looks at the parent node, the parent's parent, and so on up to the root node.  
+
+The ancestor-or-self axis considers all the ancestor as well as the current node (the current node is the `self` axis).  
+
+Similarly, `descendant` and `descendant-or-self` work on descendant elements in the tree.  
+
+The `preceding-sibling` and `following-sibling` look along the same level of the current context at all of the preceding siblings (to the left) and the following siblings (to the right), respectively.  
 
 
+#### Axis Shortcuts and Abbreviations  
+Some axes are very common so there are shortcuts for these that make the XPath expression more succinct and clearer to read. These shortcuts can be used in a location step within the location path. The most common axis is child. This is the default axis and can be omitted from any XPath step.  
+
+Another commonly used abbreviation is the double forward slash `//` which is shorthand for the axis `descendant-or-self`.  
+
+```
+/child::Envelope/child::Cube/child::Cube/child::Cube
+```
+
+It can also be writen as  
+```
+/Envelope/Cube/Cube/Cube
+```
+
+```{r}
+root <- xmlRoot(mil)
+
+root %>% xmlSize()
+root %>% xmlSApply(xmlValue)
+getNodeSet(doc, "//Envelope")
+```
 
 
+#### The Node Test  
+The node-test component in a location step identifies the name or the type of node to be matched. This is often just simply the name of the nodes in which we are interested, e.g., Cube, Sender, or molecule.  
+
+At times we want to match a node with any name, and not a specific fixed name. In this case we can use the asterisk (*) as a wildcard that matches all named elements.  
+
+The * symbol is realy shorthand for the `node()` function that matches any regular node, i.e., it does not match text, comments, attributes, and processing instructions.  
+
+If we want to match text nodes we use the node-test `text().  
+
+Similarly, we use `comment()` to match comments and `processing-instruction()` to match any processing instruction.   
+
+If we want to match only processing instructions with a particular target, we pass the target name as a string in the call to `processing-instruction()`.  
+```
+//processing-instruction('R')
+```
+
+#### The Predicate  
+Predicates allow us to further restrict the node-set, but they are not always needed and so can be omitted. A predicate tests each of the candidate nodes matched by the node-test part of the location step.  
+
+**The XPath Location-step**  
+XPath locates sets of nodes in XML documents. An XPath expression is a location path that is made up of one or more location steps. Each step has two required parts - the axis and node-test - and an optional predicate as the third part. The location step follows the syntax:  
+```
+axis::node-test[predicate]
+```
+
+The location step can be thought of as directions from one location (or context) to another. The direction is relative to each node in the current set of nodes, as computed by the previous step.  
+
+The step indicates which direction to look (axis), the ndoe(s) name or type to locate (node-test), and the filter or subset condition to apply to the qualifying nodes (predicate).  
+
+XPath ignores white space (blank spaces and new lines) within a location step and betwen steps which allows us to format the expressions freely.  
+
+- `axis::` Orients the search and is expressed in the vocabulary of a tree hierarchy, e.g., `child` looks at the children of the current context, `parent` looks at the oarent, and `descendant-orself` looks at the current context and all nodes that descend from it. These axes are often abbreviated. For example, the `child` axis is the default and can be omitted entirely from the location step. Also, `descendant-or-self::foo` can be abbreviated to `//foo` and `attribute::name` can be expressed as `@name`. We can refer to the current node and the parent with `.` and `..`, rather than `self::node()` and `parent::node()`, respectively.  
+
+- `node-test` Provides the element name or an element type to locate in the location step. For element with no names, e.g., text and comments, we use functions, such as `text()` and `comment()` to locate element by type. We can use the generic `node()` function to identity any regular/named node. The wildcard shortcut `*` also matches any regular node.  
+
+- `[predicate]` This part of the location step operate on the nodes matching the `axis::node-test` and filters the qualifying nodes to those that meet the conditions of the predicate. The expression in the predicate is applied to each node in the node-test and if the result is `true`, the node remains in the node-set. XPath provides many functions to use in the predicate. For example, `[position() = last()]` keeps only the last node in the node-set; this can be abbreviated to `[last()`. Similary, we can subset by position, e.g., `//section[2]` yields the second <section> node. There are functions to compute the name or value of a node and also to perform string manipulation and comparisions. Simple expressions can be combined using the `and` & `or` operators.  
+```
+//Cube[currency = 'USD' or @rate > 1.5]
+
+/descendant-or-self::Cube[@time]/child::Cube[attribute::rate<25]
+```
+
+More than one element can be located by an XPath expression. The located nodes are called the `node-set`. Each matching node appears in the node-set just once. This is useful and especially important to remember when we work with compound XPath queries.  
 
 
+## XPath Functions and Logical Operators  
+```{r}
+doc <- xmlParse(file = "Data/merged_catalog.xml.gz")
+xmlSApply(doc %>% getNodeSet("/merge/event[@version = '1']"), xmlGetAttr, name = "network-code") %>% 
+    table() %>% 
+    sort() %>% 
+    barplot()
+```
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```{r}
+doc <- xmlParse(file = "Data/Kiva/lenders/1.xml")
+xmlSApply(doc %>% getNodeSet(path = "/snapshot/lenders/lender/country_code"), xmlValue) %>% table() %>% as.data.frame() %>% 
+    ggplot(aes(reorder(., Freq), Freq)) +
+    geom_bar(stat = "identity") +
+    theme(axis.text.x = element_text(hjust = 0.5, angle = 0, size = 7)) +
+    scale_x_discrete(name = "lenders") +
+    geom_text(aes(label = Freq, y = Freq + 30), color = "blue")
+```
 
 
 
