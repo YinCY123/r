@@ -426,6 +426,21 @@ More than one element can be located by an XPath expression. The located nodes a
 
 
 ## XPath Functions and Logical Operators  
+XPath provides logical operators for combining predicates. Predicates can be combined together into a compound predicate using one of the binary operators `and` or `or`.  
+
+```{r}
+doc <- xmlParse(file = "Data/eBay/tt.xml")
+root <- xmlRoot(doc)
+
+getNodeSet(doc, path = "/svg/circle")
+val %>% length()
+val[[1]] %>% head()
+```
+
+
+
+
+
 ```{r}
 doc <- xmlParse(file = "Data/merged_catalog.xml.gz")
 xmlSApply(doc %>% getNodeSet("/merge/event[@version = '1']"), xmlGetAttr, name = "network-code") %>% 
