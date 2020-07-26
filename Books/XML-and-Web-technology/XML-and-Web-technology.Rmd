@@ -566,13 +566,64 @@ locates all sections that have either a table or figure in them in the parsed bo
 
 
 ## Examples of Accessing Data with XPath  
+```{r}
+doc <- xmlParse(file = "Data/GovTrack/S. 2107 (Enrolled-Bill).xml")
+xpx <- "/bill/legis-body/section/header"
+xpathSApply(doc %>% xmlRoot, "//contain(bill)", xmlGetAttr, name = "number", default = NA)
+xpathSApply(doc = doc, 
+            path = xpx, 
+            fun = xmlGetAttr, 
+            name = "display-inline")
+```
 
 
+```{r}
+doc <- xmlParse(file = "Data/merged_catalog.xml.gz")
+xpx <- "/merge/event/param[@name = 'magnitude']"
+magValues <- xpathSApply(doc = doc,
+            path = xpx, 
+            fun = xmlGetAttr, 
+            name = "value") %>% 
+    as.numeric()
+
+magValues %>% table() %>% barplot(names.arg = NA)
+```
 
 
+```{r}
+xpx <- "/merge/event/@time-stamp"
+time_stamp <- getNodeSet(doc, xpx) %>% unlist()
+
+# or 
+
+time_stamp <- xpathSApply(doc = doc, 
+                          path = "/merge/event", 
+                          fun = xmlGetAttr, 
+                          name = "time-stamp")
+```
 
 
+```{r}
+doc <- xmlParse(file = "Data/Kiva/lenders/1.xml")
+occ <- xpathSApply(doc = doc %>% xmlRoot, 
+                   path = "//lender/occupation", 
+                   fun = xmlValue)
+occ %>% table() %>% sort(decreasing = T) %>% barplot(srt = 1, xlim = c(0, 50))
+```
 
+absolute path  
+```{r}
+doc <- xmlParse(file = "Data/JStatSoft/Lumley.xml")
+xpx <- "/mods/name/namePart[@type = 'family']/text()"
+getNodeSet(doc, xpx) %>% xmlValue()
+```
+
+
+relative path  
+```{r}
+xpx <- "//namePart[@type = 'family']/text()"
+getNodeSet(doc, xpx) %>% xmlValue()
+```
 
 
 
