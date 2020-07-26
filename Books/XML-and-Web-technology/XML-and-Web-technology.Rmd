@@ -625,6 +625,150 @@ xpx <- "//namePart[@type = 'family']/text()"
 getNodeSet(doc, xpx) %>% xmlValue()
 ```
 
+```{r}
+doc <- xmlParse(file = "Data/JStatSoft/shortJStatSoft.xml")
+xpx <- "//mods/name[1]/namePart[@type = 'family']/text()"
+getNodeSet(doc, xpx) %>% xmlValue()
+```
+
+```{r}
+xpx <- "//mods/name/namePart[@type='family' and position()  = 2]"
+getNodeSet(doc, xpx) %>% xmlValue()
+```
+
+```{r}
+xpx <- "//namePart[@type='family' and . = 'Narasimhan']"
+getNodeSet(doc, xpx)
+```
+
+```{r}
+xpx <- "//namePart[@type='family' and string(.) = 'Narasimhan']/ancestor::mods/name/namePart[@type = 'family']/text()"
+getNodeSet(doc, xpx)
+```
+
+to find the co-authors family names but not the Narasimhan  
+```{r}
+xpx <- "//namePart[@type='family' and string(.) = 'Narasimhan']/ancestor::mods/name/namePart[@type = 'family' and not(./text() = 'Narasimhan')]/text()"
+
+getNodeSet(doc, xpx)
+```
+
+```{r}
+xpx <- "//namePart[@type='family' and ./text()='Narasimhan']/parent::name/preceding-sibling::name/namePart[@type='family']/text()|//namePart[@type='family' and ./text()='Narasimhan']/parent::name/following-sibling::name/namePart[@type='family']/text()"
+
+getNodeSet(doc, xpx)
+```
+
+```{r}
+q <- sprintf("//namePart[@type='family' and ./text()='%s']/parent::name/%s-sibling::name/namePart[@type='family']/text()", "Narasimhan", c("preceding", "following"))
+
+getNodeSet(doc, q)
+```
+
+```{r}
+xpathSApply(doc, q, xmlValue)
+```
+
+Rather than navigating down and then back up the hierarchy, it might be simplest to use a predicate to identify the different <mods> nodes of interest.  
+
+```{r}
+mods <- getNodeSet(doc, "/modsCollection/mods[./name/namePart[@type='family' and . = 'Narasimhan']]")
+sapply(mods, function(x) xpathSApply(x, ".//namePart[@type='family']", xmlValue))
+```
+
+```{r}
+mods <- getNodeSet(doc, "/modsCollection/mods[./name[1]/namePart[@type='family' and . = 'Narasimhan']]")
+sapply(mods, function(x) xpathSApply(x, ".//namePart[@type='family']", xmlValue))
+```
+
+```{r}
+xpx <- "//mods[name/namePart[@type='family' and string(.) = 'Lumley']]/identifier[@type='citekey']"
+xpathSApply(doc, xpx, xmlValue)
+```
+
+Note that we can directly compare `.` (the `self` node) to the string `Lumley`. This is equivalent to calling `string(.)`, and since there is only one text child node of <namePart>, it is also equivalent to `string(text())` and `text()`.  
+
+
+find the key for all articles written by Lumley  
+```{r}
+xpx <- "//mods/name/namePart[text() = 'Lumley']/ancestor::mods/identifier[@type='citekey']"
+getNodeSet(doc, xpx)
+```
+
+
+## Namespace and XPath Queries  
+A namespace has a URL that uniquely identifies it, and a prefix, which is what we work with locally our document.  
+
+```{r}
+doc <- xmlParse(file = "Data/sampleDoc.xml")
+getNodeSet(doc = doc, 
+           path = "//s:code", 
+           namespaces = c(s = "http://www.r-project.org")) 
+```
+
+```{r}
+Namespace <- c(x = 'http://docbook.org/ns/docbook', 
+               r = 'http://www.r-project.org')
+getNodeSet(doc = doc, 
+           path = "//r:code", 
+           namespaces = Namespace)
+```
+
+
+```{r}
+doc <- xmlParse(file = "Data/eurofxref-hist.xml")
+ns <- xmlNamespaces(doc, simplify = TRUE)
+names(ns) == "" # the default element is TRUE
+ns[names(ns) == ""]
+```
+
+```{r}
+getDefaultNamespace(doc, simplify = T)
+```
+
+```{r}
+doc <- xmlParse("Data/eurofxref-hist.xml")
+getDefaultNamespace(doc, simplify = F)
+
+getNodeSet(doc, "//Cube[@currency = 'NOK']")
+```
+
+
+## XInclude and XPointer  
+XInclude and XPointer are two additional technologies and standards related to XML documents. These provide a rich way to insert the contents of part of a document within other documents.  
+
+As a result, they facilitate modularity, reduce redundancy, and enable creation of complex descriptions and data structures within XML.  
+
+**XInclude Structure**  
+XInclude is a technology for merging XML fragments into a document. The XInclude namespace contains two elements: <include> and <fallback>. The <fallback> element is a child of <include> and provides a mechanism fro recovering from the inclusion of a missing resource and providing content to use when the content to be included is not available.  
+
+- *href* Provides a URI reference for the location of the resource to include. When href is missing, the reference is to the same document and the xpointer attribute must be present and identify an element within the same document.  
+
+- *xpointer* Identifies a portion of the resource to include. This attribute is optional; when ommitted, the entire resource is included. The attribute value is an XPointer expression that contains an XPath expression to identify the elements of interest in the target document. This XPointer expression can define namespace, as needed in the XPath expression.  
+
+- *parse* Indicates whether to include the content/node-set as parsed XML (parse = 'xml') or as text(parse = 'text') directly and verbatim with no interpretation by the XML parser. The default value of this optional attribute is 'xml'.  
+
+- *encoding* When `parse='text'`, the encoding attribute specifies the encoding of the resource.  
+
+
+## Summary of FUnctions for Applying XPath Expressions to XML Documents  
+- `getNodeSet()`  
+- `xpathApply()`  
+- `xpathSApply()`  
+- `getDefaultNamespace()`  
+- `xmlNamespaceDefinitions()`  
+
+
+# Chapter 5 Strategies for Extracting Data from HTML and XML Content  
+
+
+
+
+
+
+
+
+
 
 
 
