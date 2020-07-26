@@ -427,38 +427,167 @@ More than one element can be located by an XPath expression. The located nodes a
 
 ## XPath Functions and Logical Operators  
 XPath provides logical operators for combining predicates. Predicates can be combined together into a compound predicate using one of the binary operators `and` or `or`.  
+```
+//Cube[@currency = 'JPY' or @currency = 'USD']
+```
 
+Other boolean operators in XPath include: `not()`, `true()`, and `false()`.  
+
+The `not` operator is used to compute the opposite or negation of a condition. It is analogous to the `!` operator in R, and we can use it in an XPath expression such as  
+```
+//graphic[not (conditions(@fileref, '.jpg'))]
+```
+to find all <graphic> nodes that do not have a fileref attribute with the extension **jpg**. 
+
+
+## Multiple Predicates in a Node Test  
+**Expressions with Multiple Predicates**  
+Predicates can be simple or compound and they can be nested, i.e., a predicate within a predicate. Additionally, predicates can appear on multiple location steps within an XPath expression or path, and a single location step can have multiple predicates, one after the other.  
+
+- *Simple* A simple logical condition such as  
+```
+//Cube[@currency > 1.5]
+//section[.//table]
+```
+to identify a <Cube> node that has a currency attribute value greater than 1.5 or a <section> node that contains a <table> element.  
+
+- *Compound* Simple expressions combined using the operators `and` & `or`  
+```
+//Cube[@currency = 'USD' or @currency > 1.5]
+
+and 
+
+starts-with(., 'abc') and contains('xyz')
+```
+
+- *Nested* Two or more predicates nested within each other.  
+```
+//div[.//table[contains(string(./th), 'Price')]]
+```
+find an HTML <div> node that contains a table that contains the word `Price` in at least one of its column headers.  
+
+- *Multiple location steps* Predicates can appear on the more than one location step in an XPath expression.  
+```
+/book/chapter/section[1]/para[3]
+```
+finds the third paragraph in the first section of each chapter in the book.  
+
+- *Stacked* One predicate can follow another in a location step, which is called a stacked predicate. When this happens, the second predicate is evaluated in the context of the first.  
+```
+//section/para[code][2]
+```
+locates all paragraphs that contain code nodes and the second predicate selects the second of these paragraphs.  
+```
+//section/para[2][code]
+```
+first selects all paragraphs that are the second paragraph in a section; then the second predicate keeps those paragraphs that contain code.  
+
+
+## Combining XPath Location Paths in a Single Query  
+XPath allows us to combine multiple queries into a single query. We separate the individual queries using the |, with or without surrounding spaces.  
 ```{r}
-doc <- xmlParse(file = "Data/eBay/tt.xml")
-root <- xmlRoot(doc)
-
-getNodeSet(doc, path = "/svg/circle")
-val %>% length()
-val[[1]] %>% head()
+doc <- xmlParse(file = "Data/DocBook/book.xml")
+ti <- getNodeSet(doc = doc, "/book/bookinfo//title | /book/bookinfo/authorgroup/author/affiliation/orgname")
+ti %>% xmlValue()
 ```
 
 
+### Programmatically Generating XPath Queries in R  
+```{r}
+xpQueries <- c(section = "//section/title", 
+               table = "/book/bookinfo//title", 
+               figure = "/book/bookinfo/authorgroup/author/affiliation/orgname")
 
+ti <- getNodeSet(doc, xpQueries[c("table", "figure")])
+```
+
+Importantly, by combining the two XPath queries, the nodes will be returned in the correct document order, i.e., the order in which the nodes appear in the document.  
+
+```
+//section//(table|figure)/title
+
+or 
+
+//section(//table|//figure)/title
+```
+
+### Programmatically Generating XPath Queries in R  
+```{r}
+xpQueries <- c(section = "//section/title", 
+               table = "//section//table/title", 
+               figure = "//section//figure/title")
+
+ti <- getNodeSet(doc, xpQueries[c("table", "figure")])
+```
+
+```{r}
+all.titles <- getNodeSet(doc, xpQueries)
+```
 
 
 ```{r}
-doc <- xmlParse(file = "Data/merged_catalog.xml.gz")
-xmlSApply(doc %>% getNodeSet("/merge/event[@version = '1']"), xmlGetAttr, name = "network-code") %>% 
-    table() %>% 
-    sort() %>% 
-    barplot()
+xpQueries <- sprintf("//section%s/title", 
+                     c("", "//table", "//figure"))
 ```
 
+```{r}
+doc <- xmlParse(file = "Data/eurofxref-hist.xml")
+currencies <- c("USD", "JPY", "BGN")
+q <- sprintf("//Cube[@currency = '%s']", currencies)
+exRate <- lapply(q, function(q) as.numeric(getNodeSet(doc, q)))
+```
 
 ```{r}
 doc <- xmlParse(file = "Data/Kiva/lenders/1.xml")
-xmlSApply(doc %>% getNodeSet(path = "/snapshot/lenders/lender/country_code"), xmlValue) %>% table() %>% as.data.frame() %>% 
-    ggplot(aes(reorder(., Freq), Freq)) +
-    geom_bar(stat = "identity") +
-    theme(axis.text.x = element_text(hjust = 0.5, angle = 0, size = 7)) +
-    scale_x_discrete(name = "lenders") +
-    geom_text(aes(label = Freq, y = Freq + 30), color = "blue")
+xpx <- "//lender/loan_count"
+loanAmounts = as.numeric(xpathSApply(doc, xpx, xmlValue))
+
+q <- sprintf("//lender[string(loan_count) > %.2f]", quantile(loanAmounts, 0.9))
+
+bigLoans <- getNodeSet(doc, q)
 ```
+
+
+**Combining Queries and Location Paths**  
+Location paths can be combined using the `|` operator, where the expression on each side must be a valid location path.  
+```
+/book/chapter/section[1]/table | /book/chapter/section[1]/figure
+```
+locates all tables and figures in the first section of each chapter. We can combine any number of queries together, not just two.  
+
+Complicated compound expressions may have nodes that match more than one subexpression.  
+
+```
+xpQ = c("//section[.//table]", "//section[.//figure])
+getNodeSet(book, xpQ)
+```
+
+locates all sections that have either a table or figure in them in the parsed book object `book`. Sections that have both will appear once in the node-set and the sections will be in the order that they appear in the document.  
+
+
+## Examples of Accessing Data with XPath  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
