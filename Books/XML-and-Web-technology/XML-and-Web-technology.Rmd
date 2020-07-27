@@ -912,26 +912,43 @@ mods <- getNodeSet(doc = doc, path = "//mods")
 
 
 ## Examples of Scraping Content from HTML Pages  
+```{r}
+doc <- htmlParse(file = "files/download.html")
+xpx <- sprintf("//div[@class = 'css-debyuq e1voiwgp1']/h%d", 2:6) %>% paste(collapse = "|")
+storyDivs <- getNodeSet(doc, xpx)
+storyDivs %>% xmlSize()
+```
 
 ```{r}
-doc <- htmlParse(file = "files/2020.html")
-getNodeSet(doc, path = "//table")
-readHTMLTable(doc = "files/2020.html", which = 2)
+nyTimesRSSURL <- "files/HomePage.xml"
+doc <- xmlParse(file = nyTimesRSSURL)
+xpx <- "//item/title|//item/link|//item/description"
+xpathSApply(doc = doc, 
+            path = xpx, 
+            fun = xmlValue) %>% 
+    head()
+```
+
+```{r}
+doc <- htmlParse(file = "files/Machine Learning and Data Science Job Openings | Kaggle.html")
+links <- getHTMLLinks(doc = doc)
+grep("/jobs/[:num:]{,5}", links, ignore.case = T, value = T)
 ```
 
 
-```{r}
-doc <- htmlParse(file = "files/The New York Times - Breaking News, World News & Multimedia.html")
-storyDivs <- getNodeSet(doc = doc, 
-                        path = "//div[@class = 'css-142l3g4']")
-
-storyDivs
-```
 
 
-```{r}
-sapply(storyDivs, function(x) xmlName(x[[1]])) %>% table()
-```
+
+
+
+
+
+
+
+
+
+
+
 
 
 
