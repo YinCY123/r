@@ -760,18 +760,178 @@ XInclude is a technology for merging XML fragments into a document. The XInclude
 
 
 # Chapter 5 Strategies for Extracting Data from HTML and XML Content  
+The DOM-based approaches assume we can read the entire XML document into memory and then process its contents. For very large documents, this is not practical. Instead, we have to process the XML content as we read it and convert those contents into R objects 'on the fly'. This involes a different, low-level processing model named SAX - Simple API for XML - that uses handler functions to respond to envents in the XML stream.  
+
+When diccussing DOM parsing, we will introduce an approach that traverses the tree and extracts data using handler functions. This leads naturally to the lower-level SAX model.  
+
+To work with XML in R, or any language, it is important to master these two skills - XPath and node manipulation.  
+
+The SAX approach is quite different from the DOM approach as it does not try to build the XML tree. Instead, it passes small pieces of the document to 'handler' functions that the caller provides.  
+
+SAX parsing is necessary for very large XML documents that would not easily fit in memory. The approch is more low-level and involes a different mindset and strategy from DOM parsing. Branches allows us to combine SAX and DOM approaches for small parts of the entire hierarchy.  
 
 
+## Using High-level Functions to Read XML Content  
+- `readHTMLTable()`  
+- `xmlToDataFrame()`  
+- `xmlToList()`  
+- `readHTMLList()`  
+- `getHTMLLinks()`  
+- `getHTMLExternalFiles()`  
+- `readHTMLTable()`  
+- `readKeyValueDB()`  
+- `readSolorDoc()`  
 
 
+### Simple HTML Access  
+All of these high-level functions allow the caller to specify the HTML document as  
+
+- the name of a local file  
+- a URL  
+- the HTML content itself as a string  
+- as an already parsed HTML document, i.e., an R object of class `HTMLInternalDocument`  
 
 
+**getHTMLLinks()**  
+```{r}
+u <- "http://10.71.132.241/"
+getHTMLLinks(doc = u, externalOnly = F, relative = T) %>% head()
+```
 
 
+**getHTMLExternalFiles()**  
+```{r}
+u <- "http://10.71.132.241/"
+getHTMLExternalFiles(doc = u, recursive = T, relative = T)
+```
 
 
+### Extracting Data from HTML Tables  
+```{r}
+world_pop <- readHTMLTable(doc = "files/List of countries and dependencies by population - Wikipedia.html")
+world_pop %>% class()
+world_pop %>% length()
+world_pop %>% lapply(dim)
+world_pop <- readHTMLTable(doc = "files/List of countries and dependencies by population - Wikipedia.html", 
+                           which = 1)
+
+world_pop
+```
 
 
+```{r}
+r <- regexec(pattern = "\\W", 
+             text = world_pop$`Country (or dependent territory)`)
+r %>% class()
+r[[1]]
+len <- length(world_pop$`Country (or dependent territory)`)
+world_pop$`Country (or dependent territory)` <- substr(world_pop$`Country (or dependent territory)`, 1, ifelse(r > 0, as.numeric(r) - 1, len))
+world_pop
+```
+
+```{r}
+world_pop$Population <- gsub(",", "", world_pop$Population)
+world_pop
+```
+
+```{r}
+world_pop$`% of worldpopulation` <- gsub("%", "", world_pop$`% of worldpopulation`)
+world_pop
+```
+
+
+```{r}
+world_pop$Date <- as.character(world_pop$Date)
+world_pop$Date <- strptime(x = world_pop$Date, 
+                           format = "%e %b %Y")
+world_pop$Date <- as.POSIXct(world_pop$Date)
+world_pop
+```
+
+locate the table node then passing to the `readHTMLTable`  
+```{r}
+doc <- htmlParse(file = "files/List of countries and dependencies by population - Wikipedia.html")
+getNodeSet(doc = doc, 
+           path = "//table") %>% .[[1]] %>% 
+    readHTMLTable()
+```
+
+```{r}
+d <- readHTMLTable(doc = "files/History of the United States public debt - Wikipedia.html", 
+                   which = 3, 
+                   colClasses = c("integer", "Currency",  "Currency", "Percent",
+                                  "Currency", "Currency", "Percent", "Currency", 
+                                  "Currency", "Percent", "numeric"))
+d <- d[-c(1, 2), ]
+d
+```
+
+`XML` package defined classes  
+- `integer`  
+- `Currency`  
+- `Percent`  
+- `numeric`  
+- `FormattedInteger`    
+- `FormattedNumeric`  
+
+
+### Extracting Other Information from HTML Table Cells  
+The `readHTMLTable()` function allows us to extract different information from cells in the table by specifying our own function to process the cell node.  
+
+```{r}
+doc <- htmlParse(file = "files/List of countries and dependencies by population - Wikipedia.html")
+
+
+getCellLink <- function(node){
+    if(xmlName(node) == "td" && !is.null(node[["a"]]))
+        xmlGetAttr(node[["a"]], "href", character())
+    else
+        character()
+}
+```
+
+
+```{r}
+htmlParse(file = "files/List of countries and dependencies by population - Wikipedia.html") %>% 
+    getNodeSet(path = "//table[1]") %>% .[[1]] %>% 
+    getHTMLLinks() %>% 
+    head()
+```
+
+
+### Helper Functions for Converting Nodes  
+- `xmlToList()`  
+- `xmlToDataFrame()`  
+- `xmlAttrsToDataFrame()`  
+
+
+```{r}
+doc <- xmlParse(file = "Data/JStatSoft/jstatsoft.xml")
+mods <- getNodeSet(doc = doc, path = "//mods")
+```
+
+
+## Examples of Scraping Content from HTML Pages  
+
+```{r}
+doc <- htmlParse(file = "files/2020.html")
+getNodeSet(doc, path = "//table")
+readHTMLTable(doc = "files/2020.html", which = 2)
+```
+
+
+```{r}
+doc <- htmlParse(file = "files/The New York Times - Breaking News, World News & Multimedia.html")
+storyDivs <- getNodeSet(doc = doc, 
+                        path = "//div[@class = 'css-142l3g4']")
+
+storyDivs
+```
+
+
+```{r}
+sapply(storyDivs, function(x) xmlName(x[[1]])) %>% table()
+```
 
 
 
