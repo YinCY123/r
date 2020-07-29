@@ -932,16 +932,102 @@ xpathSApply(doc = doc,
 ```{r}
 doc <- htmlParse(file = "files/Machine Learning and Data Science Job Openings | Kaggle.html")
 links <- getHTMLLinks(doc = doc)
-grep("/jobs/[:num:]{,5}", links, ignore.case = T, value = T)
+grep("/jobs/[:alnum:]{,5}", links, ignore.case = T, value = T)
+```
+
+```{r}
+doc <- xmlParse(file = "files/inning_all.xml")
+r <- xmlRoot(doc)
+names(r) %>% table()
+```
+
+```{r}
+xmlApply(r, names) %>% unlist() %>% table
+```
+
+```{r}
+xpathApply(doc = doc, 
+           path = "//inning/*", 
+           fun = names) %>% 
+    unlist() %>% 
+    table()
+```
+
+```{r}
+getNodeSet(doc = doc, 
+           path = "//atbat/@num") %>% 
+    as.integer()
 ```
 
 
+```{r}
+getNodeSet(doc = doc, path = "//pitch")[[1]]
+```
+
+```{r}
+xpathSApply(doc = doc, 
+            path = "//pitch", 
+            fun = xmlGetAttr, 
+            name = "id") %>% 
+    as.integer()
+```
+
+```{r}
+node_names <- xpathApply(doc = doc, 
+           path = "//pitch", 
+           function(node) {
+               names(xmlAttrs(node = node))
+           })
+
+# all pitches have the same and equal number of attribute 
+node_names %>% unlist() %>% table %>% table()
+
+node_names[[1]]
+```
 
 
+```{r}
+ats <- xpathApply(doc = doc, 
+           path = "//pitch", 
+           fun = function(x){
+               a = xmlAttrs(x)
+})
 
+pitches <- function(list){
+    df <- data.frame()
+    for(i in seq_along(list)){
+        x = as.data.frame(list[[i]], stringsAsFactors = F) %>% t()
+        df <- rbind(df, x)
+    }
+    rownames(df) <- NULL
+    return(df)
+}
 
+pitches(ats) %>% head()
+```
 
+```{r}
+doc <- xmlParse(file = "Data/Kiva/lenders/1.xml")
+lenderNodes <- xmlRoot(x = doc)[["lenders"]]
+xmlSApply(lenderNodes, names) %>% unlist() %>% table()
+```
 
+create data frame for common variables  
+```{r}
+varNames <- c("lender_id", "loan_because", "name", "occupation")
+
+vars <- lapply(varNames, 
+       function(var){
+           xp = sprintf("//lender/%s", var)
+           xpathSApply(doc, xp, xmlValue)
+       })
+
+df <- vars %>% 
+    as.data.frame(stringAsFactors = F) %>%
+    magrittr::set_colnames(value = varNames)
+
+df %>% dim()
+```
 
 
 
