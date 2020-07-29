@@ -1,0 +1,68 @@
+﻿(function () {
+    // News right
+    var fixedBodyWidth = window.emRightBodyWidth || 1000;
+    var fixedwidth = window.emRightAdFixedWidth || 138;
+    var adwidth = window.emRightAdWidth || 135;
+    var adheight = window.emRightAdHeight || 1841;
+    var adtop = window.emRightAdTop || '43px';
+    var addefault = window.emRightadDataType || "default";
+
+
+
+    function addEvent(obj, type, fn) {
+        if (obj.attachEvent) {
+            obj['e' + type + fn] = fn;
+            obj[type + fn] = function () { obj['e' + type + fn](window.event); }
+            obj.attachEvent('on' + type, obj[type + fn]);
+        } else
+            obj.addEventListener(type, fn, false);
+    }
+
+    var adurl = function (type) {
+        var n = new Date;
+        return "//fundact.eastmoney.com/banner/Hot_Em.html?spm=001004.rw" + "&rmd=" + n.getFullYear().toString().substring(2) + (n.getMonth() + 1) + n.getDate() + n.getHours() + Math.round(n.getMinutes() / 5)
+    }
+
+    var togo = function () {
+        if (!document.getElementById("rightAD")) {
+            var html = '<iframe width="' + adwidth + '" height="' + adheight + '" frameborder="0" scrolling="no" marginwidth="0" marginheight="0" src="' + adurl(addefault) + '"></iframe>';
+            var divObj = document.createElement("div");
+            divObj.className = "rbadbox";
+            divObj.id = "rightAD";
+            divObj.innerHTML = html;
+            divObj.style.height = adheight;
+            divObj.style.width = adwidth;
+            divObj.style.position = 'absolute';
+            divObj.style.top = adtop;
+            divObj.style.zIndex = 99;
+            document.body.appendChild(divObj);
+            addEvent(window, 'resize', function () {
+                reset_fixedbound();
+            });
+            reset_fixedbound();
+        }
+    }
+
+    // 获取浏览器的宽度和高度
+    var getBrowserWH = function () {
+        var de = document.documentElement;
+        var _width = (de && de.clientWidth) || document.body.clientWidth || window.innerWidth;
+        var _height = (de && de.clientHeight) || document.body.clientHeight || window.innerHeight;
+        return { w: _width, h: _height };
+    };
+
+    var reset_fixedbound = function () {
+        var flowfixed_ad = document.getElementById("rightAD");
+        var _wh = getBrowserWH();
+        var _fr = ((document.documentElement.clientWidth - fixedBodyWidth) / 2 - fixedwidth - 5);
+        if (parseFloat(flowfixed_ad.style.right) != _fr)
+            flowfixed_ad.style.right = _fr + 'px';
+        if (_wh.w <= fixedBodyWidth + adwidth * 2 + 20) {
+            flowfixed_ad.style.display = "none";
+        } else {
+            flowfixed_ad.style.display = "block";
+        }
+    };
+    togo();
+
+})();

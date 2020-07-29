@@ -1,0 +1,131 @@
+var bk_results = {
+ "campaigns": [
+  {
+    "campaign": 221243,
+    "timestamp": 1595840543,
+    "categories": [
+    {
+     "categoryID": 997862,
+     "timestamp": 1595840454
+    }
+    ]
+  },
+  {
+    "campaign": 237624,
+    "advertiser_account_id": "18ce53vsdwh",
+    "audience_names": "MKTG_All_1PD_Global_1ActiveDays_1x30",
+    "score": "100",
+    "timestamp": 1595840543,
+    "categories": [
+    {
+     "categoryID": 1021885,
+     "timestamp": 1595840454
+    }
+    ]
+  },
+  {
+    "campaign": 319962,
+    "timestamp": 1595840543,
+    "categories": [
+    {
+     "categoryID": 408098,
+     "timestamp": 1595840543
+    },
+    {
+     "categoryID": 1024818,
+     "timestamp": 1595840454
+    }
+    ]
+  },
+  {
+    "campaign": 237625,
+    "advertiser_account_id": "18ce53wa1m5",
+    "audience_names": "MKTG_All_1PD_Global_1ActiveDays_1x30",
+    "score": "100",
+    "timestamp": 1595840543,
+    "categories": [
+    {
+     "categoryID": 1021885,
+     "timestamp": 1595840454
+    }
+    ]
+  },
+  {
+    "campaign": 221329,
+    "timestamp": 1595840543,
+    "categories": [
+    {
+     "categoryID": 1024818,
+     "timestamp": 1595840454
+    }
+    ]
+  },
+  {
+    "campaign": 221330,
+    "timestamp": 1595840543,
+    "categories": [
+    {
+     "categoryID": 1021885,
+     "timestamp": 1595840454
+    }
+    ]
+  },
+  {
+    "campaign": 320854,
+    "timestamp": 1595840543,
+    "categories": [
+    {
+     "categoryID": 408098,
+     "timestamp": 1595840543
+    },
+    {
+     "categoryID": 1024818,
+     "timestamp": 1595840454
+    }
+    ]
+  },
+  {
+    "campaign": 209855,
+    "timestamp": 1595840543,
+    "categories": [
+    {
+     "categoryID": 408098,
+     "timestamp": 1595840543
+    },
+    {
+     "categoryID": 997862,
+     "timestamp": 1595840454
+    },
+    {
+     "categoryID": 1076705,
+     "timestamp": 1595840454
+    }
+    ]
+  },
+  {
+    "campaign": 237534,
+    "seg_id": "10202010046",
+    "timestamp": 1595840543,
+    "categories": [
+    {
+     "categoryID": 1021885,
+     "timestamp": 1595840454
+    }
+    ]
+  },
+  {
+    "campaign": 283590,
+    "timestamp": 1595840543,
+    "categories": [
+    {
+     "categoryID": 997862,
+     "timestamp": 1595840454
+    },
+    {
+     "categoryID": 1021866,
+     "timestamp": 1595840454
+    }
+    ]
+  }
+ ]
+};

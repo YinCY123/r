@@ -1027,11 +1027,32 @@ df <- vars %>%
     magrittr::set_colnames(value = varNames)
 
 df %>% dim()
+
+df %>% head()
 ```
 
 
+### Extracting an Entire Observation: A different Approach  
+```{r}
+doc <- xmlParse(file = "Data/Kiva/lenders/1.xml")
+lenderNodes <- getNodeSet(doc = doc, path = "//lender")
+varNames <- xmlApply(lenderNodes, names) %>% unlist() %>% table() %>% names()
 
+obs <- lapply(X = getNodeSet(doc, "//lender"), 
+              FUN = function(node){
+                  ans = structure(sapply(node[varNames], xmlValue), names = varNames)
+                  ans["loan_count"] = if(!is.null(a <- node[["loan_count"]])){
+                      xmlValue(a)
+                  }else{
+                      NA
+                  }
+                  ans
+              })
 
+obs %>% class()
+
+do.call(rbind, obs) %>% as.data.frame()%>% head 
+```
 
 
 

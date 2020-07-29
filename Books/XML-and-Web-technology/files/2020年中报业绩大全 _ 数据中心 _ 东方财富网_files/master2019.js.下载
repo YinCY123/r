@@ -1,0 +1,213 @@
+﻿
+!(function ($) {
+
+    //搜索框通用
+    //left：偏移，例如向左偏移120（-120）
+    //stype：搜索类型如（1,2）
+    //link：跳转连接如 /bbsj/{code}.html
+    $(function () {
+        $(".suggest2017_form").each(function () {
+            var sform = $(this);
+            var id = "bar_" + Math.ceil(Math.random() * 100000);
+            $(":text", sform).attr("id", id);
+            var left = $(this).data("left") || 0;
+            var stype = $(this).data("stype") || "1,2,25";
+            var link = $(this).data("link") || "http://data.eastmoney.com/";
+            var sugitem = new suggest2017({
+                filter: {
+                    securitytype: stype
+                },
+                showblank: false,
+                modules: ["stock"],
+                offset: { left: left, top: 0 },
+                width: 280,
+                showstocklink: false,
+                inputid: id,
+                placeholder: '输代码、名称或简拼',
+                onSubmit: function (result) { //事件
+                    if (result.stock) {
+                        var url = link.replace("{code}", result.stock.Code);
+                        window.open(url);
+                    }
+                    else {
+                        alert("请输入所查询股票的代码!");
+                    }
+                    return false;
+                },
+                onConfirmStock: function (result) { //事件
+                    var url = link.replace("{code}", result.stock.Code);
+                    window.open(url);
+                    return false;
+                }
+            });
+        });
+    })
+
+    //顶部单独
+    window.StockCodeBar = new suggest2017({
+        inputid: 'StockCode_bar',
+        placeholder: '输代码、名称或简拼',
+        shownewtips: true,
+        onSubmit: 'search'
+    });
+
+    //页面标题收藏
+    function pageCollect(id) {
+        window.pageCollectquery = id;
+        return false;
+        if ($(id).length == 0 || typeof page_type == 'undefined') {
+            return;
+        }
+        this.$wrap = $(id);
+        var html;
+        var item = $('#leftnav span[data-key="' + page_type + '"]')
+        if (item.length > 0) {
+            var iconcollect = $(item[0]);
+            if (iconcollect.hasClass("left_star_f")) {
+                html = $('<button id="markBtn">-移出我的数据</button>');
+            }
+            else {
+                html = $('<button id="markBtn" class="add">+加入我的数据</button>');
+            }
+            html.addClass("page_collect_btn");
+            this.$wrap.append(html);
+            window.tempaddmydataspanhtml = html;
+            html.click(function () {
+                if (html.hasClass("add")) {
+                    iconcollect.click();
+                    html.text("-移出我的数据");
+                    html.removeClass("add");
+                }
+                else {
+                    var delspan = $('#my_data_infos span[data-key="' + page_type + '"]');
+                    delspan.click();
+                }
+            })
+        }
+    }
+    window.pageCollect = pageCollect;
+})(jQuery)
+
+
+function loadStylesString(css) {
+    var style = document.createElement('style');
+    if (typeof style.styleSheet == 'object') {
+        document.getElementsByTagName('head')[0].appendChild(style);
+        style.setAttribute('type', 'text/css');
+        style.styleSheet.cssText = css;
+    } else {
+        style.innerHTML = css;
+        document.getElementsByTagName('head')[0].appendChild(style);
+    }
+}
+//最近访问第三期
+!(function ($) {
+
+    function isInArray(str, arr) {
+        var res = -1;
+        for (var i = 0; i < arr.length; i++) {
+            var name = arr[i].split("|")[0];
+            if (str == name) {
+                res = i;
+            }
+        }
+        return res;
+    }
+
+
+    if (typeof cookies == 'undefined') return;
+    //if (cookies.get('dataRecords')) {
+    //    cookies.del("dataRecords");
+    //}
+    var records = cookies.get('dRecords');
+    if (!!records && $('#hisWrap').length) {
+        //添加css
+        loadStylesString(".hisWrap{display:none;width:100%;height:28px;line-height:28px;overflow:hidden;border-bottom: solid 1px #bbd4e8;}.hisWrap.active{height:56px}.hisWrap .histxt{float:left;width:100px}.hisWrap .hisbox{margin-left:100px;margin-right:50px;overflow:hidden}.hisWrap .hisbox .hisul{height:56px;float:left}.hisWrap li{float:left;max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.hisWrap li{margin-right:25px}.hisWrap .spread_more{float:right;width:50px;text-align:right;color:#039;cursor:pointer;display:none;}.hisWrap.active .spread_more{font-size:0;margin-top:30px}.icon_ramore{display:inline-block;*display:inline;*zoom:1;background-image:url('/images/splite_record.png');width:13px;height:12px;background-position:0 0;vertical-align:middle}.hisWrap.active .icon_ramore{background-position:13px 0}")
+
+        var data = records.split(',*');
+        var str = "";
+        if (data.length > 10) {
+            str = "style='display:block;'"
+        }
+        var html = ['<div class="histxt">您最近访问数据：</div><div class="spread_more" ' + str + '>更多<i class="icon_ramore"></i></div><div class="hisbox"><ul class="hisul">']
+
+        for (var i = data.length - 1; i >= 0; i--) {
+            if (data[i] == '') {
+                data.splice(i, 1)//删除空白元素
+                continue;
+            }
+            var item = data[i].split('|');
+            if (item[0] && item[1]) {
+                html.push('<li><a href="' + item[1] + '" target="_blank" tracker-eventcode="sjpd_sjzxsy_sjzxggsj_djzjfw">' + item[0] + '</a></li>')
+            }
+
+        }
+
+
+        html.push('</ul></div>')
+        html = html.join('');
+        $('#hisWrap').append(html);
+        $('#hisWrap').show();
+
+        var liWidth = 0;
+        var hisWidth = $('#hisWrap').width() || 1000;
+        $('#hisWrap .hisul>li').each(function () {
+            liWidth += $(this).width() + 25;
+        })
+        if (liWidth > (hisWidth - 150)) {
+            $('#hisWrap .spread_more').show();
+        }
+
+        $('#hisWrap .spread_more').click(function () {
+            $('#hisWrap').toggleClass("active")
+        })
+    }
+
+
+
+    if (typeof page_type == 'undefined' && typeof page_parent_type == 'undefined') return;
+    records = !!records ? records.split(',*') : [];
+    var name = "", href = "";
+    if (typeof page_type != 'undefined' && page_type) {
+        var $menu = $('#leftnav');
+        var item = $('span[data-key="' + page_type + '"]', $menu);
+        if (item.length > 0) {
+            item = item.eq(0)
+        }
+        href = item.data("href") || '';
+        name = item.data("name") || '';
+
+    }
+
+    if (typeof page_parent_type != 'undefined' && page_parent_type) {
+        name = page_parent_type;
+        href = location.href;
+    }
+
+    if (typeof page_detail_type != 'undefined' && page_detail_type) {
+        href = location.href;
+        name += '-' + page_detail_type;
+    }
+
+    if (href == '' || name == '' || name.length > 14) {
+        return;
+    }
+
+    var val = name + "|" + href;
+    var _index = isInArray(name, records);
+
+    if (_index == -1) {
+        if (records.length >= 20) {
+            records.shift();
+        }
+    } else {
+        records.splice(_index, 1);
+    }
+
+    records.push(val)
+
+    cookies.set("dRecords", records.join(",*"), 999 * 12 * 7200)
+
+})(jQuery)
+
+

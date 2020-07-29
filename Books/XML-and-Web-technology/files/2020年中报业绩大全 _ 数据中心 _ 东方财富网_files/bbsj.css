@@ -1,0 +1,55 @@
+﻿/* slider */
+.cnBox .slider { display: block; border-bottom: 1px solid #aaa; height: 28px; padding: 6px 0 0 20px; background-color: #FFFFFF; z-index: 1; position: relative; }
+    .cnBox .slider ul { height: 28px; position: absolute; top: 6px; margin: 0; padding: 0; left: 20px; border-right: 1px solid #aaa; }
+        .cnBox .slider ul li { list-style: none outside none; border-color: #aaa; border-style: solid solid none; border-width: 1px 0px 0px 1px; cursor: pointer; background-image: url(../images/seniormanage/liBg.png); background-repeat: repeat-x; display: inline; float: left; font-size: 14px; font-weight: normal; height: 28px; line-height: 28px; margin-left: 0; overflow: hidden; padding: 0 15px; }
+            .cnBox .slider ul li.at { height: 28px; font-weight: bold; background-image: url(../images/seniormanage/li_atBg.png); background-repeat: repeat-x; cursor: default; }
+            .cnBox .slider ul li a,
+            .cnBox .slider ul li a:link { color: #333; }
+
+.maincont table.t1.scwzb { margin: -1px 0; width: 471px }
+    .maincont table.t1.scwzb td { height: 28px; line-height: 28px; }
+
+.bbsj-morelink { height: 34px; line-height: 34px; font-size: 14px; border-right: 1px solid #BFD8EC; border-bottom: 1px solid #BFD8EC; }
+    .bbsj-morelink a:link,
+    .bbsj-morelink a:visited,
+    .bbsj-morelink a:hover,
+    .bbsj-morelink a:active { font-size: 12px; padding-right: 10px; text-decoration: underline; }
+
+.bbsj-tips { height: 30px; line-height: 30px; padding-left: 10px; }
+
+/*ÐÂ°æ²Æ±¨µ÷ÓÃ*/
+.tdnumber { text-align: right !important; padding-right: 5px !important; }
+
+.maincont table.tab1.scwzb { width: 100%; }
+    .maincont table.tab1.scwzb td { height: 28px; line-height: 28px; }
+    .maincont table.tab1.scwzb th { height: 36px; line-height: 14px; }
+
+.sjLink { float: left; margin-left: 10px; height: 34px; line-height: 34px; }
+    .sjLink a { font-size: 13px; font-weight: bold; color: red !important; font-family: ËÎÌå; }
+        .sjLink a:hover { font-size: 13px; font-weight: bold; color: red !important; font-family: ËÎÌå; }
+
+.promotion_link { width: 400px; }
+
+    .promotion_link b.arr_01 { margin-top: 4px; }
+
+
+
+.maincont .cateday_cont1, .maincont .cateday_cont2 { float: left; width: 440px; }
+.maincont .cateday_cont2 { float: right; margin-right: 5px; width: 360px; }
+.maincont .cateday1 { position: relative; }
+    .maincont .cateday1 ul { position: static; float: left; }
+        .maincont .cateday1 ul li { font-size: 12px; width: auto; padding: 0 2px; margin-top: 0; margin-left: 5px; }
+        .maincont .cateday1 ul.filter_ul a { color: #000; text-decoration: none; }
+    .maincont .cateday1 .filter_ul li.at2 a { color: #fff; }
+.filter_tit { float: left; width: 40px; height: 20px; line-height: 20px; border: 1px solid #BFD8EC; text-align: center; background-color: #ebf6ff; font-weight: bold; margin-right: 5px; }
+.filter_more { float: left; position: relative; z-index: 2; width: 50px; margin-left: 2px; }
+    .filter_more span { cursor: pointer; color: red; text-decoration: underline; margin-left: 10px; line-height: 20px; height: 20px; }
+.maincont .filter_more ul { position: absolute; left: 0px; top: 27px; border: 1px solid #51A1D2; overflow: hidden; width: 170px; *width: 180px; line-height: 30px; background-color: #F6F6F6; display: none; text-align: center; }
+.cateday_cont2 .filter_more ul { width: 525px; left: auto; right: -5px; padding: 0 5px; overflow: hidden; }
+.maincont .filter_more ul li { float: left; padding: 0 5px; height: 30px; line-height: 30px; margin: 0; background-image: none; word-wrap: break-word; }
+    .maincont .filter_more ul li b { cursor: default; }
+    .maincont .filter_more ul li a { text-decoration: underline; word-break: keep-all; white-space: nowrap; }
+
+.pop { width: 370px; padding: 5px; /*height: 100px;*/ position: absolute; border: 1px solid #ccc; /* z-index: 1000; */ background-color: #fff; display: none; z-index: 9999; }
+.popContent { width: 100%; max-height: 240px; overflow-y: hidden; overflow-x: hidden; overflow-y: auto; text-align: left; color: #373737; line-height: 18px; }
+.lnkHy { cursor: pointer; }

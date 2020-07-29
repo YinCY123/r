@@ -1,0 +1,192 @@
+
+a { text-decoration: none }
+
+
+.left_content { width: 125px; width: 125px; height: 640px; float: left; /* position: relative; */ }
+
+
+.leftnav-block { width: 125px; float: left; background-color: #fff; z-index: 99999; }
+
+/* 全景图模块 */
+
+#qj_box { position: relative; line-height: 3.2; width: 125px; height: 40px; background-color: #eff3f8; z-index: 9999; cursor: default }
+    #qj_box .alllink { margin-left: 35px; color: #ea5404; font-size: 14px; }
+    #qj_box .sjqjt_img { width: 19px; height: 9px; }
+
+    #qj_box .nav_wrap_block { position: absolute; top: 0; left: 125px; display: none; z-index: 999; }
+        #qj_box .nav_wrap_block #inputbox { position: absolute; height: 25px; left: 0; top: 0; z-index: 1000; margin: 3px; }
+            #qj_box .nav_wrap_block #inputbox .label { position: absolute; }
+            #qj_box .nav_wrap_block #inputbox input { width: 113px; margin-left: 2px; /* margin: 2px; */ border: 1px solid #c6c6c6; border-radius: 1px; text-indent: 5px; position: absolute; left: 23px; top: 2px }
+    #qj_box .navbox { /* display: flex;
+    min-width: 869px; */ overflow: hidden; min-height: 200px; position: absolute; display: block; /* left: 125px; */ left: 0; top: 0; border: 3px solid #dbe2eb; background-color: white; z-index: 999; }
+    #qj_box .label { width: 22px; height: 25px; background: #f0f0f0; display: inline-block; text-align: center; line-height: 25px; font-weight: bold; }
+    #qj_box .item_name { width: 100px; height: 25px; background: #fff; display: inline-block; line-height: 25px; font-size: 12px; /* position: absolute; */ }
+    #qj_box .navbox li { position: relative; height: 25px; width: 144px; /* display: flex; */ line-height: 25px; overflow: hidden; }
+        #qj_box .navbox li:hover { background: #003598; }
+            #qj_box .navbox li:hover .item_name { background: #003598; }
+        #qj_box .navbox li a { padding-left: 12px; /* margin-left: 12px */ display: inline-block; max-width: 100px; text-decoration: none; position: absolute; }
+        #qj_box .navbox li:hover a span { color: #fff }
+    #qj_box:hover .nav_wrap_block { display: block; }
+
+/* 首页和我的数据 */
+.left-top-home { line-height: 3.2; width: 125px; height: 40px; background-color: #eff3f8; z-index: 100; cursor: default }
+    .left-top-home .img { margin: 0 10px; }
+    .left-top-home span { font-size: 14px; }
+    .left-top-home:hover { color: #ea5404; background-color: #dbe2eb; }
+
+.myhome { position: relative; cursor: pointer; }
+.mydata { position: relative ;}
+
+    .mydata .tips { width: 200px; position: absolute; display: none; left: 125px; top: 0; color: #333; border: 3px solid #dbe2eb; background-color: white; z-index: 99; text-align: center }
+    .mydata .nodata { width: 230px; position: absolute; display: none; left: 125px; top: 0; color: #333; border: 3px solid #dbe2eb; background-color: white; z-index: 99; text-align: center }
+.left_mydata_block { width: 150px; position: absolute; display: none; left: 125px; top: 0; border: 3px solid #dbe2eb; background-color: white; z-index: 99; max-height: 800px; /* overflow-y: auto; */ }
+
+    .left_mydata_block::-webkit-scrollbar { width: 4px; height: 4px; }
+    .left_mydata_block::-webkit-scrollbar-track { background: #f6f6f6; border-radius: 2px; }
+    .left_mydata_block::-webkit-scrollbar-thumb { background: #aaa; border-radius: 2px; }
+        .left_mydata_block::-webkit-scrollbar-thumb:hover { background: #747474; }
+    .left_mydata_block::-webkit-scrollbar-corner { background: #f6f6f6; }
+
+
+    /* .mydata:hover .left_mydata_block{
+    display: block;
+} */
+
+    .left_mydata_block .icons { width: 14px; height: 14px; display: inline-block; }
+
+    .left_mydata_block ul li { height: 40px; line-height: 40px; position: relative; -moz-user-select: none; -o-user-select: none; -khtml-user-select: none; -webkit-user-select: none; -ms-user-select: none; user-select: none; }
+        .left_mydata_block ul li:hover { background-color: #003598 }
+            .left_mydata_block ul li:hover .t { color: #fff; }
+        .left_mydata_block ul li .t { /* display: inline-block; */ position: absolute; font-size: 12px; margin: 0 5px; color: #003598; line-height: 3 }
+        .left_mydata_block ul li a { position: absolute; left: 27px; width: 100px; text-decoration: none }
+    .left_mydata_block .icon_move { cursor: move; margin-left: 10px; background: url(img/left_move.png) no-repeat 0 0; position: absolute; top: 10px; }
+    .left_mydata_block .icon_new { position: absolute; right: 30px; top: 10px; background: url(img/left_new.png) no-repeat 0 0; }
+    .left_mydata_block .icon_delete { background: url(img/left_delete.png) no-repeat 0 0; position: absolute; right: 8px; top: 10px; }
+        .left_mydata_block .icon_delete:hover { background: url(img/left_delete_f.png) no-repeat 0 0; position: absolute; right: 8px; top: 10px; }
+
+
+/* 菜单栏 */
+.leftnav ul li { text-decoration: none }
+.leftnav { width: 125px; background-color: #eff3f8; }
+
+    .leftnav li { height: 40px; line-height: 40px; position: relative; z-index: 100; }
+        /* 一级 */
+        .leftnav li:hover .root-link { background-color: #dbe2eb; color: #ea5404 }
+        .leftnav li .child-block { width: 155px; position: absolute; display: none; left: 125px; top: 0; border: 3px solid #dbe2eb; background-color: white; z-index: 9999; }
+        .leftnav li:hover .child-block { /* display: block */ }
+        .leftnav li .root-link { color: #333; font-size: 14px; text-decoration: none; display: block; position: relative; }
+.root-link .icon-img { margin: 0 10px; }
+.leftnav li .root-link span { /* margin-left: 0px; */ display: inline-block; }
+
+/* 二级样式 */
+.child-block li a { text-decoration: none; }
+
+.child-block li .text2 { font-size: 12px; color: #003598; position: absolute; left: 24px; /* margin-left:30px */ }
+.child-block li:hover .text2 { color: #fff; }
+.child-block li:hover { background-color: #003598; }
+
+
+/* 三级样式 */
+.child-block .child-level3 { width: 140px; position: absolute; display: none; left: 157px; top: 0; border: 3px solid #dbe2eb; background-color: white; z-index: 99; }
+
+    .child-block .child-level3 li .text3 { font-size: 12px; color: #003598; position: absolute; left: 24px; }
+.child-block li:hover .child-level3 { display: block; }
+.child-block .child-level3 li:hover .text3 { color: #fff; }
+
+/* 左侧icon样式 */
+.left_more { display: inline-block; width: 10px; height: 10px; background: url(img/left_more.png) no-repeat 0 0; }
+.left_arrow { display: inline-block; width: 10px; height: 10px; background: url(img/left_arrow.png) no-repeat 0 0; margin-left: 10px }
+.left_icon_new { display: inline-block; width: 14px; height: 14px; background: url(img/left_new.png) no-repeat 0 0; /* margin-left: 10px; */ right: 30px; position: absolute; top: 12px; }
+.left_icon_hot { display: inline-block; width: 14px; height: 7px; background: url(img/left_icon_hot.png) no-repeat 0 0; right: 30px; position: absolute; top: 16px; }
+.left_spe_hot { display: inline-block; width: 14px; height: 7px; background: url(img/left_icon_hot.png) no-repeat 0 0; }
+.left_star { display: inline-block; width: 14px; height: 14px; background: url(img/left_star.png) no-repeat 0 0; right: 10px; position: absolute; top: 12px; }
+.left_star_f { display: inline-block; width: 14px; height: 14px; background: url(img/left_star_f.png) no-repeat 0 0; right: 10px; position: absolute; top: 12px; }
+
+.left_icon { display: inline-block; margin: 0 10px; margin-left: 10px; width: 14px; height: 14px; position: relative; }
+
+/* .icon_home{
+    background: url(img/left_home.png) no-repeat 0 0;
+}
+.icon_home_f{
+    background: url(img/left_home_f.png) no-repeat 0 0;
+} */
+.icon_home { background-image: url(img/leftsprites.png); background-position: -102px -34px; }
+.icon_home_f { background-image: url(img/leftsprites.png); background-position: -102px -68px; }
+
+/* .icon_top_mydata{
+    background: url(img/left_mydata.png) no-repeat 0 0;
+}
+.icon_top_mydata_f{
+    background: url(img/left_mydata_f.png) no-repeat 0 0;
+} */
+.icon_top_mydata { background-image: url(img/leftsprites.png); background-position: -136px -102px; }
+.icon_top_mydata_f { background-image: url(img/leftsprites.png); background-position: 0px -136px; }
+
+/* 热门数据 */
+.icon_0 { background-image: url(img/leftsprites.png); background-position: 0px -102px; }
+.icon_0_f { background-image: url(img/leftsprites.png); background-position: -34px -102px; }
+/* 资金流向 */
+.icon_1 { background-image: url(img/leftsprites.png); background-position: -136px -68px; }
+.icon_1_f { background-image: url(img/leftsprites.png); background-position: -136px -34px; }
+/* 特色数据 */
+.icon_2 { background-image: url(img/leftsprites.png); background-position: 0px -170px; }
+.icon_2_f { background-image: url(img/leftsprites.png); background-position: -34px -170px; }
+/* 新股数据 */
+.icon_3 { background-image: url(img/leftsprites.png); background-position: -68px -136px; }
+.icon_3_f { background-image: url(img/leftsprites.png); background-position: -102px -136px; }
+/* 沪深港通 */
+.icon_4 { background-image: url(img/leftsprites.png); background-position: -68px -102px; }
+.icon_4_f { background-image: url(img/leftsprites.png); background-position: -102px -102px; }
+/* 公告大全 */
+.icon_5 { background-image: url(img/leftsprites.png); background-position: -136px -136px; }
+.icon_5_f { background-image: url(img/leftsprites.png); background-position: -170px 0px; }
+/* 研究报告 */
+.icon_6 { background-image: url(img/leftsprites.png); background-position: -170px -34px; }
+.icon_6_f { background-image: url(img/leftsprites.png); background-position: -170px -68px; }
+/* 年报季报 */
+.icon_7 { background-image: url(img/leftsprites.png); background-position: 0px 0px; }
+.icon_7_f { background-image: url(img/leftsprites.png); background-position: -204px 0px; }
+/* 期货期权 -- 股东*/
+.icon_8 { background-image: url(img/leftsprites.png); background-position: -170px -102px; }
+.icon_8_f { background-image: url(img/leftsprites.png); background-position: -170px -136px; }
+/* 经济数据 --期货 */
+.icon_9 { background-image: url(img/leftsprites.png); background-position: -68px -68px; }
+.icon_9_f { background-image: url(img/leftsprites.png); background-position: -102px 0px; }
+/* 基金数据  --经济数据*/
+.icon_10 { background-image: url(img/leftsprites.png); background-position: -68px 0px; }
+.icon_10_f { background-image: url(img/leftsprites.png); background-position: -68px -34px; }
+/* 基金 */
+.icon_11 { background-image: url(img/leftsprites.png); background-position: 0px -68px; }
+.icon_11_f { background-image: url(img/leftsprites.png); background-position: -34px -68px; }
+/* 理财 :舍弃*/
+/* .icon_12{
+    background-image: url(img/leftnavsprite.png);
+    background-position: 0px -118px;
+}
+.icon_12_f{
+    background-image: url(img/leftnavsprite.png);
+    background-position: 0px -102px;
+} */
+/*股东 */
+/* .icon_13{
+    background-image: url(img/leftnavsprite.png);
+    background-position: 0px -454px;
+}
+.icon_13_f{
+    background-image: url(img/leftnavsprite.png);
+    background-position: 0px -438px;
+} */
+
+
+/* 特色数据 */
+#left_special_wrap { min-width: 300px }
+;
+#left_special_wrap .item_wrap { float: left }
+#left_special_wrap .lab { width: 22px; /* height: 40px; */ height: 48px; background: #f0f0f0; display: inline-block; text-align: center; line-height: 40px; font-weight: bold; position: absolute; }
+#left_special_wrap .item_wrap .name { width: 125px; height: 40px; background: #fff; display: inline-block; line-height: 40px; }
+.item_wrap_ul li { position: relative; /* height: 25px; */ height: 40px; width: 150px; display: flex; line-height: 40px }
+    .item_wrap_ul li:hover { height: 40px; width: 150px; background: #003598; }
+    .item_wrap_ul li a { padding-left: 12px; left: 20px; position: absolute; }
+    .item_wrap_ul li:hover a span { color: #fff }
+.item_wrap_ul .left_star { top: 12px }
+.item_wrap_ul .left_star_f { top: 12px }

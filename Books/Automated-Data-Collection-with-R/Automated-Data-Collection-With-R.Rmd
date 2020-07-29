@@ -1,0 +1,114 @@
+---
+title: "Automated Data Collection With R"
+author: "yincy"
+date: "7/29/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Chapter 1 Introduction  
+```{r}
+library(stringr)
+library(XML)
+library(maps)
+```
+
+```{r}
+heritage_page <- htmlParse(file = "files/List of World Heritage in Danger - Wikipedia.html", 
+                           encoding = "UTF-8")
+
+
+tables <- readHTMLTable(doc = heritage_page, stringsAsFactors = F)
+danger_table <- tables[[2]]
+colnames(danger_table) <- c("name", "image", "location", "criteria", "area", "year", "endangered", "reason", "refs")
+```
+
+```{r}
+danger_table$criteria <- ifelse(grepl("Natural", danger_table$criteria), "nat", "cult")
+danger_table$criteria %>% table()
+```
+
+
+```{r}
+danger_table$year <- as.numeric(danger_table$year)
+```
+
+
+```{r}
+l <- danger_table$endangered %>% nchar
+danger_table$endangered <- substr(danger_table$endangered, l-4, l-1) %>% as.numeric()
+```
+
+
+```{r}
+danger_table$location[1:3]
+reg_y <- "[/][ -]*[[:digit:]]*[.]*[[:digit:]]*[;]"
+reg_x <- "[;][ -]*[[:digit:]]*[.]*[[:digit:]]*"
+```
+
+
+```{r}
+y_coords <- str_extract(string = danger_table$location, pattern = reg_y)
+x_coords <- str_extract(string = danger_table$location, pattern = reg_x)
+```
+
+```{r}
+y_coords <- str_extract(y_coords, "[-]?[[:digit:]]+[.]*[:digit:]*")
+x_coords <- str_extract(x_coords, "[-]?[:digit:]+[.]*[:digit:]*")
+```
+
+```{r}
+danger_table$y_coord <- y_coords
+danger_table$x_coord <- x_coords
+
+danger_table[, c("x_coord", "y_coord")]
+```
+
+```{r}
+danger_table <- danger_table[, c("name", "criteria", "year", "endangered", "x_coord", "y_coord")]
+```
+
+```{r}
+p <- ifelse(danger_table$criteria == "nat", 19, 2)
+c <- ifelse(danger_table$criteria == "nat", "red", "blue")
+map("world", col = "grey", lwd = 0.5, mar = rep(0.1, 4))
+points(danger_table$x_coord, danger_table$y_coord, pch = p, col = c, cex = 0.7)
+box(which = "figure", col = "grey", lwd = 0.1)
+legend(x = -180, y = -85, 
+       legend = c("natural", "cultural"), 
+       col = c("red", "blue"), 
+       pch = c(19, 2), 
+       bty = "n", 
+       xpd = TRUE)
+```
+
+```{r}
+danger_table$yend <- cut(danger_table$endangered, breaks = seq(1985, 2020, 5))
+danger_table$yend %>% table() %>% sort() %>% barplot()
+```
+
+```{r}
+danger_table$endangered %>% hist()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

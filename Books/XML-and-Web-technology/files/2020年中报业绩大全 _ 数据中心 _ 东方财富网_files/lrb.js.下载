@@ -1,0 +1,180 @@
+﻿!function ($) {
+    loadtabledata();
+    loadevent();
+
+    function loadevent() {
+        bbsjfun.resetSlt();
+        bbsjfun.tabevent();
+    }
+
+    function loadtabledata() {
+        window.INDUSTRY_NAME = "";
+        new LoadTable({
+            id: "dt_1",
+            sort: { id: "NOTICE_DATE,SECURITY_CODE", desc: true },
+            cellcount: 16,
+            pagesize: 50,
+            autoScrollRun: false,
+            cells: cells(),
+            dataurl: centerDomain + "type=RPT_DMSK_FN_INCOME&sty=ALL&p={page}&ps={pageSize}&st={sortType}&sr={sortRule}&var={jsname}{param}",
+            param: {
+                "newapi":true,
+                "MARKET_type": { cname: "li", type: "MARKET", value: "", cssclass:"at2", filter: true},
+                "REPORT_DATE_type": { cname: "option", type: "REPORT_DATE", value: "(REPORT_DATE=%27"+dateVal+"%27)",  filter: true },
+                "INDUSTRY_NAME_type": { cname: "li", type: "INDUSTRY_NAME", value: "", cssclass: "at2",filter: true}
+            },
+            paramvalues: {
+                "MARKET_type": bbsjfun.mkt_type
+            },
+            beforeupdate: function (_t) {
+                INDUSTRY_NAME = bbsjfun.getparam(_t.options.param.INDUSTRY_NAME_type.value, "INDUSTRY_NAME");
+                _t.options.cells = cells(INDUSTRY_NAME);
+            },
+            beforedisplay: function (_t) {
+                bbsjfun.setbgqtext(_t.options.param.REPORT_DATE_type.value.replace("(REPORT_DATE=%27", ""));
+                _t.options.autoScrollRun = true;
+            },
+            maketr: maketr
+        });
+    }
+
+
+    function cells(type) {
+        var cells = [{ "n": "序号", "w": 30 },
+        { "n": "股票代码", "s": "SECURITY_CODE", "w": 55 },
+        { "n": "股票简称", "w": 60 },
+        { "n": "相关", "w": 60 },
+        { "n": "净利润</br>(元)", "s": "PARENT_NETPROFIT", "w": 55 },
+        { "n": "净利润</br>同比(%)", "s": "PARENT_NETPROFIT_RATIO", "w": 50 }];
+        if (type == "银行") {
+            cells.push({
+                "n": "营业总收入",
+                cells: [{ "n": "利息净</br>收入(元)", "s": "INTEREST_NI", "w": 55 },
+                { "n": "手续费</br>及佣金</br>净收入</br>(元)", "s": "FEE_COMMISSION_NI", "w": 55 },
+                { "n": "营业总</br>收入(元)", "s": "OPERATE_INCOME", "w": 60 },
+                { "n": "营业总</br>收入同</br>比(%)", "s": "TOI_RATIO", "w": 55 }],
+                "w": 220
+            });
+            cells.push({
+                "n": "营业总支出",
+                cells: [{ "n": "营业税</br>金及附</br>加(元)", "s": "OPERATE_TAX_ADD", "w": 55 },
+                { "n": "管理费</br>用(元)", "s": "MANAGE_EXPENSE_BANK", "w": 55 },
+                { "n": "营业总</br>支出(元)", "s": "OPERATE_EXPENSE", "w": 60 }],
+                "w": 170
+            });
+        }
+        else if (type == "券商信托") {
+            cells.push({
+                "n": "营业总收入",
+                cells: [{ "n": "利息净</br>收入(元)", "s": "INTEREST_NI", "w": 55 },
+                { "n": "手续费</br>及佣金</br>净收入</br>(元)", "s": "FEE_COMMISSION_NI", "w": 55 },
+                { "n": "营业总</br>收入(元)", "s": "TOTAL_OPERATE_INCOME", "w": 60 },
+                { "n": "营业总</br>收入同</br>比(%)", "s": "TOI_RATIO", "w": 55 }],
+                "w": 220
+            });
+            cells.push({
+                "n": "营业总支出",
+                cells: [{ "n": "营业税</br>金及附</br>加(元)", "s": "OPERATE_TAX_ADD", "w": 55 },
+                { "n": "管理费</br>用(元)", "s": "MANAGE_EXPENSE", "w": 55 },
+                { "n": "营业总</br>支出(元)", "s": "TOTAL_OPERATE_COST", "w": 60 }],
+                "w": 170
+            });
+        }
+        else if (type == "保险") {
+            cells.push({
+                "n": "营业总收入",
+                cells: [{ "n": "已赚保</br>费(元)", "s": "EARNED_PREMIUM", "w": 55 },
+                { "n": "投资收</br>益(元)", "s": "INVEST_INCOME", "w": 55 },
+                { "n": "营业总</br>收入(元)", "s": "OPERATE_INCOME", "w": 60 },
+                { "n": "营业总</br>收入同</br>比(%)", "s": "TOI_RATIO", "w": 55 }],
+                "w": 220
+            });
+            cells.push({
+                "n": "营业总支出",
+                cells: [{ "n": "退保金</br>(元)", "s": "SURRENDER_VALUE", "w": 55 },
+                { "n": "赔付支</br>出(元)", "s": "COMPENSATE_EXPENSE", "w": 55 },
+                { "n": "营业总</br>支出(元)", "s": "OPERATE_EXPENSE", "w": 60 }],
+                "w": 170
+            });
+        }
+        else {
+            cells.push({ "n": "营业总</br>收入(元)", "s": "TOTAL_OPERATE_INCOME", "w": 60 });
+            cells.push({ "n": "营业总</br>收入同</br>比(%)", "s": "TOI_RATIO", "w": 55 });
+            cells.push({
+                "n": "营业总支出",
+                cells: [{ "n": "营业支</br>出(元)", "s": "OPERATE_COST", "w": 55 },
+                { "n": "销售费</br>用(元)", "s": "SALE_EXPENSE", "w": 55 },
+                { "n": "管理费</br>用(元)", "s": "MANAGE_EXPENSE", "w": 55 },
+                { "n": "财务费</br>用(元)", "s": "FINANCE_EXPENSE", "w": 55 },
+                { "n": "营业总</br>支出(元)", "s": "TOTAL_OPERATE_COST", "w": 60 }],
+                "w": 280
+            });
+        }
+        cells.push({ "n": "营业利</br>润(元)", "s": "OPERATE_PROFIT", "w": 55 });
+        cells.push({ "n": "利润总</br>额(元)", "s": "TOTAL_PROFIT", "w": 55 });
+        cells.push({ "n": "公告<br />日期", "s": "NOTICE_DATE,SECURITY_CODE", "w": 40 });
+        return cells;
+    }
+    function maketr(row, data, i, c) {
+        var _t = this;
+        var _class = (i % 2 == 0) ? "" : "odd";
+        row.className = _class;
+        row.onmouseover = function () {
+            this.className = "over";
+        }
+        row.onmouseout = function (o, _c) {
+            o.className = _c;
+        }.binding(this, row, _class)
+        var gpdm = data.SECURITY_CODE;//代码
+        var mc = data.SECURITY_NAME_ABBR;//名称
+
+        row.cells[0].innerHTML = c;
+        row.cells[1].innerHTML = '<a href="http://quote.eastmoney.com/' + gpdm + '.html">' + gpdm + '</a>'; //
+        row.cells[2].innerHTML = '<a href="/stockdata/' + gpdm + '.html">' + mc + '</a>';
+        row.cells[3].innerHTML = '<a class="red" href="/bbsj/zcfz/' + gpdm + '.html">详细</a>&nbsp;&nbsp;<a  href="/stockdata/' + gpdm + '.html">数据</a>';
+        row.cells[4].innerHTML = numfun.toamt(data.PARENT_NETPROFIT);//归母净利润(元)
+        row.cells[5].innerHTML = numfun.tobl(data.PARENT_NETPROFIT_RATIO);//净利润同比(%)
+
+        row.cells[2].style.whiteSpace = "nowrap";
+        row.cells[3].style.whiteSpace = "nowrap";
+        if (INDUSTRY_NAME == "银行") {
+            row.cells[6].innerHTML = numfun.toamt(data.INTEREST_NI);//利息净收入(元)
+            row.cells[7].innerHTML = numfun.toamt(data.FEE_COMMISSION_NI);//手续费及佣金净收入(元)
+            row.cells[8].innerHTML = numfun.toamt(data.OPERATE_INCOME);//营业总收入(元)
+            row.cells[9].innerHTML = numfun.tobl(data.TOI_RATIO);//营业总收入同比(%)
+            row.cells[10].innerHTML = numfun.toamt(data.OPERATE_TAX_ADD);//营业税</br>金及附</br>加(元)
+            row.cells[11].innerHTML = numfun.toamt(data.MANAGE_EXPENSE_BANK);//管理费用(元)
+            row.cells[12].innerHTML = numfun.toamt(data.OPERATE_EXPENSE);//营业总支出(元)
+        } else if (INDUSTRY_NAME == "券商信托") {
+            row.cells[6].innerHTML = numfun.toamt(data.INTEREST_NI);//利息净收入(元)
+            row.cells[7].innerHTML = numfun.toamt(data.FEE_COMMISSION_NI);//手续费及佣金净收入(元)
+            row.cells[8].innerHTML = numfun.toamt(data.TOTAL_OPERATE_INCOME);//营业总收入(元)
+            row.cells[9].innerHTML = numfun.tobl(data.TOI_RATIO);//营业总收入同比(%)
+            row.cells[10].innerHTML = numfun.toamt(data.OPERATE_TAX_ADD);//营业税</br>金及附</br>加(元)
+            row.cells[11].innerHTML = numfun.toamt(data.MANAGE_EXPENSE);//管理费用(元)
+            row.cells[12].innerHTML = numfun.toamt(data.TOTAL_OPERATE_COST);//营业总支出(元) 
+        } else if (INDUSTRY_NAME == "保险") {
+            row.cells[6].innerHTML = numfun.toamt(data.EARNED_PREMIUM);//已赚保费(元)
+            row.cells[7].innerHTML = numfun.toamt(data.INVEST_INCOME);//投资收益(元)
+            row.cells[8].innerHTML = numfun.toamt(data.OPERATE_INCOME);//营业总收入(元)
+            row.cells[9].innerHTML = numfun.tobl(data.TOI_RATIO);//营业总收入同比(%)
+            row.cells[10].innerHTML = numfun.toamt(data.SURRENDER_VALUE);//退保金(元)
+            row.cells[11].innerHTML = numfun.toamt(data.COMPENSATE_EXPENSE);//赔付支出(元)
+            row.cells[12].innerHTML = numfun.toamt(data.OPERATE_EXPENSE);//营业总支出(元)
+        } else {
+            row.cells[6].innerHTML = numfun.toamt(data.TOTAL_OPERATE_INCOME);//营业总收入(元)
+            row.cells[7].innerHTML = numfun.tobl(data.TOI_RATIO);//营业总收入同比(%)
+            row.cells[8].innerHTML = numfun.toamt(data.OPERATE_COST);//营业支出(元)
+            row.cells[9].innerHTML = numfun.toamt(data.SALE_EXPENSE);//销售费用(元)
+            row.cells[10].innerHTML = numfun.toamt(data.MANAGE_EXPENSE);//管理费用(元)
+            row.cells[11].innerHTML = numfun.toamt(data.FINANCE_EXPENSE);//财务费用(元)  
+            row.cells[12].innerHTML = numfun.toamt(data.TOTAL_OPERATE_COST);//营业总支出(元)
+        }
+        row.cells[13].innerHTML = numfun.toamt(data.OPERATE_PROFIT);//营业利润(元)
+        row.cells[14].innerHTML = numfun.toamt(data.TOTAL_PROFIT);//利润总额(元)
+        row.cells[15].innerHTML = Tools.dateFormat(data.NOTICE_DATE, "MM-dd") || "-";//公告日期
+        row.cells[15].title = Tools.dateFormat(data.NOTICE_DATE, "yyyy-MM-dd");
+        row.cells[15].style.whiteSpace = "nowrap";
+    }
+}(jQuery)
+

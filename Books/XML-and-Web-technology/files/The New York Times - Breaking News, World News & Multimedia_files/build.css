@@ -1,0 +1,29 @@
+
+.nytmm_FadingSlideShow_items {
+  position: relative;
+}
+.nytmm_FadingSlideShowItem {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+.nytmm_FadingSlideShow .credit {
+  width: 100%;
+  max-width: 100%;
+  min-height: 12px;
+  text-align: right;
+  font-family: "nyt-cheltenham-sh", georgia, "times new roman", times, serif;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  letter-spacing: 0.2px;
+  color: #ccc;
+}
+.g-mobile .nytmm_FadingSlideShow .credit {
+  width: calc(100% - 15px);
+}
+.page-interactive-embedded .story.theme-main {
+  margin-top: 0px!important;
+  margin-bottom: 0px!important;
+}

@@ -1,0 +1,504 @@
+var tipText = '输入车系名称查看口碑';
+seajs.use(["jquery", "button", "gotop", "support", "select", "selectpop", "tab", "slider"], function ($) {
+    var FirstCharacter = [['A'], ['B'], ['C'], ['D'], ['E'], ['F'], ['G'], ['H'], ['I'], ['J'], ['K'], ['L'], ['M'], ['N'], ['O'], ['P'], ['Q'], ['R'], ['S'], ['T'], ['U'], ['V'], ['W'], ['X'], ['Y'], ['Z']];
+   //周杨注释 $('[data-toggle="selectpop"]').selectpop();
+
+    var bindSeriesId = null;
+    var selectSeriesId;
+    var selectSpecId;
+    var selectDear;
+    var tipSelectSpec = '请选择车型（可不选）';
+    var tipSelectSeries = '请选择品牌/车系';
+    var basePicUrl = '';
+
+    var CharactorClick = function () {
+        $('#js-divCharactorBox a').on('click', function () {
+            var charactar = $(this).attr('data-val');
+            $('#js-selectDearBox').scrollTop(0);
+            var top = $('.dear_' + charactar).first().position().top - $('dt', $('.town-con-dl')).height();
+            $('#js-selectDearBox').scrollTop(top);
+        });
+    };
+
+    var CharactorClickSearch = function () {
+        $('#js-divCharactorBoxSearch a').on('click', function () {
+            var charactar = $(this).attr('data-val');
+            $('#js-selectDearBoxSearch').scrollTop(0);
+            var top = $('.dear_' + charactar).first().position().top - $('dt', $('.town-con-dl')).height();
+            $('#js-selectDearBoxSearch').scrollTop(top);
+        });
+    };
+    var initBrand = function (currentBrandid) {
+        var myDate = new Date();
+        $.getJSON("/ajax/brand?state=0X001C&typeid=0&radom=" + new Date().getTime(), function (data) {
+            $('#js-selectDearBox').append(getBrandData(data, "#js-divCharactorBox"));
+            if (currentBrandid > 0) {
+                $(".dear_" + currentBrandid).addClass("selected");
+            }
+            BrandClick();
+            CharactorClick();
+        });
+    };
+
+    var intiBrandSearch = function () {
+        $.getJSON("/ajax/brand?state=0X001C&typeid=0&radom=" + new Date().getTime(), function (data) {
+            $('#js-selectDearBoxSearch').append(getBrandData(data, "#js-divCharactorBoxSearch"));
+            $('#js-searchDrop').find('.selectpop-box').removeClass("box-width-01");
+            BrandClickSearch();
+            CharactorClickSearch();
+        });
+    }
+
+    var getBrandData = function (data, characterId) {
+        data = $.parseJSON(data);
+
+        var haveDealCharacter = '';
+        var innerHtmlContrast = '';
+        for (var i = 0; i < FirstCharacter.length; i++) {
+            var falgedLEnd = '';
+            for (var j = 0; j < data.result.branditems.length; j++) {
+                if (data.result.branditems[j].bfirstletter == FirstCharacter[i] && haveDealCharacter.indexOf(FirstCharacter[i]) < 0) {
+                    innerHtmlContrast += '<dl class="town-con-dl"><dt>' + FirstCharacter[i] + '</dt><dd class="town-btn">';
+                    falgedLEnd = '</dd></dl>';
+                    haveDealCharacter += FirstCharacter[i];
+                    $(characterId).append('<a href="###" data-val="' + FirstCharacter[i] + '">' + FirstCharacter[i] + '</a>');
+                }
+                if (data.result.branditems[j].bfirstletter == FirstCharacter[i]) {
+                    innerHtmlContrast += '<a href="###" class="dear_' + data.result.branditems[j].bfirstletter + ' dear_' + data.result.branditems[j].id + '" data-val="' + data.result.branditems[j].id + '"  data-istop="false">' + data.result.branditems[j].name + '</a>';
+                }
+            }
+            if (innerHtmlContrast != '') {
+                innerHtmlContrast += falgedLEnd;
+            }
+
+        }
+        return innerHtmlContrast;
+    };
+
+    var initFactoryAndSeries = function (brandid, currentseriesid) {
+        $('#js-selectSeriesBox').html("");
+        $.getJSON("/ajax/factorybybrand?&brandid=" + brandid + "&state=0X001C&typeid=0&radom=" + new Date().getTime(), function (facData) {
+            facData = $.parseJSON(facData);
+            $.each(facData.result.factoryitems, function (i, item) {
+                $('#js-selectSeriesBox').append('<dl class="selectSeries_' + item.id + ' town-con-dl town-tit-dl"><dt>' + item.name + '</dt><dd class="town-btn" id="js-factory-' + item.id + '"></dd></dl>');
+                initSeriesByFactoryAndBrand(brandid, item.id, item.name, currentseriesid);
+            });
+        });
+    };
+    var initFactoryAndSeriesSearch = function (brandid) {
+        $('#js-selectSeriesBoxSearch').html("");
+        $.getJSON("/ajax/factorybybrand?&brandid=" + brandid + "&state=0X001C&typeid=0&radom=" + new Date().getTime(), function (facData) {
+            facData = $.parseJSON(facData);
+            $.each(facData.result.factoryitems, function (i, item) {
+                $('#js-selectSeriesBoxSearch').append('<dl class="selectSeries_' + item.id + ' town-con-dl town-tit-dl"><dt>' + item.name + '</dt><dd class="town-btn" id="js-factory-search-' + item.id + '"></dd></dl>');
+                initSeriesByFactoryAndBrandSearch(brandid, item.id, item.name);
+            });
+        });
+    };
+
+    var initSeriesByFactoryAndBrandSearch = function (brandid, factoryid, factoryname) {
+        $.getJSON("/ajax/seriesbyfactory?&brandid=" + brandid + "&factoryid=" + factoryid + "&state=0X001C&typeid=0&radom=" + new Date().getTime(), function (seriesData) {
+            seriesData = $.parseJSON(seriesData);
+
+            for (var i = 0; i < seriesData.result.seriesitems.length; i++) {
+                $('#js-factory-search-' + factoryid).append('<a href="/' + seriesData.result.seriesitems[i].id + '/#pvareaid=102519" class="selectSeries_' + seriesData.result.seriesitems[i].id + '" target="_blank">' + seriesData.result.seriesitems[i].name + '</a>');
+            }
+        });
+    };
+
+    var initSeriesByFactoryAndBrand = function (brandid, factoryid, factoryname, currentseriesid) {
+        $.getJSON("/ajax/seriesbyfactory?&brandid=" + brandid + "&factoryid=" + factoryid + "&state=0X001C&typeid=0&radom=" + new Date().getTime(), function (seriesData) {
+            seriesData = $.parseJSON(seriesData);
+
+            for (var i = 0; i < seriesData.result.seriesitems.length; i++) {
+                $('#js-factory-' + factoryid).append('<a href="###" class="selectSeries_' + seriesData.result.seriesitems[i].id + '" data-id="' + seriesData.result.seriesitems[i].id + '" data-name="' + seriesData.result.seriesitems[i].name + '">' + seriesData.result.seriesitems[i].name + '</a>');
+            }
+            sereisClick(factoryid);
+            if (currentseriesid > 0) {
+                $(".selectSeries_" + currentseriesid).addClass("selected");
+                $("#js-selectedText").html('<span>' + $(".selectSeries_" + currentseriesid).attr("data-name") + '</span><i class="icon10 icon10-down1"></i>');
+            }
+        });
+    };
+
+    var BrandClick = function () {
+        $('#js-selectDearBox').find('a').on('click', function () {
+            var dearId = $.parseJSON($(this).attr('data-val'));
+            $('#selectSpecDrop').parents(".select").addClass("select-disabled");
+            initFactoryAndSeries(dearId, 0);
+            $('#js-selectSeriesLazyBox').show();
+            $("#selectSpecDrop").html('<span>' + tipSelectSpec + '</span><i class="icon10 icon10-down1"></i>');
+            $("#js-selectedText").html('<span>' + tipSelectSeries + '</span><i class="icon10 icon10-down1"></i>');
+            selectSeriesId = 0;
+            initUrl();
+        });
+
+    };
+    var BrandClickSearch = function () {
+        $('#js-selectDearBoxSearch').find('a').on('click', function () {
+            var dearId = $.parseJSON($(this).attr('data-val'));
+            $('#js-selectDearBoxSearch').find('a').removeClass("selected");
+            $(this).addClass("selected");
+            initFactoryAndSeriesSearch(dearId);
+            $('#js-selectSeriesLazyBoxSearch').show();
+            $('#js-searchDrop').find('.selectpop-box').addClass("box-width-01");
+        });
+    };
+    var sereisClick = function (factoryid) {
+        $('#js-factory-' + factoryid + ' a').click(function () {
+            selectSpecId = 0;
+            selectSeriesId = $(this).attr('data-id');
+            $('.selectpop').hide();
+            $("#js-selectedText").html('<span>' + $(this).attr('data-name') + '</span><i class="icon10 icon10-down1"></i>');
+            initSpecSelectData(selectSeriesId, 0);
+            $.ajax({
+                type: "get",
+                url: "/ajax/getseriespic",
+                data: "id=" + selectSeriesId,
+                success: function (msg) {
+                    $('img', $('#selectCarImgBox')).attr('src', basePicUrl + msg.replace('t_', 's_'));
+                }
+            });
+            initUrl();
+        });
+    };
+
+    var initSpecSelectData = function (seriesId, currentspecid) {
+        $('#selectSpecDataBox').html("");
+        $('#selectSpecDrop').parents(".select").removeClass("select-disabled");
+        $.getJSON("/ajax/syearbyseries?&seriesid=" + seriesId + "&typeid=0&state=0X001C&radom=" + new Date().getTime(), function (data) {
+            data = $.parseJSON(data);
+
+            var specstr = '';
+            for (var i = 0; i < data.result.yearitems.length; i++) {
+                $('#selectSpecDataBox').append('<dl class="town-con-dl town-tit-dl"><dt>' + data.result.yearitems[i].name + '</dt><dd class="town-btn" id="js-year-' + data.result.yearitems[i].id + '"></dd></dl>');
+                intiSpec(data.result.yearitems[i].id, data.result.yearitems[i].name, currentspecid);
+            }
+            $('#selectSpecDataBox').append(specstr += '</dd></dl>');
+        });
+    };
+
+    var intiSpec = function (yearid, yearname, currentspecid) {
+        $.getJSON("/ajax/specbysyear?&yearid=" + yearid + "&typeid=1&state=0X001C&radom=" + new Date().getTime(), function (data) {
+            data = $.parseJSON(data);
+
+            var specstr = "";
+            for (var i = 0; i < data.result.specitems.length; i++) {
+                specstr += '<a href="###" class="selectSpec_' + data.result.specitems[i].id + '"  data-name="' + data.result.specitems[i].name + '" data-id="' + data.result.specitems[i].id + '"><span class="fn-right red">' + fmoney(data.result.specitems[i].maxprice, 2) + '</span>' + '' + data.result.specitems[i].name + '</a>';
+            }
+            $('#js-year-' + yearid).append(specstr);
+            if (currentspecid > 0) {
+                $(".selectSpec_" + currentspecid).addClass("selected");
+                $("#selectSpecDrop").html('<span>' + $(".selectSpec_" + currentspecid).attr("data-name") + '</span><a class="icon12 icon12-no" href="###" id="clearSpec"></a><i class="icon10 icon10-down1"></i>');
+                intiClose();
+            }
+            specClick(yearid);
+        });
+
+    };
+
+    //格式话金额 //将数字转换成逗号分隔的样式,保留两位小数s:value,n:小数位数
+    var fmoney = function (s, n) {
+        var returnStr = s / 10000;
+        return returnStr + "万";
+    };
+
+    var specClick = function (id) {
+        $('#js-year-' + id).find('a').on('click', function () {
+            selectSpecId = $(this).attr("data-id");
+            var specName = $(this).attr("data-name");
+            $('#selectSpecDrop').html('<span>' + specName + '</span><a class="icon12 icon12-no" href="###" id="clearSpec"></a><i class="icon10 icon10-down1"></i>');
+            $('#select-position').hide();
+            $.ajax({
+                type: "get",
+                url: "/ajax/GetSpecPic",
+                data: "id=" + selectSpecId,
+                success: function (msg) {
+                    $('img', $('#selectCarImgBox')).attr('src', basePicUrl + msg.replace('t_', 's_'));
+                }
+            });
+            initUrl();
+            intiClose();
+        });
+    }
+
+    $('.icon16-close').click(function () {
+        $('.selectpop ').hide();
+        $(this).parents(".select").removeClass("active");
+    });
+
+    $("#js-selectedText").on("click", function () {
+        $('#js-searchDrop').hide();
+        if ($('#js-divCharactorBox').html() <= 53) {
+            initBrand(0);
+        }
+    })
+
+    var initUrl = function () {
+        $('#compareBtn').attr('href', '###');
+        if (selectSeriesId > 0) {
+            if (selectSpecId != null && selectSpecId > 0 && selectSpecId != undefined) {
+                if (bindSeriesId == null || bindSeriesId == undefined) {
+                    $('#compareBtn').attr('href', '/comparecar/' + selectSpecId + "#pvareaid=101385");
+                    $('#compareBtn').attr('target', '_blank');
+                }
+                else {
+                    $('#compareBtn').attr('href', '/comparecar/' + selectSpecId + "#pvareaid=101385");
+                    $('#compareBtn').removeAttr('target');
+                }
+            }
+            else {
+                if (bindSeriesId == null || bindSeriesId == undefined) {
+                    $('#compareBtn').attr('href', '/compareseries/' + selectSeriesId + "#pvareaid=101385");
+                    $('#compareBtn').attr('target', '_blank');
+                }
+                else {
+                    $('#compareBtn').attr('href', '/compareseries/' + selectSeriesId + "#pvareaid=101385");
+                    $('#compareBtn').removeAttr('target');
+                }
+            }
+            if ($('#compareBtn').attr('href') == '' || $('#compareBtn').attr('href') == '###' || $('#compareBtn').attr('javascript:void(0);')) {
+            }
+            else {
+                //$('#compareBtn').removeClass('btn-hui').addClass('btn-sub');
+                //            $('#compareBtn').attr('target', 'blank');
+            }
+        }
+        else {
+            $('#selectDearAndSeries').show();
+        }
+    }
+    var intiClose = function () {
+        $('#clearSpec').click(function (e) {
+            selectSpecId = 0;
+            $.ajax({
+                type: "get",
+                url: "/ajax/GetSeriesPic",
+                data: "id=" + selectSeriesId,
+                success: function (msg) {
+                    $('img', $('#selectCarImgBox')).attr('src', basePicUrl + msg.replace('t_', 's_'));
+                }
+            });
+            $('#select-position').hide();
+            $('#selectSpecDrop').html('<span>' + tipSelectSpec + '</span><i class="icon10 icon10-down1"></i></div>');
+            initUrl();
+            return false;
+        });
+    }
+    $().ready(function () {
+        intiBrandSearch();
+
+        $('#js-searchinputbox').focus(function () {
+            if ($(this).val() == tipText) {
+                $(this).val('');
+            }
+        }).blur(function () {
+            if ($(this).val() == '') {
+                $(this).val(tipText);
+                $('#js-searchresultbox').hide();
+            }
+        });
+
+        $('#js-searchinputbox').keyup(function (e)
+        {
+            e = e || window.event;
+            if (e.keyCode != 38 && e.keyCode != 40 && e.keyCode != 13)
+            {
+                searchSeriesData();
+            }
+        });
+
+        function searchSeriesData() {
+            var txtValue = $('#js-searchinputbox').val();
+            if (txtValue != '' && $.trim(txtValue) != '') {
+                getData( txtValue);
+            }
+            else {
+                var tip = document.getElementById("js-searchresultbox");
+                tip.innerHTML = '';
+                tip.style.display = "none";
+            }
+        }
+
+        $('#btnHomeSearch').click(function () {
+            searchSeriesData();
+        });
+
+        function getData(keyword)
+        {
+            var searchDrop = document.getElementById("js-searchDrop");
+            searchDrop.style.display = "none";
+            var url= encodeURI(encodeURI("/ajax/souApiSuggest?keyword=" + keyword));
+            $.ajax({
+                type: "get",
+                url: url,
+                dataType: "json",
+                success: function (jsonData)
+                {
+                    var tip = document.getElementById("js-searchresultbox");
+                    var strHtml = '';
+                    if (jsonData.result.suggest_keys.length > 0)
+                    {
+                        for(var i=0;i<jsonData.result.suggest_keys.length;i++ )
+                        {
+                            var item=jsonData.result.suggest_keys[i];
+                            strHtml += '<a href="/' + item.wordid
+                                + '/#pvareaid=102519" target="_blank" class="border-b-no" data-val="'
+                                + item.wordid + '">' + item.key + ' 口碑</a>';
+                        };
+
+                        tip.innerHTML = strHtml;
+                        tip.style.display = "block";
+                    }
+                    else {
+                        var searchText = document.createElement("js-searchinputbox").value;
+                        if (searchText == tipText || searchText == '') {
+                            tip.style.display = "none";
+                        } else {
+                            tip.innerHTML = '<span>抱歉，没有符合条件的结果</span>';
+                            tip.style.display = "block";
+                        }
+                    }
+
+                },
+                error: function () {
+                    console.log('搜索接口故障，请稍后再试');
+                }
+            });
+        }
+
+
+
+        $(document.body).not($("#js-searchresultbox").children()).click(function (e) {
+            $("#js-searchresultbox").hide();
+        });
+        initsouobject();
+        $("#selectSpecDrop").on("click", function () {
+            $("#js-searchDrop").hide();
+        });
+
+        /*  周杨临时注释
+        $(document).keydown(function (e)
+        {
+            var tip = $("#js-searchresultbox");
+            var rowsArray = $('a', tip);
+            if (tip.is(':visible') && rowsArray.length > 0) {
+                var currentIndex = $(rowsArray).index($('.selected', tip));
+                if (currentIndex < 0) {
+                    currentIndex = -1;
+                }
+                switch (e.keyCode) {
+                    case 38: {
+                        if (currentIndex - 1 < 0) {
+                            currentIndex = rowsArray.length - 1;
+                        }
+                        else {
+                            currentIndex = currentIndex - 1;
+                        }
+                        $('a', tip).removeClass('selected');
+                        rowsArray.eq(currentIndex).addClass('selected');
+                    }
+                        break;
+                    case 40: {
+                        if (currentIndex + 1 > rowsArray.length - 1) {
+                            currentIndex = 0;
+                        }
+                        else {
+                            currentIndex = currentIndex + 1;
+                        }
+                        $('a', tip).removeClass('selected');
+                        rowsArray.eq(currentIndex).addClass('selected');
+                    }
+                        break;
+                    case 13: {
+                        if ($('.selected', tip).length > 0) {
+                            if ($('#js-jumptoseriespage').attr('action') != '') {
+                                document.getElementById('js-jumptoseriespage').submit();
+                                tip.hide();
+                            }
+                        }
+                    }
+                        break;
+                }
+                if ($('.selected', tip).length > 0) {
+                    $('#js-jumptoseriespage').attr('action', '/' + $('.selected', tip).attr('data-val') + '/');
+                }
+            }
+        });
+        */
+    });
+});
+
+
+
+var initsouobject = function () {
+    if (typeof (Sou) == "undefined") {
+        Sou = {};
+    }
+    if (typeof (Sou.Ajax) == "undefined") {
+        Sou.Ajax = {};
+        Sou.Ajax.lastScript;
+        Sou.Ajax.h = document.getElementsByTagName("head")[0];
+    }
+
+    Sou.Ajax.loadScript = function (url) {
+        var f = document.createElement("script");
+        var d = new Date().getTime();
+        f.type = "text/javascript";
+        f.id = d;
+        f.src = url + '&d=' + d;
+        Sou.Ajax.h.appendChild(f);
+        if (Sou.Ajax.lastScript && Sou.Ajax.g(Sou.Ajax.lastScript))
+            Sou.Ajax.g(Sou.Ajax.lastScript).parentNode.removeChild(Sou.Ajax.g(Sou.Ajax.lastScript));
+        Sou.Ajax.lastScript = d;
+    }
+    Sou.Ajax.loadScript = function (url, isRemove) {
+        var f = document.createElement("script");
+        var d = new Date().getTime();
+        f.type = "text/javascript";
+        f.id = d;
+        f.src = url + '&d=' + d;
+        Sou.Ajax.h.appendChild(f);
+        if (Sou.Ajax.lastScript && Sou.Ajax.g(Sou.Ajax.lastScript) && isRemove)
+            Sou.Ajax.g(Sou.Ajax.lastScript).parentNode.removeChild(Sou.Ajax.g(Sou.Ajax.lastScript));
+        Sou.Ajax.lastScript = d;
+    }
+    Sou.Ajax.g = function (x) {
+        return document.getElementById(x)
+    };
+    if (typeof (Sou.Autocomplate) == "undefined")
+        Sou.Autocomplate = {};
+    Sou.Autocomplate.tipNum = 0;
+    Sou.Autocomplate.AddAutocomplate = function (obj) {
+        var keyword = obj.value;
+
+    }
+    Sou.Autocomplate.bindAutocomplate = function (json) {
+        var tip = document.getElementById("js-searchresultbox");
+        var strHtml = '';
+        if (json.length > 0) {
+            var arrKey = json.split(',');
+            for (var i = 0; i < arrKey.length; i++) {
+                var arrSeriesKey = arrKey[i].toString().split(':');
+                if (arrSeriesKey.length > 0 && arrSeriesKey[2] != null) {
+                    if (i == arrKey.length - 1) {
+                        strHtml += '<a href="/' + arrSeriesKey[1] + '/#pvareaid=102519" target="_blank" class="border-b-no" data-val="' + arrSeriesKey[1] + '">' + arrSeriesKey[0] + ' 口碑</a>';
+                    } else {
+                        strHtml += '<a href="/' + arrSeriesKey[1] + '/#pvareaid=102519" target="_blank" data-val="' + arrSeriesKey[1] + '">' + arrSeriesKey[0] + ' 口碑</a>';
+                    }
+                }
+            }
+            tip.innerHTML = strHtml;
+            tip.style.display = "block";
+        }
+        else {
+            var searchText = document.createElement("js-searchinputbox").value;
+            if (searchText == tipText || searchText == '') {
+                tip.style.display = "none";
+            } else {
+                tip.innerHTML = '<span>抱歉，没有符合条件的结果</span>';
+                tip.style.display = "block";
+            }
+        }
+    }
+}
