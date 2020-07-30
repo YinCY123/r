@@ -95,6 +95,55 @@ danger_table$endangered %>% hist()
 ```
 
 
+**Technologies for disseminating, extracting, and storing web data**  
+```{r}
+knitr::include_graphics("technologies-for-disseminate-extracting-storing-web-data.PNG")
+```
+
+
+# Chapter 2 HTML  
+An HTML file is basically nothing but plain text—it can be opened and edited with any text editor. What makes HTML so powerful is its marked up structure.  
+
+The markup definitions rely on predefined character sequences—the tags—that enclose parts of the text.  
+
+## Syntax rules  
+### Tags, elements, and attributes  
+Plain text is turned into an HTML document by tags that can be interpreted by a browser. The combination of start tag, content, and end tag is called *element*  
+```
+<title>First HTML</title>
+```
+
+### Reserved and special characters  
+- character entities: `&;`  
+```
+the wrong format 
+<p> 5 < 6 but 7 > 3 </p>
+
+the right format
+<p> 5$lt; 6 but 7 &gt; 3 </p>
+```
+
+Character  | Entity number  | Entity name  | Explanation
+-----------|----------------|--------------|-----------------------
+"| &#34;| &quot; | quotation mark
+'| &#39;| &apos; | apostrophe
+&| &#38;| &amp;  | ampersand
+<| &#60;| &lt;   | less than 
+>| &#62;| &gt;   | greater than 
+ | &#160; &nbsp; | non-breaking space
+§| &#167;|&sect;|section
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
