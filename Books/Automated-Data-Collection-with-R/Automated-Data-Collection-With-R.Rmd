@@ -138,7 +138,6 @@ The anchor tag <a> is what turns HTML from just a markup language into a hyperte
 
 In fact, <a> elements are even more flexible as they can not only link to other files, but also link to specific parts of a document.  
 
-
 ### The metadata tag <meta>  
 The <meta> tag is an empty tag written in the head element of an HTML document. <meta> elements do not have to be closed and thus differ from the general rule that empty elements have to be closed with a dash /.  
 
@@ -165,6 +164,36 @@ Sheets (CSS), a language for describing the layout of HTML and other markup docu
 
 The purpose ofCSS is to separate content from layout to improve the document’s accessi-
 bility. Defining styles outside ofan HTML and assigning them via the class attribute enables the web designer to reuse styles across elements and documents. This enables developers to change a style in one single place—within the CSS file—with effects on all elements and documents using this style.  
+
+### The <form> tag and its companions  
+An advanced feature of HTML are forms. HTML forms do more than just layout content. They enable users to interact with servers by sending data to them instead of only receiving data from them.  
+
+```
+<form name="submitPW" action="Passed.html" method="get">
+password:
+        <input name="pw" type="text" value="">
+        <input type="submit" value="SubmitButtonText">
+</form>
+```
+
+The form in the example consists of one <form> element and two <input> elements nested within the former. The <form> tag has a name attribute, an action attribute, and a specific method. The name of the form servers as an internal identifier. The action and method attributes define what the browser is supposed to do once *submit button* is pressed. action defines the location of the response.  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
