@@ -178,18 +178,98 @@ password:
 
 The form in the example consists of one <form> element and two <input> elements nested within the former. The <form> tag has a name attribute, an action attribute, and a specific method. The name of the form servers as an internal identifier. The action and method attributes define what the browser is supposed to do once *submit button* is pressed. action defines the location of the response.  
 
+The most common protocol for requesting and receiving resources on the Web is HTTP (Hypertext Transfer Protocol). The `method` attribute refers to the HTTP method that is used to send the information to the server. Most likely it will be POST or GET.  
 
 
+### The foreign script tag <script>  
+HTML itself is not a programming language. HTML is a markup language that describes content and defines its presentation. Once an HTML file is loaded in the browser, it remains stable and does not change by events or user interaction.  
+
+The <script> element is a container for scripts that enable HTML to include functionality from other programming languages. This other language will frequently be JavaScript. JavaScript allows the browser to change the content and structure of the document after it has been loaded from the server, enabling user interaction and event handling.  
 
 
+### Table tags <table>, <tr>, <td>, and <th>  
+```
+	 <table>
+	 <tr> <th>Rank</th> <th>Nominal GDP</th> <th>Name</th> </tr>
+ 	 <tr> <th></th> <th>(per capita, USD)</th> <th></th> </tr>
+	 <tr> <td>1</td> <td>170,373</td> <td>Lichtenstein</td> </tr>
+	 <tr> <td>2</td> <td>167,021</td> <td>Monaco</td> </tr>
+ 	 <tr> <td>3</td> <td>115,377</td> <td>Luxembourg</td> </tr>
+	 <tr> <td>4</td> <td>98,565</td> <td>Norway</td> </tr>
+         <tr> <td>5</td> <td>92,682</td> <td>Qatar</td> </tr>
+	 </table>
+```
 
 
+## Parsing  
+Parsing HTML occurs at both steps—by the browser to display HTML content nicely, and also by parsers in R to construct useful representations ofHTML documents in our programming environment.  
 
 
+### What is parsing  
+The difference between reading and parsing is not just a semantic one. Instead, reading functions differ from parsing functions in that the former do not care to understand the formal grammar that underlies HTML but merely recognize the sequence of symbols included in the HTML file.  
+
+```{r}
+fortunes <- readLines(con = "/home/yincy/git/Wiley-ADCR/ch-2-html/fortunes.html")
+fortunes
+```
+
+```{r}
+parsed_fortunes <- htmlParse(file = "/home/yincy/git/Wiley-ADCR/ch-2-html/fortunes.html")
+parsed_fortunes
+```
+
+### Discarding nodes  
+Discarding unnecessary parts ofweb documents in the parsing stage can help mitigate memory issues and enhance extraction speed. Handlers provide a comfortable way to manipulate (i.e., delete, add, modify) nodes in the tree construction stage.  
+
+```{r}
+h1 <- list("body" = function(x) {NULL})
+parsed_fortunes <- htmlTreeParse(file = "/home/yincy/git/Wiley-ADCR/ch-2-html/fortunes.html", 
+                                 handlers = h1, 
+                                 asTree = T)
+
+parsed_fortunes
+```
+
+```{r}
+h1 <- list("div" = function(x)NULL, 
+           "title" = function(x)NULL)
+
+parsed_fortunes <- htmlTreeParse(file = "/home/yincy/git/Wiley-ADCR/ch-2-html/fortunes.html", 
+                                 handlers = h1, 
+                                 asTree = T)
+parsed_fortunes
+```
+
+```{r}
+knitr::include_graphics("figures/generic-handlers-for-DOM-style-parsing.png")
+```
 
 
+```{r}
+h2 <- list(
+        startElement = function(node, ...){
+                name = xmlName(node)
+                if(name %in% c("div", "title")){
+                        NULL
+                }else{
+                        node
+                }
+        }, 
+        comment = function(node){
+                NULL
+        }
+)
 
 
+parsed_fortunes <- htmlTreeParse(file = "/home/yincy/git/Wiley-ADCR/ch-2-html/fortunes.html", 
+                                 handlers = h2, 
+                                 asTree = T)
+
+parsed_fortunes
+```
+
+
+### Extracting information in the building process  
 
 
 
