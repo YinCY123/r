@@ -319,16 +319,135 @@ Information is usually stored in elements. An XML element is defined by its star
 - *nothing*, which means really nothing - no data, no other element, not even white spaces.  
 
 
+### XML structure  
+**naming rules**    
+- element names can be composed of letters, numbers, and other characters, like in <name1>...</name1>  
+- names must not start with a number  
+- Names must not start with a punctuation character  
+- Names must not start with the letters xml  
+- element names and attribute names are case sensitive  
+- names must not contain spaces  
+
+As in HTML, there are some characters that cannot be used literally in the content as they are needed for markup. To represent these characters in the content, they have to be replaced by escape sequences.
+
+```{r}
+knitr::include_graphics("figures/predefined-entity-in-XML.PNG")
+```
+
+### Comments and character data  
+```
+<!-- an arbitrary comment -->
+```
+Everything in between <!-- and --> is not treated as part of the XML code and therefore ignored by parsers. Comments may be used between tags or within element content, but not within element or attribute names.  
+
+The use of escape sequences can be cumbersome when the elements to be escaped are common in the data values.  
+
+```
+1 < 3 < pi < 9 <= sqrt(81) < 1'081 > -2 > -999
+```
+
+```
+1 &lt; 3 &lt; pi &lt; 9 &lt;= sqrt(81) &lt; 1&apos;081 &gt; -2 &gt; -999
+```
+
+to avoid this mess using CDATA  
+```
+<![CDATA[
+1 < 3 < pi < 9 <= sqrt(81) < 1'081 > -2 > -999
+]]>
+```
+
+All characters in the CDATA section are taken as is. The difference between comments and a CDATA section is that a comment is not part of the document.  
+
+### XMLsyntax summary  
+The XML syntax comprises the following set of rules  
+
+- An XML document must have a root element  
+- All elements must have a start tag and be closed, except for the declaration, which is not part of the actual XML document.  
+- XML element must be properly nested.  
+- XML attribute values must be quoted.  
+- Tags are named with characters and numbers, but may not start with a number or 'xml'  
+- Tag names may not contain spaces and are case sensitive.  
+- Space character are preserved.  
+- Some characters are illegal and have to be replaced by meta characters.  
+- Comments can be included as follows: <!-- comment -->.  
+- Content can be excluded from parsing using: <![CDATA[...]]>.  
+
+
+## XML extensions and technologies  
+We have seen that XML has advantages compared to HTML for exchanging data on the Web as it is extensible - and thus flexible. However, flexibility also carries the potential for uncertainty or inconsistency, for example, when the same element names are used for different content. Several extensions and technologies exist that improve the usability of XML by suggesting standards or providing techniques to set such standards. Some of the most important of these techniques are described in this section.  
+
+```
+<root xmlns:h='http://www.w3.org/1999/xhtml' xmlns:t='http://funnybooknames.com/crockford'>
+        
+        <h:head>
+                <h:title>Bacis HTML Sample Page</h:title>
+        </h:head>
+        
+        <t:book id='1'>
+                <t:author>Douglas Crockford</t:author>
+                <t:title>JavaScript: The Good Parts</t:title>
+        <t:/book>
+</root>
+```
+In this example, namespaces are declared in the root element using the xmlns attribute and two prefixes, h and t. The namespace name, that is, the namespace attribute value, usually carries a Uniform Resource Identifier (URI) that points to some Internet address.  
+
+**Namespace rules**  
+- Namespaces can be declared in the root element or in the start tag of any other element. In the latter case, all children of this element are considered part of this namespace.  
+
+- The namespace name does not necessarily have to be a working URL. Parsers will never try to follow the link, not even a URI. Any other string is fine. However, it is common practice to use URIs for two resons: first, as they are a long, unique string of characters, duplicates are unlikely, and second, actual URLs can point the human reader to pages where more information about the namespace is given.  
+
+- Prefixes do not have to be explicitly stated, so the declaration can either be `xmlns` or `xmlns:prefix` . If the `prefix` is dropped, the xmlns is assumed to be the default namespace and any element without a prefix is considered to be in that namespace. When prefixes are used, it is bound to a namespace in the declaration. Attributes, however, never belong to the default namespace.  
+
+
+### Extensions of XML  
+**XML markup languages**  
+```{r}
+knitr::include_graphics("figures/popular-XML-markup-languages.PNG")
+```
+
+
+**Common RSS 2.0 elements and their meaning**  
+```{r}
+knitr::include_graphics("figures/RSS2.0-elements-and-their-meaning.PNG")
+```
 
 
 
+## XML and R in practice  
+```{r}
+pasred_stocks <- xmlParse(file = "f:/git/Wiley-ADCR/ch-3-xml/stocks/technology.xml", 
+                          validate = TRUE)
+```
 
 
+### Bacis operations on XMLdocuments  
+```{r}
+bond <- xmlParse(file = "f:/git/Wiley-ADCR/ch-3-xml/bond.xml")
+bond %>% class()
+```
 
+```{r}
+bond %>% xmlRoot()
+```
 
+the root element name  
+```{r}
+bond %>% xmlRoot() %>% xmlName()
+```
 
+the root element's number of children  
+```{r}
+bond %>% xmlRoot() %>% xmlSize()
+```
 
+```{r}
+bond %>% xmlRoot() %>% class()
+```
 
+```{r}
+bond %>% xmlRoot() %>% .["movie"]
+```
 
 
 
