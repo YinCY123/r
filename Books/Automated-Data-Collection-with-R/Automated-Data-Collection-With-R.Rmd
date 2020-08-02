@@ -270,6 +270,90 @@ parsed_fortunes
 
 
 ### Extracting information in the building process  
+```{r}
+getItalics <- function(){
+        i_container = character()
+        list(i = function(node, ...){
+                i_container <<- c(i_container, xmlValue(node))
+        }, 
+        returnI = function(){
+                i_container
+        })
+}
+```
+
+
+```{r}
+h3 <- getItalics()
+```
+
+```{r}
+htmlTreeParse(file = "/home/yincy/git/Wiley-ADCR/ch-2-html/fortunes.html", 
+              handlers = h3) %>% 
+        invisible()
+
+h3$returnI()
+```
+
+
+# Chapter 3 XML and JSON  
+## XML syntax rules  
+### Elements and attributes  
+**XML declaration**  
+```
+<?xml version=1.0 encoding="ISO-8859-1"?>
+```
+
+**root element**
+An XML file must contain one and only one root element that embraces the whole document.  
+
+
+**element syntax**
+
+Information is usually stored in elements. An XML element is defined by its start tag and the content. An element frequently has an end tag, but can also be closed in the start tag with aslash /.  
+
+- *other elements*  
+- *attributes*, bits of information that describe the element in more detail. Attributes, like elements, are slots for information, but they cannot contain further elements or attributes.  
+- *data* of any form any length, for example, text, numbers or symbols.  
+- *a mixture of everything*, which sounds complicated but is a rather ordinary case when elements contain other elements that contain data.  
+- *nothing*, which means really nothing - no data, no other element, not even white spaces.  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
