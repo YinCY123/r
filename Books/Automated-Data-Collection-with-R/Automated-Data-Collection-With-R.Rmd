@@ -450,9 +450,38 @@ bond %>% xmlRoot() %>% .["movie"]
 ```
 
 
+## A short example JSON document  
+```{r}
+knitr::include_graphics("figures/data-type-in-JSON.PNG")
+```
 
 
+## JSON and R in practice  
+```{r, message=FALSE, warning=FALSE}
+library(RJSONIO)
+library(jsonlite) # build upon RJSONIO
+library(magrittr)
+library(stringr)
+```
 
+check the valid of the document  
+```{r}
+isValidJSON(content = "f:/git/Wiley-ADCR/ch-3-xml/indy.json")
+```
+
+```{r}
+indy <- RJSONIO::fromJSON(content = "f:/git/Wiley-ADCR/ch-3-xml/indy.json")
+indy %>% class()
+```
+
+```{r}
+indy_vec <- indy %>% unlist(recursive = T, use.names = T)
+indy_vec[str_detect(names(indy_vec), "name")]
+```
+
+```{r}
+indy_vec %>% unlist(recursive = T, use.names = T) %>% class()
+```
 
 
 
