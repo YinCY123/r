@@ -416,14 +416,14 @@ knitr::include_graphics("figures/RSS2.0-elements-and-their-meaning.PNG")
 
 ## XML and R in practice  
 ```{r}
-pasred_stocks <- xmlParse(file = "f:/git/Wiley-ADCR/ch-3-xml/stocks/technology.xml", 
+pasred_stocks <- xmlParse(file = "/home//git/Wiley-ADCR/ch-3-xml/stocks/technology.xml", 
                           validate = TRUE)
 ```
 
 
 ### Bacis operations on XMLdocuments  
 ```{r}
-bond <- xmlParse(file = "f:/git/Wiley-ADCR/ch-3-xml/bond.xml")
+bond <- xmlParse(file = "/home/yincy/git/Wiley-ADCR/ch-3-xml/bond.xml")
 bond %>% class()
 ```
 
@@ -449,26 +449,77 @@ bond %>% xmlRoot() %>% class()
 bond %>% xmlRoot() %>% .["movie"]
 ```
 
+```{r}
+xmlParse(file = "/home/yincy/git/Wiley-ADCR/ch-3-xml/rsscode.rss")
+```
 
 
+### From XML to data frames or list  
+Single vectors can be extracted with `xmlSApply()`, a wrapper function for `lapply()` and `sapply()` that is built to deal with children of a given XML node.  
+
+```{r}
+xmlSApply(bond %>% xmlRoot %>% .[[1]], xmlValue)
+```
+
+```{r}
+xmlSApply(bond %>% xmlRoot, xmlAttrs)
+```
 
 
+```{r}
+xmlSApply(bond %>% xmlRoot, xmlGetAttr, name = "id")
+```
+
+As long as XML documents are flat in the hierarchical sense, that is, the root node’s most distant relatives are grandchildren or children, they can usually be transformed easily into a data frame with `xmlToDataFrame()`.  
+
+```{r}
+bond %>% xmlRoot() %>% .[[1]]
+```
+
+```{r}
+xmlToDataFrame(bond %>% xmlRoot)
+```
+
+```{r}
+xmlToList(bond %>% xmlRoot())
+```
 
 
+### Event-driven parsing  
+Event-driven parsing differs from DOM- style parsing in that it skips the construction of the complete DOM at the C level. Instead, event-driven parsers sequentially traverse over an XML file, and once they find a specified element of interest they prompt an instant, user-defined reaction to this event. This procedure provides a huge advantage over DOM-style parsers because the machine’s memory never has to hold the complete document.  
 
+```{r}
+branchFun <- function(){
+        container_close <- numeric()
+        container_date <- numeric()
+        
+        "apple" = function(node, ...){
+                date = xmlValue(xmlChildren(node)[[c("date")]])
+                container_date <<- c(container_date, date)
+                close <- xmlValue(xmlChildren(node)[[c("close")]])
+                container_close <<- c(container_close, close)
+        }
+        getContainer <- function(){
+                data.frame(date = container_date, 
+                           close = container_close)
+        }
+        list(Apple = apple, getStore = getContainer)
+}
+```
 
+```{r}
+h5 <- branchFun()
+h5
+```
 
+```{r}
+xmlEventParse(file = "/home/yincy/git/Wiley-ADCR/ch-3-xml/stocks/technology.xml", 
+              branches = h5, 
+              handlers = list())
 
-
-
-
-
-
-
-
-
-
-
+apple.stock <- h5$getStore()
+apple.stock %>% head()
+```
 
 
 
