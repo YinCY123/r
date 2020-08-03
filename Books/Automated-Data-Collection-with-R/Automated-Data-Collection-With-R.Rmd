@@ -554,6 +554,107 @@ apple.stock %>% head()
 ```
 
 
+## JSON  
+check the valid of JSON file  
+```{r}
+isValidJSON(content = "f:/git/Wiley-ADCR/ch-3-xml/indy.json")
+```
+
+```{r}
+indy <- RJSONIO::fromJSON(content = "f:/git/Wiley-ADCR/ch-3-xml/indy.json")
+indy %>% class()
+```
+
+
+```{r}
+indy_vec <- unlist(indy, recursive = T, use.names = T)
+indy_vec %>% class()
+
+indy_vec[str_detect(string = names(indy_vec), "year")]
+```
+
+the data types are retained   
+```{r}
+sapply(indy[[1]], "[[", "year") 
+```
+
+```{r}
+library(plyr)
+indy.unlist <- sapply(indy[[1]], unlist)
+
+indy.df <- do.call("rbind.fill", lapply(lapply(indy.unlist, t), data.frame, stringAsFactors = F))
+```
+
+```{r}
+indy.df %>% names()
+```
+
+```{r}
+peanuts.json <- RJSONIO::fromJSON(content = "f:/git/Wiley-ADCR/ch-3-xml/peanuts.json", 
+                         nullValue = NA, 
+                         simplify = F)
+
+peanuts.df <- do.call("rbind", lapply(peanuts.json, data.frame, stringAsFactors = F))
+```
+
+
+```{r}
+peanuts.json <- toJSON(x = peanuts.df, pretty = T)
+file.output <- file(description = "peanuts_out.json")
+writeLines(text = peanuts.json, con = file.output)
+close(file.output)
+```
+
+
+```{r}
+library(jsonlite)
+```
+
+
+```{r}
+x <- '[1, 2, true, false]'
+fromJSON(x)
+
+x <- '["foo", true, false]'
+fromJSON(x)
+
+x <- '[1, "foo", null, false]'
+fromJSON(x)
+```
+
+jsonlite conveniently mapping into the desired R object  
+```{r}
+peanuts.json <- fromJSON(txt = "f:/git/Wiley-ADCR/ch-3-xml/peanuts.json")
+peanuts.json
+```
+
+```{r}
+(indy <- fromJSON(txt = "f:/git/Wiley-ADCR/ch-3-xml/indy.json"))
+```
+
+
+```{r}
+indy.json <- RJSONIO::fromJSON("f:/git/Wiley-ADCR/ch-3-xml/indy.json")
+indy.json[[1]] %>% sapply("[[", "budget")
+```
+
+
+```{r}
+potus <- xmlParse(file = "f:/git/Wiley-ADCR/materials/ch-3-xml/")
+```
+
+
+
+# XPath  
+
+
+
+
+
+
+
+
+
 
 
 
