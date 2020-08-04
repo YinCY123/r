@@ -648,7 +648,7 @@ potus <- xmlParse(file = "f:/git/Wiley-ADCR/materials/ch-3-xml/")
 # XPath  
 XPath only works on the DOM representation of a document and cannot be applied on the native code.  
 ```{r}
-parsed_doc <- htmlParse(file = "/home/yincy/git/Wiley-ADCR/ch-2-html/fortunes.html")
+parsed_doc <- htmlParse(file = "f:/git/Wiley-ADCR/ch-2-html/fortunes.html")
 parsed_doc %>% print()
 ```
 
@@ -795,20 +795,122 @@ xpathSApply(doc = parsed_doc,
             path = "//div[substring-after(./@date, '/')='2003']//i")
 ```
 
+
+## Extracting node elements  
+get value information  
 ```{r}
-parsed_doc
+xpathSApply(doc = parsed_doc, 
+            path = "//title")
+
+xpathSApply(doc = parsed_doc, 
+            path = "//title", 
+            fun = xmlValue)
+```
+
+get attributes information  
+```{r}
+xpathSApply(doc = parsed_doc, 
+            path = "//div", 
+            fun = xmlAttrs)
 ```
 
 
+```{r}
+xpathSApply(doc = parsed_doc, 
+            path = "//div", 
+            fun = xmlGetAttr, 
+            name = "id")
+
+xpathSApply(doc = parsed_doc, 
+            path = "//div", 
+            fun = xmlGetAttr, 
+            name = "lang")
+```
+
+**XML extractor functions**  
+```{r}
+knitr::include_graphics("figures/XML-extractor-functions.PNG")
+```
 
 
+### Extending the fun argument  
+```{r}
+lowerCaseFun <- function(x){
+        x <- tolower(xmlValue(x))
+        return(x)
+}
+
+xpathSApply(doc = parsed_doc, 
+            path = "//div//i", 
+            fun = lowerCaseFun)
+```
 
 
+```{r}
+dateFun <- function(x){
+        require(stringr)
+        date <- xmlGetAttr(node = x, name = "date")
+        year <- str_extract(date, "[0-9]{4}")
+        return(year)
+}
+
+xpathSApply(doc = parsed_doc, 
+            path = "//div", 
+            fun = dateFun)
+```
 
 
+```{r}
+idFun <- function(x){
+        id <- xmlGetAttr(node = x, name = "id")
+        id <- ifelse(is.null(id), "not specified", id)
+        return(id)
+}
+
+xpathSApply(doc = parsed_doc, 
+            path = "//div", 
+            fun = idFun)
+```
 
 
+#### Using variables in XPath expressions  
+```{r}
+parsed_doc <- xmlParse(file = "f:/git/Wiley-ADCR/ch-3-xml/stocks/technology.xml")
 
+companies <- c("Apple", "IBM", "Google")
+xpx <- sprintf(fmt = "//%s/close", companies)
+```
+
+```{r}
+getClose <- function(node){
+        value <- xmlValue(node)
+        company <- xmlName(node = xmlParent(x = node))
+        mat <- c(company = company, value = value)
+}
+
+xpathSApply(doc = parsed_doc, 
+            path = xpx, 
+            fun = getClose) %>% 
+        t() %>% 
+        as.data.frame() %>% 
+        head()
+```
+
+
+### XML namespaces  
+```{r}
+parsed_doc <- xmlParse(file = "../XML-and-Web-technology/Data/GovTrack/cosponsorGraph.xml")
+parsed_doc %>% xmlRoot()
+xmlNamespace(parsed_doc %>% xmlRoot)
+
+xpathSApply(doc = parsed_doc, 
+            path = "//x:code", 
+            namespaces = c(x = "http://www.r-project.org"), 
+            fun = xmlValue) %>% length()
+```
+
+
+### Little XPath helper tools  
 
 
 
