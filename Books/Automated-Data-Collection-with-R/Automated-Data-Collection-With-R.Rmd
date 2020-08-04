@@ -646,6 +646,165 @@ potus <- xmlParse(file = "f:/git/Wiley-ADCR/materials/ch-3-xml/")
 
 
 # XPath  
+XPath only works on the DOM representation of a document and cannot be applied on the native code.  
+```{r}
+parsed_doc <- htmlParse(file = "/home/yincy/git/Wiley-ADCR/ch-2-html/fortunes.html")
+parsed_doc %>% print()
+```
+
+## Identifying node sets with XPath  
+```{r}
+xpx <- "//i"
+xpathSApply(doc = parsed_doc, 
+            path = xpx, 
+            fun = xmlValue)
+```
+
+```{r}
+xpathSApply(doc = parsed_doc, 
+            path = "//p//i", 
+            fun = xmlValue)
+```
+
+```{r}
+xpathSApply(doc = parsed_doc, 
+            path = "/html/body/div/p/i", 
+            fun = xmlValue)
+```
+
+```{r}
+xpathSApply(doc = parsed_doc, 
+            path = "//body//i", 
+            fun = xmlValue)
+```
+
+```{r}
+xpathSApply(doc = parsed_doc, 
+            path = "/html/body/div/*/i", 
+            fun = xmlValue)
+```
+
+```{r}
+xpathSApply(doc = parsed_doc, 
+            path = "//title/..")
+```
+
+```{r}
+xpathApply(parsed_doc, 
+           "//address|//title")
+```
+
+```{r}
+twoQueries <- c(address = "//address", title = "//title")
+
+xpathSApply(parsed_doc, 
+            path = twoQueries)
+```
+
+### Node relations  
+```{r}
+parsed_doc
+```
+
+```{r}
+xpathSApply(doc = parsed_doc, 
+            path = "//a/ancestor::div//i")
+```
+
+```{r}
+xpathSApply(doc = parsed_doc, 
+            path = "//p/preceding-sibling::h1")
+```
+
+```{r}
+xpathSApply(doc = parsed_doc, 
+            path = "//title/parent::*")
+```
+
+```{r}
+knitr::include_graphics("figures/XPath-axes.png")
+```
+
+### XPath predicates  
+Predicates are nothing but simple functions that are applied to a node's name, value, or attribute, and which evaluate whether a condition (or set of condition) is true or false.  
+
+
+#### Numerical predicates  
+important XPath functions  
+```{r}
+knitr::include_graphics("figures/some-important-XPath-functions.png")
+```
+
+XPath operators  
+```{r}
+knitr::include_graphics("figures/XPath-operators.png")
+```
+
+
+```{r}
+xpathSApply(parsed_doc, 
+            "//div[position() = 1]/p/i")
+```
+
+
+```{r}
+xpathSApply(doc = parsed_doc, 
+            path = "//div/p[last()]")
+```
+
+```{r}
+xpathSApply(doc = parsed_doc, 
+            path = "//div/p[last() - 1]")
+```
+
+select node based on the number of children node  
+```{r}
+xpathSApply(doc = parsed_doc, 
+            path = "//div[count(.//a) > 0]")
+```
+
+```{r}
+xpathSApply(doc = parsed_doc, 
+            path = "//div[count(./@*) > 2]")
+```
+
+```{r}
+xpathSApply(doc = parsed_doc, 
+            path = "//*[string-length(text()) > 50]")
+```
+
+
+#### Textual predicates  
+```{r}
+xpathSApply(doc = parsed_doc, 
+            path = "//div[@date='October/2011']")
+```
+
+```{r}
+xpathSApply(doc = parsed_doc, 
+            path = "//*[contains(text(), 'magic')]")
+```
+
+```{r}
+xpathSApply(doc = parsed_doc, 
+            path = "//div[starts-with(./@id, 'R')]")
+```
+
+```{r}
+xpathSApply(doc = parsed_doc, 
+            path = "//div[substring-after(./@date, '/')='2003']//i")
+```
+
+```{r}
+parsed_doc
+```
+
+
+
+
+
+
+
 
 
 
