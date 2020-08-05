@@ -911,6 +911,69 @@ xpathSApply(doc = parsed_doc,
 
 
 ### Little XPath helper tools  
+**SelectGadget**: SelectorGadget (http://selectorgadget.com) is an open-source bookmarklet that simplifies the generation ofsuitable XPath statements through a point-and-click approach.  
+
+
+**Web Developer Tools**  
+
+
+# Chapter 5 HTTP  
+```{r}
+t <- "RCurl filetype:PDF"
+url <- URLencode(URL = t, reserved = T)
+url
+
+URLdecode(URL = url)
+```
+
+
+**Common HTTP request methods**  
+```{r}
+knitr::include_graphics("figures/Common-HTTP-request-methods.PNG")
+```
+
+### Status code  
+
+Status codes can range from 100 up to 599 and follow a specific scheme: the leading digit signifies the status category -- 1xx for informations, 2xx for success, 3xx for redirection, 4xx for client errors and 5xx for server errors.  
+
+```{r}
+knitr::include_graphics("figures/Commen-HTTP-status-code.PNG")
+```
+
+
+```{r}
+library(RCurl)
+getURL("http://httpbin.org/headers", 
+       useragent = paste(R.version$platform, R.version$version.string, sep = ", ")) %>% 
+        cat()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
