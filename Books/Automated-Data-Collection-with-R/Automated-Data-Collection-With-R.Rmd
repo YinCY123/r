@@ -949,14 +949,26 @@ getURL("http://httpbin.org/headers",
 ```
 
 
+```{r}
+getCurlOptionsConstants() %>% names()
+```
+
+```{r}
+getURL("http://www.r-datacollection.com/materials/http/helloworld.html") 
+```
+
+
+```{r}
+pngfile <- getBinaryURL("http://www.r-datacollection.com/materials/http/ sky.png")
+writeBin(object = pngfile, con = "sky.png")
+```
 
 
 
 
 
 
-
-
+# Chapter 7 SQL and relational databases  
 
 
 
