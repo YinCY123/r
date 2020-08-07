@@ -969,12 +969,81 @@ writeBin(object = pngfile, con = "sky.png")
 
 
 # Chapter 7 SQL and relational databases  
+```{r}
+library(DBI)
+library(RSQLite)
+```
+
+
+establish connection  
+```{r}
+sqlite <- dbDriver(drvName = "SQLite")
+con <- dbConnect(drv = sqlite, "birthdays.db")
+
+
+df <- data.frame(firstname = c("Peter", "Peter", "Mary","Paul", "Mary", "Mary"), 
+                 rank = c(1, 2, 3, 1 ,1, 2), 
+                 foodname = c("spaghetti", "hamburger", "hamburger", "fruit salad", "chocolate", "fish fingers"))
+
+dbWriteTable(conn = con, name = "birthdays", value = df)
+```
+
+'plain' SQL  
+```{r}
+sql <- "SELECT * FROM birthdays"
+res <- dbGetQuery(conn = con, statement = sql)
+```
+
+
+```{r}
+res <- dbSendQuery(conn = con, statement = sql)
+fetch(res = res)
+```
+
+```{r}
+dbGetInfo(dbObj = con)
+```
+
+```{r}
+dbListTables(conn = con)
+```
+
+```{r}
+dbDataType(dbObj = con, obj = "firstname")
+dbDataType(dbObj = con, obj = "rank")
+```
+
+```{r}
+dbDisconnect(conn = con)
+```
 
 
 
+# Chapter 8 Regular expressions and essential string functions  
+```{r}
+library(stringr)
 
+raw.data <- "555-1239Moe Szyslak(636) 555-0113Burns, C. Montgomery555 -6542Rev. Timothy Lovejoy555 8904Ned Flanders636-555-3226Simpson, Homer5553642Dr. Julius Hibbert"
 
+p <- "[[:alpha:]., ]{2,}"
+name <- str_extract_all(string = raw.data, pattern = p) %>% 
+        unlist()
+name
+```
 
+```{r}
+p <- "\\(?(\\d{3})?\\)?(-| )?(\\d{3})?(-| )?\\d{4}"
+phone <- str_extract_all(string = raw.data, pattern = p) %>% 
+        unlist()
+
+phone
+```
+
+```{r}
+data.frame(name = name, 
+           phone = phone, 
+           stringsAsFactors = F)
+```
 
 
 
