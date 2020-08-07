@@ -1255,17 +1255,86 @@ tmpcols <- names(tables[[3]])
 
 
 ```{r}
-for(i in 3:20){
-        tmpcols <- intersect(tmpcols, names(tables[[i]]))
-}
-
-tmpcols
-
-episodes <- NULL
-
-for(i in 3:20){
-        
-}
+small.frogs <- "Sm˚a grodorna, sm˚a grodorna ¨ar lustiga att se."
+small.frogs
 ```
+
+```{r}
+small.forgs.utf8 <- iconv(x = small.frogs, from = "windows-1252", to = "UTF-8")
+small.forgs.utf8
+```
+
+```{r}
+Encoding(small.forgs.utf8)
+```
+
+```{r}
+Encoding(small.forgs.utf8) <- "WINDOWS-1252"
+small.forgs.utf8
+```
+
+```{r}
+iconvlist() %>%  sample(size = 10)
+```
+
+
+```{r}
+iconvlist() %>% grep(pattern = "windows", x = ., ignore.case = T, value = T)
+```
+
+```{r}
+library(RCurl)
+
+enc.test <- getURL("https://cn.bing.com/")
+str_extract_all(string = enc.test, 
+                pattern = "<meta.+?>")
+```
+
+guess encoding package  
+```{r}
+library(tau)
+
+is.locale(small.frogs)
+is.ascii(small.frogs)
+```
+
+```{r}
+x <- c("chunkylover53@126.com", "yinchunyou2012@163.com")
+str_extract_all(x, "[a-zA-Z]+[0-9]*\\@[0-9]{3}\\.[a-z]{3}")
+```
+
+```{r}
+str_extract_all(x, "\\d+")
+str_extract_all(x, "[:digit:]+")
+str_extract_all(x, "[0-9]+")
+```
+
+```{r}
+x <- "<title>+++BREAKING NEWS+++</title>"
+
+str_extract_all(x, "\\<.+?\\>")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
