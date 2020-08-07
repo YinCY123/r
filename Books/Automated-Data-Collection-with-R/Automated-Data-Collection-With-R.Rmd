@@ -1046,26 +1046,226 @@ data.frame(name = name,
 ```
 
 
+```{r}
+example.obj <- "1. A small sentence. - 2. Another tiny sentence."
+str_extract(example.obj, "sm.ll")
+```
 
 
+```{r}
+str_extract(example.obj, "sm[abc]ll")
+```
+
+```{r}
+str_extract(example.obj, "sm[a-p]ll")
+```
 
 
+```{r}
+str_extract_all(example.obj, "[uvw. ]")
+```
+
+```{r}
+str_extract_all(example.obj, "[[:punct:]]")
+```
+
+```{r}
+str_extract_all(example.obj, "[:punct:]")
+```
+
+```{r}
+str_extract_all(example.obj, "[AAAA]")
+```
+
+```{r}
+str_extract("Franc¸ois Hollande", pattern = "Fran[a-z]ois")
+```
+
+```{r}
+str_extract("Franc¸ois Hollande", "Fran[[:alpha:]]ois")
+```
+
+```{r}
+str_extract_all(example.obj, "[[:punct:]ABC]")
+```
+
+```{r}
+str_extract_all(example.obj, "[^[:alnum:]]")
+```
+
+```{r}
+p <- "s[[:alpha:]][[:alpha:]][[:alpha:]]l"
+str_extract_all(example.obj, p)
+```
+
+```{r}
+p <- "s[[:alpha:]]{3}l"
+str_extract_all(example.obj, p)
+```
+
+```{r}
+str_extract_all(example.obj, "A.+sentence") %>% 
+        .[[1]]
+```
+
+```{r}
+str_extract_all(example.obj, "A.+?sentence") %>% 
+        .[[1]]
+```
+
+```{r}
+str_extract_all(example.obj, "(.en){1,5}")
+```
+
+```{r}
+str_extract_all(example.obj, "\\.")
+```
+
+```{r}
+str_extract_all(example.obj, fixed(pattern = "."))
+```
+
+```{r}
+str_extract_all(example.obj, "[.]")
+```
+
+```{r}
+str_extract_all(example.obj, "\\w+")
+```
+
+```{r}
+str_extract_all(example.obj, "e\\b")
+```
+
+```{r}
+str_extract_all(example.obj, "e\\>")
+```
+
+```{r}
+str_extract_all(example.obj, "([[:alpha:]]).+?\\1") %>% unlist
+```
+
+```{r}
+raw.data <- "555-1239Moe Szyslak(636) 555-0113Burns, C. Montgomery555-6542Rev. Timothy Lovejoy555 8904Ned Flanders636-555-3226Simpson, Homer5553642Dr. Julius Hibbert"
+
+str_extract_all(raw.data, "[[:alpha:]., ]{2,}")
+```
 
 
+```{r}
+str_extract(example.obj, "tiny")
+```
+
+```{r}
+str_extract_all(example.obj, "[[:digit:]]")
+```
+
+```{r}
+str_locate_all(example.obj, "[[:digit:]]")
+```
+
+```{r}
+str_replace_all(example.obj, "([:digit:]. )?", "")
+```
+
+```{r}
+pos <- str_locate(example.obj, "tiny")
+
+str_sub(example.obj, start = pos[, 1], end = pos[, 2])
+```
+
+```{r}
+str_split(example.obj, "-")
+```
+
+```{r}
+str_split_fixed(example.obj, "[:blank:]", 5)
+```
+
+```{r}
+char.vec <- c("this", "and this", "and that")
+str_detect(char.vec, "this")
+```
+
+```{r}
+str_count(char.vec, "this")
+```
 
 
+```{r}
+str_dup(char.vec, 3)
+```
 
 
+```{r}
+str_length(char.vec)
+```
 
 
+```{r}
+str_pad(string = char.vec, 
+        width = max(str_length(char.vec)), 
+        side = "both", 
+        pad = " ")
+```
 
 
+```{r}
+str_pad(string = char.vec, 
+        width = max(str_length(char.vec)), 
+        side = "both", 
+        pad = " ") %>% 
+        str_trim(side = "both")
+```
+
+```{r}
+str_c(char.vec, collapse = "\n") %>% 
+        cat()
+```
+
+```{r}
+agrep(pattern = "Barack Obama", 
+      x = "Barack H. Obama", 
+      max.distance = list(all = 3))
+```
+
+```{r}
+agrep(pattern = "Barack Obama", 
+      x = "Michelle Obama", 
+      max.distance = list(all = 3))
+```
+
+```{r}
+pmatch(x = c("and this", "and that", "and these", "and those"), 
+       table = char.vec,
+       nomatch = 0, 
+       duplicates.ok = T)
+```
+
+```{r}
+library(XML)
+
+tables <- readHTMLTable(doc = "files/List of The Simpsons episodes - Wikipedia.html", 
+                        header = T, 
+                        stringsAsFactors = F)
+
+tables[[3]]
+tmpcols <- names(tables[[3]])
+```
 
 
+```{r}
+for(i in 3:20){
+        tmpcols <- intersect(tmpcols, names(tables[[i]]))
+}
 
+tmpcols
 
+episodes <- NULL
 
-
-
+for(i in 3:20){
+        
+}
+```
 
 
