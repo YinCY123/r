@@ -1316,10 +1316,39 @@ str_extract_all(x, "\\<.+?\\>")
 ```
 
 
+# Chapter 9 Scraping the Web  
+```{r, message=FALSE, warning=FALSE}
+library(RCurl)
+library(XML)
+library(stringr)
+```
 
 
+### CSV election results data  
+```{r}
+doc <- htmlParse(file = "files/Data Files for the 2012 Presidential Election Results.html")
+links <- getHTMLLinks(doc)
+filenames <- links[str_detect(links, "_General.csv")]
+```
 
 
+```{r}
+for(i in filenames){
+        if(file.exists(paste("election12_maryland/", basename(i), sep = ""))){
+                next
+        }else{
+                do.call(what = "download.file", 
+                        args = list(
+                                url = i, 
+                                destfile = paste("election12_maryland/", basename(i), sep = "")
+                        ))
+        }
+        Sys.sleep(time = 2)
+}
+```
+
+
+### PDF legislative district maps  
 
 
 
