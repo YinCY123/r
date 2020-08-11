@@ -1,0 +1,1772 @@
+body {
+    background-color: #eff3fa;
+    min-width: 320px;
+}
+h1, h2
+{
+    margin: 0 0 20px 0;
+    line-height: 100%;
+}
+ul 
+{
+    margin-bottom: 0;
+}
+.skipNav {
+    position: absolute;
+    left: 0;
+    top: -500px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+a:hover, a:focus {
+    text-decoration: underline;
+	font-weight: bold;
+    outline: 0;
+}
+.hidden {
+    display: none;
+}
+.row-fluid {
+    clear: both;
+}
+.mdgov_imgLeft {
+	float: left;
+	margin-right: 20px;
+	margin-bottom: 20px;
+}
+.mdgov_imgRight {
+	float: right;
+	margin-left: 20px;
+	margin-bottom: 20px;
+}
+/* [ ENTERPRISE TOP BAR ] */
+
+#mdgov_TopSliverBar {
+	color: #fff;
+}
+
+#mdgov_TopSliverBar {
+	width: 100%;
+	z-index: 1000;
+	min-height: 33px;
+	background-color: #000;
+	border-bottom-width: 4px;
+	border-bottom-style: solid;
+	border-bottom-color: #2b639e;
+	font-size: 80%;
+}
+
+#mdgov_settingsNav 
+{
+    margin: 0;
+}
+
+#mdgov_settingsNav li {
+    margin-right: 10px;
+}
+		
+#mdgov_settingsNav a,
+#mdgov_settingsNav a:link {
+	color: #fff;
+}
+
+#mdgov_TopSliverBarContent {
+	position: relative;
+	width: 100%;
+	margin: 0 auto;
+}
+		
+#mdgov_sliverRight a,
+#mdgov_sliverRight a:link {
+	color: #fff;
+	padding-right: 10px;
+}
+
+#mdgov_sliverLeft {
+	float: left;	
+	white-space: nowrap;
+}
+
+#mdgov_sliverRight {
+	white-space: nowrap;
+	position: absolute;
+	right: 2.5%;
+	padding: 6px 0;
+}
+			
+#mdgov_sliverRight a,
+#mdgov_sliverRight a:link {
+	border: none;
+	margin: 0;
+	position: relative;
+	top: 0;
+}
+
+#headerBackground {
+    width: 100%;
+    z-index: -1;
+}
+#headerBgSubpage {
+    height: 100%;
+    width: 100%;
+    min-height: 110px;
+    z-index: -1;
+}
+.headerBgImg {
+    background-image: url(../img/agencyHeaderBg-generic.jpg);
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-size: 100%;
+}
+#mdgov_homeLink a {
+    display: block;
+    text-align: center;
+    width: 145px;
+    height: 100px;
+    background-image: url("../img/MDgov_Crown_Logo_2.png");
+    background-repeat: no-repeat;
+}
+#mdgov_homeLink a:hover {
+    background-image: url("../img/MDgov_Crown_Logo_Hover_2.png");
+}
+#mdgov_homeLink a:focus {
+    background-image: url("../img/MDgov_Crown_Logo_Hover_2.png");
+}
+#mdgov_agencyHeader {
+    float: right;
+}
+#mdgov_agencyLogo {
+    width: 60%;
+    float: right;
+}
+#mdgov_agencyLogo img {
+    max-height: 75px;
+}
+#mdgov_agencyTitle {
+    margin-top: 20px;
+	margin-left: 15px;
+}
+.headerBgImgSubpage {
+    background-image: url(../img/agencyHeaderBg-generic.jpg);
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+#header.subpage {
+    min-height: 110px;
+}
+#header_left {
+    float: left;
+    width: 160px;
+    height: 117px;
+}
+#header_mid {
+    float: left;
+    width: 530px;
+    height: 117px;
+}
+#header_right {
+    float: right;
+    width: 270px;
+    height: 117px;
+}
+#agency_branding, #agency_branding_subpage {
+    padding: 20px;
+    background-image: url(../img/bgBlack65.png);
+}
+#mdGov_crownlogo {
+    float: left;
+    width: 145px;
+    padding: 6px 0 0 10px;
+    margin-top: -22px;
+}
+#agencyTitle {
+    float: left;
+    width: 540px;
+    padding: 20px 0 0 60px;
+}
+#agencyLogo {
+    float: right;
+    width: 132px;
+    padding: 15px 20px 0 0;
+}
+#agencyLogo_subpage {
+    float: right;
+    width: 150px;
+    padding: 15px 20px 0 0;
+}
+.mdgov_socialNav {
+    float: right;
+    min-width: 200px;
+    margin-top: 15px;
+}
+#footer_right .mdgov_socialNav {
+    margin-top: 0;
+}
+.footerLinks ul {
+    float: left;
+    margin: 0 0 20px 0;
+    padding: 0;
+}
+.footerLinks li {
+    margin-left: 10px;
+    padding-left: 10px;
+    border-left: 1px solid #fff;
+}
+.footerLinks li:first-child {
+    margin-left: 0;
+    padding-left: 0;
+    border-left: none;
+}
+/* [ SEARCH ] */
+
+#mdgov_enterpriseSearch {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    margin: 40px auto;
+}
+#mdgov_enterpriseSearch section header 
+{
+    position: relative;
+}
+
+#mdgov_enterpriseSearch section header .mdgov_moreLink 
+{
+    font-size: 55%;
+    position: relative;
+    top: -4px;
+    left: 20px;
+    color: #999;
+}
+
+.mdgov_inner #mdgov_enterpriseSearch {
+    float: left;
+}
+
+.modal-backdrop {
+	display: none;
+	z-index: 1000;
+}
+	
+#mdgov_enterpriseSearchContainer {
+	margin: 0 auto;
+	z-index: 1051;
+	width: 95%;
+	max-width: 960px;
+}
+
+#mdgov_searchContent 
+{
+    padding: 20px;
+}
+
+#mdgov_searchContent .cl_contentBlock:last-child {
+    margin-bottom: 20px;
+}
+	
+#mdgov_searchContent h2
+{
+    font-size: 150%;
+    color: #900;
+}
+	
+#mdgov_searchContent a i
+{
+    color: #ccc;
+}
+	
+#mdgov_searchInput {
+	z-index: 1001;
+	position: relative;
+	float: left;
+	width: 60%;
+	margin-right: 30px;
+	font-size: 150%;
+}
+
+.mdgov_inner #mdgov_searchInput {
+	margin-right: 0;
+	font-size: 150%;
+	z-index: 1060;
+}
+
+#mdgov_searchInput .mdgov_searchInputBox 
+{
+    color: #999;
+	width: 100%;
+	height: 47px;
+	padding: 0px;
+	box-sizing: border-box;
+	text-indent: 10px;
+	overflow: hidden;
+	line-height: 45px;
+	margin-bottom: 0;
+	outline: none;
+	font-size: 90%;
+	border-radius: 5px;
+	border: none !important;
+	-moz-box-shadow: 0px 0px 5px 0px #000;
+	-webkit-box-shadow: 0px 0px 5px 0px #000;
+	box-shadow: 0px 0px 5px 0px #000;
+	-webkit-appearance: none;	
+}
+
+.mdgov_inner #mdgov_searchInput .mdgov_searchInputBox {
+	margin: 0;
+}
+
+#mdgov_searchInput .mdgov_searchButton {
+    z-index: 1002;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 48px;
+    padding: 4px 5px;
+    font-size: 20px;
+    border-radius: 0px 5px 5px 0px;
+    border: none;
+}
+
+.mdgov_searchIcon {
+    background-image: url(../img/icons/search.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    display: block;
+    height: 40px;
+}
+
+.btn-primary {
+	background-color: #000;
+	background-image: -moz-linear-gradient(top, #333, #000);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#333), to(#000));
+	background-image: -webkit-linear-gradient(top, #333, #000);
+	background-image: -o-linear-gradient(top, #333, #000);
+	background-image: linear-gradient(to bottom, #333, #000);
+	background-repeat: repeat-x;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#333', endColorstr='#000', GradientType=0);
+	border-color: #000 #000 #000;
+	border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
+	filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+	color: #fff !important;
+}
+
+.btn-primary:hover, 
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.btn-primary.disabled,
+.btn-primary[disabled] {
+  background-color: #000;
+  *background-color: #333;
+}
+
+.btn-primary:active,
+.btn-primary.active {
+  background-color: #333 \3;
+}
+
+/* [ / SEARCH ] */
+
+/* [ STATEWIDE ALERTS ] */
+
+#mdgov_trendsAndAlerts p 
+{
+    margin: 0;
+}
+
+#mdgov_trendsAndAlerts a 
+{
+	color: #fff;
+	font-size: 90%;
+}
+
+#mdgov_trendsAndAlerts 
+{
+	height: 46px;
+	color: #fff;
+	box-sizing: border-box;
+	z-index: 1001;
+	border-radius: 5px;
+	overflow: hidden;
+	font-size: 90%;
+	box-shadow: 0px 0px 5px 0px #000;
+	zoom: 1;
+}
+
+
+#mdgov_trendsAndAlerts.hasAlert {
+	display: block !important;
+	color: #000;
+	background-color: #FC0;
+}
+
+#mdgov_trendsAndAlerts.hasAlert #mdgov_alerts a p {
+    padding: 0px 40px 0px 0px;
+}
+
+#mdgov_trendsAndAlerts #mdgov_alerts,
+#mdgov_trendsAndAlerts #mdgov_trending {
+	margin: 6px 10px;
+}
+
+#mdgov_alerts p{
+	clear: none;
+}
+
+#mdgov_trendsAndAlerts.hasAlert #mdgov_alerts {
+	display: block;	
+}
+				
+#mdgov_trendsAndAlerts.hasAlert #mdgov_trending {
+	display: none;	
+}
+				
+#mdgov_trendsAndAlerts.hasAlert #mdgov_alerts a {
+	display: block;
+    color: #000;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px dotted #000;
+}
+
+#mdgov_trendsAndAlerts.hasAlert #mdgov_alerts a:last-child {
+	display: block;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+    border-bottom: none;
+}
+				
+#mdgov_trendsAndAlerts.hasAlert #mdgov_alerts a:hover,
+#mdgov_trendsAndAlerts.hasAlert #mdgov_alerts a:active {
+	text-decoration: none;
+}
+
+.mdgov_alertIcon {
+	background-image: url(../img/icons/warning-sign.png);
+    background-repeat: no-repeat;
+    background-position: left;
+    width: 35px;
+    height: 35px;
+	float: left;
+	margin-right: 10px;	
+    display: inline-block;
+}
+				
+#mdgov_trendsAndAlerts h2 {
+	clear: none;
+	text-transform: uppercase;
+	font-size: 100%;
+	margin-bottom: 2px;	
+	padding-bottom: 0;
+	border-bottom: none;
+}
+
+#mdgov_trendsAndAlerts ul {
+	width: 500px;
+}
+
+#mdgov_trendsAndAlerts li a {
+	margin-right: 5px;	
+}
+
+#mdgov_trendsAndAlerts li:after {
+	content: "\2022";
+	margin-right: 5px;
+}
+
+#mdgov_trendsAndAlerts li:last-child:after {
+	content: "" !important;
+	margin-right: 0 !important;
+}
+
+#mdgov_alertCount p 
+{
+    font-size: 100%;
+    border-radius: 5px;
+    background-color: #900;
+    border: 2px solid #FFF;
+    position: absolute;
+    top: 10px;
+    color: #FFF;
+    padding: 1px 9px;
+    text-align: center;
+    font-weight: bold;
+    right: 10px;
+}
+
+/* [ STATEWIDE ALERTS ] */
+
+
+
+
+#primary_content_Block {
+    background-color: #fff;
+    padding: 20px 0;
+    float: left;
+    width: 100%;
+}
+.primary_left_col_list 
+{
+    margin-bottom: 20px;
+}
+#primary_left_col .mdgov_contentWrapper
+{
+    padding: 0 0 0 20px;
+}
+#primary_middle_col  .mdgov_contentWrapper
+{
+    padding: 0 0 0 20px;
+    border-left: 1px solid #ccc;
+}
+#primary_right_col  .mdgov_contentWrapper
+{
+    padding: 0 20px;
+    border-left: 1px solid #ccc;
+}
+#primary_one_col  .mdgov_contentWrapper
+{
+    padding: 0 20px;
+}
+#sub_primary_right_col {
+    float: left;
+    border-left: 1px solid #ccc;
+    padding: 0 20px 20px 20px;
+    margin-top: 20px;
+}
+#primary_content_Block h2 {
+    font-size: 20px;
+    line-height: 24px;
+}
+.cl_base_hNav {
+	list-style: none;
+	clear: both;
+	margin: 0;
+	padding: 0;
+}
+
+.cl_base_hNav li {
+    float: left;
+    list-style: none;
+    break-inside: avoid-column;
+    -webkit-column-break-inside: avoid;
+}
+
+.cl_base_hNav li a {
+	/* LAYOUT */
+	display: block;
+	float: left;
+}
+
+.cl_iconNav {
+    padding-left: 10px;
+    margin: 0;
+}
+.cl_iconNav li {
+    list-style: none;
+    background-image: url("../img/sprites/nav_sprite.png");
+    background-position: left -599px;
+    background-repeat: no-repeat;
+    color: #1c468e;
+    padding-left: 15px;
+}
+.rslides {
+    position: relative;
+    margin: 0 auto 40px;
+}
+.rslides li {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    left: 0;
+    top: 0;
+    margin-bottom: 5px !important;
+    list-style: none;
+    z-index: 0;
+}
+.rslides li:first-child {
+    position: relative;
+    display: block;
+    float: left;
+}
+.rslides img {
+    display: block !important;
+    height: auto;
+    float: left;
+    width: 100%;
+    border: 0;
+}
+#mdgov_featuredMontage {
+    margin: 0;
+    padding: 0;
+}
+hgroup h2, hgroup h3 {
+    font-size:16px !important;
+    color:#000;
+    font-weight: bold;
+    margin:-10px 0 7px 0 !important;
+    padding:0 !important
+}
+
+.rslideshow h3 {
+    font-size:15px !important;
+    color:#1c468e
+}
+.rslides_tabs {
+    padding: 5px;
+    text-align: center;
+    width: 100%}
+.rslides_tabs li {
+    display: inline;
+    float: none;
+    margin-right: 1px;
+}
+.rslides_tabs a {
+    width: auto;
+    padding: 5px 10px;
+    height: auto;
+    background: transparent;
+    display: inline;
+}
+.rslides_tabs li:first-child {
+    margin-left: 0;
+}
+.rslides_tabs li a {
+    background: #999;
+    border-radius: 10px;
+    color: transparent;
+    padding: 7px;
+    font-size: 0;
+    margin-right: 5px;
+}
+.rslides_tabs .rslides_here a {
+    background: #7c7c7c;
+}
+.zipInput {
+    width: 140px;
+    margin-right: 5px;
+}
+#secondary_content_Block {
+    background-color: #F7F7F7;
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+}
+#secondary_left_col {
+    background-color: #F7F7F7;
+    float: left;
+    padding: 0 0 20px 20px;
+    margin-top: 20px;
+}
+.leftMargin0 {
+    margin-left:0 !important
+}
+#secondary_middle_col_lt,
+#secondary_middle_col_rt {
+    background-color: #F7F7F7;
+    float: left;
+    border-left: 1px solid #ccc;
+    padding: 0 0 20px 10px;
+	display: grid;
+    margin-top: 20px;
+}
+#secondary_right_col {
+    background-color: #F7F7F7;
+    float: left;
+    border-left: 1px solid #ccc;
+    padding: 0 20px 20px 20px;
+    margin-top: 20px;
+}
+#secondary_content_Block h3 {
+    font-size: 16px;
+    line-height: 19px;
+    margin: 10px 0 3px 0;
+}
+.secondary_image_block {
+    height: 90px;
+}
+#footer_block {
+    background-color: #000;
+    border-top: 4px #2b639e solid;
+    width: 100%;
+    color: #fff;
+}
+#footer_block a {
+    color: #fff;
+}
+#footer_left {
+    padding: 20px 0 0 20px;
+}
+#footer_block p {
+	clear: both;
+}
+#footer_right {
+    padding: 20px 20px 20px 0;
+}
+.cl_socialNav {
+    float: right;
+}
+.cl_socialNav li {
+    margin-left: 5px;
+    list-style: none;
+    display: inline-block;
+    margin-bottom: 0;
+}
+.cl_socialNav li:first-child {
+    margin-left: 0;
+}
+.cl_socialNav li a {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-image: url(../img/sprites/social-icons.png);
+    background-repeat: no-repeat;
+    background-position: left 0;
+    text-indent: -99999px;
+}
+.cl_socialNav li a.sm-facebook, .cl_socialNav_Small li a.sm-facebook {
+    background-position: left 0;
+}
+.cl_socialNav li a.sm-facebook:hover, .cl_socialNav li a.sm-facebook:focus, .cl_socialNav li a.sm-facebook:active {
+    background-position: right 0;
+}
+.cl_socialNav li a.sm-twitter {
+    background-position: left -41px;
+}
+.cl_socialNav li a.sm-twitter:hover, .cl_socialNav li a.sm-twitter:focus, .cl_socialNav li a.sm-twitter:active {
+    background-position: right -41px;
+}
+.cl_socialNav li a.sm-googleplus {
+    background-position: left -82px;
+}
+.cl_socialNav li a.sm-googleplus:hover, .cl_socialNav li a.sm-googleplus:focus, .cl_socialNav li a.sm-googleplus:active {
+    background-position: right -82px;
+}
+.cl_socialNav li a.sm-tumblr {
+    background-position: left -121px;
+}
+.cl_socialNav li a.sm-tumblr:hover, .cl_socialNav li a.sm-tumblr:focus, .cl_socialNav li a.sm-tumblr:active {
+    background-position: right -121px;
+}
+.cl_socialNav li a.sm-foursquare {
+    background-position: left -161px;
+}
+.cl_socialNav li a.sm-foursquare:hover, .cl_socialNav li a.sm-foursquare:focus, .cl_socialNav li a.sm-foursquare:active {
+    background-position: right -161px;
+}
+.cl_socialNav li a.sm-instagram {
+    background-position: left -201px;
+}
+.cl_socialNav li a.sm-instagram:hover, .cl_socialNav li a.sm-instagram:focus, .cl_socialNav li a.sm-instagram:active {
+    background-position: right -201px;
+}
+.cl_socialNav li a.sm-flickr {
+    background-position: left -241px;
+}
+.cl_socialNav li a.sm-flickr:hover, .cl_socialNav li a.sm-flickr:focus, .cl_socialNav li a.sm-flickr:active {
+    background-position: right -241px;
+}
+.cl_socialNav li a.sm-youtube {
+    background-position: left -281px;
+}
+.cl_socialNav li a.sm-youtube:hover, .cl_socialNav li a.sm-youtube:focus, .cl_socialNav li a.sm-youtube:active {
+    background-position: right -281px;
+}
+.cl_socialNav li a.sm-vimeo {
+    background-position: left -321px;
+}
+.cl_socialNav li a.sm-vimeo:hover, .cl_socialNav li a.sm-vimeo:focus, .cl_socialNav li a.sm-vimeo:active {
+    background-position: right -321px;
+}
+.cl_socialNav li a.sm-all {
+    background-position: left -361px;
+}
+.cl_socialNav li a.sm-all:hover, .cl_socialNav li a.sm-all:focus, .cl_socialNav li a.sm-all:active {
+    background-position: right -361px;
+}
+.cl_socialNav li a.sm-rss {
+    background-position: left -481px;
+}
+.cl_socialNav li a.sm-rss:hover, .cl_socialNav li a.sm-rss:focus, .cl_socialNav li a.sm-rss:active {
+    background-position: right -481px;
+}
+.cl_socialNav li a.sm-pinterest {
+    background-position: left -521px;
+}
+.cl_socialNav li a.sm-pinterest:hover, .cl_socialNav li a.sm-pinterest:focus, .cl_socialNav li a.sm-pinterest:active {
+    background-position: right -521px;
+}
+.cl_socialNav li a.sm-blogger {
+    background-position: left -561px;
+}
+.cl_socialNav li a.sm-blogger:hover, .cl_socialNav li a.sm-blogger:focus, .cl_socialNav li a.sm-blogger:active {
+    background-position: right -561px;
+}
+.cl_socialNav li a.sm-settings {
+    background-position: left -601px;
+}
+.cl_socialNav li a.sm-settings:hover, .cl_socialNav li a.sm-settings:focus, .cl_socialNav li a.sm-settings:active {
+    background-position: right -601px;
+}
+.cl_socialNav li a.sm-enewsletter {
+    background-position: left -641px;
+}
+.cl_socialNav li a.sm-enewsletter:hover, .cl_socialNav li a.sm-enewsletter:focus, .cl_socialNav li a.sm-enewsletter:active {
+    background-position: right -641px;
+}
+.cl_socialNav li a.sm-video {
+    background-position: left -681px;
+}
+.cl_socialNav li a.sm-video:hover, .cl_socialNav li a.sm-video:focus, .cl_socialNav li a.sm-video:active {
+    background-position: right -681px;
+}
+.cl_socialNav li a.sm-podcast {
+    background-position: left -721px;
+}
+.cl_socialNav li a.sm-podcast:hover, .cl_socialNav li a.sm-podcast:focus, .cl_socialNav li a.sm-podcast:active {
+    background-position: right -721px;
+}
+.cl_socialNavDirectory {
+    float: right;
+}
+.cl_socialNavDirectory li {
+    margin-left: 0;
+    list-style: none;
+    display: inline-block;
+    margin-bottom: 0;
+}
+.cl_socialNavDirectory li a {
+    display: inline-block;
+    width: 128px;
+    height: 32px;
+    background-image: url(../img/sprites/social_media_buttons.png);
+    background-repeat: no-repeat;
+    background-position: left 0;
+    text-indent: -99999px;
+}
+.cl_socialNavDirectory li a.sm-directory, .cl_socialNavDirectory_Small li a.sm-directory {
+    background-position: left -10px;
+}
+.cl_socialNavDirectory li a.sm-directory:hover, .cl_socialNavDirectory li a.sm-directory:focus, .cl_socialNavDirectory li a.sm-directory:active {
+    background-position: right -10px;
+}
+
+#mdgov_iaNav {
+    min-height: 1px;
+}
+.subnav_col {
+    float: left;
+    margin-top: 20px;
+}
+.cl_subNav {
+    margin: 0;
+    list-style: none;
+    padding: 0;
+}
+.cl_subNav li a {
+    background-color: #2b639e;
+    border-bottom: 1px solid #fff;
+    color: #fff;
+    display: block;
+    padding: 10px;
+}
+.cl_subNav li a:hover {
+    background-color: #000;
+}
+.cl_subNav li a.navTitle {
+    background-color: #777;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.cl_subNav li a.active {
+    background-color: #000;
+}
+.cl_subNav li a.active:after {
+    background-image: url("../img/sprites/nav_sprite.png");
+    background-position: left -474px;
+    background-repeat: no-repeat;
+    content: "";
+    position: absolute;
+    right: -10px;
+    top: 0;
+    width: 10px;
+}
+#mdgov_iaNavTrigger a {
+    position: absolute;
+    top: 170px;
+    text-decoration: none;
+    padding: 10px 0 10px 0;
+    background-color: #777;
+    color: white;
+    width: 100%;
+    height: 22px;
+    margin-right: auto;
+}
+#sub_primary_middle_col {
+    float: left;
+    padding: 0 0 20px 0;
+    margin-top: 20px;
+}
+#two_col-left {
+    float: left;
+    padding: 20px 0 20px 20px;
+    margin: 0;
+}
+#two_col-right {
+    float: right;
+    padding: 0 20px 20px 20px;
+    margin: 0;
+    border-left: 1px solid #ccc;
+}
+.left_col_list {
+    float: left;
+    margin-right: 24px;
+}
+.sec_item_img {
+    float: left;
+    margin: 0 20px 10px 0;
+    max-width: 100%}
+.centerContent {
+    margin: 20px;
+    text-align: center;
+}
+#mdgov_enterpriseNavigation {
+	z-index: 10;
+	width: 100%;
+	clear: both;
+	background-color: #2b639e;
+}
+
+#mdgov_enterpriseNavigation ul 
+{
+    margin: 0;
+    padding: 0;
+	text-align:center;
+	list-style:none;
+	position: relative;
+	display: block;
+}
+
+#mdgov_enterpriseNavigation ul ul
+{
+    margin-left: 20px;
+}
+
+#mdgov_enterpriseNavigation ul li {
+	display: inline-block;
+	*display: inline;
+}
+
+#mdgov_enterpriseNavigation ul li a.level0 {
+	display: block;
+	clear: both;
+	padding: 12px 20px;
+	color: #fff;
+	text-transform: uppercase;
+	background-color: transparent;
+	z-index: 1020;
+    -webkit-transition: background-color .1s ease, color .1s ease;
+    -moz-transition: background-color .1s ease, color .1s ease;
+    -o-transition: background-color .1s ease, color .1s ease;
+    transition: background-color .1s ease, color .1s ease;
+    transition-delay: .2s;
+}
+
+#mdgov_enterpriseNavigation li:hover a.level0,
+#mdgov_enterpriseNavigation li a.level0:focus,
+#mdgov_enterpriseNavigation li a.level0:active,
+#mdgov_enterpriseNavigation li a.level0.active 
+{
+    background-color: #fff;
+	color: #000;
+	position: relative;
+	text-decoration: none;
+}
+
+.mdgov_navSub 
+{
+	width: 0%;
+	opacity: 0;
+	max-height: 0px;
+	overflow: hidden;
+	position: absolute;
+	left: -9999px;
+	top: 39px;
+	background-color: #fff;
+	z-index: 1001;
+	border-bottom: 4px solid #2b639e;
+    -webkit-transition: max-height 0s ease, opacity .1s ease;
+    -moz-transition: max-height 0s ease, opacity .1s ease;
+    -o-transition: max-height 0s ease, opacity .1s ease;
+    transition: max-height 0s ease, opacity .1s ease;
+    transition-delay: .2s;
+}
+
+.mdgov_inner .mdgov_navSub 
+{
+    top: 39px;
+    bottom: auto;
+    border-top: none;
+    border-bottom: 4px solid #08c;
+}
+
+#mdgov_enterpriseNavigation li a.level0 + .mdgov_navSub:hover,
+#mdgov_enterpriseNavigation li a.level0:hover + .mdgov_navSub,
+#mdgov_enterpriseNavigation li a.level0:focus + .mdgov_navSub,
+#mdgov_enterpriseNavigation .mdgov_navSub.active
+{
+    width: 100%;
+    opacity: 1;
+    max-height: 500px;
+	left: 0;
+}
+
+.mdgov_navSubContainer 
+{
+    opacity: 0;
+    max-height: 250px;
+    height: 0px;
+    padding: 20px 0;
+    font-size: 90%;
+    background-image: url(../img/backgrounds/megaMenuDivider.gif);
+    background-repeat: repeat-y;
+    background-position: 52.2%;
+    background-clip: content-box;
+    -moz-transition: opacity .5s ease;
+    -webkit-transition: opacity .5s ease;
+    -o-transition: opacity .5s ease;
+    transition: opacity .5s ease;
+    transition-delay: .2s;
+}
+
+#mdgov_enterpriseNavigation li a.level0 + .mdgov_navSub .mdgov_navSubContainer:hover,
+#mdgov_enterpriseNavigation li a.level0:hover + .mdgov_navSub .mdgov_navSubContainer,
+#mdgov_enterpriseNavigation li a.level0:focus + .mdgov_navSub .mdgov_navSubContainer,
+#mdgov_enterpriseNavigation .mdgov_navSub.active .mdgov_navSubContainer
+{
+    opacity: 1;
+    height: auto;
+}
+
+.mdgov_navSubContainer ul li {
+	float: left !important;
+	width: 48%;
+}
+
+.mdgov_navSubContainer ul li a {
+	color: #069 !important;
+	display: block !important;
+	float: none !important;
+	padding: 0 0 5px 0 !important;
+	margin: 0 20px 5px 0 !important;
+	text-align: left !important;
+	text-transform: none !important;
+}
+
+.mdgov_navSubContainer ul.cl_imageNavList li a {
+	padding: 0 !important;
+	margin: 0 20px 0 0 !important;
+}
+
+.mdgov_navSubContainer ul.cl_imageNavList li a:focus img {
+	border: 2px solid #900;
+}
+
+.mdgov_navSubContainer ul li a:hover,
+.mdgov_navSubContainer ul li a:focus {
+	color: #000 !important;
+}
+
+.mdgov_navSubContainerContent {
+	display: block;
+	max-width: 960px;
+	margin: 0 auto;
+	text-align: left;
+}
+
+.mdgov_navSubContainerContent .span1,
+.mdgov_navSubContainerContent .span2,
+.mdgov_navSubContainerContent .span3,
+.mdgov_navSubContainerContent .span4,
+.mdgov_navSubContainerContent .span5,
+.mdgov_navSubContainerContent .span6,
+.mdgov_navSubContainerContent .span12 {
+	display: block;
+	min-height: 140px;
+}
+
+.mdgov_navSubRight .icon-twitter {
+	margin-right: 10px;
+}
+
+.mdgov_navTweet {
+	margin-bottom: 10px;
+}
+
+#governorBlock 
+{
+    margin: 20px 0 20px 20px;
+}
+
+.sectionMenu {
+    margin-left: 10px;
+}
+.hidden-accessible {
+    position: absolute;
+    left: 0px;
+    top: -500px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+.mobileButton 
+{
+    text-decoration: none !important;
+    padding: 5px 10px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    position: relative;
+}
+.mobileButton:after 
+{
+    content: "\00BB \0020";
+    font-size: 150%;
+    position: absolute;
+    top: 2px;
+    right: 10px;
+}
+
+/* [ Tablet-ish... ] */
+@media (max-width: 767px) {
+	
+	iframe {
+		width: 100%;
+	}
+    
+	#mdgov_enterpriseNavigation {
+		width: 100%;
+		margin-left: 0;
+	}
+	
+	#mdgov_enterpriseNavigation nav ul li a.level0 {
+        display: block;
+        clear: both;
+        padding: 12px 20px;
+        color: #fff;
+        text-transform: uppercase;
+    }
+
+    #mdgov_trendsAndAlerts.hasAlert,
+    #mdgov_trendsAlertsWrapper {
+        margin-top: 5px;
+    }
+
+    #mdgov_enterpriseSearch {
+		margin: 20px auto;
+	}
+	
+	#mdgov_searchInput {
+        float: none;
+    }
+
+	.mdgov_inner #mdgov_enterpriseSearch {
+		float: none;
+		width: 100%;
+		top: 0;
+	}
+	
+	#mdgov_searchInput {
+		width: 100%;
+		margin-right: 0;
+	}
+	
+	#mdgov_searchInput .mdgov_searchInputBox {
+        font-size: 60%;
+    }
+
+    .mdgov_socialNav {
+		top: 20px;
+		width: 100%;
+		text-align: center;
+		margin-top: 20px;
+	}
+	
+	.mdgov_socialNav ul {
+	    float: none;
+		text-align: center;
+	}
+	
+	.mdgov_socialNav ul li {
+	    float: none;
+		display: inline-block;
+	}
+
+    .mdgov_inner #mdgov_agencyHeader .mdgov_socialNav {
+        display: none;
+    }
+	#primary_left_col .mdgov_contentWrapper {
+    	padding: 0 20px 0 20px;
+	}
+    #footer_block {
+        text-align: center;
+    }
+
+    .footerLinks ul {
+        display: block;
+        width: 100%;
+    }
+	
+    .footerLinks li {
+        display: block;
+        width: 100%;
+        clear: both;
+        margin-left: 0;
+        padding-left: 0;
+        border-left: none;
+    }
+	
+    .footerLinks li a {
+        padding: 5px 0;
+        display: block;
+        width: 100%;
+    }
+	
+}
+
+@media(max-width:1200px) {
+
+    #agencyTitle {
+        float: left;
+        width: 550px;
+        padding: 10px 0 0 20px;
+    }
+
+}
+
+@media(min-width:979px) {
+    .hidden-desktop {
+        position: absolute;
+        left: -10000px;
+        top: auto;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+    }
+	#mdgov_mobileNavButton .show, #mdgov_mobileNavButton .hide {
+		display:none;
+	}
+}
+
+@media (max-width:979px) {
+    body {
+        padding-right: 0;
+        padding-left: 0;
+    }
+    #header.subpage {
+        min-height: 80px;
+    }
+    #header_left {
+        height: 70px;
+        width: 20%
+	}
+    #header_mid {
+        clear: both;
+        height: 60px;
+        width: 100%
+	}
+    #header_right {
+        margin-top: -130px;
+        height: 70px;
+        width: 80%
+	}
+    #header, #headerBackground, .headerBgImg {
+        min-height: 130px;
+    }
+    .container {
+        width: 100%}
+    #searchInputBox, #searchInputBox_sub {
+        font-size: 16px;
+    }
+    #main_search_block {
+        margin-top: 20px;
+    }
+    #menu_bar {
+        display: none;
+    }
+    #sub_primary_right_col {
+        float: left;
+        width: 30%}
+    #sub_primary_middle_col {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+	#mdgov_enterpriseNavigation {
+		width: 50%;
+		z-index: 1001;
+		position: absolute;
+		top: 33px;
+		left: 0;
+		display: none;
+	}
+	
+	#mdgov_enterpriseNavigation ul {
+		text-align:left;
+	}
+	
+	#mdgov_enterpriseNavigation ul li {
+		display: block;
+	}
+	
+	#mdgov_enterpriseNavigation ul li a.level0
+	{
+	    border-radius: 0;
+	    background-color: #000;
+		border-bottom: 1px solid #333;
+		-webkit-transition: none;
+        -moz-transition: none;
+        -o-transition: none;
+        transition: none;
+	}
+	
+	.mdgov_inner #mdgov_enterpriseNavigation ul li a.level0 {
+	    border-radius: 0;
+    }
+	
+    #mdgov_enterpriseNavigation li:hover a.level0,
+    #mdgov_enterpriseNavigation li a.level0:focus,
+    #mdgov_enterpriseNavigation li a.level0:active,
+    #mdgov_enterpriseNavigation li a.level0.active 
+    {
+    	background-color: #2b639e;
+		color: #fff;
+	}
+    
+    #mdgov_mobileNavButton a {
+        position: absolute;
+        left: 0;
+        height: 21px;
+        color: #fff;
+        text-transform: uppercase;
+        text-shadow: 1px 1px 2px #000;
+        text-decoration: none;
+        background-color: #2b639e;
+        text-align: left;
+        font-size: 165% !important;
+        width: 100%;
+        text-indent: 1.5%;
+        padding: 6px 0;
+        border-bottom: 4px solid #000;
+    }
+    #mdgov_mobileNavButton a span {
+        position: absolute;
+        font-size: 85%;
+        font-weight: lighter;
+    } 
+	
+	.mdgov_socialNav {
+        margin-top: 20px;
+    }
+
+    .cl_socialNav {
+	    list-style: none;
+        padding: 0;
+    }
+
+
+    .cl_socialNav.vertical li {
+	    margin-right: 0;
+	    margin-bottom: 5px;
+	    float: left;
+	    display: block;
+	    clear: both;
+    }
+
+
+    .cl_socialNav li a {
+	    width: 24px;
+	    height: 24px;
+	    background-image: url(../img/icons/social-icons-sm.png);
+    }
+
+    .cl_socialNav li a.sm-twitter {
+	    background-position: left -31px;
+    }
+
+    .cl_socialNav li a.sm-twitter:hover,
+    .cl_socialNav li a.sm-twitter:focus,
+    .cl_socialNav li a.sm-twitter:active {
+	    background-position: right -31px;
+    }
+
+    .cl_socialNav li a.sm-googleplus {
+	    background-position: left -61px;
+    }
+
+    .cl_socialNav li a.sm-googleplus:hover,
+    .cl_socialNav li a.sm-googleplus:focus,
+    .cl_socialNav li a.sm-googleplus:active {
+	    background-position: right -61px;
+    }
+
+    .cl_socialNav li a.sm-tumblr {
+	    background-position: left -91px;
+    }
+
+    .cl_socialNav li a.sm-tumblr:hover,
+    .cl_socialNav li a.sm-tumblr:focus,
+    .cl_socialNav li a.sm-tumblr:active {
+	    background-position: right -91px;
+    }
+
+    .cl_socialNav li a.sm-foursquare {
+	    background-position: left -121px;
+    }
+
+    .cl_socialNav li a.sm-foursquare:hover,
+    .cl_socialNav li a.sm-foursquare:focus,
+    .cl_socialNav li a.sm-foursquare:active {
+	    background-position: right -121px;
+    }
+
+    .cl_socialNav li a.sm-instagram {
+	    background-position: left -151px;
+    }
+
+    .cl_socialNav li a.sm-instagram:hover,
+    .cl_socialNav li a.sm-instagram:focus,
+    .cl_socialNav li a.sm-instagram:active {
+	    background-position: right -151px;
+    }
+
+    .cl_socialNav li a.sm-flickr {
+	    background-position: left -181px;
+    }
+
+    .cl_socialNav li a.sm-flickr:hover,
+    .cl_socialNav li a.sm-flickr:focus,
+    .cl_socialNav li a.sm-flickr:active {
+	    background-position: right -181px;
+    }
+
+    .cl_socialNav li a.sm-youtube {
+	    background-position: left -211px;
+    }
+
+    .cl_socialNav li a.sm-youtube:hover,
+    .cl_socialNav li a.sm-youtube:focus,
+    .cl_socialNav li a.sm-youtube:active {
+	    background-position: right -211px;
+    }
+
+    .cl_socialNav li a.sm-vimeo {
+	    background-position: left -241px;
+    }
+
+    .cl_socialNav li a.sm-vimeo:hover,
+    .cl_socialNav li a.sm-vimeo:focus,
+    .cl_socialNav li a.sm-vimeo:active {
+	    background-position: right -241px;
+    }
+
+    .cl_socialNav li a.sm-all {
+	    background-position: left -271px;
+    }
+
+    .cl_socialNav li a.sm-all:hover,
+    .cl_socialNav li a.sm-all:focus,
+    .cl_socialNav li a.sm-all:active {
+	    background-position: right -271px;
+    }
+
+    .cl_socialNav li a.sm-rss {
+	    background-position: left -361px;
+    }
+
+    .cl_socialNav li a.sm-rss:hover,
+    .cl_socialNav li a.sm-rss:focus,
+    .cl_socialNav li a.sm-rss:active {
+	    background-position: right -361px;
+    }
+
+    .cl_socialNav li a.sm-pinterest {
+	    background-position: left -391px;
+    }
+
+    .cl_socialNav li a.sm-pinterest:hover,
+    .cl_socialNav li a.sm-pinterest:focus,
+    .cl_socialNav li a.sm-pinterest:active {
+	    background-position: right -391px;
+    }
+
+    .cl_socialNav li a.sm-blogger {
+	    background-position: left -421px;
+    }
+
+    .cl_socialNav li a.sm-blogger:hover,
+    .cl_socialNav li a.sm-blogger:focus,
+    .cl_socialNav li a.sm-blogger:active {
+	    background-position: right -421px;
+    }
+
+    .cl_socialNav li a.sm-settings {
+	    background-position: left -451px;
+    }
+
+    .cl_socialNav li a.sm-settings:hover,
+    .cl_socialNav li a.sm-settings:focus,
+    .cl_socialNav li a.sm-settings:active {
+	    background-position: right -451px;
+    }
+
+    .cl_socialNav li a.sm-enewsletter {
+	    background-position: left -481px;
+    }
+
+    .cl_socialNav li a.sm-enewsletter:hover,
+    .cl_socialNav li a.sm-enewsletter:focus,
+    .cl_socialNav li a.sm-enewsletter:active {
+	    background-position: right -481px;
+    }
+
+    .cl_socialNav li a.sm-video {
+	    background-position: left -511px;
+    }
+
+    .cl_socialNav li a.sm-video:hover,
+    .cl_socialNav li a.sm-video:focus,
+    .cl_socialNav li a.sm-video:active {
+	    background-position: right -511px;
+    }
+
+    .cl_socialNav li a.sm-podcast {
+	    background-position: left -541px;
+    }
+
+    .cl_socialNav li a.sm-podcast:hover,
+    .cl_socialNav li a.sm-podcast:focus,
+    .cl_socialNav li a.sm-podcast:active {
+	    background-position: right -541px;
+    }
+	
+	#MobileNav:target #mdgov_mobileNavButton .show {
+		display:inline;
+	}
+	
+	#MobileNav:target #mdgov_mobileNavButton .hide,
+	#MobileNav:not(:target) #mdgov_mobileNavButton .show {
+		display:none;
+	}
+	
+	#MobileNav:not(:target) #mdgov_enterpriseNavigation {
+		display:none;
+	}
+	
+	#MobileNav:target #mdgov_enterpriseNavigation {
+		display:inherit;
+	}
+}
+
+@media (min-width:767px) {
+    .hidden-desktop2 {
+        position: absolute;
+        left: -10000px;
+        top: auto;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+    }
+}
+
+@media (max-width:767px) {
+	#mdgov_homeLink {
+        width: 100%;
+    }
+    #mdgov_homeLink a {
+        width: 150px;
+        margin: 0 auto;
+    }
+    #mdgov_agencyLogo {
+        display: none;
+    }
+    #mdgov_agencyTitle {
+        text-align: center;
+    }
+    #secondary_left_col, #secondary_middle_col_lt, #secondary_middle_col_rt, #secondary_right_col {
+        border-left: 0;
+    }
+    #primary_middle_col .mdgov_contentWrapper,
+    #primary_right_col .mdgov_contentWrapper
+    {
+        border: 0;
+		padding: 0 20px;
+    }
+
+    .hidden-phone {
+        display: none !important;
+    }
+
+    #primary_content_Block {
+        margin-top: 20px;
+		padding: 0;
+    }
+    
+    .primary_left_col_list 
+    {
+        margin-bottom: 0;
+    }
+   .mdgov_subNav,
+   .subNavWrapper
+   {
+        margin-bottom: 20px;
+   }
+   
+   .mdgov_subNav h2
+   {
+        margin: 0 !important;
+   }
+   
+   .mdgov_subNav h2 a
+   {
+        display: block;
+   }
+   
+   .mdgov_subNav .subNavWrapper ul
+   {
+        padding-left: 10px;
+   }
+   
+    #header.subpage {
+        min-height: 150px;
+    }
+    #main_search {
+        width: 95%}
+    #searchInputBox, #searchInputBox_sub {
+        font-size: 13px;
+    }
+    #mdgov_iaNav {
+        height: 0;
+        overflow: hidden;
+    }
+    .mdgov_iaNavOpen {
+        height: auto !important;
+        overflow: visible !important;
+    }
+    #sub_primary_right_col {
+        float: left;
+        width: 95%;
+        border-left: 0;
+    }
+    #footer_left {
+        padding-right: 20px;
+    }
+    #two_col-left {
+        padding-right: 20px;
+    }
+    #two_col-right {
+        border-left: 0;
+    }
+    #mdgov_enterpriseNavigation {
+        width: 100%;
+        margin-left: 0;
+    }
+    #social_media_top {
+        width: 100%;
+    }
+    #mdgov_agencyName {
+        /*float: right;*/
+        width: 100%;
+    }
+    #mdgov_agencyHeader {
+        float: none;
+    }
+    #footer_right {
+        padding: 0 20px 20px 20px;
+        margin: 20px 0 0 0;
+    }
+}
+
+@media (max-width:480px) {
+    body {
+        padding: 0;
+    }
+    .container {
+        width: 100%
+	}
+	#mdgov_agencyTitle {
+    	padding: 0;
+	}
+    #main_search_block {
+        margin: 10px;
+    }
+    .main_search_inner {
+        margin-left: 10px;
+    }
+    #searchInputBox {
+        height: 40px;
+    }
+    #searchInputBox_sub {
+        width: 77%}
+    #main_search a.btn {
+        width: 30px;
+        height: 21px;
+    }
+    #main_search_sub a.btn {
+        width: 30px;
+    }
+    .zipInput {
+        width: 130px;
+    }
+    .cl_socialNav {
+        float: none;
+    }
+    #secondary_left_col, #secondary_middle_col_lt, #secondary_middle_col_rt {
+        padding-right: 20px;
+    }
+    #sub_primary_middle_col {
+        padding: 0 20px 20px 20px;
+        margin-top: 20px;
+    }
+    #governorBlock {
+    	width:90%;
+    }
+}
+
+	.uiMessage {
+		padding:20px;
+		border-radius:5px;
+		background-color:#ffffcc;
+		border:1px solid #FFDEA3;
+		text-align:center;
+	}
+	
+	.HideMontageImages img {
+		display:none;
+	}
+	.HideMontageImages li {
+		list-style: none;
+		margin-bottom: 5px !important;
+		left: 0;
+		top: 0;
+	}
+	.HideMontageImages hgroup {
+		border-bottom: 1px solid #ccc;
+	}
+	.HideMontageImages hgroup h2 {
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+	.HideMontageImages hgroup h3 {
+		margin: 0 0 10px 0 !important;
+		padding: 0 0 10px 0 !important;
+	}
+	.fillImageButton {
+		height: 19px;
+		padding: 15px 19px 14px 19px;
+	}
+	.searchButtonDiv
+	{
+	  line-height:12px;
+	  padding: 0 !important;
+	  width: 58px !important;
+	}
