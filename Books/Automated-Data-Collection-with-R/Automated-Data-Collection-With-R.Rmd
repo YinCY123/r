@@ -1421,6 +1421,86 @@ list.files(path = "./cran_tasks/")
 
 
 ### Manipulating URLs to access multiple pages  
+```{r}
+baseurl <- htmlParse("files/News - Transparency.org.html")
+xp <- "//select[@aria-label='Choose page number']/option"
+total_pages <- xpathSApply(doc = baseurl, 
+                           fun = xmlValue, 
+                           path = xp) %>% 
+        as.numeric() %>% 
+        max()
+
+total_pages
+```
+
+```{r}
+xp <- "//select[@aria-label='Choose page number']/option"
+pages_url <- xpathSApply(doc = baseurl, 
+                         fun = xmlGetAttr, 
+                         path = xp, 
+                         name = "value")
+
+pages_url
+```
+
+download each page  
+```{r}
+downloadPages <- function(pageurl, folder, handle){
+        dir.create(path = paste(".", folder, sep = "/"))
+        page_name <- paste(basename(pageurl), ".html", sep = "")
+        if(file.exists(paste(".", folder, page_name, sep = "/"))){
+                next
+        }else{
+                content <- try(getURL(url = pageurl, curl = handle))
+                write(content, paste(".", folder, page_name, sep = ""))
+                Sys.sleep(1)
+        }
+}
+
+handle <- getCurlHandle()
+
+lapply(X = pages_url %>% as.list, 
+       FUN = downloadPages, 
+       folder = "tp_index_2010", 
+       handle = handle)
+
+list.fiels(path = "./tp_index_2010")
+```
+
+
+### Convenient functions to gather inks, lists, and tables from HTML documents  
+```{r}
+doc <- htmlParse(file = "files/Niccol¨° Machiavelli - Wikipedia.html", isHTML = T)
+mac_source <- readLines("files/Niccol¨° Machiavelli - Wikipedia.html")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
