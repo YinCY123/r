@@ -1349,12 +1349,78 @@ for(i in filenames){
 
 
 ### PDF legislative district maps  
+```{r}
+doc <- htmlParse(file = "files/Maryland Legislative Districts.html")
+links <- getHTMLLinks(doc)
+PDFlinks <- links[str_detect(string = links, pattern = "Documents/2010Maps/Leg/Districts.+pdf$")]
+
+downloadPDF <- function(url, filename, folder){
+        dir.create(path = paste(".", folder, sep = "/"), showWarnings = F)
+        for(i in url){
+                if(file.exists(paste(".", folder, basename(i), sep = "/"))){
+                        next
+                }else{
+                        content <- getBinaryURL(url = i, curl = handle)
+                        writeBin(object = content, con = paste(folder, "/", basename(i), sep = ""))
+                        Sys.sleep(time = 1)
+                }
+        }
+}
+
+handle <- getCurlHandle(useragent = str_c(R.version$platform, 
+                                          R.version$version.string, 
+                                          sep = ", "), 
+                        httpheader = c(from = "yinchunyou2012@163.com"))
+
+do.call(what = "downloadPDF", 
+        args = list(
+                url = PDFlinks[[1]], 
+                folder = "elec12_maryland_maps"
+        ))
+```
+
+
+### Downloading multiple files from an FTP index   
+```{r}
+ftp <- "ftp://cran.r-project.org/pub/R/web/views/"
+ftp_files <- getURL(url = ftp, dirlistonly = TRUE)
+filenames <- str_split(ftp_files, pattern = "\n")[[1]]
+filenames_html <- filenames[str_detect(filenames, ".+(.html)")]
+filenames_html[1:3]
+```
+
+```{r}
+downloadFTP <- function(filenames, folder, handle){
+        dir.create(path = paste(".", folder, sep = "/"), showWarnings = F)
+        fileurl <- str_c(ftp, filenames)
+        if(file.exists(paste(".", folder, filenames, sep = "/"))){
+                next
+        }else{
+                content <- try(getURL(fileurl, curl = handle))
+                write(x = content, str_c(folder, "/", filenames))
+                Sys.sleep(1)
+        }
+}
+
+handle <- getCurlHandle(ftp.use.epsv = F)
+
+for(i in filenames_html){
+        do.call(what = "downloadFTP", 
+                args = list(
+                        filenames = i, 
+                        folder = "cran_tasks", 
+                        handle = handle
+                ))
+}
+```
+
+```{r}
+list.files(path = "./cran_tasks/")
+```
 
 
 
-
-
-
+### Manipulating URLs to access multiple pages  
 
 
 
