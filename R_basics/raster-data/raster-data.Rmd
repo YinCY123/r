@@ -1,0 +1,107 @@
+---
+title: "raster data"
+author: "yincy"
+date: "8/24/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# The relationship between raster resolution, spatial extent and number of pixels  
+```{r, message=FALSE, warning=FALSE}
+library(raster)
+library(rgdal)
+```
+
+
+## Spatial Resolution  
+A raster consists of a series of pixels, each with the same dimensions and shape. In the case of raster derived from airborns sensors, each pixel represents an area of space on the Earth's surface. The size of the area on the surface that each pixel covers is known as the satial resolution of the image. For instance, an image that has a 1m spatial resolution means that each pixel in the image represents a 1m x 1m area.  
+
+```{r}
+knitr::include_graphics("images/spatial-resolution.PNG")
+```
+
+```{r}
+knitr::include_graphics("images/diff-resolution.PNG")
+```
+
+
+## Load the data  
+load an raster in R to see how the attributes are stored.  
+```{r}
+dem <- raster(x = "data/1010-mutation385-12  385-34.tif")
+```
+
+
+View raster attributes  
+```{r}
+dem
+```
+
+
+## Spatial Extent  
+The spatial extent of a raster, represents the 'X, Y' coordinates of the corners of the raster in geographic space. This information, in addition to the cell size or spatial resolution, tells the program how to place or render each pixel in 2 dimensional space. Tools like R, using supporting packages such as rgdal and associated raster tools have functions that allow you to view and define the extent of a new raster.  
+
+```{r}
+dem@extent
+```
+
+```{r}
+knitr::include_graphics("images/raster-stretched-over-different-extents.PNG")
+```
+
+
+## Calculating Raster Extent  
+Extent and spatial resolution are closely connected. To calculate the extent of a raster, we first need the bottom **left hand** (X,Y) coordinate of the raster. In the case of the UTM coordinate system which is in meters, to calculate the raster's extent, we can add the number of culumns and rows to the X, Y corner coordinate location of the raster, multiplied by the resolution (the pixel size) of the raster.  
+
+```{r}
+knitr::include_graphics("images/calculate-spatial-extent.PNG")
+```
+
+```{r}
+# create a blank raster
+my_raster <- raster(nrow = 4, ncol = 4)
+
+#assign 'data' to raster: 1 to n based on the number of cells in the raster
+my_raster[] <- 1:ncell(my_raster)
+my_raster
+```
+
+the crs value is define, this is the default values for something created with the `raster()` function if nothing is defined.  
+
+```{r}
+my_raster@extent
+```
+
+```{r}
+plot(my_raster, main = "raster with 16 pixels")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
