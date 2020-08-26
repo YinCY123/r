@@ -41,7 +41,7 @@ Rayshader also has three functions to detect and add water to maps:
 
 - `add_water` users the output of `detect_water` to add a water color to the map. The user can input their own color, or pass the name of one of the pre-defined palettes from `sphere_shade` to get a matching hue.  
 
-- `render_water` adds a 3D transparent water layer to 3D maps, after the rgl device has already been created. This can either add to a 3D transparent water layer to a map that does not already have a water layer, or replace an existing water layer on the map.  
+- `render_water` adds a 3D transparent water layer to 3D maps, after the `rgl` device has already been created. This can either add to a 3D transparent water layer to a map that does not already have a water layer, or replace an existing water layer on the map.  
 
 
 
@@ -76,7 +76,7 @@ All of these functions are designed to be used with the magrittr pipe ` %>% `.
 
 
 ## Usage  
-Rayshader can be used for two purposes: both creating hillshaded maps and 3D data visualizations plots.  
+`Rayshader` can be used for two purposes: both creating hillshaded maps and 3D data visualizations plots.  
 
 ### Mapping with rayshader   
 ```{r}
