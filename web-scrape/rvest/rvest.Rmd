@@ -1,0 +1,125 @@
+---
+title: "rvest"
+author: "yincy"
+date: "8/30/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Extracting HTML elements with CSS  
+```{r}
+library(rvest)
+
+lego_url <- "http://www.imdb.com/title/tt1490017/"
+html <- read_html(x = lego_url)
+
+characters <- html_nodes(x = html, css = ".cast_list .character")
+characters %>% length()
+
+characters[1:2]
+```
+
+```{r}
+html_text(x = characters, trim = T)
+```
+
+`rvest` contains a few handy functions for accessing different attributes of the currently selected nodes. Foe example, we can access names of the selected tags with `html_names()`  
+
+```{r}
+html_nodes(x = html, css = ".cast_list") %>% 
+    html_name()
+```
+
+
+Most of the time we want to use `html_nodes()` (returning `xml nodeset`) to make sure we capture all matches, but in those cases when we know that there is only single match or when we only care about the first match, we can use `html_node()`, which returns single `xml node`.  
+
+```{r}
+html_node(x = html, css = ".cast_list")
+```
+
+If the name of the current tag is `table` (both as single `xml node`, but also as `xml nodeset` of tables) it can usually be parsed into a data.frame automatically (either as a single data.frame or as a list of data.frame, for `xml node` and `xml nodeset`, respectively).  
+
+```{r}
+html_node(x = html, css = ".cast_list") %>% 
+    html_table() %>% 
+    head()
+```
+
+The most basic content in HTML is text. It can be located between the opening and the closing tag of the "tag bracket" (sometimes along with other 'descendant' tags). The text (from current and all 'children' tags) can be extracted with `html_text()`. Lets extract text out of the first character node.  
+
+```{r}
+html_node(x = html, css = ".cast_list .character") %>% 
+    html_text()
+```
+
+Finally attributes of HTML tags can be extracted using `html_attrs()` (or `html_attr()` for extracting a single attribute from a node/nodeset, given its name). Let's fetch of the actors' pages.  
+
+```{r}
+html_nodes(x = html, css = ".cast_list .character") %>% 
+    html_children() %>% 
+    html_attr("href")
+```
+
+
+## Extracting HTML elements with xpath  
+Alternative way of extracting HTML elements is using `xpath` argument in `html_node()` or `html_nodes()`, which allows specifying expressions to extract individual nodes or nodesets. `XPath` (XML Path Language) is a query language for selecting nodes from an XML document. It is much more powerful than CSS selectors, but its syntax is also more terse.  
+
+The following `rvest` code will separate "children" text from "parent" text and return only text from the "child" node(s).  
+
+```{r}
+html_node(x = html, css = ".cast_list .character") %>% 
+    html_children() %>% 
+    html_text()
+```
+
+
+However, there's no suitable "CSS selector" to exclude child nodes and extract only text from the "parent" node. This is the situation where `xpath` selector can be more powerful. In addtion to traversing the html/xml tree, `xpath` also has its "extractor" functions, similar to those of `rvest`. In particular, here will use `text()` applied to "current node only" (this is the meaning of `./` in the following code). We also use `normalize-space()` function, which drops empty strings.  
+
+Note that the `xpath` internal function `text()` has simplified the content, but `html_nodes()` is unaware of it and still returns `xml_nodeset()`.  
+
+```{r}
+html_node(x = html, css = ".cast_list .character") %>% 
+    html_nodes(xpath = "./text()[normalize-space()]") %>% 
+    html_text(trim = T)
+```
+
+```{r}
+ls("package:rvest")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
