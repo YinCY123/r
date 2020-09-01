@@ -1,0 +1,12 @@
+---
+title: "httr"
+author: "yincy"
+date: "9/1/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Best practices for API package  
