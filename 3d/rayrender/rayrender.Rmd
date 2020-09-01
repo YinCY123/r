@@ -123,7 +123,7 @@ generate_cornell() %>%
 ```
 
 
-Finally, rayrender supports environment lighting with the `environment_light` argument. Pass a high dynamic range image (`.hdr`) or a low-dynamic range image (`.jpg`, `.png`) and the image will be used to light the scene (along with any other lights). Here's an example using an HDR image of Venice at sunset (obtained for free from hdrihaven.com), also using the Oren-Nayar diffuse model with `sigma=90` for a more realistic diffuse surface. We also add an extruded polygon star, using the `extruded_polygon` object.  
+Finally, `rayrender` supports environment lighting with the `environment_light` argument. Pass a high dynamic range image (`.hdr`) or a low-dynamic range image (`.jpg`, `.png`) and the image will be used to light the scene (along with any other lights). Here's an example using an HDR image of Venice at sunset (obtained for free from hdrihaven.com), also using the Oren-Nayar diffuse model with `sigma=90` for a more realistic diffuse surface. We also add an extruded polygon star, using the `extruded_polygon` object.  
 
 ```{r}
 env_lights <- "venice_sunset_2k.hdr"
@@ -145,33 +145,10 @@ generate_ground(material = diffuse(color = "grey20", checkercolor = "grey50", si
     render_scene(parallel = T, environment_light = env_lights, 
                  width = 800, height = 800, 
                  fov = 70, clamp_value = 10, 
-                 samples = 1000, aperture = 0.1, 
+                 samples = 1000, aperture = 0.5, 
                  lookfrom = c(-0.9, 1.2, -4.5), 
                  lookat = c(0, -1, 0))
 ```
-
-
-
-```{r}
-df <- matrix(data = rnorm(10000), nrow = 100, ncol = 100)
-
-
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
