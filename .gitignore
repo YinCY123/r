@@ -18,3 +18,4 @@
 
 # ignore .rds file
 *.rds
+.RData
