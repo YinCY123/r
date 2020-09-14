@@ -92,6 +92,7 @@ my_raster2 <- raster(nrow = 8, ncol = 8)
 # resample 16 pix raster with 32 pix raster 
 # use bilinear interpolation with our numeric data 
 my_raster2 <- resample(x = my_raster1, y = my_raster2, method = "bilinear")
+my_raster2@extent
 ```
 
 ```{r}
@@ -143,7 +144,7 @@ knitr::include_graphics("images/extent-coordinate-reference-system.PNG")
 
 
 ## Coordinate Reference System and Projection Information
-The `rgdal` package has all the common ESPG codes with proj4string built in. We can see them by creating an objet of the function `make_ESPG()`.  
+The `rgdal` package has all the common ESPG codes with proj4string built in. We can see them by creating an object of the function `make_ESPG()`.  
 
 ```{r}
 # create an object with all ESPG code
@@ -155,9 +156,9 @@ head(espg, n = 5)
 
 
 ## Define the extent  
-In the above raster example, we created serveral simple raster objects in R. R defaulted to a global lat/long extent. We can define the extent that we need to use too.  
+In the above raster example, we created several simple raster objects in R. R defaulted to a global lat/long extent. We can define the extent that we need to use too.  
 
-Let's create a new raster with the same projection as our original DEM. We know that our data are in UTM zone 11N. For the sake of this exercise, let say we want to create a raster with the left hand cornore coordinate at:  
+Let's create a new raster with the same projection as our original DEM. We know that our data are in UTM zone 11N. For the sake of this exercise, let say we want to create a raster with the left hand corner coordinate at:  
 
 - xmin = 254570  
 - ymin = 4107302  
@@ -239,23 +240,117 @@ IMPORTANT: the above code does not reproject the raster. It simply defines the C
 
 
 
+# Raster Data in R  
+Raster or "gridded" data are data that are saved in pixels. In the spatial world, each pixel represents an area on the Earth's surface. For example in the raster below, each pixel represents a particular land cover class that would be found in that location in the real world.  
+
+```{r}
+library(raster)
+library(sp)
+library(rgdal)
+```
+
+```{r}
+dem <- raster("data/1010-mutation385-12  385-34.tif")
+dem
+```
+
+```{r}
+plot(dem)
+```
 
 
 
+- dimensions: the "size" of the file in pixels  
+ + nrow, ncol: the number of rows and columns in the data  
+ + ncells: the total number of pixels or cells that make up the raster.  
+ 
+resolution: the size of each pixel (in meters in this case). 1 meter pixels means that each pixel represents a 1m x 1m area on the earth's surface.  
+
+- extent: the spatial extent of the raster. This value will be in the same coordinate units as the coordinate reference system of the raster.  
+
+- coord ref: the coordinate reference system string for the raster. This raster is in UTM (Universal Trans Mercator) zone 11 with a datum of WGS84.  
 
 
+## Working with Rasters in R  
+```{r}
+cellStats(dem, min)
+cellStats(dem, max)
+cellStats(dem, range)
+```
+
+```{r}
+dem@extent
+```
+
+## Raster Pixel Values  
+```{r}
+hist(dem, 
+     col = "purple", 
+     maxpixels = 800000)
+```
 
 
+## Plot Raster Data  
+```{r}
+par(mfrow = c(1,2))
+
+image(dem, zlim = c(50, 255))
+image(dem, zlim = c(100, 255))
+par(mfrow = c(1, 1))
+```
 
 
+## Plotting with Colors  
+```{r}
+par(mfrow = c(2, 2))
+
+image(dem, col = terrain.colors(100, rev = T), zlim = c(100, 255))
+image(dem, col = heat.colors(100, rev = T), zlim = c(100, 255))
+image(dem, col = rainbow(100), zlim = c(100, 255))
+image(dem, col = topo.colors(n = 100, rev = T), zlim = c(100, 255))
+
+par(mfrow = c(1, 1))
+```
 
 
+## Breaks and Colorbars in R  
+```{r}
+col <- terrain.colors(n = 5, rev = T)
+brk <- c(50, 100, 150, 200, 250)
 
 
+plot(dem, col = col, breaks = brk, main = "DEM with more breaks")
+```
 
 
+```{r}
+par(xpd = F, mar = c(5.1, 4.1, 4.1, 4.5))
+
+plot(dem, col = col, breaks = brk, main = "DEM with a custom legend", legend = F)
+
+par(xpd =T)
+legend(x = par()$usr[2], y = 411,
+       legend = c("lowest", "a bit higher", "middle ground", "higher yet", "highest"),
+       fill = col)
+```
 
 
+```{r}
+dem <- dem*2
+dem1 <- dem * 10
+plot(dem1)
+```
+
+
+```{r}
+plot(dem)
+
+cropbox1 <- drawExtent()
+
+demcrop1 <- crop(dem, cropbox1)
+
+plot(demcrop1, col = grey.colors(100, rev = F))
+```
 
 
 

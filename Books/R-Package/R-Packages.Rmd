@@ -48,7 +48,7 @@ We use various functions from devtools to build a small toy package from scratch
 - Access to established workflows for installation, getting help, and checking basic quality.  
 - Version control and an open development process.  
     + This is completely optional in your work, but recommended. You'll see how Git and GitHub helps us expose all the intermediate stages of our package.  
-- Documentation fro individual functions vis `roxygen2`.  
+- Documentation for individual functions vis `roxygen2`.  
 - Unit testing with `testthat`.  
 - Documentation for the package as a whole via an executable `README.Rmd`.  
 
@@ -64,8 +64,9 @@ Call `create_package()` to initialize a new package in a directory on your compu
 
 Make a deliberate choice about where to create this package on your computer. It should probably be somewhere within your home directory, alongside your other R projects. It should not be nested inside another RStudio Project, R package, or Git repo. Nor should it be in an R package library, which holds packages that have already been built and installed. The conversion of the source package we are creating here into an installed package is part of what devtools facilitates. Don't try to do devtools' job for it!   
 Substitue your chosen path into a `create_package()` call like this:  
+
 ```{r}
-create_package(path = "f:/git/foofactors")
+create_package(path = "/home/yincy/git/foofactors")
 ```
 
 We have to work in a temp directory, because this book is built non-interactively, in the cloud. Behind the scenes, we're executing our own `create_package()` command.  
@@ -85,7 +86,14 @@ We have to work in a temp directory, because this book is built non-interactivel
 
 
 ## `use_git()`  
+The foofactors directory is an R source package and an RStudio Project. Now we make it also a Git repository, with `use_git()`.  
 
+```{r}
+use_git()
+```
+
+
+## `use_r`  
 
 
 
