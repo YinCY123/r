@@ -49,7 +49,115 @@ gr_network %>%
 ```
 
 
+# P2y12r signaling network  
+```{r, message=F, }
+library(KEGGREST)
+library(reactome.db)
+library(rWikiPathways)
+library(pathview)
+```
 
 
+## map p2y12r onto KEGG pathways  
+```{r}
+p2ry12_entrez <- "70839"
+mgs[grep("p2ry12", mgs$gene_name, ignore.case = T, value = F)]
+```
 
+
+```{r}
+listDatabases()
+keggLink(target = "pathway", source = paste("mmu:", p2ry12_entrez, sep = ""))
+
+
+```
+
+
+```{r}
+getNodeSet(doc = kegg_mmu04611_parsed, 
+           path = "//entry")
+
+names <- c("id", "name", "type")
+
+df <- data.frame()
+
+for(name in names){
+    x <- do.call(what = "xpathSApply", 
+            args = list(
+                doc = kegg_mmu04611_parsed,
+                path = "//entry", 
+                fun = xmlGetAttr, 
+                name = name
+            ))
+    df <- rbind(df, x)
+}
+
+
+df <- t(df) %>% as.data.frame() %>% 
+    magrittr::set_colnames(value = c("id", "name", "type"))
+rownames(df) <- NULL
+df <- df %>% 
+    dplyr::filter(name != "undefined")
+```
+
+```{r}
+relations <- c("entry1", "entry2", "type")
+relation_df <- data.frame()
+for(relation in relations){
+    x <- do.call(what = "xpathSApply", 
+            args = list(
+                doc = kegg_mmu04611_parsed,
+                path = "//relation", 
+                fun = xmlGetAttr, 
+                name = relation
+            ))
+    relation_df <- rbind(relation_df, x)
+}
+
+relation_df <- relation_df %>% t() %>% 
+    as.data.frame() %>% 
+    magrittr::set_rownames(value = NULL) %>% 
+    magrittr::set_colnames(value = c("entry1", "entry2", "type"))
+```
+
+
+```{r}
+sub_names <- c("name", "value")
+sub_df <- data.frame()
+for(sub_name in sub_names){
+    x <- do.call(what = "xpathSApply", 
+            args = list(
+                doc = kegg_mmu04611_parsed,
+                path = "//relation/subtype", 
+                fun = xmlGetAttr, 
+                name = sub_name
+            ))
+    sub_df <- rbind(sub_df, x)
+}
+
+sub_df <- sub_df %>% t() %>% 
+    as.data.frame() %>% 
+    magrittr::set_rownames(value = NULL) %>% 
+    magrittr::set_colnames(value = c("type_name", "type_value"))
+```
+
+
+## map p2ry12 onto reactome pathway  
+```{r}
+reactome.db::reactome_dbInfo()
+```
+
+```{r}
+reactome_pathway_p2r12 <- reactomePATHID2EXTID %>% 
+    as.data.frame() %>% 
+    dplyr::filter(gene_id == "70839") %>% 
+    pull(DB_ID) %>% 
+    unique()
+```
+
+```{r}
+library(DBI)
+
+dbListTables(conn = reactome_dbconn())
+```
 
