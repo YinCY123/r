@@ -58,6 +58,28 @@ library(pathview)
 ```
 
 
+## PVN  
+```{r}
+pvn <- read.csv(file = "20200702_frame_tpm_coding_gene_PVN.csv", 
+                row.names = 1)
+pvn
+```
+
+```{r}
+AngII_14 <- grep("14A", colnames(pvn), value = T)
+LNAME_14 <- grep("14L", colnames(pvn), value = T)
+AngII_3 <- grep("3A", colnames(pvn), value = T)
+LNAME_3 <- grep("3L", colnames(pvn), value = T)
+naive <- grep("naive", colnames(pvn), value = T)
+
+
+
+```
+
+
+
+
+
 ## map p2y12r onto KEGG pathways  
 ```{r}
 p2ry12_entrez <- "70839"
