@@ -59,4 +59,45 @@ mtcars %>% toupper_arg(c(mpg:disp, vs))
 The main advantage of the lower level tidyselect tools is that they offer a bit more information and flexibility. Instead of returning the selected data, they return the locations of selected elements inside the input data. If you don’t need the selected locations and can afford the dependency, you may consider wrapping dplyr instead.  
 
 
+## The selection evaluators  
+tidyselect is implemented with non-standard evaluation (NSE). This unique feature of the R language refers to the ability of functions to **defuse** some or all of their arguments, and resume evaluation later on. Crucially, evaluation can be resumed in a different context or according to different rules, which is often how domain-specific languages are created in R.  
+
+### Deufsing and resuming evaluation of R code  
+When a function argument is defused, R halts the evaluation of the code and returns a defused expression instead. This expression contains the code that describes how compute the intended value.  
+
+
+defuse your own R code with `expr()`  
+```{r}
+own <- rlang::expr(1 + 2)
+own
+```
+
+```{r}
+ls("package:tidyselect")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
