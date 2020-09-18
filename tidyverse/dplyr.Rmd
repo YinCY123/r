@@ -438,12 +438,43 @@ by_cyl <- mtcars %>% nest_by(cyl)
 by_cyl
 ```
 
+This is a little different to the usual `group_by()` output: we have visibly changed the structure of the data. Now we have three rows, and we have a list-col, `data`, that stores the data for that group. Also note that the output is `rowwise()`; this is important because it's going to make working with that list of data frames much easier.  
 
+One we have one data frame per row, it's straightforward to make one model per row.  
+```{r}
+mods <- by_cyl %>% mutate(mod = list(lm(mpg ~ wt, data = data)))
+mods
+```
 
+And supplement that with one set of predictions per row.  
+```{r}
+mods <- mods %>% mutate(pred = list(predict(mod, data)))
+mods
+```
 
+You could then summarize the model in a variety of ways. 
 
+```{r}
+mods %>% summarise(rmse = sqrt(mean((pred - data$mpg)^2)))
+```
 
+```{r}
+mods %>% summarise(rsq = summary(mod)$r.squared)
+```
 
+```{r}
+mods %>% summarise(broom::glance(mod))
+```
+
+access the parameters of each model  
+```{r}
+mods %>% summarise(broom::tidy(mod))
+```
+
+## Repeated function calls  
+`rowwise()` doesn't just work with functions that return a length-1 vector (aka summary functions); it can work with any function if the result is a list. This means that `rowwise()` and `mutate()` provide an elegant way to call a function many times with varying arguments, storing the outputs alongside the inputs.  
+
+## Simulations  
 
 
 
