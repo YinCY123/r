@@ -50,7 +50,7 @@ gr_network %>%
 
 
 # P2y12r signaling network  
-```{r, message=F, }
+```{r, message=F, warning=FALSE}
 library(KEGGREST)
 library(reactome.db)
 library(rWikiPathways)
@@ -65,19 +65,42 @@ pvn <- read.csv(file = "20200702_frame_tpm_coding_gene_PVN.csv",
 pvn
 ```
 
+samples  
 ```{r}
-AngII_14 <- grep("14A", colnames(pvn), value = T)
-LNAME_14 <- grep("14L", colnames(pvn), value = T)
-AngII_3 <- grep("3A", colnames(pvn), value = T)
-LNAME_3 <- grep("3L", colnames(pvn), value = T)
+A14 <- grep("14A", colnames(pvn), value = T)
+L14 <- grep("14L", colnames(pvn), value = T)
+A3 <- grep("3A", colnames(pvn), value = T)
+L3 <- grep("3L", colnames(pvn), value = T)
 naive <- grep("naive", colnames(pvn), value = T)
-
-
-
 ```
 
+fold changes  
+```{r}
+FC_df <- pvn %>% 
+    rownames_to_column(var = "ensembl") %>% 
+    rowwise() %>% 
+    mutate(
+        mean_A14 = mean(PVN_14A1, PVN_14A2, PVN_14A3), 
+        mean_L14 = mean(PVN_14L1, PVN_14L2_b1, PVN_14L3_b1, PVN_14L4, PVN_14L5, PVN_14L6), 
+        mean_A3 = mean(PVN_3A1_b1, PVN_3A2, PVN_3A3_b1), 
+        mean_L3 = mean(PVN_3L1_b1, PVN_3L2_b1, PVN_3L3), 
+        mean_naive = mean(PVN_naive1, PVN_naive2, PVN_naive3), 
+        FC_A14 = mean_A14 / mean_naive, 
+        FC_L14 = mean_L14 / mean_naive, 
+        FC_A3 = mean_A3 / mean_naive, 
+        FC_L3 = mean_L3 / mean_naive) %>% 
+    relocate(geneid_symbol, ensembl, starts_with("FC_"), starts_with("mean")) 
 
+FC_df[duplicated(FC_df$geneid_symbol), ]
+```
 
+```{r}
+agg_FC_df <- aggregate.data.frame(FC_df[, 3:6], list(FC_df$geneid_symbol), FUN = "sum") %>% 
+    column_to_rownames("Group.1")
+agg_FC_df
+
+agg_FC_df - apply(agg_FC_df, 2, mean, trim = 0.3, na.rm = T)
+```
 
 
 ## map p2y12r onto KEGG pathways  
@@ -88,79 +111,18 @@ mgs[grep("p2ry12", mgs$gene_name, ignore.case = T, value = F)]
 
 
 ```{r}
-listDatabases()
 keggLink(target = "pathway", source = paste("mmu:", p2ry12_entrez, sep = ""))
-
-
-```
-
-
-```{r}
-getNodeSet(doc = kegg_mmu04611_parsed, 
-           path = "//entry")
-
-names <- c("id", "name", "type")
-
-df <- data.frame()
-
-for(name in names){
-    x <- do.call(what = "xpathSApply", 
-            args = list(
-                doc = kegg_mmu04611_parsed,
-                path = "//entry", 
-                fun = xmlGetAttr, 
-                name = name
-            ))
-    df <- rbind(df, x)
-}
-
-
-df <- t(df) %>% as.data.frame() %>% 
-    magrittr::set_colnames(value = c("id", "name", "type"))
-rownames(df) <- NULL
-df <- df %>% 
-    dplyr::filter(name != "undefined")
 ```
 
 ```{r}
-relations <- c("entry1", "entry2", "type")
-relation_df <- data.frame()
-for(relation in relations){
-    x <- do.call(what = "xpathSApply", 
-            args = list(
-                doc = kegg_mmu04611_parsed,
-                path = "//relation", 
-                fun = xmlGetAttr, 
-                name = relation
-            ))
-    relation_df <- rbind(relation_df, x)
-}
-
-relation_df <- relation_df %>% t() %>% 
-    as.data.frame() %>% 
-    magrittr::set_rownames(value = NULL) %>% 
-    magrittr::set_colnames(value = c("entry1", "entry2", "type"))
-```
-
-
-```{r}
-sub_names <- c("name", "value")
-sub_df <- data.frame()
-for(sub_name in sub_names){
-    x <- do.call(what = "xpathSApply", 
-            args = list(
-                doc = kegg_mmu04611_parsed,
-                path = "//relation/subtype", 
-                fun = xmlGetAttr, 
-                name = sub_name
-            ))
-    sub_df <- rbind(sub_df, x)
-}
-
-sub_df <- sub_df %>% t() %>% 
-    as.data.frame() %>% 
-    magrittr::set_rownames(value = NULL) %>% 
-    magrittr::set_colnames(value = c("type_name", "type_value"))
+pathview(gene.data = agg_FC_df - apply(agg_FC_df, 2, mean, trim = 0.3, na.rm = T), 
+         pathway.id = "04611", 
+         kegg.native = F, 
+         species = "mmu", 
+         gene.idtype = "symbol", 
+         cpd.lab.offset = 0, 
+         cex = 0.7, 
+         min.nnodes = 1)
 ```
 
 

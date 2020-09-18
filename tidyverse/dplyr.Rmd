@@ -42,7 +42,7 @@ The following table shows a condensed translation between dplyr verbs and their 
 
 **dplyr**| **base**  
 ---------|------------
-`arrange(df,x)`| `df[order),,drop = F]` 
+`arrange(df,x)`| `df[order), ,drop = F]` 
 `distinct(df, x)`| `df[!duplicated(x), , drop = F]`, `unique()`
 `filter(df, x)`| `df[which(x), , drop = F]`, `subset()`
 `mutate(df, z = x + y)`| `df$z = df$x + df$y`, `transform()`
@@ -50,7 +50,7 @@ The following table shows a condensed translation between dplyr verbs and their 
 `pull(df, x)`| `df$x`
 `rename(df, y = x)`| `names(df)[names(df) == "x] <- "y"`
 `relocate(df, y)`| `df[union("y", names(df))]`
-`select(df, x, y)`| `df[c("x", "y")], subset()`
+`select(df, x, y)`| `df[c("x", "y")]`, `subset()`
 `select(df, starts_with("x"))`| `df[grepl(names(df), "^x")]`
 `summarise(df, mean(x))`| `mean(df$x)`, `tapply()`, `aggregate()`, `by()`
 `slice(df, c(1, 2, 5))`| `df[c(1, 2, 5), , drop = F]`
@@ -62,7 +62,6 @@ library(dplyr)
 mtcars <- as_tibble(mtcars)
 iris <- as_tibble(iris)
 ```
-
 
 
 ### `arrange()`: Arrange rows by variables  
@@ -82,13 +81,7 @@ mtcars %>%
 
 ```{r}
 mtcars %>% 
-    arrange(-cyl, -disp)
-```
-
-
-base R  
-```{r}
-mtcars[order(mtcars$cyl, mtcars$disp, decreasing = T), , drop = F]
+    arrange(-cyl, -disp) # only suitable for numeric variable
 ```
 
 
@@ -207,7 +200,7 @@ iris %>% select(where(is.factor))
 ### `summarise()`: Reduce multiple values down to a single value  
 `dplyr::summarise()` compuates one or more summaries for each group.  
 
-```{r}
+```{r, message=F, warning=FALSE}
 mtcars %>% 
     group_by(cyl) %>% 
     summarise(
@@ -437,42 +430,6 @@ out2
 by_cyl <- mtcars %>% nest_by(cyl)
 by_cyl
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
