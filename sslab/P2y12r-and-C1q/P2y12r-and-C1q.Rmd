@@ -91,16 +91,37 @@ FC_df <- pvn %>%
         FC_L3 = mean_L3 / mean_naive) %>% 
     relocate(geneid_symbol, ensembl, starts_with("FC_"), starts_with("mean")) 
 
-FC_df[duplicated(FC_df$geneid_symbol), ]
+FC_df[!duplicated(FC_df$geneid_symbol), ]
 ```
 
 ```{r}
 agg_FC_df <- aggregate.data.frame(FC_df[, 3:6], list(FC_df$geneid_symbol), FUN = "sum") %>% 
     column_to_rownames("Group.1")
 agg_FC_df
-
-agg_FC_df - apply(agg_FC_df, 2, mean, trim = 0.3, na.rm = T)
 ```
+
+
+```{r}
+agg_FC_df_log2 <- agg_FC_df %>% log2()
+
+for(i in dim(agg_FC_df_log2)[2]){
+    agg_FC_df_log2[[i]] <- ifelse(agg_FC_df_log2[[i]] > 5, 5, agg_FC_df_log2[[i]])
+    agg_FC_df_log2[[i]] <- ifelse(agg_FC_df_log2[[i]] < -5, -5, agg_FC_df_log2[[i]])
+    agg_FC_df_log2[[i]] <- ifelse(agg_FC_df_log2[[i]] == Inf, 5, agg_FC_df_log2[[i]])
+    agg_FC_df_log2[[i]] <- ifelse(agg_FC_df_log2[[i]] == -Inf, -5, agg_FC_df_log2[[i]])
+    agg_FC_df_log2[[i]] <- ifelse(is.nan(agg_FC_df_log2[[i]]), 0, agg_FC_df_log2[[i]])
+}
+```
+
+
+```{r}
+par(mfrow = c(3, 1))
+plot(agg_FC_df_log2$FC_A14, agg_FC_df$FC_L14, pch = 19, xlim = c(-9, 9), ylim = c(-9, 9))
+hist(agg_FC_df_log2$FC_A14, breaks = 30)
+hist(agg_FC_df_log2$FC_L14, breaks = 30)
+```
+
+
 
 
 ## map p2y12r onto KEGG pathways  
@@ -115,33 +136,18 @@ keggLink(target = "pathway", source = paste("mmu:", p2ry12_entrez, sep = ""))
 ```
 
 ```{r}
-pathview(gene.data = agg_FC_df - apply(agg_FC_df, 2, mean, trim = 0.3, na.rm = T), 
+pathview(gene.data = agg_FC_df, 
          pathway.id = "04611", 
          kegg.native = F, 
          species = "mmu", 
-         gene.idtype = "symbol", 
+         gene.idtype = "SYMBOL", 
          cpd.lab.offset = 0, 
-         cex = 0.7, 
-         min.nnodes = 1)
+         cex = 0.4, 
+         min.nnodes = 1, 
+         trans.fun = list(gene = log2), 
+         multi.state =F, 
+         limit = list(gene = c(-5, 5), cpd = c(-5, 5)))
 ```
 
 
-## map p2ry12 onto reactome pathway  
-```{r}
-reactome.db::reactome_dbInfo()
-```
-
-```{r}
-reactome_pathway_p2r12 <- reactomePATHID2EXTID %>% 
-    as.data.frame() %>% 
-    dplyr::filter(gene_id == "70839") %>% 
-    pull(DB_ID) %>% 
-    unique()
-```
-
-```{r}
-library(DBI)
-
-dbListTables(conn = reactome_dbconn())
-```
 
