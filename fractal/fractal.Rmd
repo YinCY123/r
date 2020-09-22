@@ -1,0 +1,52 @@
+---
+title: "fractal"
+author: "yincy"
+date: "9/20/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+cmp_power <- function(m){
+  return(m^2)
+}
+
+fn <- function(n, b, ...){
+  x <- c(b^2 + 1i)
+  for(i in seq(n)){
+    y <- do.call(
+      what = "cmp_power", 
+      args = list(
+        m = x[length(x)]
+      )
+    )
+    x <- append(x, y)
+  }
+  return(x)
+}
+
+y <- fn(n = 100, b = 1)
+df <- tibble::tibble(
+  x = seq(y), 
+  y = y
+)
+
+df %>% 
+  ggplot(aes(x, Mod(y))) +
+  geom_jitter()
+```
+
+```{r}
+du <- function(n, b, c){
+  x <- c()
+  for(i in seq(n)){
+    m <- 
+  }
+}
+```
+
+
+
