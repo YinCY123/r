@@ -157,3 +157,71 @@ download.kegg(pathway.id = "01100", species = "mmu", file.type = "xml")
 
 
 
+## parse pathway to data frame   
+```{r}
+KGML_files <- list.files(path = "f:/mmu_kegg_xml/", full.names = T, pattern = ".xml$")
+KGML_files <- KGML_files[file.size(KGML_files) < 2300000]
+
+df <- data.frame()
+
+for(i in KGML_files){
+    pathway <- do.call(
+        what = "parseKGML2DataFrame", 
+        args = list(
+            file = i, 
+            genesOnly = T, 
+            expandGene = T
+        )
+    )
+    df <- rbind(df, pathway)
+}
+
+df %>% dim()
+df %>% pull(type) %>% table()
+df %>% pull(subtype) %>% table()
+
+df %>% head()
+```
+
+```{r}
+library(EnsDb.Mmusculus.v79)
+df$from <- gsub("mmu:", "", df$from)
+df$to <- gsub("mmu:", "", df$to)
+df %>% head()
+gs <- keggList(database = "mmu")
+mgs_df <- gs %>% as.data.frame() %>% 
+    tibble::rownames_to_column("entrez") %>% 
+    mutate(entrez = gsub("mmu:", "", entrez))
+
+colnames(mgs_df) <- c("entrez", "description")
+
+mmart <- useEnsembl(biomart = "ensembl", dataset = "mmusculus_gene_ensembl", mirror = "www")
+
+mart_df <- getBM(attributes = c("entrezgene_id", "mgi_symbol"), 
+                 filters = "entrezgene_id", 
+                 values = mgs_df$entrez, 
+                 mart = mmart)
+
+mart_df$entrezgene_id <- as.character(mart_df$entrezgene_id)
+
+mgs_df_join <- left_join(x = mgs_df, y = mart_df, by = c("entrez" = "entrezgene_id")) 
+
+f <- function(str1, str2, ...){
+    return(paste(str1, str2, sep = ", "))
+}
+
+mgs_df_join <- mgs_df_join %>% 
+    distinct(entrez, .keep_all = T) %>% 
+    tibble::column_to_rownames("entrez")
+
+mgs_df_join <- mgs_df_join[mgs_df$entrez, ] %>% 
+    rownames_to_column("entrez")
+
+
+```
+
+
+## parse pathway to graph
+
+
+
