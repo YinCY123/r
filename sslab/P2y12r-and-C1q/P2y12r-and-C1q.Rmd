@@ -52,8 +52,6 @@ gr_network %>%
 # P2y12r signaling network  
 ```{r, message=F, warning=FALSE}
 library(KEGGREST)
-library(reactome.db)
-library(rWikiPathways)
 library(pathview)
 ```
 
@@ -104,13 +102,16 @@ agg_FC_df
 ```{r}
 agg_FC_df_log2 <- agg_FC_df %>% log2()
 
-for(i in dim(agg_FC_df_log2)[2]){
-    agg_FC_df_log2[[i]] <- ifelse(agg_FC_df_log2[[i]] > 5, 5, agg_FC_df_log2[[i]])
-    agg_FC_df_log2[[i]] <- ifelse(agg_FC_df_log2[[i]] < -5, -5, agg_FC_df_log2[[i]])
-    agg_FC_df_log2[[i]] <- ifelse(agg_FC_df_log2[[i]] == Inf, 5, agg_FC_df_log2[[i]])
-    agg_FC_df_log2[[i]] <- ifelse(agg_FC_df_log2[[i]] == -Inf, -5, agg_FC_df_log2[[i]])
-    agg_FC_df_log2[[i]] <- ifelse(is.nan(agg_FC_df_log2[[i]]), 0, agg_FC_df_log2[[i]])
+for(i in dim(agg_FC_df_log2)[1]){
+    for(j in dim(agg_FC_df_log2)[2]){
+        ifelse(agg_FC_df_log2[i, j] == -Inf, -5, agg_FC_df_log2[i, j])
+        ifelse(agg_FC_df_log2[i, j] == Inf, 5, agg_FC_df_log2[i, j])
+        ifelse(is.na(agg_FC_df_log2[i, j]), 0, agg_FC_df_log2[i, j])
+        ifelse(abs(agg_FC_df_log2[i, j]) > 5, 5 * sign(agg_FC_df_log2[i, j]), agg_FC_df_log2[i, j])
+    }
 }
+
+agg_FC_df_log2
 ```
 
 
@@ -148,6 +149,11 @@ pathview(gene.data = agg_FC_df,
          multi.state =F, 
          limit = list(gene = c(-5, 5), cpd = c(-5, 5)))
 ```
+
+```{r}
+download.kegg(pathway.id = "01100", species = "mmu", file.type = "xml")
+```
+
 
 
 
