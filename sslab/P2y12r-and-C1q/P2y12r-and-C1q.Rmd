@@ -22,7 +22,7 @@ library(igraph)
 ```
 
 
-# C1q and C3 promotors  
+# C1q and C3 regulators   
 ```{r}
 mgs <- genes(EnsDb.Mmusculus.v79)
 
@@ -161,9 +161,10 @@ pathview(gene.data = agg_FC_df,
 
 ## parse pathway to data frame   
 ```{r}
-KGML_files <- list.files(path = "/home/yincy/git/Data/KEGG/pathways/mouse/", full.names = T, pattern = ".xml$")
+KGML_files <- list.files(path = "f:/mmu_kegg_xml/", full.names = T, pattern = ".xml$")
 # KGML_files <- KGML_files[file.size(KGML_files) < 2300000]
 
+df <- data.frame()
 for(i in KGML_files){
     pathway <- do.call(
         what = "parseKGML2DataFrame", 
@@ -188,7 +189,7 @@ all_path_df %>% pull(type) %>% table()
 all_path_df %>% pull(subtype) %>% table()
 
 all_path_df %>% head()
-df <- df %>% distinct(from, to, .keep_all = T)
+all_path_df <- all_path_df %>% distinct(from, to, .keep_all = T)
 
 from <- all_path_df %>% pull(from)
 to <- all_path_df %>% pull(to)
@@ -235,7 +236,7 @@ to_vector %>% head()
 all_path_df$from_symbol <- from_vector[all_path_df$from] 
 all_path_df$to_symbol <- to_vector[all_path_df$to]
 all_path_df <- all_path_df %>% 
-    dplyr::select(from, to, from_symbol, to_symbol, type, subtype)
+    dplyr::select(from_symbol, to_symbol, from, to, type, subtype)
 ```
 
 ```{r}
@@ -247,34 +248,59 @@ all_path_df %>% pull(to_symbol) %>% is.na() %>% table()
 all_path_graph <- graph_from_data_frame(d = all_path_df, 
                                         directed = T)
 
-ll <- layout_with_lgl(graph = all_path_graph)
-ll %>% head()
-ll %>% range()
-ll <- norm_coords(layout = ll, 
-                  xmin = -w, xmax = w, 
-                  ymin = -w, ymax = w)
+ego_size(graph = all_path_graph, order = 1, nodes = "P2ry12", mode = "out")
+order_1 <- make_ego_graph(graph = all_path_graph, order = 1, nodes = "P2ry12", mode = "out")
+
+plot(order_1[[1]], 
+     vertex.size = 15, 
+     vertex.frame.color = NA, 
+     edge.arrow.size = 0.5)
 ```
 
-
 ```{r}
-fw <- 10
-pdf(file = "all_path.pdf", width = fw, height = fw)
-plot(all_path_graph, 
-     vertex.size = 10,
-     layout = ll, 
+ego_size(graph = all_path_graph, nodes = "P2ry12", mode = "out", order = 2)
+Gnai1_order1 <- make_ego_graph(graph = all_path_graph, order = 1, nodes = "Gnai1", mode = "out")[[1]]
+
+ll <- layout_nicely(Gnai1_order1)
+ll %>% head()
+ll %>% range()
+
+pdf(file = "Gnai1_order1.pdf")
+plot(Gnai1_order1, 
+     vertex.frame.color = NA, 
+     vertex.size = 10, 
+     vertex.label.cex = 0.5, 
      rescale = F, 
      xlim = range(ll), 
      ylim = range(ll), 
-     edge.curved = 0.3, 
-     edge.arrow.size = 0.5, 
-     vertex.label = E(all_path_graph)$from_symbol)
-
+     layout = ll, 
+     edge.arrow.size = 0.5)
 dev.off()
 ```
 
 
+```{r}
+vcol <- rep("grey", V(order_2[[1]]) %>% length())
+vcol[V(order_2[[1]])$name == "P2ry12"] <- "red"
+ll <- layout_with_kk(graph = order_2[[1]])
+ll %>% head()
+ll %>% range()
 
-
+pdf(file = "order_2.pdf")
+plot(order_2[[1]], 
+     vertex.frame.color = NA,
+     vertex.size = 20,
+     edge.arrow.size = 0.5, 
+     rescale = F, 
+     xlim = range(ll), 
+     ylim = range(ll), 
+     layout = ll, 
+     vertex.arrow.size = 0.5, 
+#     vertex.label = NA, 
+     vertex.color = vcol, 
+     vertex.label.cex = 0.5)
+dev.off()
+```
 
 
 
