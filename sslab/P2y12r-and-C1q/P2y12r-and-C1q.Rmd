@@ -14,6 +14,11 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(nichenetr)
 library(EnsDb.Mmusculus.v79)
+library(KEGGREST)
+library(pathview)
+library(KEGGgraph)
+library(biomaRt)
+library(igraph)
 ```
 
 
@@ -49,13 +54,21 @@ gr_network %>%
 ```
 
 
-# P2y12r signaling network  
-```{r, message=F, warning=FALSE}
-library(KEGGREST)
-library(pathview)
+Download KEGG pathways  
+```{r}
+mmu_pathways <- keggList(database = "pathway", organism = "mmu")
+mmu_pathways <- mmu_pathways %>% 
+    names() %>% 
+    gsub(pattern = "path:mmu", replacement = "", x = .)
+
+download.kegg(pathway.id = mmu_pathways, 
+              species = "mmu", 
+              kegg.dir = "/home/yincy/git/Data/KEGG/pathways/mouse/", 
+              file.type = "xml")
 ```
 
 
+# P2y12r signaling network  
 ## PVN  
 ```{r}
 pvn <- read.csv(file = "20200702_frame_tpm_coding_gene_PVN.csv", 
@@ -98,7 +111,6 @@ agg_FC_df <- aggregate.data.frame(FC_df[, 3:6], list(FC_df$geneid_symbol), FUN =
 agg_FC_df
 ```
 
-
 ```{r}
 agg_FC_df_log2 <- agg_FC_df %>% log2()
 
@@ -114,7 +126,6 @@ for(i in dim(agg_FC_df_log2)[1]){
 agg_FC_df_log2
 ```
 
-
 ```{r}
 par(mfrow = c(3, 1))
 plot(agg_FC_df_log2$FC_A14, agg_FC_df$FC_L14, pch = 19, xlim = c(-9, 9), ylim = c(-9, 9))
@@ -123,14 +134,11 @@ hist(agg_FC_df_log2$FC_L14, breaks = 30)
 ```
 
 
-
-
 ## map p2y12r onto KEGG pathways  
 ```{r}
 p2ry12_entrez <- "70839"
 mgs[grep("p2ry12", mgs$gene_name, ignore.case = T, value = F)]
 ```
-
 
 ```{r}
 keggLink(target = "pathway", source = paste("mmu:", p2ry12_entrez, sep = ""))
@@ -150,19 +158,11 @@ pathview(gene.data = agg_FC_df,
          limit = list(gene = c(-5, 5), cpd = c(-5, 5)))
 ```
 
-```{r}
-download.kegg(pathway.id = "01100", species = "mmu", file.type = "xml")
-```
-
-
-
 
 ## parse pathway to data frame   
 ```{r}
-KGML_files <- list.files(path = "f:/mmu_kegg_xml/", full.names = T, pattern = ".xml$")
-KGML_files <- KGML_files[file.size(KGML_files) < 2300000]
-
-df <- data.frame()
+KGML_files <- list.files(path = "/home/yincy/git/Data/KEGG/pathways/mouse/", full.names = T, pattern = ".xml$")
+# KGML_files <- KGML_files[file.size(KGML_files) < 2300000]
 
 for(i in KGML_files){
     pathway <- do.call(
@@ -176,52 +176,106 @@ for(i in KGML_files){
     df <- rbind(df, pathway)
 }
 
-df %>% dim()
-df %>% pull(type) %>% table()
-df %>% pull(subtype) %>% table()
+df <- df %>% as_tibble()
+write.csv(x = df, file = "all_path_dataframe.csv", 
+          row.names = F, 
+          quote = F)
 
-df %>% head()
+all_path_df <- read.csv(file = "all_path_dataframe.csv", 
+                        stringsAsFactors = F)
+all_path_df %>% dim()
+all_path_df %>% pull(type) %>% table()
+all_path_df %>% pull(subtype) %>% table()
+
+all_path_df %>% head()
+df <- df %>% distinct(from, to, .keep_all = T)
+
+from <- all_path_df %>% pull(from)
+to <- all_path_df %>% pull(to)
+c(from, to) %>% unique() %>% length()
 ```
 
 ```{r}
-library(EnsDb.Mmusculus.v79)
-df$from <- gsub("mmu:", "", df$from)
-df$to <- gsub("mmu:", "", df$to)
-df %>% head()
-gs <- keggList(database = "mmu")
-mgs_df <- gs %>% as.data.frame() %>% 
-    tibble::rownames_to_column("entrez") %>% 
-    mutate(entrez = gsub("mmu:", "", entrez))
+all_path_df$from <- gsub("mmu:", "", all_path_df$from)
+all_path_df$to <- gsub("mmu:", "", all_path_df$to)
+all_path_df
+```
 
-colnames(mgs_df) <- c("entrez", "description")
-
-mmart <- useEnsembl(biomart = "ensembl", dataset = "mmusculus_gene_ensembl", mirror = "www")
-
-mart_df <- getBM(attributes = c("entrezgene_id", "mgi_symbol"), 
+```{r}
+mmart <- useMart(biomart = "ensembl", dataset = "mmusculus_gene_ensembl")
+from_df <- getBM(attributes = c("entrezgene_id", "mgi_symbol"), 
                  filters = "entrezgene_id", 
-                 values = mgs_df$entrez, 
+                 values = all_path_df[, "from"] %>% unique(), 
                  mart = mmart)
+from_df <- from_df %>% 
+    distinct(entrezgene_id, .keep_all = T) %>% 
+    column_to_rownames("entrezgene_id") 
 
-mart_df$entrezgene_id <- as.character(mart_df$entrezgene_id)
-
-mgs_df_join <- left_join(x = mgs_df, y = mart_df, by = c("entrez" = "entrezgene_id")) 
-
-f <- function(str1, str2, ...){
-    return(paste(str1, str2, sep = ", "))
-}
-
-mgs_df_join <- mgs_df_join %>% 
-    distinct(entrez, .keep_all = T) %>% 
-    tibble::column_to_rownames("entrez")
-
-mgs_df_join <- mgs_df_join[mgs_df$entrez, ] %>% 
-    rownames_to_column("entrez")
+from_vector <- from_df[[1]]
+names(from_vector) <- rownames(from_df)
+from_vector %>% length()
+from_vector %>% head()
 
 
+to_df <- getBM(attributes = c("entrezgene_id", "mgi_symbol"), 
+                 filters = "entrezgene_id", 
+                 values = all_path_df[, "to"] %>% unique(), 
+                 mart = mmart)
+to_df <- to_df %>% 
+    distinct(entrezgene_id, .keep_all = T) %>% 
+    column_to_rownames("entrezgene_id")
+
+to_vector <- to_df[[1]]
+names(to_vector) <- rownames(to_df)
+to_vector %>% length()
+to_vector %>% head()
+```
+
+```{r}
+all_path_df$from_symbol <- from_vector[all_path_df$from] 
+all_path_df$to_symbol <- to_vector[all_path_df$to]
+all_path_df <- all_path_df %>% 
+    dplyr::select(from, to, from_symbol, to_symbol, type, subtype)
+```
+
+```{r}
+all_path_df %>% pull(from_symbol) %>% is.na() %>% table()
+all_path_df %>% pull(to_symbol) %>% is.na() %>% table()
+```
+
+```{r}
+all_path_graph <- graph_from_data_frame(d = all_path_df, 
+                                        directed = T)
+
+ll <- layout_with_lgl(graph = all_path_graph)
+ll %>% head()
+ll %>% range()
+ll <- norm_coords(layout = ll, 
+                  xmin = -w, xmax = w, 
+                  ymin = -w, ymax = w)
 ```
 
 
-## parse pathway to graph
+```{r}
+fw <- 10
+pdf(file = "all_path.pdf", width = fw, height = fw)
+plot(all_path_graph, 
+     vertex.size = 10,
+     layout = ll, 
+     rescale = F, 
+     xlim = range(ll), 
+     ylim = range(ll), 
+     edge.curved = 0.3, 
+     edge.arrow.size = 0.5, 
+     vertex.label = E(all_path_graph)$from_symbol)
+
+dev.off()
+```
+
+
+
+
+
 
 
 
