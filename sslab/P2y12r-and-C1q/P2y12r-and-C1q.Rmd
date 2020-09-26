@@ -161,7 +161,9 @@ pathview(gene.data = agg_FC_df,
 
 ## parse pathway to data frame   
 ```{r}
-KGML_files <- list.files(path = "f:/mmu_kegg_xml/", full.names = T, pattern = ".xml$")
+KGML_files <- list.files(path = "/home/yincy/git/Data/KEGG/pathways/mouse/", 
+                         full.names = T, 
+                         pattern = ".xml$")
 # KGML_files <- KGML_files[file.size(KGML_files) < 2300000]
 
 df <- data.frame()
@@ -251,32 +253,104 @@ all_path_graph <- graph_from_data_frame(d = all_path_df,
 ego_size(graph = all_path_graph, order = 1, nodes = "P2ry12", mode = "out")
 order_1 <- make_ego_graph(graph = all_path_graph, order = 1, nodes = "P2ry12", mode = "out")
 
+pdf(file = "P2ry12_order_1.pdf")
 plot(order_1[[1]], 
      vertex.size = 15, 
      vertex.frame.color = NA, 
      edge.arrow.size = 0.5)
+dev.off()
 ```
 
 ```{r}
 ego_size(graph = all_path_graph, nodes = "P2ry12", mode = "out", order = 2)
-Gnai1_order1 <- make_ego_graph(graph = all_path_graph, order = 1, nodes = "Gnai1", mode = "out")[[1]]
+Gnai1_order1 <- make_ego_graph(graph = all_path_graph, 
+                               order = 1, 
+                               nodes = "Gnai1", 
+                               mode = "out")[[1]]
 
-ll <- layout_nicely(Gnai1_order1)
+ll <- layout_as_star(graph = Gnai1_order1, center = "Gnai1")
 ll %>% head()
 ll %>% range()
+
+vcol <- rep("gold", V(Gnai1_order1)$name %>% length())
+vcol[V(Gnai1_order1)$name == "Gnai1"] <- "red"
+vcol %>% table()
 
 pdf(file = "Gnai1_order1.pdf")
 plot(Gnai1_order1, 
      vertex.frame.color = NA, 
-     vertex.size = 10, 
+     vertex.size = 5, 
      vertex.label.cex = 0.5, 
      rescale = F, 
      xlim = range(ll), 
      ylim = range(ll), 
      layout = ll, 
-     edge.arrow.size = 0.5)
+     edge.arrow.size = 0.3, 
+     vertex.color = vcol)
 dev.off()
 ```
+
+```{r}
+Gnai2_order1 <- make_ego_graph(graph = all_path_graph, 
+                               order = 1, 
+                               mode = "out", 
+                               nodes = "Gnai2")[[1]]
+
+vcol <- rep("grey", V(Gnai2_order2)$name %>% length())
+vcol[V(Gnai2_order2)$name == "Gnai2"] <- "red"
+vcol %>% table()
+
+ll <- layout_as_star(graph = Gnai2_order2, center = "Gnai2")
+ll %>% head()
+ll %>% range()
+
+pdf(file = "Gnai2_order1.pdf")
+plot(Gnai2_order2, 
+     vertex.color = vcol, 
+     vertex.frame.color = NA, 
+     vertex.label.cex = 0.5, 
+     vertex.size = 5,
+     edge.arrow.size = 0.3, 
+     xlim = range(ll), 
+     ylim = range(ll), 
+     layout = ll)
+dev.off()
+```
+
+
+```{r}
+Gnai3_order1 <- make_ego_graph(graph = all_path_graph, 
+                               order = 1, 
+                               mode = "out", 
+                               nodes = "Gnai3")[[1]]
+
+vcol <- rep("grey", V(Gnai3_order1)$name %>% length())
+vcol[V(Gnai3_order1)$name == "Gnai3"] <- "red"
+vcol %>% table()
+
+ll <- layout_as_star(graph = Gnai3_order1, center = "Gnai3")
+ll %>% head()
+ll %>% range()
+
+pdf(file = "Gnai3_order1.pdf")
+plot(Gnai3_order1, 
+     vertex.color = vcol, 
+     vertex.frame.color = NA, 
+     vertex.label.cex = 0.5, 
+     vertex.size = 5,
+     edge.arrow.size = 0.3, 
+     xlim = range(ll), 
+     ylim = range(ll), 
+     layout = ll)
+dev.off()
+```
+
+```{r}
+nodes_Gnai1 <- V(Gnai1_order1)$name
+nodes_Gnai2 <- V(Gnai2_order1)$name
+nodes_Gnai3 <- V(Gnai3_order1)$name
+```
+
 
 
 ```{r}
@@ -300,6 +374,15 @@ plot(order_2[[1]],
      vertex.color = vcol, 
      vertex.label.cex = 0.5)
 dev.off()
+```
+
+```{r}
+df <- data.frame(
+    Gnai1 = nodes_Gnai1, 
+    Gnai2 = nodes_Gnai2, 
+    Gnai3 = nodes_Gnai3
+)
+df
 ```
 
 
