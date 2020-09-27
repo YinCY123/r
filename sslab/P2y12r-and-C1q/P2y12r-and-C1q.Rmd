@@ -345,6 +345,31 @@ write.csv(x = p2ry12_sig_df[, 1:2] %>% distinct(from_symbol, to_symbol),
 ```
 
 
+## DEG in p2ry12 order 3 genes  
+```{r}
+A3 <- read.csv(file = "20200702_3A_naive_DE_FDR.csv", header = T)
+A3_DEG <- A3 %>% dplyr::filter(logFC >= 1 | logFC <= -1) %>% 
+    dplyr::pull(geneid_symbol)
+
+L3 <- read.csv(file = "20200702_3L_naive_DE_FDR.csv", header = T)
+L3_DEG <- L3 %>% 
+    dplyr::filter(logFC >= 1 | logFC <= -1) %>% 
+    dplyr::pull(geneid_symbol)
+```
+
+
+```{r}
+p2ry12_order3_sig_df <- read.csv(file = "p2ry12_order3_df.csv", header = T)
+
+from_to_vector <- c(p2ry12_order3_sig_df[[1]], p2ry12_order3_sig_df[[2]]) %>% unique()
+```
+
+```{r}
+A3_DEG_order3 <- setdiff(from_to_vector, A3_DEG)
+L3_DEG_order3 <- setdiff(from_to_vector, L3_DEG)
+```
+
+
 
 
 
