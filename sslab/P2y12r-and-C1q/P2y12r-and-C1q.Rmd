@@ -192,6 +192,7 @@ all_path_df %>% pull(subtype) %>% table()
 
 all_path_df %>% head()
 all_path_df <- all_path_df %>% distinct(from, to, .keep_all = T)
+all_path_df %>% dim()
 
 from <- all_path_df %>% pull(from)
 to <- all_path_df %>% pull(to)
@@ -250,140 +251,104 @@ all_path_df %>% pull(to_symbol) %>% is.na() %>% table()
 all_path_graph <- graph_from_data_frame(d = all_path_df, 
                                         directed = T)
 
-ego_size(graph = all_path_graph, order = 1, nodes = "P2ry12", mode = "out")
-order_1 <- make_ego_graph(graph = all_path_graph, order = 1, nodes = "P2ry12", mode = "out")
+ego_size(graph = all_path_graph, order = 3, nodes = "P2ry12", mode = "out")
+p2ry12_order1 <- make_ego_graph(graph = all_path_graph, order = 1, nodes = "P2ry12", mode = "out")[[1]]
+p2ry12_order2 <- make_ego_graph(graph = all_path_graph, order = 2, nodes = "P2ry12", mode = "out")[[1]]
+p2ry12_order3 <- make_ego_graph(graph = all_path_graph, order = 3, nodes = "P2ry12", mode = "out")[[1]]
 
-pdf(file = "P2ry12_order_1.pdf")
-plot(order_1[[1]], 
+nodes_o1 <- p2ry12_order1 %>% 
+    as_data_frame() %>% 
+    .[,2] %>% 
+    unique()
+
+nodes_o2 <- p2ry12_order2 %>% 
+    as_data_frame() %>% 
+    .[, 2] %>% 
+    unique() %>% 
+    setdiff(nodes_o1)
+
+nodes_o3 <- p2ry12_order3 %>% 
+    as_data_frame() %>% 
+    .[, 2] %>% 
+    unique() %>% 
+    setdiff(nodes_o1) %>% 
+    setdiff(nodes_o2)
+
+p2ry12_o1 <- p2ry12_order3 %>% 
+    as_data_frame() %>% 
+    magrittr::set_colnames(c("from_symbol", "to_symbol", "from_entrez", "to_entrez", "type", "subtype")) %>% 
+    dplyr::filter(from_symbol %in% c("P2ry12")) %>% 
+    distinct(from_symbol, to_symbol, .keep_all = T)
+
+p2ryo2 <- p2ry12_order3 %>% 
+    as_data_frame() %>% 
+    magrittr::set_colnames(c("from_symbol", "to_symbol", "from_entrez", "to_entrez", "type", "subtype")) %>% 
+    dplyr::filter(from_symbol %in% nodes_o1) %>% 
+    distinct(from_symbol, to_symbol, .keep_all = T)
+
+p2ryo3 <- p2ry12_order3 %>% 
+    as_data_frame() %>% 
+    magrittr::set_colnames(c("from_symbol", "to_symbol", "from_entrez", "to_entrez", "type", "subtype")) %>% 
+    dplyr::filter(from_symbol %in% nodes_o2) %>% 
+    distinct(from_symbol, to_symbol, .keep_all = T)
+
+p2ry12_sig_df <- rbind(p2ry12_o1, p2ryo2, p2ryo3) 
+
+p2ry12_ig <- graph_from_data_frame(d = p2ry12_sig_df, directed = T)
+
+vcol <- rep("grey70", V(p2ry12_ig) %>% length())
+vcol[V(p2ry12_ig)$name == "P2ry12"] <- "red"
+vcol[V(p2ry12_ig)$name %in% nodes_o1] <- "gold"
+vcol[V(p2ry12_ig)$name %in% nodes_o2] <- "blue"
+vcol %>% table()
+
+ecol <- rep("grey70", E(p2ry12_ig) %>% length())
+table(ecol)
+
+ll <- layout_with_fr(graph = p2ry12_ig)
+ll %>% head()
+ll %>% .[, 1] %>% range()
+ll %>% .[, 2] %>% range()
+
+pdf(file = "P2ry12_order3.pdf")
+plot(p2ry12_ig, 
      vertex.size = 15, 
-     vertex.frame.color = NA, 
-     edge.arrow.size = 0.5)
-dev.off()
-```
-
-```{r}
-ego_size(graph = all_path_graph, nodes = "P2ry12", mode = "out", order = 2)
-Gnai1_order1 <- make_ego_graph(graph = all_path_graph, 
-                               order = 1, 
-                               nodes = "Gnai1", 
-                               mode = "out")[[1]]
-
-ll <- layout_as_star(graph = Gnai1_order1, center = "Gnai1")
-ll %>% head()
-ll %>% range()
-
-vcol <- rep("gold", V(Gnai1_order1)$name %>% length())
-vcol[V(Gnai1_order1)$name == "Gnai1"] <- "red"
-vcol %>% table()
-
-pdf(file = "Gnai1_order1.pdf")
-plot(Gnai1_order1, 
-     vertex.frame.color = NA, 
-     vertex.size = 5, 
-     vertex.label.cex = 0.5, 
-     rescale = F, 
-     xlim = range(ll), 
-     ylim = range(ll), 
-     layout = ll, 
-     edge.arrow.size = 0.3, 
-     vertex.color = vcol)
-dev.off()
-```
-
-```{r}
-Gnai2_order1 <- make_ego_graph(graph = all_path_graph, 
-                               order = 1, 
-                               mode = "out", 
-                               nodes = "Gnai2")[[1]]
-
-vcol <- rep("grey", V(Gnai2_order2)$name %>% length())
-vcol[V(Gnai2_order2)$name == "Gnai2"] <- "red"
-vcol %>% table()
-
-ll <- layout_as_star(graph = Gnai2_order2, center = "Gnai2")
-ll %>% head()
-ll %>% range()
-
-pdf(file = "Gnai2_order1.pdf")
-plot(Gnai2_order2, 
      vertex.color = vcol, 
+     vertex.label.cex = 0.3,
+     vertex.label.color = vcol,
      vertex.frame.color = NA, 
-     vertex.label.cex = 0.5, 
-     vertex.size = 5,
-     edge.arrow.size = 0.3, 
-     xlim = range(ll), 
-     ylim = range(ll), 
-     layout = ll)
-dev.off()
-```
-
-
-```{r}
-Gnai3_order1 <- make_ego_graph(graph = all_path_graph, 
-                               order = 1, 
-                               mode = "out", 
-                               nodes = "Gnai3")[[1]]
-
-vcol <- rep("grey", V(Gnai3_order1)$name %>% length())
-vcol[V(Gnai3_order1)$name == "Gnai3"] <- "red"
-vcol %>% table()
-
-ll <- layout_as_star(graph = Gnai3_order1, center = "Gnai3")
-ll %>% head()
-ll %>% range()
-
-pdf(file = "Gnai3_order1.pdf")
-plot(Gnai3_order1, 
-     vertex.color = vcol, 
-     vertex.frame.color = NA, 
-     vertex.label.cex = 0.5, 
-     vertex.size = 5,
-     edge.arrow.size = 0.3, 
-     xlim = range(ll), 
-     ylim = range(ll), 
-     layout = ll)
-dev.off()
-```
-
-```{r}
-nodes_Gnai1 <- V(Gnai1_order1)$name
-nodes_Gnai2 <- V(Gnai2_order1)$name
-nodes_Gnai3 <- V(Gnai3_order1)$name
-```
-
-
-
-```{r}
-vcol <- rep("grey", V(order_2[[1]]) %>% length())
-vcol[V(order_2[[1]])$name == "P2ry12"] <- "red"
-ll <- layout_with_kk(graph = order_2[[1]])
-ll %>% head()
-ll %>% range()
-
-pdf(file = "order_2.pdf")
-plot(order_2[[1]], 
-     vertex.frame.color = NA,
-     vertex.size = 20,
-     edge.arrow.size = 0.5, 
+     edge.arrow.size = 0.2, 
+     xlim = ll %>% .[, 1] %>% range(), 
+     ylim = ll %>% .[, 2] %>% range(), 
      rescale = F, 
-     xlim = range(ll), 
-     ylim = range(ll), 
-     layout = ll, 
-     vertex.arrow.size = 0.5, 
+     layout = ll*1.1, 
 #     vertex.label = NA, 
-     vertex.color = vcol, 
-     vertex.label.cex = 0.5)
+     edge.color = ecol, 
+     edge.width = 0.2, 
+    edge.curved = 0.2)
+
+legend("topright", 
+       legend = c("order 0 = 1", "order 1 = 3", "order 2 = 86", "order 3 = 559"), 
+       pch = 19, 
+       col = c("red", "gold", "blue", "grey70"), 
+       bty = "n", 
+       cex = 0.7)
+
 dev.off()
 ```
 
 ```{r}
-df <- data.frame(
-    Gnai1 = nodes_Gnai1, 
-    Gnai2 = nodes_Gnai2, 
-    Gnai3 = nodes_Gnai3
-)
-df
+write.csv(x = p2ry12_sig_df[, 1:2] %>% distinct(from_symbol, to_symbol), 
+          file = "p2ry12_order3_df.csv", 
+          row.names = F, 
+          quote = F)
 ```
+
+
+
+
+
+
 
 
 
