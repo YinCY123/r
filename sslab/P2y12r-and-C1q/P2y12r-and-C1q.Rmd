@@ -382,6 +382,41 @@ write.csv(x = A3_DEG_order3,
 ```
 
 
+```{r}
+write.csv(x = A3_DEG_order3, 
+          file = "A3_DEG_order3_intersect.csv", 
+          row.names = F, 
+          quote = F)
+
+write.csv(x = L3_DEG_order3, 
+          file = "L3_DEG_order3_intersect.csv", 
+          row.names = F, 
+          quote = F)
+```
+
+```{r}
+intersects <- intersect(L3_DEG_order3, A3_DEG_order3)
+```
+
+
+## GO  
+```{r}
+go_list_pvn_2 <- readxl::read_xlsx(path = "GO list/20200812_geneid_updown_go_list_PVN_uniq.xlsx", 
+                                   sheet = 6)
+
+go_list_pvn_2
+```
+
+```{r}
+go_geneID <- str_split(string = go_list_pvn_2$geneID, pattern = "/")
+go_list_pvn_2$overlap <- lapply(go_geneID, FUN = intersect, y = intersects) %>% sapply(str_c, collapse = "/")
+
+write.xlsx2(x = go_list_pvn_2, 
+            file = "GO list/pvn_uniq.xlsx", 
+            sheetName = "co_down_GO", 
+            append = T)
+```
+
 
 
 
