@@ -418,6 +418,21 @@ write.xlsx2(x = go_list_pvn_2,
 ```
 
 
+```{r}
+files <- list.files(path = "GO list", pattern = "BS_|CTX_", full.names = T)
+sheets <- c("3up_GO", "3down_GO", "co_up_GO", "co_down_GO")
+file_names <- c("BS_2.xlsx", "BS_uniq.xlsx", "CTX_2.xlsx", "CTX_uniq.xlsx")
+
+for(i in files[4]){
+    for(sheet in sheets){
+        p <- read.xlsx(file = i, sheetName = sheet)
+        p$overlap <- p$geneID %>% str_split(pattern = "/") %>% 
+            lapply(FUN = intersect, y = intersects) %>% 
+            sapply(FUN = str_c, collapse = "/")
+        write.xlsx(x = p, file = "CTX_uniq.xlsx", append = T, sheetName = sheet)
+    }
+}
+```
 
 
 
