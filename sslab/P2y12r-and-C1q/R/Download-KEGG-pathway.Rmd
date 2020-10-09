@@ -1,0 +1,29 @@
+---
+title: "Download-KEGG-pathway"
+author: "yincy"
+date: "10/9/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(KEGGREST)
+library(magrittr)
+library(pathview)
+```
+
+
+```{r}
+mmu_pathways <- keggList(database = "pathway", organism = "mmu")
+mmu_pathways <- mmu_pathways %>% 
+    names() %>% 
+    gsub(pattern = "path:mmu", replacement = "", x = .)
+
+download.kegg(pathway.id = mmu_pathways, 
+              species = "mmu", 
+              kegg.dir = "/home/yincy/git/Data/KEGG/pathways/mouse/", 
+              file.type = "xml")
+```
