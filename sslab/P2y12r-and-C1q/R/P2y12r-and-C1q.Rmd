@@ -443,61 +443,67 @@ intersects_A3_L3 <- intersect(A3_DEG_order3_intersect, L3_DEG_order3_intersect)
 intersects_pvn_top100_DEG_A3_L3_DGE <- intersect(pvn_top_100_GO_DEG, intersects_A3_L3)
 ```
 
-```{r}
-library(org.Mm.eg.db)
-columns(org.Mm.eg.db)
-intersects_pvn_top100_DEG_A3_L3_DGE_df <- select(x = org.Mm.eg.db, 
-       keys = intersect(pvn_top_100_GO_DEG, intersects_A3_L3), 
-       keytype = "SYMBOL", 
-       column = c("ENTREZID", "SYMBOL"))
 
-A3_L3_top100_DEG_pathways <- keggLink(target = "pathway", 
-         source = paste("mmu:", intersects_pvn_top100_DEG_A3_L3_DGE_df$ENTREZID, sep = "")) %>% 
-    unique() %>% 
-    gsub("path:", replacement = "", x = .)
-```
 
 ```{r}
-download.kegg(pathway.id = A3_L3_top100_DEG_pathways %>% gsub("mmu", "", .), 
-              species = "mmu", 
-              kegg.dir = "../res/P2ry12/A3_L3_top100_pathways/")
+parseKGML2Graph(file = "../res/P2ry12/A3_L3_top100_pathways/mmu00240.xml", genesOnly = F, expandGenes = T)
 ```
 
 
-## merge KEGG pathways  
-```{r, message=FALSE, warning=FALSE}
-library(tkWidgets)
-library(KEGGgraph)
-library(KEGG.db)
+```{r}
+parseKGML2Graph(file = "../res/P2ry12/A3_L3_top100_pathways/mmu00240.xml") %>% 
+  getKEGGedgeData() %>% 
+  .[[1]]
 ```
 
+
 ```{r}
-pathways <- list.files(path = "../res/P2ry12/A3_L3_top100_pathways/", 
-                       pattern = ".xml$", 
-                       full.names = T)
-
-pathways_list <- list()
-
-for(i in seq_along(pathways)){
-    pathways_list[[i]] <- parseKGML2Graph(file = pathways[i], 
-                                          genesOnly = F, 
-                                          expandGenes = F)
+KGML2DataFrame <- function(filepath, ...){
+  # load required packages
+  require(KEGGgraph, quietly = TRUE)
+  require(magrittr, quietly = TRUE)
+  
+  parsedKGML <- parseKGML(file = filepath, ...)
+  parsedGraph <- parseKGML2Graph(file = parsedKGML, genesOnly = F, expandGenes = T)
+  graph_edge_list <- getKEGGedgeData(graph = parsedGraph)
+  ids <- sapply(graph_edge_list, getEntryID)
+  return(ids)
 }
 
-pathways_merged <- mergeKEGGgraphs(list = pathways_list, edgemode = "directed")
+files <- list.files(path = "f:/git/R-codes/sslab/P2y12r-and-C1q/res/P2ry12/A3_L3_top100_pathways/", 
+                    pattern = ".xml$", 
+                    full.names = T)
 
-pathways_merged
-
-pdf(file = "path.pdf")
-plot(path)
-dev.off()
+KGML2DataFrame(filepath = "../res/P2ry12/A3_L3_top100_pathways/mmu00230.xml")
 ```
 
 
+# map 3 days and 14 days  
+```{r}
+subtype_element <- data.frame(
+  name = c("compound", "hidden compound", "activation", "inhibition", 
+           "expression", "reexpression", "indirect effect", "state change", 
+           "binding/association", "dissociation", "missing interaction", 
+           "phosphorylation", "dephosphorylation", "glycosylation", "ubiquitination", 
+           "methylation"), 
+  value = c("Entry element id attribute value for compound", 
+            "Entry element id attribute value for hidden compound", 
+            "-->", "--|", "-->", "--|", "..>", 
+            "...", "---", "-+-", "-/-",
+            "+p", "-p", "+g", "+u", "+m")
+)
 
+subtype_element
+```
 
-
-
+**Type attribute**  
+attribute value| explanation
+---------------|-----------------------
+ECrel| enzyme-enzyme relation, indicating two enzyme catalyzing successive reaction steps  
+PPrel| protein-protein interaction, such as binding and modification
+GErel| gene expression interaction, indicating relation of transcription factor and target gene product
+PCrel| protein-compound interaction 
+maplink| link to another map
 
 
 
