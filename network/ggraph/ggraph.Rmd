@@ -1,0 +1,152 @@
+---
+title: "ggraph"
+author: "yincy"
+date: "10/12/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggraph)
+library(tidygraph)
+library(purrr)
+library(rlang)
+```
+
+
+# tidygraph and ggraph  
+## Supported data structures  
+Prior to v2 `ggraph` had two main supported data structures, namely `dendrogram` and `igraph`. In addition hclust and network were supported by automatic conversion to `dendrogram` and `igraph` respectively. Each of the two data structures had their own layouts and under the hood two different set of functionality had to be maintained to extract nodes and edges etc. In v2 and going forward this has been simplified and ggraph now uses only `tbl_graph` as a graph representation. This does not mean that you’re out of luck if you’re not buying into the whole tidygraph idea. Every object supported by `tidygraph` is supported directly in ggraph by automatic conversion to `tbl_graph`. This means that `igraph`, `dendrogram`, `hclust`, and `network` is still supported in addition to `data.tree`, `phylo`, and `graph` as well as a number of `data.frame`, `matrix`, and `list` representations.  
+
+The change has reduced internal code complexity quite a bit which will make it easier to provide new features in future. From a user point of view it has the benefit of simplifying the API in that `ggraph` doesn’t really care what type of network object you pass in - every layout and geom just works with every data structure. Further, it simplifies how to add `ggraph` support to additional data structures: just write an `as_tbl_graph()` method for the class!. Due to the large support of classes and data structures in `tidygraph` this should relatively straightforward. If you’re developer of a package that defines a custom network class simply export an `as_tbl_graph()` method for the class to gain native `ggraph` (and tidygraph) support, or add it directly to `tidygraph` through a PR.  
+
+## NSE in layout specifications  
+In `ggraph` the initiation will need to specify a layout to use for the subequent node and edge geoms.Many of these layouts use different node and edge variables in their calculations e.g. a node size or an edge weight. Prior to v2 these arguments would simply take a string naming the respective variable to use, but following the v2 update these arguments implement Non-Standard Evaluation (NSE) in a manner known from both `dplyr` and `ggplot2` where it is used inside `aes()` calls. Depending on whether the argument refers to a node or edge value the provided expression will be evaluated in the context of nodes or edges respectively. The bottomline is that given a network such as this.  
+
+```{r}
+graph <- as_tbl_graph(
+    data.frame(
+        from = sample(5, 20, TRUE), 
+        to = sample(5, 20, TRUE), 
+        weight = runif(20)
+    )
+)
+
+graph
+```
+
+```{r}
+ggraph(graph, layout = "fr", weights = weight) +
+    geom_edge_link() +
+    geom_node_point()
+```
+
+```{r}
+ggraph(graph, layout = "fr", weights = log(weight)) +
+    geom_edge_link() +
+    geom_node_point()
+```
+
+## Access to tidygraph algorithms in ggraph code  
+The most important improvement resulting from the integration of tidygraph and ggraph is that tidygraph algorithms are now directly usable within ggraph calls. This means that it is no longer necessary to precompute and store derived node and edge variables on the graph in order to use them in a plot.  
+
+```{r}
+graph <- create_notable(name = "zachary")
+
+ggraph(graph, layout = "fr") +
+    geom_edge_link() +
+    geom_node_point(aes(size = centrality_pagerank())) +
+    theme(legend.position = "right") +
+    scale_size_area(name = "centrality")
+```
+
+here it is not necessary to first compute the pagerank centrality and store it as a node variable in order to plot it, and if you’re interested in looking at one of the myriad of other centrality measures you simply change the plotting code. This feature makes it much easier and painfree to investigate the effect of different graph measures on your plots and is a huge benefit when iterating on your visualisation.  
+
+Access to `tidygraph` is available within `ggraph()` and `aes()` calls, and within `facet` formulas. It is thus possible to use algorithms when specifying layouts, adding aesthetics to geoms and splitting into subplots - all areas were ease of iteration is vital.  
+
+```{r}
+ggraph(graph, layout = "matrix", sort.by = node_rank_leafsort()) +
+    geom_edge_point(aes(color = centrality_edge_betweenness()), mirror = TRUE) +
+    theme(legend.position = "bottom")
+```
+
+```{r}
+ggraph(graph, layout = "fr") +
+    geom_edge_link() +
+    geom_node_point() +
+    facet_nodes(~ group_infomap())
+```
+
+
+# Layouts  
+In very short terms, a layout is the vertical and horizontal placement of nodes when plotting a particular graph structure. Conversely, a layout algorithm is an algorithm that takes in a graph structure (and potentially some additional parameters) and return the vertical and horizontal position of the nodes. Often, when people think of network visualizations, they think of node-edge diagrams where strongly connected nodes are attempted to be plotted in close proximity. Layouts can be a lot of other things too though — e.g. hive plots and treemaps. One of the driving factors behind ggraph has been to develop an API where any type of visual representation of graph structures is supported.  
+
+## The `ggraph()` and `create_layout()` functions 
+As the layout is a global specification of the spatial position of the nodes it spans all layers in the plot and should thus be defined outside of calls to geoms or stats. In `ggraph` it is often done as part of the plot initialization using `ggraph()` — a function equivalent in intent to `ggplot()`. As a minimum `ggraph()` must be passed a graph object supported by `ggraph`.  
+
+```{r}
+library(ggraph)
+library(tidygraph)
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+set_graph_style(plot_margin = margin(1, 1, 1, 1), family = "宋体")
+graph <- as_tbl_graph(highschool)
+
+ggraph(graph) +
+    geom_edge_link(aes(color = factor(year))) +
+    geom_node_point()
+```
+
+```{r, message=FALSE, warning=FALSE}
+ggraph(graph = graph, layout = "kk") +
+    geom_edge_link(aes(color = factor(year))) +
+    geom_node_point()
+```
+
+If any layout parameters refers to node or edge variables they must be supplied as unquoted expression (like inside `aes()` and `tidyverse` verbs).  
+
+In addition to specifying the layout during plot creation it can also happen separately using create_layout(). This function takes the same arguments as ggraph() but returns a layout_ggraph object that can later be used in place of a graph structure in ggraph call.  
+
+```{r, warning=F}
+layout <- create_layout(graph = graph, layout = "eigen")
+
+ggraph(layout) +
+    geom_edge_link(aes(color = factor(year))) +
+    geom_node_point(size = 2)
+```
+
+Examining the return of create_layout() we see that it is really just a data.frame of node positions and (possible) attributes. Furthermore the original graph object along with other relevant information is passed along as attributes.  
+
+```{r}
+head(layout)
+```
+
+```{r}
+attributes(layout)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
