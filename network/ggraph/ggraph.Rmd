@@ -130,6 +130,583 @@ head(layout)
 attributes(layout)
 ```
 
+## Adding support for new data sources  
+Out of the box `ggraph` supports `tbl_graph` objects from tidygraph natively. Any other type of object will be attempted to be coerced to a `tbl_graph` object automatically. Tidygraph provide conversions for most known graph structure in R so almost any data type is supported by ggraph by extension. If there is wish for support for additional classes this can be achieved by providing a `as_tbl_graph()` method for the class. If you do this, consider submitting the method to tidygraph so others can benefit from your work.  
+
+### Layouts abound  
+There’s a lot of different layouts in ggraph — All layouts from the graphlayouts and igraph packages are available, an ggraph itself also provide some of the more specialised layouts itself. All in all ggraph provides well above 20 different layouts to choose from.  
+
+If ggraph lacks the needed layout it is always possible to supply your own layout function that takes a tbl_graph object and returns a data.frame of node positions, or supply the positions directly by passing a matrix or data.frame to the layout argument.  
+ 
+### A note on circularity  
+Some layouts can be shown effectively both in a standard Cartesian projection as well as in a polar projection. The standard approach in ggplot2 has been to change the coordinate system with the addition of e.g. `coord_polar()`. This approach — while consistent with the grammar — is not optimal for ggraph as it does not allow layers to decide how to respond to circularity. The prime example of this is trying to draw straight lines in a plot using `coord_polar()`. Instead circularity is part of the layout specification and gets communicated to the layers with the `circular` column in the data, allowing each layer to respond appropriately. Sometimes standard and circular representations of the same layout get used so often that they get different names. In ggraph they’ll have the same name and only differ in whether or not `circular` is set to `TRUE`.  
+
+```{r, message=FALSE, warning=FALSE}
+ggraph(graph = graph, layout = "linear") +
+    geom_edge_arc(aes(color = factor(year)))
+```
+
+```{r, message=FALSE, warning=FALSE}
+ggraph(graph, layout = "linear", circular = T) +
+    geom_edge_arc(aes(color = factor(year))) +
+    coord_fixed()
+```
+
+```{r}
+graph <- tbl_graph(nodes = flare$vertices, edges = flare$edges)
+
+ggraph(graph, layout = "partition") +
+    geom_node_tile(aes(fill = depth), size = 0.25)
+```
+
+
+```{r}
+ggraph(graph, layout = "partition", circular = TRUE) +
+    geom_node_arc_bar(aes(fill = depth), size = 0.25) +
+    coord_fixed()
+```
+
+### Node-edge diagram layouts  
+Both `graphlayout` and `igraph` provides a range of different layout algorithms for classic node-edge diagrams (colloquially referred to as hairballs). Some of these are incredibly simple such as randomly, grid, circle, and star, while others tries to optimize the position of nodes based on different characteristics of the graph. There is no such thing as “the best layout algorithm” as algorithms have been optimized for different scenarios. Experiment with the choices at hand and remember to take the end result with a grain of salt, as it is just one of a range of possible “optimal node position” results.  
+
+```{r}
+graph <- as_tbl_graph(highschool) %>% 
+    mutate(degree = centrality_degree())
+
+lapply(c("stress", "fr", "lgl", "graphopt"), function(layout){
+    ggraph(graph, layout = layout) +
+        geom_edge_link(aes(color = factor(year)), show.legend = F) +
+        geom_node_point() +
+        labs(caption = paste("Layout: ", layout))
+})
+```
+
+
+### Hive plots 
+A hive plot, while still technically a node-edge diagram, is a bit different from the rest as it uses information pertaining to the nodes, rather than the connection information in the graph. This means that hive plots, to a certain extent are more interpretable as well as less vulnerable to small changes in the graph structure. They are less common though, so use will often require some additional explanation.  
+
+```{r}
+graph <- graph %>% 
+    mutate(friends = ifelse(
+        centrality_degree(mode = "in") < 5, "few", 
+        ifelse(centrality_degree(mode = "in") >= 15, 'many', "medium")
+    ))
+
+graph
+
+ggraph(graph, layout = "hive", axis = friends, sort.by = degree) +
+    geom_edge_hive(aes(color = factor(year))) +
+    geom_axis_hive(aes(color = friends), size = 2, label = F) +
+    coord_fixed()
+```
+
+
+### Focal layouts  
+Some layouts can put focus on a single node or a group of nodes by defining all other positions relative to that. An example of this is the `focus` layout, but the `centrality` layout is very akin to it.  
+
+```{r}
+ggraph(graph, layout = "focus", focus = node_is_center()) +
+    ggforce::geom_circle(aes(x0 = 0, y0 = 0, r = r), data = data.frame(r = 1:5), color = "grey") +
+    geom_edge_link() +
+    geom_node_point() +
+    coord_fixed()
+```
+
+### Hierarchical layouts  
+Trees and hierarchies are an important subset of graph structures, and `ggraph` provides a range of layouts optimized for their visual representation. Some of these use enclosure and position rather than edges to communicate relations (e.g. treemaps and circle packing). Still, these layouts can just as well be used for drawing edges if you wish to.  
+
+```{r}
+graph <- tbl_graph(nodes = flare$vertices, edges = flare$edges)
+
+set.seed(1)
+ggraph(graph, layout = "circlepack", weight = size) +
+    geom_node_circle(aes(fill = depth), size = 0.25, n = 50) +
+    coord_fixed()
+```
+
+```{r}
+set.seed(1)
+ggraph(graph, layout = "circlepack", weight = size) +
+    geom_edge_link() +
+    geom_node_point(aes(color = depth)) +
+    coord_fixed()
+```
+
+
+```{r}
+ggraph(graph, layout = "treemap", weight = size) +
+    geom_node_tile(aes(fill = depth), size = 0.25)
+```
+
+```{r}
+ggraph(graph, layout = "treemap", weight = size) +
+    geom_edge_link() +
+    geom_node_point(aes(color = depth))
+```
+
+The most recognized tree plot is probably dendrograms though. If nothing else is stated the height of each node is calculated based on the distance to its farthest sibling (the tree layout, on the other hand, puts all nodes at a certain depth at the same level).  
+
+```{r}
+ggraph(graph, layout = "tree") +
+    geom_edge_diagonal()
+```
+
+The height of each branch point can be set to a variable — e.g. the height provided by hclust and dendrogram objects.  
+
+```{r}
+dendrogram <- hclust(d = dist(iris[, 1:4]))
+
+ggraph(dendrogram, layout = "dendrogram", height = height) +
+    geom_edge_elbow()
+```
+
+
+```{r}
+ggraph(dendrogram, layout = "dendrogram", circular = TRUE) +
+    geom_edge_elbow() +
+    coord_fixed()
+```
+
+A type of trees known especially in phylogeny is unrooted trees, where no node is considered the root. Often a dendrogram layout will not be faithful as it implicitly position a node at the root. To avoid that you can use the `unrooted` layout instead.  
+
+```{r}
+ggraph(dendrogram, layout = "unrooted") +
+    geom_edge_link()
+```
+
+Often unrooted trees have a branch length attached - this can be passed to both the dendrogram and unrooted layout to determine the length of each edge.  
+
+
+# Nodes  
+Nodes in a network are the entities that are connected. Sometimes these are also referred to as vertices, but ggraph has opted for this nomenclature and uses it consistently. While the nodes in a graph are the abstract concepts of entities, and the layout is their physical placement, the node geoms are the visual manifestation of the entities. Conceptually one can simply think of it in terms of a scatter plot — the layout provides the x and y coordinates, and these can be used to draw nodes in different ways in the plotting window. Actually, due to the design of ggraph the standard scatterplot-like geoms from ggplot2 can be used directly for plotting nodes.  
+
+```{r}
+set_graph_style(plot_margin = margin(1, 1, 1, 1))
+
+gr <- as_tbl_graph(highschool)
+
+ggraph(gr, layout = "kk") +
+    geom_point(aes(x = x, y = y))
+```
+
+The reason this works is that, as discussed in the Layout vignette, layouts return a data.frame of node positions and metadata and this is used as the default plot data:  
+
+```{r}
+head(create_layout(gr, layout = "kk"))
+```
+
+## `geom_node_*()`  
+While usage of the default `ggplot2` is absolutely allowed, ggraph comes with its own set of node geoms. Many of these are direct translations of `ggplot2` own geoms like `geom_point()` so one could wonder why bother to use them.  
+
+The first reason is to provide clear code. It is not apparent anywhere that the standard geoms are addressing the nodes and using `geom_node_*()` makes it clear that this layer will draw nodes.  
+
+The second reason is that it will save typing. Since ggraph is in control of the shape of the input data through the layout calculations, it knows that x and y position is encoded in an x and y column. This means that `geom_node_*` can default the x and y aesthetics so there’s no need to type them:  
+
+```{r}
+ggraph(gr, layout = "kk") +
+    geom_node_point()
+```
+
+sometimes there is a need for addressing the x and y aesthetics, which is still possible, for instance if a partition layout should be inverted.  
+
+```{r, message=FALSE, warning=FALSE}
+gr <- tbl_graph(nodes = flare$vertices, edges = flare$edges)
+
+ggraph(gr, layout = "partition") +
+    geom_node_tile(aes(y = -y, fill = depth))
+```
+
+of course this could also be accomplished by reversing the y-axis using `scale_y_reverse()` so this is just to illustrate that the defaults are easily overwritten if needed.  
+
+The third reason is for the added functionality. All `ggraph` geoms get a `filter` aesthetic that allows you to quickly filter the input data. The use of this can be illustrated when plotting a tree.  
+
+```{r}
+ggraph(gr, layout = "dendrogram", circular = T) +
+    geom_edge_diagonal() +
+    geom_node_point(aes(filter = leaf)) +
+    coord_fixed()
+```
+
+In the above plot only the terminal nodes are drawn by filtering on the logical leaf column provided by the dendrogram layout.  
+
+
+## The different node geoms  
+The usual suspects are of course provided in the form of `geom_node_point()` (showcased above), `geom_node_text()`, and `geom_node_label()`. These work as expected, taking in the usual aesthetics (plus filter). Only x and y are defaulted so everything else must be provided e.g. label which does not default to the name column like is done in `igraph`. One feature sets `geom_node_text()` and `geom_node_label()` apart from their `ggplot2` counterparts: both have a `repel` argument that, when set to `TRUE`, will use the repel functionality provided by the `ggrepel` package to avoid overlapping text. There is also `geom_node_voronoi()` that plots nodes as cells from a voronoi tesselation. This is useful for e.g. showing dominance of certain node types in an area as overlapping is avoided.  
+
+```{r, warning=FALSE}
+graph <- create_notable(name = "meredith") %>% 
+    mutate(group = sample(c("A", "B"), n(), TRUE))
+
+ggraph(graph, layout = "stress") +
+    geom_node_voronoi(aes(fill = group), max.radius = 1) +
+    geom_node_point() +
+    geom_edge_link() +
+    coord_fixed()
+```
+
+Apart from these geoms there’s a set of geoms mainly useful for spatial node layouts such as treemaps, partition, circle packing, and fabric. `geom_node_tile()` and `geom_node_range()` are the ggraph counterpart to ggplot2s `geom_tile()` and `geom_linerange()` while `geom_node_circle()` and `geom_node_arc_bar()` maps to `ggforces` `geom_circle()` and `geom_arc_bar()`. Collective for these is that the spatial dimensions of the geoms (e.g. radius, width, and height) are precalculated by their intended layouts and defaulted by the geoms.  
+
+```{r, warning=FALSE}
+ggraph(gr, layout = 'treemap', weight = size) + 
+  geom_node_tile(aes(fill = depth))
+```
+
+All spatial node geoms will be center-based, meaning that the x and y value of the layout will refer to the center of the layout and not e.g. the bottom-left corner. This makes it easier to add labels to spatial layouts as well as using spatial layouts in a non-spatial way.  
+
+```{r, warning=FALSE}
+l <- ggraph(gr, layout = "partition", circular = T)
+l + geom_node_arc_bar(aes(fill = depth)) +
+    coord_fixed()
+```
+
+```{r, warning=FALSE}
+l + geom_edge_diagonal() +
+    geom_node_point(aes(color = depth)) +
+    coord_fixed()
+```
+
+# Edges  
+## Meet the `geom_edge_*()` family  
+While the introduction might feel a bit over-the-top it is entirely true. An edge is an abstract concept denoting a relationship between two entities. A straight line is simply just one of many ways this relationship can be visualised. As we saw when discussing nodes sometimes it is not drawn at all but impied using containment or position (treemap, circle packing, and partition layouts), but more often it is shown using a line of some sort. This use-case is handled by the large family of edge geoms provided in ggraph. Some of the edges are general while others are dedicated to specific layouts. Let’s creates some graphs for illustrative purposes first.  
+
+```{r, message=FALSE, warning=FALSE}
+library(ggraph)
+library(tidygraph)
+library(purrr)
+library(rlang)
+```
+
+
+```{r}
+set_graph_style(plot_margin = margin(1, 1, 1, 1))
+
+hierarchy <- as_tbl_graph(hclust(d = dist(iris[, 1:4]))) %>% 
+  mutate(Class = map_bfs_back_chr(node_is_root(), .f = function(node, path, ...){
+    if(leaf[node]){
+      as.character(iris$Species[as.integer(label[node])])
+    }else{
+      species <- unique(unlist(path$result))
+      if(length(species) == 1){
+        species
+      }else{
+        NA_character_
+      }
+    }
+  }))
+
+
+hairball <- as_tbl_graph(highschool) %>% 
+  mutate(
+    year_pop = map_local(mode = 'in', .f = function(neighborhood, ...) {
+      neighborhood %E>% pull(year) %>% table() %>% sort(decreasing = TRUE)
+    }),
+    pop_devel = map_chr(year_pop, function(pop) {
+      if (length(pop) == 0 || length(unique(pop)) == 1) return('unchanged')
+      switch(names(pop)[which.max(pop)],
+             '1957' = 'decreased',
+             '1958' = 'increased')
+    }),
+    popularity = map_dbl(year_pop, ~ .[1]) %|% 0
+  ) %>% 
+  activate(edges) %>% 
+  mutate(year = as.character(year))
+
+hairball
+```
+
+### Link  
+While you don't have to use a straight line for edges it is certainly possible and `geom_edge_link()` is here to serve. 
+
+```{r}
+ggraph(hairball, layout = "stress") +
+  geom_edge_link(aes(color = year))
+```
+
+### Fan  
+Sometimes the graph is not simple, i.e. it has multiple edges between the same nodes. Using links is a bad choice here because edges will overlap and the viewer will be unable to discover parallel edges. geom_edge_fan() got you covered here. If there are no parallel edges it behaves like geom_edge_link() and draws a straight line, but if parallel edges exists it will spread them out as arcs with different curvature. Parallel edges will be sorted by directionality prior to plotting so edges flowing in the same direction will be plotted together:  
+
+```{r}
+ggraph(hairball, layout = "stress") +
+  geom_edge_fan(aes(color = year))
+```
+
+### parallel  
+An alternative to `geom_edge_fan()` is `geom_edge_parallel()`. It will draw edges as straight lines but in the case of multi-edges it will offset each edge a bit so they run parallel to each other. As with `geom_edge_fan()` the edges will be sorted by direction first. The offset is done at draw time and will thus remain constant even during resizing.  
+
+```{r}
+ggraph(hairball, layout = "stress") +
+  geom_edge_parallel(aes(color = year))
+```
+
+### Loops  
+Loops cannot be shown with regular edges as they have no length. A dedicated `geom_edge_loop()` exists for these cases.  
+
+```{r}
+loopy_hairball <- hairball %>% 
+  bind_edges(tibble::tibble(from = 1:5, to = 1:5, year = rep("1957", 5)))
+
+ggraph(loopy_hairball, layout = "stress") +
+  geom_edge_link(aes(color = year), alpha = 0.25) +
+  geom_edge_loop(aes(color = year))
+```
+
+### Density  
+Consider the case where it is of interest to see which types of edges dominates certain areas of the graph. You can colour the edges, but edges can tend to get overplotted, thus reducing readability. `geom_edge_density()` lets you add a shading to your plot based on the density of edges in a certain area.  
+
+```{r}
+ggraph(hairball, layout = "stress") +
+  geom_edge_density(aes(fill = year)) +
+  geom_edge_link(alpha = 0.25)
+```
+
+### Arcs  
+While some insists that curved edges should be used in standard “hairball” graph visualisations it really is a poor choice, as it increases overplotting and decreases interpretability for virtually no gain (unless complexity is your thing). That doesn’t mean arcs have no use in graph visualizations.  
+
+```{r}
+ggraph(hairball, layout = "linear") +
+  geom_edge_arc(aes(color = year))
+```
+
+```{r}
+ggraph(hairball, layout = "linear", circular = T) +
+  geom_edge_arc(aes(color = year)) +
+  coord_fixed()
+```
+
+### Elbow  
+The classic dendrogram with its right angle bends. Of course such visualizations are also supported with the geom_edge_elbow(). It goes without saying that this type of edge requires a layout that flows in a defined direction, such as a tree.  
+
+```{r}
+ggraph(hierarchy, layout = "dendrogram", height = height) +
+  geom_edge_elbow()
+```
+
+### Diagonals  
+If right angles aren’t really your thing ggraph provides a smoother version in the form of geom_edge_diagonal(). This edge is a quadratic bezier with control points positioned at the same x-value as the terminal nodes and halfway in-between the nodes on the y-axis.  
+
+```{r}
+ggraph(hierarchy, layout = "dendrogram", height = height) +
+  geom_edge_diagonal()
+```
+
+
+### Bends  
+An alternative to diagonals are bend edges which are elbow edges with a smoothed corner. It is implemented as a quadratic bezier with control points at the location of the expected elbow corner.  
+
+```{r}
+ggraph(hierarchy, layout = "dendrogram", height = height) +
+  geom_edge_bend()
+```
+
+### Hive  
+This is certainly a very specific type of edge, intended only for use with hive plots. It draws edges as quadratic beziers with control point positioned perpendicular to the axes of the hive layout.  
+
+```{r}
+ggraph(hairball, layout = "hive", axis = pop_devel, sort.by = popularity) +
+  geom_edge_hive(aes(color = year)) +
+  geom_axis_hive(label = F) +
+  coord_fixed()
+```
+
+### Span  
+As with the hive edge the `geom_edge_span()` is made in particular for a specific layout - the fabric layout. It draws the edge as a vertical line connecting the horizontal node lines of the layout, potentially with a terminal shape.  
+
+```{r}
+ggraph(hairball, layout = "fabric", sort.by = node_rank_fabric()) +
+  geom_node_range(color = "grey") +
+  geom_edge_span(end_shape = "circle") +
+  coord_fixed()
+```
+
+## Point and tile  
+It may seem weird to have edge geoms that doesn’t have any span, but the matrix layout calls for exactly that. The terminal nodes of the edge are determined by the vertical and horizontal position of the mark, and for that reason the geom doesn’t need any extend. The point and tile geoms serve the same purpose but are simply different geometry types.  
+
+```{r}
+ggraph(hairball, layout = "matrix", sort.by = bfs_rank()) +
+  geom_edge_point() +
+  coord_fixed()
+```
+
+```{r}
+ggraph(hairball, layout = "matrix", sort.by = bfs_rank()) +
+  geom_edge_tile() +
+  coord_fixed()
+```
+
+
+## The three types of edge geoms  
+Almost all edge geoms comes in three variants. The basic variant (no suffix) as well as the variant suffixed with 2 (e.g. geom_edge_link2()) calculates a number (n) of points along the edge and draws it as a path. The variant suffixed with 0 (e.g. geom_edge_diagonal0()) uses the build in grid grobs to draw the edges directly (in case of a diagonal it uses bezierGrob()).  
+
+### Base variant  
+The basic edge geom is drawn by calculating a number of points along the edge path and draw a line between these. This means that you’re in control of the detail level of curved edges and that all complex calculations happens up front. Generally you will see better performance using the base variant rather than the 0-variant that uses grid grobs, unless you set the number of points to calculate to something huge (50–100 is usually sufficient for a smooth look). Apart from better performance you also get a nice bonus (you actually get several, but only one is discussed here): The possibility of drawing a gradient along the edge. Each calculated point gets an index value between 0 and 1 that specifies how far along the edge it is positioned and this value can be used to e.g. map to an alpha level to show the direction of the edge.  
+
+```{r}
+ggraph(hairball, layout = "linear") +
+  geom_edge_arc(aes(color = year, alpha = stat(index))) +
+  scale_edge_alpha(name = "Edge direction", guide = "edge_direction")
+```
+
+
+### 2-variant  
+Like the base variant the 2-variant calculates points along the edge and draws a path along them. The difference here is that in this variant **you can map node attributes to the edge** and the aesthetics are then interpolated along the edge.  
+
+```{r}
+ggraph(hierarchy, layout = "dendrogram", height = height) +
+  geom_edge_elbow2(aes(color = node.Class))
+```
+
+### 0-variant  
+
+
+## Edge strength  
+Many of the edge geoms takes a strength argument that denotes their deviation from a straight line. Setting strength = 0 will always result in a straight line, while strength = 1 is the default look. Anything in between can be used to modify the look of the edge, while values outside that range will probably result in some weird looks.   
+
+```{r}
+small_tree <- create_tree(n = 5, children = 2)
+
+ggraph(small_tree, layout = "dendrogram") +
+  geom_edge_elbow(strength = 0.6)
+```
+
+```{r}
+ggraph(small_tree, layout = "dendrogram") +
+  geom_edge_diagonal(strength = 0.6)
+```
+
+
+## Decorating edges 
+```{r}
+simple <- create_notable(name = "bull") %>% 
+  mutate(name = c("Thomas", "Bob", "Hadley", "Winston", "Baptiste")) %>% 
+  activate(edges) %>% 
+  mutate(type = sample(c("friends", "foe"), 5, TRUE))
+```
+
+
+### Arrows  
+```{r}
+ggraph(simple, layout = "graphopt") +
+  geom_edge_link(arrow = arrow(length = unit(4, "mm"))) +
+  geom_node_point(size = 5)
+```
+
+```{r}
+ggraph(simple, layout = "graphopt") +
+  geom_edge_link(arrow = arrow(length = unit(4, "mm")), 
+                 end_cap = circle(3, "mm")) +
+  geom_node_point(size = 5)
+```
+
+Using the `circle()`, `square()`, `ellipsis()`, and `rectangle()` helpers it is possible to get a lot of control over how edges are capped at either end. This works for any edge, curved or not.  
+
+```{r}
+ggraph(simple, layout = "linear", circular = T) +
+  geom_edge_arc(arrow = arrow(length = unit(4, "mm")), 
+                start_cap = circle(3, "mm"), 
+                end_cap = circle(3, "mm")) +
+  geom_node_point(size = 5) +
+  coord_fixed()
+```
+
+
+```{r}
+ggraph(simple, layout = "graphopt") +
+  geom_edge_link(aes(start_cap = label_rect(node1.name), 
+                     end_cap = label_rect(node2.name)), 
+                arrow = arrow(length(unit(4, "mm")))) +
+  geom_node_text(aes(label = name))
+```
+
+The capping of edges is dynamic and responds to resizing of the plot so the absolute size of the cap areas are maintained at all time.  
+
+#### A quick note on directionality  
+In `ggraph` there is no such thing as an undirected graph. Every edge has a start and an end node. For undirected graphs the start and end of edges is arbitrary but still exists and it is thus possible to add arrowheads to undirected graphs as well. This should not be done of course, but this is the responsibility of the user as ggraph does not make any checks during rendering.  
+
+
+## Labels  
+You would expect that edge labels would be their own geom(s), but ggraph departs from the stringent grammar interpretation here. This is because the label placement is dependent on the choice of edge. Because of this edge labeling is bundled with each edge geom (but not the 0-variant) through the label aesthetic.  
+
+```{r}
+ggraph(simple, layout = "graphopt") +
+  geom_edge_link(aes(label = type), 
+                 arrow = arrow(length = unit(4, "mm")), 
+                 end_cap = circle(3, "mm")) +
+  geom_node_point(size = 5)
+```
+
+Usually you would like the labels to run along the edges, but providing a fixed angle will only work at a very specific aspect ratio. Instead ggraph offers to calculate the correct angle dynamically so the labels always runs along the edge.  
+
+```{r}
+ggraph(simple, layout = "graphopt") +
+  geom_edge_link(aes(label = type), 
+                 angle_calc = "along", 
+                 label_dodge = unit(2.5, "mm"), 
+                 arrow = arrow(length = unit(4, "mm")), 
+                 end_cap = circle(3, "mm")) +
+  geom_node_point(size = 5)
+```
+
+
+## Connections  
+The estranged cousin of edges are connections. While edges show the relational nature of the nodes in the graph structure, connections connect nodes that are not connected in the graph. This is done by finding the shortest path between the two nodes. Currently the only connection geom available is `geom_conn_bundle()` that implements the hierarchical edge bundling technique.  
+
+```{r}
+flaregraph <- tbl_graph(flare$vertices, flare$edges)
+
+
+from <- match(flare$imports$from, flare$vertices$name)
+to <- match(flare$imports$to, flare$vertices$name)
+
+ggraph(flaregraph, layout = "dendrogram", circular = T) +
+  geom_conn_bundle(data = get_con(from = from, to = to), alpha = 0.1) +
+  coord_fixed()
+```
+
+
+
+
+```{r}
+play_geometry(n = 20, radius = 10) %>% 
+  mutate(shape = sample(c("ellipse", "rectangle"), n(), T, prob = c(0.8, 0.2))) %>% 
+  activate(edges) %>% 
+  mutate(angle = sample(c(30, 90), n(), T, prob = c(0.95, 0.05)), 
+         lty = factor(sample(0:6, n(), T))) %>% 
+  ggraph(layout = "graphopt") +
+  geom_edge_link(aes(filter = angle == 90, color = angle == 90), 
+                 arrow = arrow(angle = 90, length = unit(3, "mm")), 
+                 end_cap = circle(3, "mm"), 
+                 edge_width = 2) +
+  geom_edge_link(aes(filter = angle == 30), 
+                 arrow = arrow(angle = 30, length = unit(3, "mm")), 
+                 end_cap = circle(3, "mm"), 
+                 edge_width = 0.1, 
+                 edge_alpha = 0.25) +
+  geom_node_point(size = 5) +
+  scale_edge_color_brewer(name = "line type", type = "qual", palette = 3)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
