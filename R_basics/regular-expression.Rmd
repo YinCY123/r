@@ -72,16 +72,69 @@ sapply(regmatches(homicides, r), function(x)x[2]) %>% as.Date(format = "%B %d, %
 ```
 
 
+The primary R functions for dealing with regular expressions are  
+
+- `grep`, `grepl`: Search for matches of a regular expression/pattern in a character vector; either return the indices into the character vector that match, the strings that happen to match, or a TRUE/FALSE vector indicating which element match.  
+
+- `regexpr`, `gregexpr`: Search a character vector for regular expression matches and return the indices of the string where the match begins and the length of the match.  
+
+- `sub`, `gsub`: Search a character vector for regular expression matches and replace that match with another string.  
+
+- `regexec`: demo with examples.  
 
 
+```{r}
+homicides <- readLines(con = "homicides.txt")
+homicides[1]
+homicides[1000]
+```
 
+## grep and grepl  
+```{r}
+grep("iconHomicideShooting", homicides) %>% length()
+grep("iconHomicideShooting|icon_homicide_shooting", homicides) %>% length()
+```
 
+```{r}
+grep("Cause: shooting", homicides) %>% length()
+i <- grep("Cause: [Ss]hooting", homicides)
+j <- grep("[Ss]hooting", homicides)
+```
 
+```{r}
+setdiff(i, j) # all i in j
+setdiff(j, i)
+```
 
+```{r}
+homicides[setdiff(j, i)]
+```
 
+```{r}
+grep("Harris", homicides)
+grep("Harris", homicides, value = T) %>% head(n = 3)
+```
 
+```{r}
+grepl("Harris", homicides) %>% table()
+```
 
+## regexpr and gregexpr  
+```{r}
+x <- regexpr("Harris", homicides, ignore.case = T)
+str(x)
+```
 
+```{r}
+attributes(x)
+attr(x, "match.length") %>% table()
+attr(x, "index.type")
+attr(x, "useBytes")
+```
+
+```{r}
+
+```
 
 
 
