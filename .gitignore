@@ -15,7 +15,3 @@
 # ignore log file
 *.log
 .Rproj.user
-
-# ignore .rds file
-*.rds
-.RData
