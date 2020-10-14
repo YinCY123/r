@@ -1470,22 +1470,97 @@ list.fiels(path = "./tp_index_2010")
 
 ### Convenient functions to gather inks, lists, and tables from HTML documents  
 ```{r}
-doc <- htmlParse(file = "files/Niccol¨° Machiavelli - Wikipedia.html", isHTML = T)
-mac_source <- readLines("files/Niccol¨° Machiavelli - Wikipedia.html")
+mac_source <- readLines(con = "files/Niccolò Machiavelli - Wikipedia.html")
+mac_parsed <- htmlParse(file = mac_source, encoding = "UTF-8")
+mac_node <- mac_parsed["//body"][[1]]
+```
+
+```{r}
+getHTMLLinks(doc = mac_source)[1:3]
+```
+
+```{r}
+getHTMLLinks(mac_node)[1:3]
+```
+
+```{r}
+getHTMLLinks(doc = mac_parsed, 
+             xpQuery = "//a[@class='extiw']/href")[1:3]
+```
+
+```{r}
+xpathSApply(doc = mac_parsed, 
+            path = "//a", 
+            fun = xmlGetAttr, 
+            name = "href") %>% 
+        head()
 ```
 
 
+```{r}
+xpath <- "//img[contains(@src, 'Machiavelli')]/@src"
+getHTMLExternalFiles(doc = mac_parsed, 
+                     xpQuery = xpath) %>% 
+        head()
+```
 
 
+```{r}
+readHTMLList(doc = mac_parsed) %>% 
+        length()
+```
 
 
+```{r}
+readHTMLTable(doc = mac_parsed) %>% 
+        .[[5]]
+```
+
+```{r}
+readHTMLTable(doc = mac_parsed, 
+              elFun = getHTMLLinks, 
+              stringAsFactors = F)[[2]][, 2] %>% 
+        as.character()
+```
 
 
+### Dealing with HTML forms  
+```{r}
+info <- debugGatherer()
+handle <- getCurlHandle(cookiejar = "", 
+                        followlocation = T, 
+                        autoreferer = T, 
+                        debugfunc = info$update, 
+                        verbose = T, 
+                        httpheader = list(
+                                from = "yinchunyou2012@163.com", 
+                                'user-agent' = str_c(R.version$version.string, 
+                                                     ", ", 
+                                                     R.version$platform)
+                        ))
 
 
+xmlAttrToDF <- function(parsedHTML, xpath){
+        x <- xpathApply(doc = parsedHTML, 
+                        path = xpath, 
+                        fun = xmlAttrs)
+        x <- lapply(x, function(x){
+                as.data.frame(t(x))
+        })
+        do.call(rbind.fill, x)
+}
+```
 
+```{r}
+url <- "http://wordnetweb.princeton.edu/perl/webwn"
+doc <- htmlParse(file = url)
+getNodeSet(doc, "//form")
+```
 
-
+```{r}
+xmlAttrToDF(parsedHTML = doc, 
+            xpath = "//form[1]/input")
+```
 
 
 
