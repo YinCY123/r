@@ -31,29 +31,29 @@ GSE135092 <- getGEO(GEO = "GSE135092")
 
 # load data  
 ```{r}
-# geo geo accession of each group
-amd_geo_accession <- GSE135092[[1]] %>% pData() %>% 
-    filter(`tissue:ch1` == "RPE, Macula", `amd_status:ch1` == "AMD") %>% 
+# geo accession of each group
+amd_geo_accession <- GSE135092[[1]] %>% as.data.frame() %>% 
+    dplyr::filter(tissue.ch1 == "RPE, Macula", amd_status.ch1 == "AMD") %>% 
     pull(geo_accession)
 
-control_geo_accession <- GSE135092[[1]] %>% pData() %>% 
-    dplyr::filter(`tissue:ch1` == "RPE, Macula", `amd_status:ch1` == "Control") %>% 
+control_geo_accession <- GSE135092[[1]] %>% as.data.frame() %>% 
+    dplyr::filter(tissue.ch1 == "RPE, Macula", amd_status.ch1 == "Control") %>% 
     pull(geo_accession)
 
 # reads counts table for each file into an list
 reads_list <- list()
 for(i in c(amd_geo_accession, control_geo_accession)){
-    reads = read.table(file = list.files(path = "f:/git/Data/AMD/bulk-normal-amd/", 
+    reads = read.table(file = list.files(path = "/home/yincy/git/Data/AMD-related/AMD-bulk-seq/GSE135092/GSE135092/", 
                                                  pattern = i, 
                                                  full.names = T), 
-                               sep = "\t", 
                                header = T, 
-                               stringsAsFactors = F)
+                               stringsAsFactors = F,
+                               sep = "\t")
     reads_list[[i]] <- reads
 }
 
 
-# check the equality of rownames
+# check the equality of row names
 a <- c()
 for(i in seq_along(reads_list)){
     a[i] <- append(a, identical(reads_list[[1]][, 1], reads_list[[i]][, 1]))
@@ -62,7 +62,7 @@ for(i in seq_along(reads_list)){
 all(a)
 
 
-# from count list to dataframe 
+# from count list to data frame 
 reads_table <- sapply(reads_list, FUN = function(x){cbind(x[, 3])}, simplify = T)
 reads_table %>% dim()
 reads_table %>% .[1:5, 1:5]
@@ -71,7 +71,7 @@ reads_table <- reads_table %>%
     magrittr::set_rownames(value = reads_list[[1]][, 1])
 
 write.table(x = reads_table, 
-            file = "f:/git/R-codes/Retina/bulk-amd-normal/reads_table_amd_ctrl.csv", 
+            file = "/home/yincy/git/R-codes/Retina/bulk-amd-normal/reads_table_amd_ctrl.csv", 
             row.names = T, 
             col.names = T, 
             quote = F)
@@ -82,9 +82,9 @@ identical(colnames(reads_table)[seq_along(c(amd_geo_accession, control_geo_acces
 ```
 
 ```{r}
-sample_info <- GSE135092[[1]] %>% pData() %>% 
-    dplyr::filter(`tissue:ch1` == "RPE, Macula") %>% 
-    arrange(`amd_status:ch1`)
+sample_info <- GSE135092[[1]] %>% as.data.frame() %>% 
+    dplyr::filter(tissue.ch1 == "RPE, Macula") %>% 
+    arrange(amd_status.ch1)
 
 rownames(sample_info) <- c(amd_geo_accession, control_geo_accession)
 
