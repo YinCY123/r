@@ -5,7 +5,7 @@ date: "10/12/2020"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -43,18 +43,18 @@ iris_tree <- as_tbl_graph(iris_clust)
 iris_tree
 ```
 
-Lastly, `tidygraph` also wraps the multitude of graph constructors available in `igraph` and exports them under the `create_*()` family of functions for deterministic constructors(e.g. the call to `create_ring(10)` above) and the `play_*()` family for constructors that incorporate sampling (e.g. `play_erdos_renyi()` for creating graphs with a fixed edge probability). All of these functions provide a consistent argument naming scheme to take them easier to use and understand.  
+Lastly, `tidygraph` also wraps the multitude of graph constructors available in `igraph` and exports them under the `create_*()` family of functions for **deterministic constructors**(e.g. the call to `create_ring(10)` above) and the `play_*()` family for constructors that **incorporate sampling** (e.g. `play_erdos_renyi()` for creating graphs with a fixed edge probability). All of these functions provide a consistent argument naming scheme to take them easier to use and understand.  
 
 # Meet a new verb...
 There are many ways a multitable setup could fit into the tidyverse. There could be an added qualifier to the verbs such as `mutate_nodes()` and `filter_edges()` or each verb could take an additional argument specifying what is targeted e.g. `arrange(..., target = 'nodes')`. Both of these approachable are viable but would require a huge amount of typing as well as being taxing to support down the line.  
 
-The approach used by tidygraph is to let the data object itself carry around a pointer to the active data frame that should be the target of manipulation. This pointer is changed using the `activate()` verb, which, on top of changing which part of the data is being worked on, also changes the print output to show the currently active data on top:  
+The approach used by `tidygraph` is to let the data object itself carry around a pointer to the active data frame that should be the target of manipulation. This pointer is changed using the `activate()` verb, which, on top of changing which part of the data is being worked on, also changes the print output to show the currently active data on top:  
 
 ```{r}
 iris_tree %>% activate(edges)
 ```
 
-As can be seen, `activate()` takes a single argument specifying the part of the data that should be targeted for subsequent operations as an unquoted symbol. `tidygraph` continues the naming conventions from `ggraph` using `nodes` and `edges` to denote the entities and their connections respectively, but vertices and links are allowed synonyms inside `activate()`.  
+As can be seen, `activate()` takes a single argument specifying the part of the data that should be targeted for subsequent operations as an unquoted symbol. `tidygraph` continues the naming conventions from `ggraph` using `nodes` and `edges` to denote the entities and their connections respectively, but `vertices` and `links` are allowed synonyms inside `activate()`.  
 
 The current active data can always be extracted as a tibble using `as_tibble()`.  
 
@@ -75,15 +75,17 @@ iris_tree <- iris_tree %>%
 iris_tree
 ```
 
-In the above the `.N()` function is used to gain access to the node data while manipulating the edge data. Similarly `.E()` will give you the edge data and `.G()` will give you the tbl_graph object itself.
+In the above the **`.N()` function is used to gain access to the node data while manipulating the edge data**. Similarly `.E()` will give you the edge data and `.G()` will give you the tbl_graph object itself.
 
 Some verbs have effects outside of the currently active data. `filter()`/`slice()` on node data will remove the edges terminating at the removed nodes and `arrange()` on nodes will change the indexes of the `to` and `from` column in the edge data.  
 
-While one might expect all of dplyrs verbs to be supported in that manner, there is a clear limitation in the relational data structure that requires rows to maintain their identity. Thus, summarise() and do() are not allowed as there is no clear interpretation of how alterations on the node and edge data with these verbs should be interpreted. If these operations are required I suggest applying them to a tibble representation and then joining the result back in.  
+While one might expect all of dplyrs verbs to be supported in that manner, there is a clear limitation in the relational data structure that requires rows to maintain their identity. Thus, `summarise()` and `do()` are not allowed as there is no clear interpretation of how alterations on the node and edge data with these verbs should be interpreted. If these operations are required I suggest applying them to a tibble representation and then joining the result back in.  
 
-Speaking of joining, all joins from dplyr are supported. Nodes and edges are added and removed as required by the join. New edge data to be joined in must have a to and from column referencing valid nodes in the existing graph.  
+Speaking of joining, all joins from dplyr are supported. Nodes and edges are added and removed as required by the join. **New edge data to be joined in must have a to and from column referencing valid nodes in the existing graph**.  
 
 ```{r}
+library(dplyr)
+
 iris_sum <- iris %>% 
     group_by(Species) %>% 
     summarise_all(mean) %>% 
@@ -99,7 +101,7 @@ iris_tree
 # Expanding the vocabulary  
 On top of what has been showed so far, `tidygraph` provides an assortment of graph specific verbs that can be used to power your analysis and manipulation. Analogous to `bind_rows()`, `tidygraph` provides three functions to expand your data: `bind_nodes()` and `bind_edges()` append nodes and edges to the graph respectively. As with the join functions `bind_edges()` must contain valid `from` and `to` columns. `bind_graphs()` allows you to combine multiple graphs in the same graph structure resulting in each original graph to become a component in the returned graph.  
 
-While bind_graphs() cannot be used to create edges between the merged graphs graph_join() can do just that. It merges nodes using a full_join() semantic and keeps the individual edges from both graphs:  
+While `bind_graphs()` cannot be used to create edges between the merged graphs `graph_join()` can do just that. It merges nodes using a `full_join()` semantic and keeps the individual edges from both graphs:  
 
 ```{r}
 library(ggraph)
@@ -131,7 +133,7 @@ gr1 %>% graph_join(gr2) %>%
     theme_graph()
 ```
 
-The standard `dplyr` verbs protects the `to` and `from` columns in the edge data in order to avoid accidental modification of the graph topology. If changing of the terminal nodes are necessary the reroute() verb will come in handy.  
+The standard `dplyr` verbs protects the `to` and `from` columns in the edge data in order to avoid accidental modification of the graph topology. If changing of the terminal nodes are necessary the `reroute()` verb will come in handy.  
 
 ```{r, message=FALSE, warning=FALSE}
 gr1 <- create_star(n = 6, directed = TRUE)
@@ -148,7 +150,7 @@ gr2 <- gr1 %>%
 gr3 <- gr1 %>% 
     mutate(graph = "using subset") %>% 
     activate(edges) %>% 
-    reroute(from = to + 1, subset = to < 4)
+    reroute(from = to + 1, subset = to < 4) # select the subset of edge to change
 
 ggraph(bind_graphs(gr1, gr2, gr3), layout = "nicely") +
     geom_edge_link(arrow = arrow(length = unit(3, "mm"))) +
@@ -157,7 +159,7 @@ ggraph(bind_graphs(gr1, gr2, gr3), layout = "nicely") +
     theme_graph(foreground = "steelblue")
 ```
 
-As can be seen, reroute works pretty much as a `to` and `from` specific `mutate()`, with the added benefit of incorporating a subset operator if only a few edges should be changed.  
+As can be seen, `reroute()` works pretty much as a `to` and `from` specific `mutate()`, with the added benefit of incorporating a `subset` operator if only a few edges should be changed.  
 
 # Making the most of graphs  
 While being able to use the `dplyr` verbs on relational data is nice and all, one of the reasons we are dealing with graph data in the first place is because we need some graph-based algorithms for solving our problem at hand. If we need to break out of the tidy workflow every time this was needed we wouldn’t have gained much. Because of this `tidygraph` has wrapped more or less all of `igraphs` algorithms in different ways, ensuring a consistent syntax as well as output that fits into the tidy workflow.  
@@ -188,8 +190,9 @@ play_smallworld(n_dim = 1, dim_size = 100, order = 3, p_rewire = 0.05) %>%
     mutate(centrality = centrality_authority()) %>% 
     ggraph(layout = "kk") +
     geom_edge_link() +
-    geom_node_point(aes(size = centrality, color = centrality)) +
-    theme_graph()
+    geom_node_point(aes(size = centrality), color = "grey50") +
+    theme_graph() +
+    scale_size_area(max_size = 6)
 ```
 
 It is quite difficult to a priori decide which centrality measure makes most sense for a problem at hand so having easy access to a large range of them in a common syntax is boon.  
@@ -197,7 +200,7 @@ It is quite difficult to a priori decide which centrality measure makes most sen
 ## Clustering  
 Another common operation is to group nodes based on the graph topology, sometimes referred to as community detection based on its commonality in social network analysis. All clustering algorithms from `igraph` is available in `tidygraph` using the `group_*` prefix. All of these functions return an integer vector with nodes (or edges) sharing the same integer being grouped together.  
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 play_islands(n_islands = 5, size_islands = 10, p_within = 0.8, m_between = 3) %>% 
     mutate(community = as.factor(group_infomap())) %>% 
     ggraph(layout = "kk") +
@@ -220,11 +223,8 @@ play_geometry(n = 50, radius = 0.25) %>%
 ```
 
 ## Searches  
-An integral type of operation on graphs is to perform a search, that is, start from one node and then traverse the edges until all nodes has been visited. The most common approaches are either breath first search where all neighbors of a node is visited before moving on to the next node, or depth first serch where you move along to the next node immediately and only backtracks and visit other neighbors when you’ve hit a dead end. Different statistics from these searches are available in `tidygraph` through the `bfs_*() and dfs_*()` family of functions e.g. the distance to the start node along the search can be obtained with `bfs_dist()`/`dfs_dist()`. The root node can be specified in the same way as with node pairs. Sorting based on a search from the node with highest centrality can thus be done with:  
+An integral type of operation on graphs is to perform a search, that is, start from one node and then traverse the edges until all nodes has been visited. The most common approaches are either **breath first search** where all neighbors of a node is visited before moving on to the next node, or **depth first serch** where you move along to the next node immediately and only backtracks and visit other neighbors when you’ve hit a dead end. Different statistics from these searches are available in `tidygraph` through the `bfs_*() and dfs_*()` family of functions e.g. the distance to the start node along the search can be obtained with `bfs_dist()`/`dfs_dist()`. The root node can be specified in the same way as with node pairs. Sorting based on a search from the node with highest centrality can thus be done with:  
 
-```{r}
-grep("^bfs_", ls("package:tidygraph"), value = T)
-```
 
 ```{r}
 play_geometry(n = 50, radius = 0.25) %>% 
@@ -240,7 +240,7 @@ play_smallworld(n_dim = 1, dim_size = 100, order = 3, p_rewire = 0.05) %>%
 ```
 
 ## All the rest  
-While an ontology of graph operations has been attempted in the different functions above, there are some that falls outside. These have been lumped together under the node_*() and edge_*() umbrellas and include things such as topological ordering and Burt’s constraint among others. All of these functions ensures a mutate-compatible output.  
+While an ontology of graph operations has been attempted in the different functions above, there are some that falls outside. These have been lumped together under the `node_*()` and `edge_*()` umbrellas and include things such as topological ordering and Burt’s constraint among others. All of these functions ensures a mutate-compatible output.  
 
 # Graph measures  
 Along with computations on the individual nodes and edges it is sometimes necessary to get summary statistics on the graph itself. Theses can be simple measures such as the number of nodes and edges as well as more involved measures such as assortativity(the propensity of similar nodes to be connected). All of these measures can be calculated through the `graph_*()` function family and they will all return a scalar.  
@@ -331,6 +331,52 @@ island %>%
     crystallise()
 ```
 
+# Summary  
+- graph constructor functions  
 
+```{r}
+grep("^create_|^play_", ls("package:tidygraph"), value = T)
+```
 
+- node and edge types   
+
+```{r}
+grep("^node_is_|^edge_is", ls("package:tidygraph"), value = T)
+```
+
+- measure centrality  
+
+```{r}
+grep("^centrality_", ls("package:tidygraph"), value = T)
+```
+
+- clustering (community detection)  
+
+```{r}
+grep("^group", ls("package:tidygraph"), value = T)
+```
+
+- pair of nodes measures  
+
+```{r}
+grep("^node_.*[_from|_to]{1}$", ls("package:tidygraph"), value = T)
+```
+
+- Searches  
+
+```{r}
+grep("^bfs_|^dfs_", ls("package:tidygraph"), value = T)
+```
+
+- local measures  
+
+```{r}
+grep("^local_", ls("package:tidygraph"), value = T)
+```
+
+- graph functions  
+
+```{r}
+grep("^graph_", ls("package:tidygraph"), value = T)
+```
 
