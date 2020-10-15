@@ -24,7 +24,7 @@ library(igraph)
 # P2y12r signaling network  
 ## PVN  
 ```{r}
-pvn <- read.csv(file = "20200702_frame_tpm_coding_gene_PVN.csv", 
+pvn <- read.csv(file = "../data/20200702_frame_tpm_coding_gene_PVN.csv", 
                 row.names = 1)
 pvn
 ```
@@ -300,14 +300,27 @@ write.csv(x = p2ry12_sig_df[, 1:2] %>% distinct(from_symbol, to_symbol),
 
 ## DEG in p2ry12 order 3 genes  
 ```{r}
-A3 <- read.csv(file = "20200702_3A_naive_DE_FDR.csv", header = T)
+A3 <- read.csv(file = "../data/20200702_3A_naive_DE_FDR.csv", header = T)
 A3_DEG <- A3 %>% dplyr::filter(abs(logFC) >= 1) %>% 
     dplyr::pull(geneid_symbol)
 
-L3 <- read.csv(file = "20200702_3L_naive_DE_FDR.csv", header = T)
+L3 <- read.csv(file = "../data/20200702_3L_naive_DE_FDR.csv", header = T)
 L3_DEG <- L3 %>% 
     dplyr::filter(abs(logFC) >= 1) %>% 
     dplyr::pull(geneid_symbol)
+```
+
+
+```{r}
+A14 <- read.csv(file = "../data/20200702_14A_naive_DE_FDR.csv")
+A14_DEG <- A14 %>% 
+  dplyr::filter(abs(logFC) >= 1) %>% 
+  dplyr::pull(geneid_symbol)
+
+L14 <- read.csv(file = "../data/20200702_14L_naive_DE_FDR.csv")
+L14_DEG <- L14 %>%
+  filter(abs(logFC) >= 1) %>% 
+  pull(geneid_symbol)
 ```
 
 
@@ -521,7 +534,18 @@ intersect(all_path_df$subtype %>% unique(), subtype_element$name)
 
 all_path_df$subtype_value <- vl[all_path_df$subtype]
 all_path_df %>% filter(subtype != "compound")
+
+## add edge and node info
+all_path_df$angle <- ifelse(all_path_df$subtype == "inhibition", 90, 30)
+all_path_df$edge_label <- ifelse(grepl("[a-z]", all_path_df$subtype_value), all_path_df$subtype_value, NA)
+
+lty <- c(rep(1, 4), 5, 1, 3, 1, 5, 3, 5, 1, 3, 1)
+names(lty) <- all_path_df$subtype %>% unique() %>% na.omit() %>% as.character()
+all_path_df$lty <- lty[all_path_df$subtype]
+
+all_path_df %>% head()
 ```
+
 
 ## add gene and compound information  
 ```{r}
@@ -627,7 +651,7 @@ for(i in seq_along(ll)){
   }
 }
 
-KEGG_drug_to_display <- str_trim(extracted_str, "both")
+KEGG_drug_to_display <- extracted_str
 
 ## remove parenthesis 
 KEGG_drug_to_display <- str_replace(KEGG_drug_to_display, "[ ]*\\(?[[:alnum:][:punct:]]*\\)?$", "")
@@ -637,7 +661,7 @@ KEGG_drug_to_display %>% head()
 
 
 ```{r}
-# some rows of from and to contain multiple ids, retain only the first one
+# some rows in from and to contain multiple ids, retain only the first one
 ll <- str_locate(all_path_df$from, " ") %>% .[, 1]
 all_path_df[!(ll %>% is.na()), ]
 
@@ -649,6 +673,7 @@ for(i in seq_along(ll)){
   }
 }
 
+
 ll <- str_locate(all_path_df$to, " ") %>% .[, 1]
 all_path_df[!(ll %>% is.na()), ]
 
@@ -656,11 +681,10 @@ for(i in seq_along(ll)){
   if(is.na(ll[i])){
     all_path_df$to[i] <- all_path_df$to[i]
   }else{
-    all_path_df$to <- str_extract_before(all_path_df$to[i], " ")
+    all_path_df$to[i] <- str_extract_before(all_path_df$to[i], " ")
   }
 }
 
-## to this place
 
 all_path_df$from <- str_trim(string = all_path_df$from, side = "both")
 all_path_df$to <- str_trim(string = all_path_df$to, side = "both")
@@ -670,15 +694,9 @@ names_to_display <- c(KEGG_mmu_genes_to_display, KEGG_compounds_to_display,
 
 all_path_df$from_symbol <- names_to_display[all_path_df$from]
 all_path_df$to_symbol <- names_to_display[all_path_df$to]
-all_path_df %>% filter(!is.na(from))
-
 all_path_df <- all_path_df %>% 
-  relocate(from_symbol, to_symbol, from, to, type, subtype, subtype_value)
-
-all_path_df %>% 
-  filter(is.na(from) | is.na(to))
-
-all_path_df$to %>% str_split(" ") %>% sapply(length) %>% table()
+  dplyr::rename(from = from_symbol, to = to_symbol, from_entrez = from, to_entrez = to)
+all_path_df %>% filter(is.na(from)|is.na(to))
 ```
 
 
@@ -692,25 +710,180 @@ PCrel| protein-compound interaction
 maplink| link to another map
 
 
+## visulization with `ggraph`  
+
 ```{r}
-library(igraph)
+library(ggraph)
+library(tidygraph)
+```
 
-grep("^graph", ls("package:igraph"), value = T)
+### determine order of genes  
+```{r}
+all_path_gene_df <- read.csv(file = "../res/P2ry12/all_path_dataframe.csv") %>% 
+  distinct(from, to, .keep_all = T)
+# write.csv(x = all_path_gene_df, file = "../res/P2ry12/all_path_gene_df.csv")
 
-vs <- c(all_path_df$from_symbol, 
-        all_path_df$to_symbol) %>% unique()
-all_path_df %>% 
-  filter(is.na(from_symbol) | is.na(to_symbol)) %>%  
-  head(10) %>% 
-  pull(to) %>% 
-  stringr.plus::str_extract_before(pattern = " ")
+all_path_gene_df$from <- gsub("mmu:", "", all_path_gene_df$from)
+all_path_gene_df$to <- gsub("mmu:", "", all_path_gene_df$to)
+
+all_path_gene_df$from_symbol <- KEGG_mmu_genes_to_display[all_path_gene_df$from]
+all_path_gene_df$to_symbol <- KEGG_mmu_genes_to_display[all_path_gene_df$to]
+
+all_path_gene_df <- all_path_gene_df %>% 
+  relocate(from_symbol, to_symbol, everything())
+
+all_path_gene_graph <- graph_from_data_frame(d = all_path_gene_df, directed = T)
+p2ry12_order1 <- make_ego_graph(all_path_gene_graph, order = 1, nodes = "P2ry12", mode = "out")[[1]]
+p2ry12_order2 <- make_ego_graph(all_path_gene_graph, order = 2, mode = "out", nodes = "P2ry12")[[1]]
+p2ry12_order3 <- make_ego_graph(all_path_gene_graph, order = 3, mode = "out", nodes = "P2ry12")[[1]]
+p2ry12_order4 <- make_ego_graph(all_path_gene_graph, order = 4, mode = "out", nodes = "P2ry12")[[1]]
+p2ry12_order5 <- make_ego_graph(all_path_gene_graph, order = 5, mode = "out", nodes = "P2ry12")[[1]]
+p2ry12_order6 <- make_ego_graph(all_path_gene_graph, order = 6, mode = "out", nodes = "P2ry12")[[1]]
+
+genes_in_order0 <- "P2ry12"
+genes_in_order1 <- V(p2ry12_order1)[1:length(V(p2ry12_order1))] %>% attr("name") %>% unique()
+genes_in_order2 <- V(p2ry12_order2)[1:length(V(p2ry12_order2))] %>% attr("name") %>% unique()
+genes_in_order3 <- V(p2ry12_order3)[1:length(V(p2ry12_order3))] %>% attr("name") %>% unique()
+genes_in_order4 <- V(p2ry12_order4)[1:length(V(p2ry12_order4))] %>% attr("name") %>% unique()
+genes_in_order5 <- V(p2ry12_order5)[1:length(V(p2ry12_order5))] %>% attr("name") %>% unique()
+genes_in_order6 <- V(p2ry12_order6)[1:length(V(p2ry12_order6))] %>% attr("name") %>% unique()
+
+
+genes_on_order0 <- "P2ry12"
+genes_on_order1 <- setdiff(genes_in_order1, genes_on_order0)
+genes_on_order2 <- setdiff(genes_in_order2, genes_in_order1)
+genes_on_order3 <- setdiff(genes_in_order3, genes_in_order2)
+genes_on_order4 <- setdiff(genes_in_order4, genes_in_order3)
+genes_on_order5 <- setdiff(genes_in_order5, genes_in_order4)
+genes_on_order6 <- setdiff(genes_in_order6, genes_in_order5)
 ```
 
 
+DEG   
+```{r}
+A3_DEG_order3_intersect <- read.csv(file = "../res/P2ry12/A3_DEG_order3_intersect.csv")[[1]]
+L3_DEG_order3_intersect <- read.csv(file = "../res/P2ry12/L3_DEG_order3_intersect.csv")[[1]]
+A3_L3_DEG_inter <- intersect(A3_DEG_order3_intersect, L3_DEG_order3_intersect)
+
+pvn_top100_GO_DEG <- read.csv(file = "../res/P2ry12/genes_per_group.csv") %>% 
+  filter(grepl("^PVN_2_3up|^PVN_2_3down", group)) %>% 
+  pull(symbol)
+
+write.csv(x = pvn_top100_GO_DEG, file = "../res/P2ry12/pvn_top100_GO_DEG.csv")
+
+intersect(A3_DEG_order3_intersect, pvn_top100_GO_DEG)
+intersect(L3_DEG_order3_intersect, pvn_top100_GO_DEG)
+all_DEG <- intersect(A3_L3_DEG_inter, pvn_top100_GO_DEG)
+```
 
 
+```{r}
+all_path_df <- all_path_df %>% 
+  as.tibble() %>% 
+  dplyr::rename(from = from_symbol, to = to_symbol, from_entrez = from, to_entrez = to)
+
+ig <- graph_from_data_frame(d = all_path_df[, c("from", "to")], directed = T)
+all_short_path <- shortest_paths(ig, V(ig)$name == "P2ry12", V(ig)$name %in% all_DEG)[[1]]
+
+all_path_nodes <- sapply(all_short_path[-5], as_ids) %>% 
+  t() %>% 
+  rbind(c(all_short_path[[5]] %>% as_ids, NA)) %>% 
+  as.data.frame() %>% 
+  magrittr::set_colnames(c("order0", "order1", "order2", "order3"))
+
+o1 <- all_path_df %>% 
+  filter(from %in% (all_path_nodes %>% pull(order0) %>% unique()), to %in% (all_path_nodes %>% pull(order1) %>% unique()))
+
+o2 <- all_path_df %>% 
+  filter(from %in% (all_path_nodes %>% pull(order1) %>% unique()), to %in% (all_path_nodes %>% pull(order2) %>% unique()))
+
+o3 <- all_path_df %>% 
+  filter(from %in% (all_path_nodes %>% pull(order2) %>% unique()), to %in% (all_path_nodes %>% pull(order3) %>% unique))
+
+filtered_path <- rbind(o1, o2, o3)
+
+N <- tibble(
+  name = c(filtered_path$from, filtered_path$to) %>% unique()
+) %>% 
+  mutate(shape = ifelse(grepl("^cpd:|^gl:|^dr:", name, ignore.case = F), "21", "22")) 
+
+E <- filtered_path %>% 
+  dplyr::select(from, to, from_entrez, to_entrez, everything())
+```
 
 
+```{r, warning=FALSE, message=FALSE}
+g <- tbl_graph(nodes = N, edges = E, directed = T)
+
+g %>%  
+  ggraph(layout = "lgl") +
+  geom_edge_link(aes(filter = angle == 30, 
+                     edge_linetype = factor(lty), 
+                     label = edge_label), 
+                 end_cap = circle(3, "mm"), 
+                 start_cap = circle(1, "mm"), 
+                 arrow = arrow(length = unit(2, "mm")), 
+                 show.legend = F) +
+  geom_edge_link(aes(filter = angle == 90, 
+                     edge_linetype = factor(lty)), 
+                 arrow = arrow(angle = 90, length = unit(1.5, "mm")), 
+                 end_cap = circle(3, "mm"), 
+                 show.legend = F) +
+  geom_node_point(aes(filter = !(name %in% all_DEG)), color ="grey", size = 5) +
+  geom_node_point(aes(filter = (name %in% all_DEG)), color = "red", size = 5) +
+  geom_node_text(aes(label = name), repl = T) 
+
+ggsave(filename = "p2ry12_downstream_signal.tiff")
+```
+
+
+### number of DEGs in different order  
+```{r}
+DEG_14_orders <- g %>% 
+  dplyr::mutate(dfsr = bfs_dist(root = .N()$name == "P2ry12", mode = "out")) %>% 
+  filter(.N()$name %in% intersect(A14_DEG, L14_DEG)) %>% 
+  as_tibble() %>% 
+  pull(dfsr) %>% 
+  table() %>% 
+  as.data.frame() %>% 
+  magrittr::set_colnames(c("order", 'freq'))
+
+DEG_3_orders <- g %>% 
+  dplyr::mutate(dfsr = bfs_dist(root = .N()$name == "P2ry12", mode = "out")) %>% 
+  filter(.N()$name %in% intersect(A3_DEG, L3_DEG)) %>% 
+  as_tibble() %>% 
+  pull(dfsr) %>% 
+  table() %>% 
+  as.data.frame() %>% 
+  magrittr::set_colnames(c("order", "freq"))
+
+g %>% 
+  dplyr::mutate(dfsr = bfs_dist(root = .N()$name == "P2ry12", mode = "out")) %>% 
+  filter(.N()$name %in% all_DEG) %>% 
+  as_tibble() %>% 
+  filter(dfsr == 3) %>% 
+  pull(name) -> o3_DEG
+```
+
+
+```{r}
+DEG_3_orders$group = '3'
+DEG_14_orders$group = '14'
+
+DEG_3_orders %>% 
+  rbind(DEG_14_orders) %>% 
+  ggplot(aes(order, freq)) +
+  geom_bar(stat = "identity", position = "dodge", aes(fill = group)) +
+  scale_fill_brewer(name = "days", type = "qual", palette = "Set1", direction = -1) +
+  ggtitle(label = "Number of DEGs in different order")
+
+ggsave(filename = "Number-of-DEGs-in-different-order.tiff")
+```
+
+
+```{r}
+all_DEG
+```
 
 
 
