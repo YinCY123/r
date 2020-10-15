@@ -685,42 +685,9 @@ play_geometry(n = 20, radius = 10) %>%
   scale_edge_color_brewer(name = "line type", type = "qual", palette = 3)
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```{r}
+play_geometry(n = 20, radius = 10) %>% as_tibble()
+```
 
 
 
