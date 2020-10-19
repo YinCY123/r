@@ -539,11 +539,13 @@ all_path_df %>% filter(subtype != "compound")
 all_path_df$angle <- ifelse(all_path_df$subtype == "inhibition", 90, 30)
 all_path_df$edge_label <- ifelse(grepl("[a-z]", all_path_df$subtype_value), all_path_df$subtype_value, NA)
 
-lty <- c(rep(1, 4), 5, 1, 3, 1, 5, 3, 5, 1, 3, 1)
-names(lty) <- all_path_df$subtype %>% unique() %>% na.omit() %>% as.character()
+lty <- c(rep(1, 5), 5, 1, 3, 1, 5, 3, 5, 1, 3, 1)
+names(lty) <- all_path_df$subtype %>% unique() %>%  as.character()
 all_path_df$lty <- lty[all_path_df$subtype]
+all_path_df$lty <- ifelse(is.na(all_path_df$lty), 1, all_path_df$lty)
+all_path_df$edge_label <- ifelse(is.na(all_path_df$edge_label), "", all_path_df$edge_label)
 
-all_path_df %>% head()
+all_path_df %>% filter(is.na(lty))
 ```
 
 
@@ -731,31 +733,84 @@ all_path_gene_df$to_symbol <- KEGG_mmu_genes_to_display[all_path_gene_df$to]
 
 all_path_gene_df <- all_path_gene_df %>% 
   relocate(from_symbol, to_symbol, everything())
-
-all_path_gene_graph <- graph_from_data_frame(d = all_path_gene_df, directed = T)
-p2ry12_order1 <- make_ego_graph(all_path_gene_graph, order = 1, nodes = "P2ry12", mode = "out")[[1]]
-p2ry12_order2 <- make_ego_graph(all_path_gene_graph, order = 2, mode = "out", nodes = "P2ry12")[[1]]
-p2ry12_order3 <- make_ego_graph(all_path_gene_graph, order = 3, mode = "out", nodes = "P2ry12")[[1]]
-p2ry12_order4 <- make_ego_graph(all_path_gene_graph, order = 4, mode = "out", nodes = "P2ry12")[[1]]
-p2ry12_order5 <- make_ego_graph(all_path_gene_graph, order = 5, mode = "out", nodes = "P2ry12")[[1]]
-p2ry12_order6 <- make_ego_graph(all_path_gene_graph, order = 6, mode = "out", nodes = "P2ry12")[[1]]
-
-genes_in_order0 <- "P2ry12"
-genes_in_order1 <- V(p2ry12_order1)[1:length(V(p2ry12_order1))] %>% attr("name") %>% unique()
-genes_in_order2 <- V(p2ry12_order2)[1:length(V(p2ry12_order2))] %>% attr("name") %>% unique()
-genes_in_order3 <- V(p2ry12_order3)[1:length(V(p2ry12_order3))] %>% attr("name") %>% unique()
-genes_in_order4 <- V(p2ry12_order4)[1:length(V(p2ry12_order4))] %>% attr("name") %>% unique()
-genes_in_order5 <- V(p2ry12_order5)[1:length(V(p2ry12_order5))] %>% attr("name") %>% unique()
-genes_in_order6 <- V(p2ry12_order6)[1:length(V(p2ry12_order6))] %>% attr("name") %>% unique()
+```
 
 
-genes_on_order0 <- "P2ry12"
-genes_on_order1 <- setdiff(genes_in_order1, genes_on_order0)
-genes_on_order2 <- setdiff(genes_in_order2, genes_in_order1)
-genes_on_order3 <- setdiff(genes_in_order3, genes_in_order2)
-genes_on_order4 <- setdiff(genes_in_order4, genes_in_order3)
-genes_on_order5 <- setdiff(genes_in_order5, genes_in_order4)
-genes_on_order6 <- setdiff(genes_in_order6, genes_in_order5)
+```{r}
+all_path_df <- all_path_df %>% 
+  as.tibble() %>% 
+  dplyr::rename(from = from_symbol, to = to_symbol, from_entrez = from, to_entrez = to)
+
+ig <- graph_from_data_frame(d = all_path_df[, c("from", "to")], directed = T)
+distance_to_p2ry12_all_path <- shortest_paths(ig, from = V(ig)$name == "P2ry12", to = V(ig), mode = "out")[[1]]
+
+list2df <- function(list){
+  maxL <- sapply(list, length) %>% max()
+  for(i in seq_along(list)){
+    l = length(list[[i]])
+    if(l < maxL){
+      list[[i]] <- append(list[[i]], values = rep(NA, (maxL - l)))
+    }
+  }
+  list <- as.data.frame(list)
+  colnames(list) <- NULL
+  list <- t(list)
+  colnames(list) <- paste(rep("order", times = maxL), 0:(maxL - 1), sep = "_")
+  return(as.data.frame(list))
+}
+
+all_path_nodes <- list2df(lapply(distance_to_p2ry12_all_path, as_ids))
+
+inter_len <- apply(all_path_nodes, 1, intersect, all_DEG) %>% sapply(length)
+
+retained_path <- all_path_nodes[inter_len >= 1, ] 
+
+o1 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_0) %>% unique()), 
+         to %in% (retained_path %>% pull(order_1) %>% unique()))
+
+o2 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_1) %>% unique()), 
+         to %in% (retained_path %>% pull(order_2) %>% unique()))
+
+o3 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_2) %>% unique()), 
+         to %in% (retained_path %>% pull(order_3) %>% unique()))
+
+o4 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_3) %>% unique()), 
+         to %in% (retained_path %>% pull(order_4) %>% unique()))
+
+o5 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_4) %>% unique()), 
+         to %in% (retained_path %>% pull(order_5) %>% unique()))
+o6 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_5) %>% unique()), 
+         to %in% (retained_path %>% pull(order_6) %>% unique()))
+
+o7 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_6) %>% unique()), 
+         to %in% (retained_path %>% pull(order_7) %>% unique()))
+
+o8 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_7) %>% unique()), 
+         to %in% (retained_path %>% pull(order_8) %>% unique()))
+o9 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_8) %>% unique()), 
+         to %in% (retained_path %>% pull(order_9) %>% unique()))
+
+
+filtered_path <- rbind(o1, o2, o3, o4, o5, o6, o7)
+filtered_path %>% pull(lty) 
+
+N <- tibble::tibble(
+  symbol = c(filtered_path$from, filtered_path$to) %>% unique(),
+  ids = c(filtered_path$from_entrez, filtered_path$to_entrez) %>% unique()
+) %>% 
+  mutate(shape = ifelse(grepl("^cpd:|^gl:|^dr:", ids, ignore.case = F), "21", "22")) 
+
+E <- filtered_path %>% 
+  dplyr::select(from, to, from_entrez, to_entrez, everything())
 ```
 
 
@@ -776,64 +831,41 @@ intersect(L3_DEG_order3_intersect, pvn_top100_GO_DEG)
 all_DEG <- intersect(A3_L3_DEG_inter, pvn_top100_GO_DEG)
 ```
 
-
-```{r}
-all_path_df <- all_path_df %>% 
-  as.tibble() %>% 
-  dplyr::rename(from = from_symbol, to = to_symbol, from_entrez = from, to_entrez = to)
-
-ig <- graph_from_data_frame(d = all_path_df[, c("from", "to")], directed = T)
-all_short_path <- shortest_paths(ig, V(ig)$name == "P2ry12", V(ig)$name %in% all_DEG)[[1]]
-
-all_path_nodes <- sapply(all_short_path[-5], as_ids) %>% 
-  t() %>% 
-  rbind(c(all_short_path[[5]] %>% as_ids, NA)) %>% 
-  as.data.frame() %>% 
-  magrittr::set_colnames(c("order0", "order1", "order2", "order3"))
-
-o1 <- all_path_df %>% 
-  filter(from %in% (all_path_nodes %>% pull(order0) %>% unique()), to %in% (all_path_nodes %>% pull(order1) %>% unique()))
-
-o2 <- all_path_df %>% 
-  filter(from %in% (all_path_nodes %>% pull(order1) %>% unique()), to %in% (all_path_nodes %>% pull(order2) %>% unique()))
-
-o3 <- all_path_df %>% 
-  filter(from %in% (all_path_nodes %>% pull(order2) %>% unique()), to %in% (all_path_nodes %>% pull(order3) %>% unique))
-
-filtered_path <- rbind(o1, o2, o3)
-
-N <- tibble(
-  name = c(filtered_path$from, filtered_path$to) %>% unique()
-) %>% 
-  mutate(shape = ifelse(grepl("^cpd:|^gl:|^dr:", name, ignore.case = F), "21", "22")) 
-
-E <- filtered_path %>% 
-  dplyr::select(from, to, from_entrez, to_entrez, everything())
-```
-
-
 ```{r, warning=FALSE, message=FALSE}
 g <- tbl_graph(nodes = N, edges = E, directed = T)
 
-g %>%  
-  ggraph(layout = "lgl") +
-  geom_edge_link(aes(filter = angle == 30, 
-                     edge_linetype = factor(lty), 
-                     label = edge_label), 
-                 end_cap = circle(3, "mm"), 
-                 start_cap = circle(1, "mm"), 
-                 arrow = arrow(length = unit(2, "mm")), 
-                 show.legend = F) +
-  geom_edge_link(aes(filter = angle == 90, 
-                     edge_linetype = factor(lty)), 
-                 arrow = arrow(angle = 90, length = unit(1.5, "mm")), 
-                 end_cap = circle(3, "mm"), 
-                 show.legend = F) +
-  geom_node_point(aes(filter = !(name %in% all_DEG)), color ="grey", size = 5) +
-  geom_node_point(aes(filter = (name %in% all_DEG)), color = "red", size = 5) +
-  geom_node_text(aes(label = name), repl = T) 
+ll <- create_layout(g, "nicely")
 
-ggsave(filename = "p2ry12_downstream_signal.tiff")
+ll %>%  
+  ggraph() +
+  geom_edge_link(aes(filter = (angle == 30), 
+                     edge_linetype = factor(lty)), 
+                 end_cap = circle(2.5, "mm"), 
+                 start_cap = circle(1, "mm"), 
+                 arrow = arrow(length = unit(1, "mm")), 
+                 show.legend = F, 
+                 edge_width = 0.2) +
+  geom_edge_link(aes(filter = (angle == 90), 
+                     edge_linetype = factor(lty)), 
+                 arrow = arrow(angle = 90, length = unit(1, "mm")), 
+                 end_cap = circle(2.5, "mm"), 
+                 show.legend = F, 
+                 edge_width = 0.2) +
+  geom_node_point(aes(shape = shape, filter = !(symbol %in% A3_L3_DEG_inter)), 
+                  fill ="grey", 
+                  size = 5, 
+                  show.legend = F, 
+                  color = "grey") +
+  geom_node_point(aes(shape = shape, filter = (symbol %in% A3_L3_DEG_inter)), 
+             fill = "red", 
+             color = "red", 
+             show.legend = F, 
+             size = 5) +
+  geom_node_text(aes(label = symbol), size = 2) +
+  scale_shape_manual(values = c("21" = 22, "22" = 21)) +
+  theme_graph()
+
+ggsave(filename = "p2ry12_downstream_signal.pdf")
 ```
 
 
