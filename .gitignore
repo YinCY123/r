@@ -15,3 +15,7 @@
 # ignore log file
 *.log
 .Rproj.user
+
+# ignore PDF csv files
+*.pdf
+*.csv
