@@ -19,3 +19,8 @@
 # ignore PDF csv files
 *.pdf
 *.csv
+
+# ignore tiff pnd jpef figures
+*.png
+*.tiff
+*.jpeg
