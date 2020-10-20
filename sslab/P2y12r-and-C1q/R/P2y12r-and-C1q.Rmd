@@ -576,7 +576,6 @@ for(i in seq_along(ll)){
 KEGG_compounds_to_display <- str_trim(extracted_str, "both")
 names(KEGG_compounds_to_display) <- KEGG_compound_ids
 KEGG_compounds_to_display[10:20]
-```
 
 
 ```{r}
@@ -693,11 +692,11 @@ all_path_df$to <- str_trim(string = all_path_df$to, side = "both")
 names_to_display <- c(KEGG_mmu_genes_to_display, KEGG_compounds_to_display, 
                       KEGG_drug_to_display, KEGG_glycan_to_dispaly)
 
-all_path_df$from_symbol <- names_to_display[all_path_df$from]
-all_path_df$to_symbol <- names_to_display[all_path_df$to]
-all_path_df <- all_path_df %>% 
-  dplyr::rename(from = from_symbol, to = to_symbol, from_entrez = from, to_entrez = to)
-all_path_df %>% dplyr::filter(is.na(from)|is.na(to))
+# all_path_df$from_symbol <- names_to_display[all_path_df$from]
+# all_path_df$to_symbol <- names_to_display[all_path_df$to]
+# all_path_df <- all_path_df %>% 
+#   dplyr::rename(from = from_symbol, to = to_symbol, from_entrez = from, to_entrez = to)
+# all_path_df %>% dplyr::filter(is.na(from)|is.na(to))
 ```
 
 
@@ -720,18 +719,18 @@ library(tidygraph)
 
 ### determine order of genes  
 ```{r}
-all_path_gene_df <- read.csv(file = "../res/P2ry12/all_path_dataframe.csv") %>% 
-  distinct(from, to, .keep_all = T)
+# all_path_gene_df <- read.csv(file = "../res/P2ry12/all_path_dataframe.csv") %>% 
+#   distinct(from, to, .keep_all = T)
 # write.csv(x = all_path_gene_df, file = "../res/P2ry12/all_path_gene_df.csv")
 
-all_path_gene_df$from <- gsub("mmu:", "", all_path_gene_df$from)
-all_path_gene_df$to <- gsub("mmu:", "", all_path_gene_df$to)
-
-all_path_gene_df$from_symbol <- KEGG_mmu_genes_to_display[all_path_gene_df$from]
-all_path_gene_df$to_symbol <- KEGG_mmu_genes_to_display[all_path_gene_df$to]
-
-all_path_gene_df <- all_path_gene_df %>% 
-  relocate(from_symbol, to_symbol, everything())
+# all_path_gene_df$from <- gsub("mmu:", "", all_path_gene_df$from)
+# all_path_gene_df$to <- gsub("mmu:", "", all_path_gene_df$to)
+# 
+# all_path_gene_df$from_symbol <- KEGG_mmu_genes_to_display[all_path_gene_df$from]
+# all_path_gene_df$to_symbol <- KEGG_mmu_genes_to_display[all_path_gene_df$to]
+# 
+# all_path_gene_df <- all_path_gene_df %>% 
+#   relocate(from_symbol, to_symbol, everything())
 ```
 
 
@@ -741,9 +740,9 @@ all_path_df
 
 
 ```{r}
-all_path_df <- all_path_df %>% 
-  as.tibble() %>% 
-  dplyr::rename(from = from_symbol, to = to_symbol, from_entrez = from, to_entrez = to)
+# all_path_df <- all_path_df %>% 
+#   as.tibble() %>% 
+#   dplyr::rename(from = from_symbol, to = to_symbol, from_entrez = from, to_entrez = to)
 
 ig <- graph_from_data_frame(d = all_path_df[, c("from", "to")], directed = T)
 distance_to_p2ry12_all_path <- shortest_paths(ig, from = V(ig)$name == "70839", to = V(ig), mode = "out")[[1]]
@@ -803,12 +802,9 @@ o7 <- all_path_df %>%
 o8 <- all_path_df %>% 
   filter(from %in% (retained_path %>% pull(order_7) %>% unique()), 
          to %in% (retained_path %>% pull(order_8) %>% unique()))
-o9 <- all_path_df %>% 
-  filter(from %in% (retained_path %>% pull(order_8) %>% unique()), 
-         to %in% (retained_path %>% pull(order_9) %>% unique()))
 
 
-filtered_path <- rbind(o1, o2, o3, o4, o5, o6, o7, o8, o9)
+filtered_path <- rbind(o1, o2, o3, o4, o5, o6, o7, o8)
 filtered_path %>% pull(lty) 
 
 N <- tibble::tibble(
@@ -841,8 +837,8 @@ all_DEG <- intersect(A3_L3_DEG_inter, pvn_top100_GO_DEG)
 ```{r, warning=FALSE, message=FALSE}
 g <- tbl_graph(nodes = N, edges = E, directed = T)
 
-ll <- create_layout(g, "nicely")
-
+# ll <- create_layout(g, "nicely")
+set.seed(123)
 g %>%  
   mutate(names = names_to_display[ids]) %>% 
   ggraph(layout = "lgl") +
@@ -871,7 +867,7 @@ g %>%
              size = 5) +
   geom_node_text(aes(label = names), size = 2) +
   scale_shape_manual(values = c("21" = 22, "22" = 21)) +
-  theme_graph()
+  theme_graph() 
 
 ggsave(filename = "p2ry12_downstream_signal.pdf")
 ```
@@ -880,8 +876,6 @@ ggsave(filename = "p2ry12_downstream_signal.pdf")
 ### number of DEGs in different order  
 ```{r}
 tg <- as_tbl_graph(all_path_df)
-A14_DEG_ENTREZ <- mapIds(org.Mm.eg.db, keys = A14_DEG, keytype = "SYMBOL", column = "ENTREZID")
-
 
 DEG_14_orders <- tg %>% 
   dplyr::mutate(bfsr = bfs_dist(root = .N()$name == "70839", mode = "out")) %>% 
@@ -895,7 +889,7 @@ DEG_14_orders <- tg %>%
 
 DEG_3_orders <- tg %>% 
   dplyr::mutate(dfsr = bfs_dist(root = .N()$name == "70839", mode = "out")) %>% 
-  filter(.N()$name %in% intersect(mapIds(org.Mm.eg.db, as.character(A3_DEG), "ENTREZID", "SYMBOL"), 
+  dplyr::filter(.N()$name %in% intersect(mapIds(org.Mm.eg.db, as.character(A3_DEG), "ENTREZID", "SYMBOL"), 
                                   mapIds(org.Mm.eg.db, as.character(L3_DEG), "ENTREZID", "SYMBOL"))) %>% 
   as_tibble() %>% 
   pull(dfsr) %>% 
@@ -929,6 +923,29 @@ ggsave(filename = "Number-of-DEGs-in-different-order.tiff")
 
 ```{r}
 all_DEG
+```
+
+```{r, warning=FALSE, message=FALSE}
+tg %>% 
+  dplyr::mutate(bfsr = bfs_dist(root = .N()$name == "70839", mode = "out")) %>% 
+  dplyr::filter(.N()$name %in% intersect(mapIds(x = org.Mm.eg.db, keys = as.character(A14_DEG), column = "ENTREZID", keytype = "SYMBOL"), 
+                                         mapIds(x = org.Mm.eg.db, keys = as.character(L14_DEG), column = "ENTREZID", keytype = "SYMBOL"))) %>% 
+  as_tibble() %>% 
+  mutate(symbol = mapIds(org.Mm.eg.db, keys = .$name, keytype = "ENTREZID", column = "SYMBOL")) %>% 
+  magrittr::set_colnames(c("entrez", "order", "symbol")) %>% 
+  write.csv(file = "A14_L14_genes_in_different_order.csv", row.names = F, quote = F)
+```
+
+
+```{r, warning=FALSE, message=FALSE}
+tg %>% 
+  dplyr::mutate(dfsr = bfs_dist(root = .N()$name == "70839", mode = "out")) %>% 
+  dplyr::filter(.N()$name %in% intersect(mapIds(org.Mm.eg.db, as.character(A3_DEG), "ENTREZID", "SYMBOL"), 
+                                  mapIds(org.Mm.eg.db, as.character(L3_DEG), "ENTREZID", "SYMBOL"))) %>% 
+  as_tibble() %>% 
+  mutate(symbol = mapIds(org.Mm.eg.db, keys = .$name, keytype = "ENTREZID", column = "SYMBOL")) %>% 
+  magrittr::set_colnames(c("entrez", "order", "symbol")) %>% 
+  write.csv(file = "A3_L3_genes_in_different_order.csv", row.names = F, quote = F)
 ```
 
 
