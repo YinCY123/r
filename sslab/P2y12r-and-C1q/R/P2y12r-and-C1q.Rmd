@@ -319,8 +319,8 @@ A14_DEG <- A14 %>%
 
 L14 <- read.csv(file = "../data/20200702_14L_naive_DE_FDR.csv")
 L14_DEG <- L14 %>%
-  filter(abs(logFC) >= 1) %>% 
-  pull(geneid_symbol)
+  dplyr::filter(abs(logFC) >= 1) %>% 
+  dplyr::pull(geneid_symbol)
 ```
 
 
@@ -495,10 +495,10 @@ all_path_df <- all_path_df %>% distinct(from, to, .keep_all = T)
 all_path_df %>% dim()
 
 all_path_df %>% 
-  filter(type == "maplink")
+  dplyr::filter(type == "maplink")
 
 all_path_df <- all_path_df %>% 
-  filter(type != "maplink")
+  dplyr::filter(type != "maplink")
 all_path_df %>% dim()
 
 all_path_df$from <- gsub("mmu:", replacement = "", all_path_df$from)
@@ -533,7 +533,7 @@ all_path_df$subtype %>% unique()
 intersect(all_path_df$subtype %>% unique(), subtype_element$name)
 
 all_path_df$subtype_value <- vl[all_path_df$subtype]
-all_path_df %>% filter(subtype != "compound")
+all_path_df %>% dplyr::filter(subtype != "compound")
 
 ## add edge and node info
 all_path_df$angle <- ifelse(all_path_df$subtype == "inhibition", 90, 30)
@@ -545,7 +545,7 @@ all_path_df$lty <- lty[all_path_df$subtype]
 all_path_df$lty <- ifelse(is.na(all_path_df$lty), 1, all_path_df$lty)
 all_path_df$edge_label <- ifelse(is.na(all_path_df$edge_label), "", all_path_df$edge_label)
 
-all_path_df %>% filter(is.na(lty))
+all_path_df %>% dplyr::filter(is.na(lty))
 ```
 
 
@@ -687,7 +687,6 @@ for(i in seq_along(ll)){
   }
 }
 
-
 all_path_df$from <- str_trim(string = all_path_df$from, side = "both")
 all_path_df$to <- str_trim(string = all_path_df$to, side = "both")
 
@@ -698,7 +697,7 @@ all_path_df$from_symbol <- names_to_display[all_path_df$from]
 all_path_df$to_symbol <- names_to_display[all_path_df$to]
 all_path_df <- all_path_df %>% 
   dplyr::rename(from = from_symbol, to = to_symbol, from_entrez = from, to_entrez = to)
-all_path_df %>% filter(is.na(from)|is.na(to))
+all_path_df %>% dplyr::filter(is.na(from)|is.na(to))
 ```
 
 
@@ -737,12 +736,17 @@ all_path_gene_df <- all_path_gene_df %>%
 
 
 ```{r}
+all_path_df
+```
+
+
+```{r}
 all_path_df <- all_path_df %>% 
   as.tibble() %>% 
   dplyr::rename(from = from_symbol, to = to_symbol, from_entrez = from, to_entrez = to)
 
 ig <- graph_from_data_frame(d = all_path_df[, c("from", "to")], directed = T)
-distance_to_p2ry12_all_path <- shortest_paths(ig, from = V(ig)$name == "P2ry12", to = V(ig), mode = "out")[[1]]
+distance_to_p2ry12_all_path <- shortest_paths(ig, from = V(ig)$name == "70839", to = V(ig), mode = "out")[[1]]
 
 list2df <- function(list){
   maxL <- sapply(list, length) %>% max()
@@ -761,7 +765,11 @@ list2df <- function(list){
 
 all_path_nodes <- list2df(lapply(distance_to_p2ry12_all_path, as_ids))
 
-inter_len <- apply(all_path_nodes, 1, intersect, all_DEG) %>% sapply(length)
+inter_len <- apply(all_path_nodes[1:10], 
+                   1, 
+                   intersect, 
+                   mapIds(org.Mm.eg.db, keys = all_DEG, keytype = "SYMBOL", column = "ENTREZID")) %>%
+  sapply(length)
 
 retained_path <- all_path_nodes[inter_len >= 1, ] 
 
@@ -800,17 +808,16 @@ o9 <- all_path_df %>%
          to %in% (retained_path %>% pull(order_9) %>% unique()))
 
 
-filtered_path <- rbind(o1, o2, o3, o4, o5, o6, o7)
+filtered_path <- rbind(o1, o2, o3, o4, o5, o6, o7, o8, o9)
 filtered_path %>% pull(lty) 
 
 N <- tibble::tibble(
-  symbol = c(filtered_path$from, filtered_path$to) %>% unique(),
-  ids = c(filtered_path$from_entrez, filtered_path$to_entrez) %>% unique()
+  ids = c(filtered_path$from, filtered_path$to) %>% unique()
 ) %>% 
   mutate(shape = ifelse(grepl("^cpd:|^gl:|^dr:", ids, ignore.case = F), "21", "22")) 
 
 E <- filtered_path %>% 
-  dplyr::select(from, to, from_entrez, to_entrez, everything())
+  dplyr::select(from, to, everything())
 ```
 
 
@@ -836,8 +843,9 @@ g <- tbl_graph(nodes = N, edges = E, directed = T)
 
 ll <- create_layout(g, "nicely")
 
-ll %>%  
-  ggraph() +
+g %>%  
+  mutate(names = names_to_display[ids]) %>% 
+  ggraph(layout = "lgl") +
   geom_edge_link(aes(filter = (angle == 30), 
                      edge_linetype = factor(lty)), 
                  end_cap = circle(2.5, "mm"), 
@@ -851,17 +859,17 @@ ll %>%
                  end_cap = circle(2.5, "mm"), 
                  show.legend = F, 
                  edge_width = 0.2) +
-  geom_node_point(aes(shape = shape, filter = !(symbol %in% A3_L3_DEG_inter)), 
+  geom_node_point(aes(shape = shape, filter = !(names %in% A3_L3_DEG_inter)), 
                   fill ="grey", 
                   size = 5, 
                   show.legend = F, 
                   color = "grey") +
-  geom_node_point(aes(shape = shape, filter = (symbol %in% A3_L3_DEG_inter)), 
+  geom_node_point(aes(shape = shape, filter = (names %in% A3_L3_DEG_inter)), 
              fill = "red", 
              color = "red", 
              show.legend = F, 
              size = 5) +
-  geom_node_text(aes(label = symbol), size = 2) +
+  geom_node_text(aes(label = names), size = 2) +
   scale_shape_manual(values = c("21" = 22, "22" = 21)) +
   theme_graph()
 
@@ -871,18 +879,24 @@ ggsave(filename = "p2ry12_downstream_signal.pdf")
 
 ### number of DEGs in different order  
 ```{r}
-DEG_14_orders <- g %>% 
-  dplyr::mutate(dfsr = bfs_dist(root = .N()$name == "P2ry12", mode = "out")) %>% 
-  filter(.N()$name %in% intersect(A14_DEG, L14_DEG)) %>% 
+tg <- as_tbl_graph(all_path_df)
+A14_DEG_ENTREZ <- mapIds(org.Mm.eg.db, keys = A14_DEG, keytype = "SYMBOL", column = "ENTREZID")
+
+
+DEG_14_orders <- tg %>% 
+  dplyr::mutate(bfsr = bfs_dist(root = .N()$name == "70839", mode = "out")) %>% 
+  dplyr::filter(.N()$name %in% intersect(mapIds(x = org.Mm.eg.db, keys = as.character(A14_DEG), column = "ENTREZID", keytype = "SYMBOL"), 
+                                         mapIds(x = org.Mm.eg.db, keys = as.character(L14_DEG), column = "ENTREZID", keytype = "SYMBOL"))) %>% 
   as_tibble() %>% 
-  pull(dfsr) %>% 
+  pull(bfsr) %>% 
   table() %>% 
   as.data.frame() %>% 
   magrittr::set_colnames(c("order", 'freq'))
 
-DEG_3_orders <- g %>% 
-  dplyr::mutate(dfsr = bfs_dist(root = .N()$name == "P2ry12", mode = "out")) %>% 
-  filter(.N()$name %in% intersect(A3_DEG, L3_DEG)) %>% 
+DEG_3_orders <- tg %>% 
+  dplyr::mutate(dfsr = bfs_dist(root = .N()$name == "70839", mode = "out")) %>% 
+  filter(.N()$name %in% intersect(mapIds(org.Mm.eg.db, as.character(A3_DEG), "ENTREZID", "SYMBOL"), 
+                                  mapIds(org.Mm.eg.db, as.character(L3_DEG), "ENTREZID", "SYMBOL"))) %>% 
   as_tibble() %>% 
   pull(dfsr) %>% 
   table() %>% 
@@ -906,7 +920,7 @@ DEG_3_orders %>%
   rbind(DEG_14_orders) %>% 
   ggplot(aes(order, freq)) +
   geom_bar(stat = "identity", position = "dodge", aes(fill = group)) +
-  scale_fill_brewer(name = "days", type = "qual", palette = "Set1", direction = -1) +
+  scale_fill_brewer(name = "group", type = "qual", palette = "Set1", direction = -1) +
   ggtitle(label = "Number of DEGs in different order")
 
 ggsave(filename = "Number-of-DEGs-in-different-order.tiff")
