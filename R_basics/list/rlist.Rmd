@@ -1,0 +1,27 @@
+---
+title: "rlist"
+author: "yincy"
+date: "10/26/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, message=FALSE, warning=FALSE}
+library(rlist)
+library(pipeR)
+```
+
+```{r}
+people <- list.load(file = "data/people.json")
+
+people %>>% 
+    list.filter(Expertise$R >= 1 & Expertise$Python >= 1) %>>% 
+    list.class(Interests) %>>% 
+    list.sort(-length(.)) %>>% 
+    list.take(3) %>>% 
+    list.map(. %>>% list.table(Age))
+```
+

@@ -1,0 +1,129 @@
+---
+title: "pipeR"
+author: "yincy"
+date: "10/26/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+`pipeR` is an Rpackage that helps you better organize your code in pipeline built with `%》>%`, `Pipe()` or `pipeline()` which is much easier to read, wirte and maintain.  
+
+```{r}
+sample_mtcars <- sample(mtcars$mpg, 10000, replace = T)
+density_mtcars <- density(sample_mtcars, kernel = "gaussian")
+plot(density_mtcars, col = "red", main = "density of mpg (bootstrap)")
+```
+
+```{r}
+mtcars$mpg %>>% 
+    sample(size = 10000, replace = T) %>>% 
+    density(kernel = "guassian") %>>% 
+    plot(col = "red", main = "density of mpg")
+```
+
+```{r}
+mtcars %>>% 
+    subset(mpg >= quantile(mpg, 0.05) & mpg <= quantile(mpg, 0.05)) %>% 
+    (mpg) %>>% 
+    sample(size = 10000, replace = T) %>>% 
+    density(kernel = "guassian") %>>% 
+    plot(col = "red", main = "density of mpg")
+```
+
+
+**Design priciples**  
+
+- define a set of syntax rather than symbols  
+- syntax should be simple, clear and intuitive  
+- give user full control of the piping behavior  
+
+**Pipe operator**  
+- to first argument of a function  
+- to `.` in an expression  
+- by formula to avoid ambiguity in symbol names.  
+- to an expression only for its side effect  
+- to an expression and save the intermediate results  
+- to a symbol in order to extract that element  
+
+Basically, the behavior of the operator is fully determined by the syntax of the expression that follows the operator.  
+
+
+# pipe to first argument  
+```{r, message=FALSE, warning=F}
+rnorm(100, 0) %>>% 
+    log %>>% 
+    diff %>>% 
+    sample(size = 10000, replace = T) %>>% 
+    summary()
+```
+
+```{r}
+mtcars$mpg %>% 
+    plot(col = "red", main = sprintf("number of points: %d", length(.)))
+```
+
+
+There are situations where one calls a function in a namespace with ::. In this case, the call must end up with parentheses with or without parameters.  
+
+```{r}
+mtcars$mpg %>>% 
+    stats::median()
+
+mtcars$mpg %>>% 
+    graphics::plot(col = "red")
+```
+
+```{r}
+functions <- list(average = function(x) mean(x))
+
+mtcars$mpg %>>% functions$average()
+mtcars$mpg %>>% functions[["average"]]() # need parenthese
+```
+
+```{r}
+mtcars %>>% 
+    subset(mpg <= quantile(mpg, 0.95), c(mpg, wt)) %>>% 
+    summary()
+```
+
+One important thing to notice here is that pipeR does not support lazy evaluation on left value, that is, the left value will be evaluated immediately which cannot be substituted by the function on the right.  
+
+```{r}
+10000 %>>% 
+    replicate(rnorm(10000)) %>>% 
+    system.time()
+```
+
+```{r}
+system.time(replicate(10000, rnorm(1000)))
+```
+
+```{r}
+mtcars %>>% 
+    lm(mpg ~ cyl + wt)
+```
+
+```{r}
+mtcars %>>% 
+    lm(formula = mpg ~ cyl + wt)
+```
+
+# pipe to dot  
+```{r}
+mtcars
+```
+
+
+
+
+
+
+
+
+
+
+
+
