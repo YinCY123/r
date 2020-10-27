@@ -9,6 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Getting started  
 `pipeR` is an Rpackage that helps you better organize your code in pipeline built with `%》>%`, `Pipe()` or `pipeline()` which is much easier to read, wirte and maintain.  
 
 ```{r}
@@ -51,7 +52,8 @@ mtcars %>>%
 Basically, the behavior of the operator is fully determined by the syntax of the expression that follows the operator.  
 
 
-# pipe to first argument  
+# Pipe operator  
+## pipe to first argument  
 ```{r, message=FALSE, warning=F}
 rnorm(100, 0) %>>% 
     log %>>% 
@@ -111,10 +113,430 @@ mtcars %>>%
     lm(formula = mpg ~ cyl + wt)
 ```
 
-# pipe to dot  
+## pipe to dot  
 ```{r}
-mtcars
+mtcars %>>% 
+    (lm(mpg ~ cyl + wt, data = .))
 ```
+
+```{r}
+mtcars %>>% 
+    {lm(mpg ~ cyl + wt, data = .)}
+```
+
+**The difference between `{}` and `()` used above is**:  
+
+- `{}` accepts mpre than one expression within the braces and its value is determined by the last one; but `()` accepts only one expression.  
+
+- `{}` has only one feature: pipe to `.` in the enclosed expression while `()` has more features.  
+
+```{r}
+mtcars %>>% {
+    model <- lm(mpg ~ wt + cyl, data = .)
+    summ <- summary(model)
+    summ[c('r.squared', 'adj.r.squared')]
+}
+```
+
+```{r}
+mtcars %>>% 
+    lm(formula = mpg ~ wt + cyl) %>>% 
+    summary %>>% {
+    if(.$r.squared >= 0.8){
+        return("Model A")
+    }
+    cat("Model B should be considered.\n")
+    "Model B"
+}
+```
+
+```{r}
+mtcars %>>% {
+    par(mfrow = c(1, 2))
+.$mpg %>>% plot(col = "red", main = "mtcars (mpg)")
+.$mpg %>>% hist(main = "distribution")
+}
+```
+
+```{r}
+mtcars %>>% {
+    par(mfrow = c(1, 2))
+.$mpg %>>% plot(col = "red", main = sprintf("mtcars (mpg: %d)", length(.)))
+.$mpg %>>% hist(main = "distribution")
+}
+```
+
+
+### Creating closure  
+```{r}
+density_plot <- mtcars$mpg %>>% 
+    sample(size = 10000, replace = T) %>>% 
+    (function(kernel){
+        . %>>% 
+            density(kernel = kernel) %>% 
+            plot(main = sprintf("%s kernel", kernel))
+    })
+```
+
+```{r}
+par(mfrow = c(1,3))
+density_plot("guassian")
+density_plot("rectanglar")
+density_plot("trianglar")
+```
+
+
+```{r}
+1:10 %>>% (function(x, pow) x^pow)(2)
+```
+
+```{r}
+mtcars %>>% 
+    lm(formula = mpg ~ wt + cyl) %>>% 
+    (function(model, warn_level){
+        warning("r.squared is too low", call. = FALSE)
+        model
+    })(0.9) %>>%
+    coef
+```
+
+## Pipe by formula  
+```{r}
+mtcars %>>% 
+    (lm(mpg ~., data = .))
+```
+
+the above code an be rewritten using lambda expression like 
+
+```{r}
+mtcars %>>% 
+    (df ~ lm(mpg ~., data = df))
+```
+
+the formula tells `%>>%` to use `df` to represent `mtcars` so that the expression of linear model fit won't look ambiguous any more.  
+
+```{r}
+mtcars %>>% 
+    subset(select = c(mpg, wt, cyl)) %>>% 
+    (x ~ lm(mpg ~., data = x))
+```
+
+```{r}
+mtcars %>>% 
+    subset(select = c(mpg, wt, cyl)) %>>% 
+    (x ~ {
+        summ <- lm(mpg ~., data = x) %>>% 
+            summary
+        list(n = nrow(x), r.squared = summ$r.squared)
+    })
+```
+
+
+## Pipe for side effect  
+In a pipeline, one may be interested not only in the final outcome but sometimes also in intermediate results. In other words, as the operator pipes the value forward for streamlined processing, one may also want to save the intermediate result for further use, visualize the intermediate values for better understanding, or print some message to indicate the progress.  
+
+```{r}
+z <- plot(mtcars$mpg)
+z
+```
+
+It can be clearly seen that `plot()` does two things:  
+
+1. Draw a scatter image of `mtcars$mpg`  
+2. return `NULL` value  
+
+The first thing is often considered as side-effect because it is an influence the function has on the outside environment: it changes what to show in the graphics area. However, when we are building a pipeline and want to plot with some intermediate results, we only want the side effect and have to avoid the returned value, in this case, NULL, which is not the desired data we would like to further process.  
+
+
+## Syntax for side effect  
+```{r}
+mtcars %>>% 
+    subset(mpg >= quantile(mpg, 0.05) & mpg <= quantile(mpg, 0.95), c(mpg, cyl, wt)) %>>% 
+    (~ cat("rows: ", nrow(.), "\n")) %>>% 
+    summary()
+```
+
+```{r, eval=FALSE}
+mtcars %>>% 
+    subset(mpg >= quantile(mpg, 0.05) & mpg <= quantile(mpg, 0.95)) %>>% 
+    cat("rows: ", nrow(.), "\n") %>>% 
+    summary()
+```
+
+
+```{r}
+mtcars %>>% 
+    subset(mpg >= quantile(mpg, 0.05) & mpg <= quantile(mpg, 0.95)) %>>% 
+    (~ plot(mpg ~ wt, data = .)) %>>% 
+    lm(formula = mpg ~ wt) %>>% 
+    summary()
+```
+
+## Lambda expression  
+```{r}
+mtcars %>>% 
+    subset(mpg >= quantile(mpg, 0.05) & mpg <= quantile(mpg, 0.95), c(mpg, cyl ,wt)) %>>% 
+    (~ filtered ~ cat("rows:", nrow(filtered), "\n")) %>>% 
+    summary()
+```
+
+## String
+```{r}
+mtcars %>>%
+    "Running linear model" %>>% 
+    lm(formula = mpg ~ wt + cyl) %>>% 
+    "summarizing the model" %>>% 
+    summary() %>>% 
+    coef()
+```
+
+```{r}
+data(diamonds, package = "ggplot2")
+
+diamonds %>>% 
+    "filtering data ..." %>>% 
+    filter(carat >= quantile(carat, 0.05) & carat <= quantile(carat, 0.95)) %>>% 
+    select(carat, price, depth) %>>% 
+    "estimating linear model ..." %>>% 
+    lm(formula = carat ~ price + depth) %>>% 
+    "summarizing model ..." %>>% 
+    summary()
+```
+
+## Question mark  
+```{r}
+mtcars %>>% 
+    subset(vs == 1, c(mpg, wt, cyl)) %>>% 
+    (? nrow(.)) %>>% 
+    (? data ~ ncol(data)) %>>% 
+    summary()
+```
+
+```{r}
+mtcars %>>% 
+    ("Raw data rows:" ? nrow(.)) %>>% 
+    subset(vs == 1, c(mpg, cyl, wt)) %>>% 
+    ("Filtered data rows:" ? nrow(.)) %>>% 
+    lm(formula = mpg ~ wt + cyl)
+```
+
+
+## Stopping  
+```{r}
+mtcars %>>% 
+    subset(vs == 1, c(mpg, wt, cyl)) %>>% 
+    lm(formula = mpg ~ cyl + wt) %>>% 
+    (~ stopifnot(summary(.)$r.squared >= 0.5)) %>>% 
+    predict(newdata = list(cyl = 4.5, wt = 3.0))
+```
+
+```{r,eval=FALSE}
+mtcars %>>% 
+    subset(vs == 1, c(mpg, wt, cyl)) %>>% 
+    lm(formula = mpg ~ cyl + wt) %>>% 
+    (~ stopifnot(summary(.)$r.squared >= 0.8)) %>>% 
+    predict(newdata = list(cyl = 4.5, wt = 3.0))
+```
+
+
+## Debugging  
+```{r, eval=F}
+mtcars %>>% 
+    subset(vs == 1, c(mpg, wt, cyl)) %>>% 
+    (~ message("debug1")) %>>% 
+    (~ browser()) %>>% 
+    lm(formula = mpg ~ cyl + wt) %>>% 
+    summary()
+```
+
+Since `browser()` supports conditional breakpoint with `expr =` being set, the breakpoint can be smart to examine the value of the expression and then decide whether or not to pause.  
+
+```{r}
+mtcars %>>% 
+    subset(vs == 1, c(mpg, cyl, wt)) %>>% 
+    lm(formula = mpg ~ wt + cyl) %>>% 
+    summary() %>>% 
+    (~ browser(expr = .$r.squared < 0.5))
+
+# if the R^2 of the inear model is less than 0.8, the evaluation will pause and wait for browser.
+```
+
+
+# Pipe with assignment  
+```{r}
+mtcars %>>% 
+    subset(select = c(mpg, wt, cyl)) %>>% 
+    (~ sub_mtcars) %>>% 
+    lm(formula = mpg ~ wt + cyl) %>>% 
+    (~ lm_mtcars) %>>% 
+    summary()
+```
+
+```{r}
+sub_mtcars
+```
+
+```{r}
+lm_mtcars
+```
+
+```{r}
+ls.str() # inspect the environment variable and it's structure
+```
+
+```{r}
+mtcars %>>% 
+    subset(select = c(mpg, wt, cyl)) %>>% 
+    (~ summ = summary(.)) %>>% # side-effect assignment
+    lm(formula = mpg ~ wt + cyl)
+```
+
+```{r}
+summ
+```
+
+```{r}
+mtcars %>>% 
+    subset(select = c(mpg, wt, cyl)) %>>% 
+    (~ summ = df ~ summary(df)) %>>% # side-effect assignment
+    lm(formula = mpg ~ wt + cyl)
+```
+
+```{r}
+summ
+```
+
+```{r}
+mtcars %>>% 
+    subset(select = c(mpg, wt, cyl)) %>>% 
+    (~ summ = df ~ summary(df)) %>>% 
+    (model = lm(mpg ~ wt + cyl, data = .))
+```
+
+```{r}
+summ
+model
+```
+
+
+```{r}
+mtcars %>>% 
+    (~ summary(.) -> summ)
+```
+
+The `(~ expression -> symbol)` and `(~ symbol <- expression)` syntax work for side-effect assignment, and `(expression -> symbol)` and `(symbol <- expression)` work for piping with assignment.  
+
+
+```{r}
+mtcars %>>% 
+    (~ summary(.) -> summ) %>>%  # side-effect assignment
+    (lm(formula = mpg ~ wt + cyl, data = .) -> lm_mtcars) %>>% # continue piping
+    summary()
+```
+
+```{r}
+summ
+```
+
+```{r}
+lm_mtcars
+```
+
+```{r}
+results <- list()
+mtcars %>>% 
+    lm(formula = mpg ~ wt + cyl) %>>% 
+    (~ results$mtcars = . %>>% summary %>>% (r.squared))
+
+results
+```
+
+```{r}
+iris %>>% 
+    lm(formula = Sepal.Length ~ Sepal.Width) %>>% 
+    (~ results$iris = . %>>% summary %>>% (r.squared))
+
+results
+```
+
+```{r}
+results <- numeric()
+rnorm(100) %>>% 
+    (~ mean(.) -> results["mean"]) %>>% 
+    (~ median(.) -> results['median']) %>>%
+    summary
+
+results
+```
+
+```{r}
+numbers <- 1:5
+
+letters %>>% 
+    sample(length(numbers)) %>>% 
+    (~ . -> names(numbers))
+
+numbers
+```
+
+
+# extract element  
+The syntax `x %>>% (y)` indicates to extract the element named `y` from object `x` where `y` must be a valid symbol name and `x` can be a vector, list, environment or anything else that supports `[[]]`. It also works with S4 object and able to extract a slot from it in exactly the same way.  
+
+```{r}
+mtcars %>>% 
+    (lm(mpg ~ wt + cyl, data = .)) %>>% 
+    summary %>>% 
+    (r.squared)
+```
+
+```{r}
+list(a = 1, b = 2) %>>% (a)
+```
+
+```{r}
+c(a = 1, b = 2) %>>% (a)
+```
+
+```{r}
+env <- new.env()
+env$a <-  1
+env$b <-  2
+
+env %>>% (a) 
+```
+
+```{r}
+set.seed(0)
+x <- cumsum(rnorm(150))
+y <- 2 * x + rnorm(150) * 0.5
+
+matplot(cbind(x, y), type = "l")
+```
+
+
+# Pipe function  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
