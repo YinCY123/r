@@ -948,5 +948,125 @@ tg %>%
   write.csv(file = "A3_L3_genes_in_different_order.csv", row.names = F, quote = F)
 ```
 
+# Go analysis  
+```{r}
+pvn_A3_DEG_up <- read.csv(file = "../data/20200702_3A_naive_DE_FDR.csv") %>% 
+  dplyr::filter(logFC >= 1) %>% 
+  select(geneid_symbol, logFC, PValue) %>% 
+  dplyr::arrange(-logFC)
+
+pvn_A3_DEG_down <- read.csv(file = "../data/20200702_3A_naive_DE_FDR.csv") %>% 
+  dplyr::filter(logFC <= -1) %>% 
+  select(geneid_symbol, logFC, PValue) %>% 
+  dplyr::arrange(logFC)
+
+
+pvn_L3_DEG_up <- read.csv(file = "../data/20200702_3L_naive_DE_FDR.csv") %>% 
+  dplyr::filter(logFC >= 1) %>% 
+  select(geneid_symbol, logFC, PValue) %>% 
+  dplyr::arrange(-logFC)
+
+pvn_L3_DEG_down <- read.csv(file = "../data/20200702_3L_naive_DE_FDR.csv") %>% 
+  dplyr::filter(logFC <= -1) %>% 
+  select(geneid_symbol, logFC, PValue) %>% 
+  dplyr::arrange(logFC)
+
+
+pvn_A14_DEG_up <- read.csv(file = "../data/20200702_14A_naive_DE_FDR.csv") %>% 
+  dplyr::filter(logFC >= 1) %>% 
+  select(geneid_symbol, logFC, PValue) %>% 
+  dplyr::arrange(-logFC)
+
+pvn_A14_DEG_down <- read.csv(file = "../data/20200702_14A_naive_DE_FDR.csv") %>% 
+  dplyr::filter(logFC <= -1) %>% 
+  select(geneid_symbol, logFC, PValue) %>% 
+  dplyr::arrange(logFC)
+
+
+pvn_L14_DEG_up <- read.csv(file = "../data/20200702_14L_naive_DE_FDR.csv") %>% 
+  dplyr::filter(logFC >= 1) %>% 
+  select(geneid_symbol, logFC, PValue) %>% 
+  dplyr::arrange(-logFC)
+
+pvn_L14_DEG_down <- read.csv(file = "../data/20200702_14L_naive_DE_FDR.csv") %>% 
+  dplyr::filter(logFC <= -1) %>% 
+  select(geneid_symbol, logFC, PValue) %>% 
+  dplyr::arrange(logFC)
+```
+
+
+```{r}
+pvn_A3_L3_DEG_up <- intersect(pvn_A3_DEG_up$geneid_symbol, pvn_L3_DEG_up$geneid_symbol)
+pvn_A3_L3_DEG_down <- intersect(pvn_A3_DEG_down$geneid_symbol, pvn_L3_DEG_down$geneid_symbol)
+
+pvn_A14_L14_DEG_up <- intersect(pvn_A14_DEG_up$geneid_symbol, pvn_L14_DEG_up$geneid_symbol)
+pvn_A14_L14_DEG_down <- intersect(pvn_A14_DEG_down$geneid_symbol, pvn_L14_DEG_down$geneid_symbol)
+```
+
+
+```{r}
+pvn_A3_L3_DEG_up_df <- select(x = org.Mm.eg.db, 
+                              keys = pvn_A3_L3_DEG_up, 
+                              keytype = "SYMBOL", 
+                              columns = c("SYMBOL", "ENTREZID"))
+
+pvn_A3_L3_DEG_down_df <- select(x = org.Mm.eg.db, 
+                                keys = pvn_A3_L3_DEG_down, 
+                                keytype = "SYMBOL", 
+                                columns = c("ENTREZID", "SYMBOL"))
+
+
+pvn_A14_L14_DEG_up_df <- select(x = org.Mm.eg.db, 
+                                keys = pvn_A14_L14_DEG_up, 
+                                keytype = "SYMBOL", 
+                                columns = c("SYMBOL", "ENTREZID"))
+
+pvn_A14_L14_DEG_down_df <- select(x = org.Mm.eg.db, 
+                                  keys = pvn_A14_L14_DEG_down, 
+                                  keytype = "SYMBOL", 
+                                  columns = c("SYMBOL", "ENTREZID"))
+```
+
+
+```{r}
+pvn_A3_L3_DEG_up_GO <- goana(de = pvn_A3_L3_DEG_up_df$ENTREZID, 
+                             species = "Mm") %>% 
+  tibble::rownames_to_column("GOID") %>% 
+  mutate(group = "up")
+
+pvn_A3_L3_DEG_down_GO <- goana(de = pvn_A3_L3_DEG_down_df$ENTREZID, 
+                               species = "Mm") %>% 
+  tibble::rownames_to_column("GOID") %>% 
+  mutate(group = "down")
+
+pvn_A3_L3_DEG_GO <- rbind(pvn_A3_L3_DEG_up_GO, pvn_A3_L3_DEG_down_GO)
+
+
+
+pvn_A14_L14_DEG_up_GO <- goana(de = pvn_A14_L14_DEG_up_df$ENTREZID, 
+                               species = "Mm") %>% 
+  tibble::rownames_to_column("GOID") %>% 
+  mutate(group = "up")
+
+pvn_A14_L14_DEG_down_GO <- goana(de = pvn_A14_L14_DEG_down_df$ENTREZID, 
+                                 species = "Mm") %>% 
+  tibble::rownames_to_column("GOID") %>% 
+  mutate(group = "down")
+
+pvn_A14_L14_DEG_GO <- rbind(pvn_A14_L14_DEG_up_GO, pvn_A14_L14_DEG_down_GO)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
