@@ -1056,18 +1056,23 @@ do.call(rbind, obs) %>% as.data.frame()%>% head
 
 
 
+```{r}
+attrs <- c("name", "id", "type")
 
+xmlAttrs_df <- function(file, path, attrs, default = -1){
+    doc = xmlParse(file = file)
+    ns <- getNodeSet(doc = doc, path = path)
+    df <- data.frame(x = seq_along(ns))
+    for(attr in attrs){
+        x <- xpathSApply(doc = doc, path = path, fun = xmlGetAttr, name = attr, default = default)
+        df <- cbind(df, attr = x)
+    }
+    colnames(df) <- c("x",attrs)
+    return(df)
+}
 
-
-
-
-
-
-
-
-
-
-
+xmlAttrs_df(file = files[1], path = "//entry", attrs = attrs) 
+```
 
 
 
