@@ -1,0 +1,1 @@
+define([],function(){var c=function(c){return"[object Array]"==Object.prototype.toString.call(c)};return function(a){for(var b,y,g,h,j=a.substr(a.lastIndexOf("?")+1),v=j.split("&"),O=v.length,A={},i=0;O>i;i++)v[i]&&(h=v[i].split("="),b=h[0],y=h[1],g=A[b],"undefined"==typeof g?A[b]=y:c(g)?g.push(y):A[b]=[g,y]);return A}});

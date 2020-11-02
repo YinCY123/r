@@ -1,0 +1,12 @@
+.table-a{text-align:center;color:#333;font:14px/35px "Microsoft Yahei", 微软雅黑, SimHei, 黑体, sans-serif;position:relative;}
+.table-a .tab-a{width:100%;height:32px;line-height:32px;font-size:14px;border-bottom:2px solid #bcbcbc;}
+.table-a .tab-a .nav-selected{color:#dd0000;border-bottom: 2px solid #dd0000;}
+.table-a .tab-a a{float:left;width:60px;color:#333;}
+.table-a .tab-cont{display:none;}
+.table-a .bg{background: #f8f8f8;}
+.table-a__th tr{color:#888;border-bottom:1px solid #d4d4d4;}
+.table-a__tb em{font-family: Arial, Helvetica, sans-serif;font-style:italic;}
+.table-a__tb em.top3{color:#dd0000;}
+.table-a__tb .play-name,.table-a__tb .team-name,.table-a__more{color:#333;}
+.table-a__tb .play-name:hover,.table-a__tb .team-name:hover,.table-a__more:hover{color:#dd0000;}
+.table-a  tr:nth-child(even){background: #f8f8f8;}

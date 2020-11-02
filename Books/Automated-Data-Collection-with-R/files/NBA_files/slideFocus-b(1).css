@@ -1,0 +1,23 @@
+@charset "utf-8";
+.slide-focus-b-wrap{overflow: hidden;position: relative;}
+.slide-focus-b-cont{width:100%;overflow: hidden;position: relative;}
+.slide-focus-b-cont li{float: left;display: inline;overflow: hidden;position: relative;}
+.slide-focus-b-cont a img{display: block;}
+.slide-focus-b-prev,.slide-focus-b-next{position: absolute;top:50%;display: block;width:40px;height:60px;text-indent: -999px; margin-top: -30px;overflow: hidden;cursor: pointer;}
+.slide-focus-b-prev{left:0;}
+.slide-focus-b-next{right:0;}
+.slide-focus-b-prev .ico,.slide-focus-b-next .ico{display: block;width:40px;height:60px;}
+.slide-focus-b-prev .ico{background-repeat: no-repeat;}
+.slide-focus-b-next .ico{background-repeat: no-repeat;}
+.slide-focus-b-prev:hover,.slide-focus-b-next:hover{background:rgba(0,0,0, 0.5); filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#7f000000', EndColorStr='#7f000000');*zoom:1;}
+:root .slide-focus-b-prev:hover,:root .slide-focus-b-next:hover{filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#00000000', EndColorStr='#00000000'); }
+.slide-focus-b-txts{position:absolute;left:0;bottom:0;line-height: 60px;}
+.slide-focus-b-txts p{padding-left: 20px;font-size: 20px;color:#fff;}
+.slide-focus-b-txts a:link, .slide-focus-b-txts a:visited{color:#fff;}
+.slide-focus-b-txts a:hover, .slide-focus-b-txts a:active{color:#dd0000;}
+.slide-focus-b-pager{position: absolute;right:10px;bottom:0;padding:0;height: 12px;}
+.slide-focus-b-pager a{display: inline-block;width:12px;height:12px;margin-left:10px;overflow: hidden;vertical-align: middle;background-repeat: no-repeat;}
+.slide-focus-b-pager a.cur{background-repeat: no-repeat;}
+.slide-focus-b-pager a:hover{cursor: pointer;}
+.slide-focus-bg{position:absolute;left:0;bottom:0;width:100%;height: 60px;background-repeat: repeat-x}
+.slide-focus-bg{background-position:0px 0px}.slide-focus-bg{background-image: url(//n.sinaimg.cn/products/base/latest/css/component/sina/slideFocus-b_x.png)}.slide-focus-b-prev .ico{background-position:-9px -20px}.slide-focus-b-next .ico{background-position:-9px -140px}.slide-focus-b-pager a{background-position:-48px -240px}.slide-focus-b-pager a.cur{background-position:-48px -272px}.slide-focus-b-prev .ico,.slide-focus-b-next .ico,.slide-focus-b-pager a,.slide-focus-b-pager a.cur{background-image: url(//n.sinaimg.cn/products/base/latest/css/component/sina/slideFocus-b_z.png)}

@@ -1,0 +1,8 @@
+.news-list-c{width:100%;font:14px/26px Arial, Helvetica, sans-serif;}
+.news-list-c__li{height:52px;}
+.news-list-c__li .year{width:203px;}
+.news-list-c__li a.img,.news-list-c__li .year,.news-list-c__li .year li{float:left;}
+.news-list-c__li a.img{width:90px;height:50px;border:1px solid #ccc;}
+.news-list-c__li .year a{padding:0 9px;color:#333;}
+.news-list-c__li .year a:hover{color:#dd0000;}
+.news-list-c__li .year .earlier{font-family:"Microsoft Yahei", 微软雅黑, SimHei, 黑体, sans-serif;}

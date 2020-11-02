@@ -1,0 +1,28 @@
+@charset "utf-8";
+.footer-a{overflow:hidden;font:14px/20px "Microsoft YaHei","微软雅黑","SimHei","黑体",sans-serif;color:#666;position: relative;border-top:1px solid #D6D6D6;min-width: 1000px;padding-top: 34px;margin:0 auto;clear: both;zoom:1;background: #FBFBFB;}
+.footer-a{margin-top:40px;padding-bottom:30px;text-align:center;line-height:30px;color:#333;}
+.footer-a a{color:#666;}
+.footer-a a:hover{color:#dd0000;}
+.footer-a a:link,.footer-a a:visited{color:#666;text-decoration: none;}
+.footer-a a:hover,.footer-a a:active{color:#dd0000;text-decoration: none;}
+.footer-a .inner{width:1000px;margin:0 auto;position: relative;}
+.footer-a .hd{padding:0 0 25px 40px;text-align: left;}
+.footer-a .hd li{width:270px;padding: 0 0 0 30px;border-left:solid 1px #ddd;float: left;display: inline;line-height: 30px;}
+.footer-a .hd h3{line-height: 20px;height: 20px;padding:0 0 10px 0;overflow: hidden;font-size: 14px;color:#333;font-weight: normal;}
+.footer-a .hd div a{display: inline-block;width:120px;}
+.footer-a .hd .forum{width:102px;}
+.footer-a .hd .hotline,.footer-a .hd .mail{width:auto;}
+.footer-a .hd .hotline{display: block;}
+.footer-a li.support{width:215px;}
+.footer-a li.logo{border-left:0;width:180px;padding:0;}
+.footer-a li.logo a{display: block;width:130px;height:67px;margin:7px 0 0 0;background: url(../../../images/logo_c.png?__sprite) no-repeat 0 0;}
+.footer-a li.rc{width:auto;padding-left: 55px;min-height: 90px;_height:90px;}
+.footer-a li.rc a{float: left;display: inline;width: 40px;height: 40px;margin:6px 15px 0 0;overflow:hidden; text-indent: -9999px;}
+.footer-a li.rc .weibo{background: url(../../../images/ico_weibo_a.png?__sprite) no-repeat 0 0; background-color: #666;}
+.footer-a li.rc .weixin{background: url(../../../images/ico_weixin_a.png?__sprite) no-repeat 0 0; background-color: #666;}
+.footer-a li.rc .weibo:hover,.footer-a li.rc .weibo.selected{background: url(../../../images/ico_weibo_a.png?__sprite) no-repeat 0 0; background-color: #dd0000;}
+.footer-a li.rc .weixin:hover,.footer-a li.rc .weixin.selected{background: url(../../../images/ico_weixin_a.png?__sprite) no-repeat 0 0; background-color: #dd0000;}
+.footer-a .rc-layer{position: absolute;top:80px;left:0;}
+.footer-a .rc-layer .ico{display: block;width:15px;height: 5px;background: url(../../../images/arrow_b.png?__sprite) no-repeat 0 0;overflow: hidden;position: relative;z-index: 1;}
+.footer-a .rc-layer img{border:solid 1px #D6D6D6;padding:3px;margin-top: -1px;background: #fff;}
+
