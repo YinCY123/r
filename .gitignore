@@ -24,3 +24,6 @@
 *.png
 *.tiff
 *.jpeg
+
+# ignore xml file
+*.xml
