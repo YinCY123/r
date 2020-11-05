@@ -1,1 +1,0 @@
-define([],function(){return function(a,c){c=c||"node-type",a=$(a);var h=$("["+c+"]",a),v={};v.wrap=a;var w={};return h.each(function(){var a=$(this);v[a.attr(c)]=a,w[a.attr(c)]||(w[a.attr(c)]=[]),w[a.attr(c)].push(this)}),$.each(w,function(i,n){w[i]=$([].slice.call(n))}),v._list=w,v}});

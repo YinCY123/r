@@ -1,1 +1,0 @@
-define([],function(){var c=function(c){return"function"==typeof c},a=function(a,v){var T=!1,h=setTimeout(function(){T=!0,c(a)&&a.call(this)},v);return{isTimeout:function(){return T},success:function(){h&&clearTimeout(h)}}};return function(v,T,h){var y=a(T,h);return c(v)&&v.call(this,y),y}});

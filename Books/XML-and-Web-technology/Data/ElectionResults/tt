@@ -1,6 +1,0 @@
-url = "http://elections.nytimes.com/2008/results/states/exitpolls/california.html"
-d = htmlParse(url)
-tbls = getNodeSet(d, "//table")
-tbls[[1]][["tbody"]][[2]][[1]]
-
-xmlValue(tbls[[1]][["tbody"]][[2]][[1]][[1]])

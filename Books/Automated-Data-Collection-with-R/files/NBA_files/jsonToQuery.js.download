@@ -1,1 +1,0 @@
-define([],function(){return function(a){var c=[],h=function(a){return a.toString()};if("object"==typeof a)for(var g in a)if(a[g]instanceof Array)for(var i=0,v=a[g].length;v>i;i++)c.push(g+"="+h(a[g][i]));else c.push(g+"="+h(a[g]));return c.length?c.join("&"):""}});
