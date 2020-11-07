@@ -14,6 +14,10 @@ library(rlist)
 library(pipeR)
 ```
 
+This package supports filtering, mapping, grouping, sorting, updating, searching and many other functions. It is pipe-friendly and strongly recommends functional programming style in list operations.  
+
+# Quick overview  
+
 ```{r}
 people <- list.load(file = "data/people.json")
 
@@ -24,4 +28,66 @@ people %>>%
     list.take(3) %>>% 
     list.map(. %>>% list.table(Age))
 ```
+
+## Working in pipeline  
+`PipeR` is recommended to work with rlist functions since they do not have any conflicting design with rlist.  
+
+
+## File formats  
+ - `JSON`: `rlist` package imports `jsonlite` package to read/write JSON data.  
+ - `YAML`: `rlist` import `yaml` package to read/wirte YAML data.  
+
+
+# Features  
+## mapping  
+`list.load()` is designed for loading data from given data source. The data source can be either local or remote and the function by default uses the file extension to decide the way to read it.  
+
+```{r}
+people <- list.load(file = "data/sample.json")
+str(people)
+```
+
+to extract the name of each people  
+```{r}
+lapply(people, function(x){
+    x$Name
+})
+```
+
+```{r}
+list.map(people, Name)
+```
+
+List mapping is to evaluate an expression for each list member. It is the fundamental operation in rlist functionality. Almost all functions in this package that work with expressions are using mapping but in different ways.  
+
+### list.map  
+```{r}
+list.map(people, Age)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
