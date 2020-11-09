@@ -1,0 +1,61 @@
+---
+title: "P2ry12 KEGG pathway"
+author: "yincy"
+date: "11/9/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(org.Mm.eg.db)
+library(stringr)
+```
+
+# load data  
+```{r}
+pvn <- read.csv(file = "../data/20201109_frame_tpm_PVN.csv", row.names = 1)
+```
+
+# samples  
+```{r}
+A14 <- grep("14A", colnames(pvn), value = T)
+L14 <- grep("14L", colnames(pvn), value = T)
+A3 <- grep("3A", colnames(pvn), value = T)
+L3 <- grep("3L", colnames(pvn), value = T)
+naive <- grep("naive", colnames(pvn), value = T)
+
+A14;L14;A3;L3;naive
+
+
+# sample column index
+pvn_A14_col_index <- grep(str_c(A14, collapse = "|"), colnames(pvn))
+pvn_L14_col_index <- grep(str_c(L14, collapse = "|"), colnames(pvn))
+pvn_A3_col_index <- grep(str_c(A3, collapse = "|"), colnames(pvn))
+pvn_L3_col_index <- grep(str_c(L3, collapse = "|"), colnames(pvn))
+pvn_naive_col_index <- grep(str_c(naive, collapse = "|"), colnames(pvn))
+```
+
+
+# filter out low expressed genes  
+```{r}
+
+filter_index <- pvn[, -1] %>% 
+    rowwise() %>% 
+    mutate()
+
+pvn[1:10, -1] %>% 
+    rowwise() %>% 
+    mutate(mean_A3 = )
+```
+
+```{r}
+grep(A3 %>% str_c(collapse = "|"), colnames(pvn))
+```
+
+
+
+
