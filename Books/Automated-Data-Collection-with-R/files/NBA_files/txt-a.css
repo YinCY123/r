@@ -1,8 +1,0 @@
-#html .txt-a-video,#html .txt-a-live,#html .txt-a-album{padding-left:21px;vertical-align: top;}
-#html .txt-a-video{background: url(//n.sinaimg.cn/products/base/latest/images/ico_video_a.png) no-repeat left center;}
-#html .txt-a-live{background: url(//n.sinaimg.cn/products/base/latest/images/ico_live_a.png) no-repeat left center;}
-#html .txt-a-album{background: url(//n.sinaimg.cn/products/base/latest/images/ico_album_a.png) no-repeat left center;}
-#html .txt-a-bold{font-weight: bold;}
-#html .txt-a-hilight{color:#dd0000;}
-#html .txt-a-hilight:link,#html .txt-a-hilight:visited{color:#dd0000;}
-#html .txt-a-hilight:hover,#html .txt-a-hilight:active{color:#dd0000;}

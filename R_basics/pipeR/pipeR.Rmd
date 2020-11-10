@@ -126,7 +126,7 @@ mtcars %>>%
 
 **The difference between `{}` and `()` used above is**:  
 
-- `{}` accepts mpre than one expression within the braces and its value is determined by the last one; but `()` accepts only one expression.  
+- `{}` accepts more than one expression within the braces and its value is determined by the last one; but `()` accepts only one expression.  
 
 - `{}` has only one feature: pipe to `.` in the enclosed expression while `()` has more features.  
 
@@ -245,7 +245,7 @@ It can be clearly seen that `plot()` does two things:
 1. Draw a scatter image of `mtcars$mpg`  
 2. return `NULL` value  
 
-The first thing is often considered as side-effect because it is an influence the function has on the outside environment: it changes what to show in the graphics area. However, when we are building a pipeline and want to plot with some intermediate results, we only want the side effect and have to avoid the returned value, in this case, NULL, which is not the desired data we would like to further process.  
+The first thing is often considered as side-effect because **it is an influence the function has on the outside environment**: it changes what to show in the graphics area. However, when we are building a pipeline and want to plot with some intermediate results, we only want the side effect and have to avoid the returned value, in this case, NULL, which is not the desired data we would like to further process.  
 
 
 ## Syntax for side effect  
@@ -276,7 +276,7 @@ mtcars %>>%
 ```{r}
 mtcars %>>% 
     subset(mpg >= quantile(mpg, 0.05) & mpg <= quantile(mpg, 0.95), c(mpg, cyl ,wt)) %>>% 
-    (~ filtered ~ cat("rows:", nrow(filtered), "\n")) %>>% 
+    (~ filtered ~ cat("rows:", nrow(filtered), "\n\n")) %>>% 
     summary()
 ```
 
@@ -295,11 +295,14 @@ data(diamonds, package = "ggplot2")
 
 diamonds %>>% 
     "filtering data ..." %>>% 
+    (~ Sys.sleep(2)) %>>% 
     filter(carat >= quantile(carat, 0.05) & carat <= quantile(carat, 0.95)) %>>% 
     select(carat, price, depth) %>>% 
     "estimating linear model ..." %>>% 
+    (~ Sys.sleep(2)) %>>% 
     lm(formula = carat ~ price + depth) %>>% 
     "summarizing model ..." %>>% 
+    (~ Sys.sleep(2)) %>>% 
     summary()
 ```
 
@@ -367,13 +370,15 @@ mtcars %>>%
 mtcars %>>% 
     subset(select = c(mpg, wt, cyl)) %>>% 
     (~ sub_mtcars) %>>% 
+    (~ Sys.sleep(2)) %>>% 
     lm(formula = mpg ~ wt + cyl) %>>% 
     (~ lm_mtcars) %>>% 
+    (~ Sys.sleep(2)) %>>% 
     summary()
 ```
 
 ```{r}
-sub_mtcars
+sub_mtcars %>% head()
 ```
 
 ```{r}
@@ -410,7 +415,7 @@ summ
 mtcars %>>% 
     subset(select = c(mpg, wt, cyl)) %>>% 
     (~ summ = df ~ summary(df)) %>>% 
-    (model = lm(mpg ~ wt + cyl, data = .))
+    (model = lm(mpg ~ wt + cyl, data = .)) # pipe and assign
 ```
 
 ```{r}
@@ -421,8 +426,15 @@ model
 
 ```{r}
 mtcars %>>% 
-    (~ summary(.) -> summ)
+    (~ summary(.) -> summ) %>>% 
+    subset(cyl == 6) %>>% 
+    ("number of rows after selection: " ? nrow(.))
 ```
+
+```{r}
+summ
+```
+
 
 The `(~ expression -> symbol)` and `(~ symbol <- expression)` syntax work for side-effect assignment, and `(expression -> symbol)` and `(symbol <- expression)` work for piping with assignment.  
 
@@ -430,7 +442,7 @@ The `(~ expression -> symbol)` and `(~ symbol <- expression)` syntax work for si
 ```{r}
 mtcars %>>% 
     (~ summary(.) -> summ) %>>%  # side-effect assignment
-    (lm(formula = mpg ~ wt + cyl, data = .) -> lm_mtcars) %>>% # continue piping
+    (lm(formula = mpg ~ wt + cyl, data = .) -> lm_mtcars) %>>% # pipe assignment 
     summary()
 ```
 
@@ -446,7 +458,7 @@ lm_mtcars
 results <- list()
 mtcars %>>% 
     lm(formula = mpg ~ wt + cyl) %>>% 
-    (~ results$mtcars = . %>>% summary %>>% (r.squared))
+    (~ results$mtcars = . %>>% summary %>>% (r.squared)) # side-effects assignment
 
 results
 ```
@@ -514,36 +526,393 @@ y <- 2 * x + rnorm(150) * 0.5
 matplot(cbind(x, y), type = "l")
 ```
 
+```{r}
+lm(y ~ x + 0) %>>% 
+    residuals %>>%
+    fUnitRoots::adfTest(type = "nc") %>>% # S4 object
+    (~ testobj) %>>% # save test object to environment
+    ("Which class of this object?" ? class(.)) %>>% 
+    (test) %>>%
+    (statistic)
+```
+
+
+Since the syntax only accepts symbol name, to evaluate an expression with the piped object being the frame if it is a list or environment, using `with()` or `within()` can be helpful.  
+
+```{r}
+list(a = 1, b = 2) %>>%
+    with(a + 2 * b)
+```
+
 
 # Pipe function  
+`Pipe()` function is the light-weight version of Pipe operator yet has more features.  
+
+1. Support all features of `%>>%` but use `$` for command chaining.  
+2. Support direct subsetting, extraction, element assignment.  
+
+Basically, `Pipe()` creates a `Pipe` object for which `$` is specically defined to perform first-argument piping, and `.(...)` is defined to act like `x %>>% (...)`. Pipe object also supports subsetting (`[]`), extraction (`[[]]`), and their corresponding assignment operations.  
+
+```{r}
+mtcars %>>% 
+    lm(formula = mpg ~ wt + cyl) %>>% 
+    summary()
+```
+
+can be rewritten like  
+```{r}
+Pipe(mtcars)$
+    lm(formula = mpg ~ wt + cyl)$ 
+    summary()
+```
 
 
+## Pipe to first-argument  
+```{r}
+set.seed(123)
+
+Pipe(rnorm(100, mean = 10))$
+    log()$
+    .(~ Sys.sleep(2))$
+    diff()$
+    sample(size = 10000, replace = T)$
+    summary() # eventially return an Pipe object
+```
 
 
+```{r}
+Pipe(rnorm(100, mean = 10))$
+    log()$
+    diff()$
+    sample(size = 10000, replace = T)$
+    summary()$
+    value # the output object is no longer an Pipe object
+```
+
+```{r}
+Pipe(mtcars)$
+    lm(formula = mpg ~ wt + cyl)
+```
+
+```{r}
+Pipe(mtcars)$
+    lm(formula = mpg ~ wt + cyl)[]
+```
 
 
+```{r}
+Pipe(mtcars$mpg)$
+    plot(col = "red", main = sprintf("mpg (%d obs.)", length(.)))
+```
+
+```{r}
+pmtcars <- Pipe(mtcars)$
+    subset(mpg >= quantile(mpg, 0.05) & mpg <= quantile(mpg, 0.95))
+
+pmtcars$
+    lm(formula = mpg ~ wt + cyl)
+```
+
+```{r}
+pmtcars$
+    lm(formula = mpg ~ wt + cyl + qsec)$
+    summary()$
+    coef()
+```
 
 
+### Creating partial function  
+```{r}
+density_plot <- Pipe(mtcars$mpg)$
+    sample(size = 10000, replace = T)$
+    density(kernel = "gaussian")$
+    plot
+```
 
 
+```{r}
+par(mfrow = c(1, 2))
+density_plot(col = "blue", main = "blue points")
+density_plot(col = "grey", main = "gray circles", type = "o")
+```
 
 
+## Dot function  
+### Pipe to dot  
+```{r}
+Pipe(mtcars)$
+    .(lm(mpg ~ cyl + wt, data = .))
+```
 
 
+### Pipe by formula  
+```{r}
+Pipe(mtcars)$
+    .(df ~ lm(mpg ~ cyl + wt, data = df))
+```
 
 
+### Pipe for side effect  
+```{r}
+Pipe(mtcars)$
+    subset(mpg >= quantile(mpg, 0.05) & mpg <= quantile(mpg, 0.95), c(mpg, cyl, wt))$
+    .(~ cat('rows:', nrow(.), "\n\n"))$
+    lm(formula  = mpg ~ .)$
+    summary()$
+    coef()
+```
+
+#### Question mark  
+```{r}
+Pipe(mtcars)$
+    subset(vs == 1, c(mpg, cyl, wt))$
+    .("number of rows after filtering:"? nrow(.))$
+    .("number of columns after filtering:"? data ~ ncol(data))$
+    summary()
+```
+
+```{r}
+mtcars %>>% 
+    subset(vs == 1, c(mpg, cyl, wt)) %>>% 
+    (~ browser()) %>>% 
+    lm(formula = mpg ~ cyl + wt) %>>% 
+    summary()
+```
 
 
+### Pipe with assignment  
+```{r}
+pmodel <- Pipe(mtcars)$
+    subset(select = c(mpg, wt, cyl))$
+    .(~ sub_mtcars)$
+    lm(formula = mpg ~ wt + cyl)
+
+summary(pmodel)
+```
+
+```{r}
+Pipe(mtcars)$
+    lm(formula = mpg ~ wt + cyl)$
+    .(~ summary(.) -> summ)$ 
+    coef() # works on the lm results
+```
+
+```{r}
+summ
+```
 
 
+```{r}
+Pipe(mtcars)$
+    lm(formula = mpg ~ wt + cyl)$
+    .(summary(.) -> summ)$
+    coef() # works on the summary results
+```
+
+### Extract element  
+```{r}
+Pipe(mtcars)$
+    lm(formula = mpg ~ wt + cyl)$
+    summary()$
+    .(r.squared)
+```
+
+### Dot functions as closure  
+Note that `.()` is only defined within a `Pipe` object and is not an exportedd function in PipeR, you cannot directly call `.()` outside a `Pipe()`.  
+
+In fact, if you are familiar with functional programming, it is called a *closure*, which is basically defined as a function returned by a function. However, you can save `.()` in a `Pipe` object to a symbol as a shortcut to call it elsewhere.  
+
+```{r}
+model <- Pipe(mtcars)$
+    lm(formula = mpg ~ wt + cyl)$
+    .
+
+model()
+```
+
+```{r}
+model(coefficients) # pipe extract
+```
+
+```{r}
+model()$summary()$coef() # pipe to first argument
+```
 
 
+## Subsettting  
+### Using `[]`  
+```{r}
+Pipe(list(a = 1, b = 2, c = 3))[c("a", "b")]
+```
+
+```{r}
+Pipe(mtcars)[c("mpg", "cyl", "wt")]$
+    head()
+```
+
+```{r}
+library(data.table)
+dt <- data.table(id = 1:6, x = rnorm(6), y = rep(letters[1:3]), key = "id")
+dt
+```
+
+```{r}
+Pipe(dt)[1:3]
+```
+
+```{r}
+Pipe(dt)[J(3)]
+```
+
+```{r}
+Pipe(dt)[, sum(x), by = list(y)]
+```
+
+```{r}
+Pipe(dt)[, z := x^2 + 1] # reference mutate
+```
+
+```{r}
+pmtcars <- Pipe(mtcars)$
+    .(~ rownames(.) -> row_names)$
+    as.data.table()[, name := row_names]$
+    setkey(name)
+```
+
+```{r}
+row_names
+```
 
 
+```{r}
+pmtcars[mpg >= quantile(mpg, 0.05)]$
+    lm(formula = mpg ~ wt + cyl)$
+    summary()$
+    coef()
+```
 
 
+```{r}
+Pipe(mtcars$mpg)[-length(.)]
+```
+
+```{r}
+Pipe(mtcars)[['mpg']]$
+    summary()
+```
+
+```{r}
+Pipe(mtcars)$ 
+    .(mpg)$
+    summary()
+```
+
+```{r}
+Pipe(mtcars)$
+    with(summary(mpg))
+```
 
 
+### Assigning values to elements  
+```{r}
+lst <- Pipe(list(a = 1, b  =2))
+lst
+```
+
+```{r}
+lst$a <- 2
+lst
+```
+
+```{r}
+lst[['b']] <- NULL
+lst
+```
+
+```{r}
+lst$c <- 1:3
+lst
+```
+
+```{r}
+lst[c("a", "c")] <- list(1:3, 2:5)
+lst
+```
+
+
+# Pipeline
+This function evaluates both argument-based and expression-based pipelines. What make it special is that it does not require using pipe operator `%>>%`, nor does it create a `Pipe` object as a wrapper. Using `pipeline()`, you will be able to write cleaner pipeline expressions with less noise.  
+
+In other words, pipeline() implements two similar operator-free mechanisms for building a pipeline. The good thing is that you don't have to sacrifice any feature to use it, that is, all features of %>>% are supported in pipeline() and some are even made easier to use.  
+
+## Argument-based pipeline  
+```{r}
+mtcars$mpg %>>% 
+    sample(size = 10000, replace = T) %>>% 
+    density(kernel = "gaussian", bw = 5) %>>% 
+    plot(col = "red", main = "density of mpg (bootstrap)")
+```
+
+rewrite with `pipeline()`  
+```{r}
+pipeline(mtcars$mpg, 
+         sample(size = 10000, replace = T), 
+         density(kernel = "gaussian", bw = 5), 
+         plot(col = "red", main = "density of mpg (bootstrap)"))
+```
+
+Internally, `pipeline()` translate such a function call into expressions connected by `%>>%`.  
+
+```{r}
+pipeline(mtcars$mpg, 
+         ("The number of samples: "? length(.)), 
+         sample(size = 10000, replace = T), 
+         (~ mtcars_sample), # side effect assignment 
+         density(kernel = "gaussian", bw = 5), 
+         plot(col = "red", main = "density of mpg (bootstrap)"))
+```
+
+## expression-based pipeline  
+```{r}
+mtcars$mpg %>>% 
+    sample(size = 10000, replace = T) %>>% 
+    density(kernel = "gaussian", bw = 5) %>>% 
+    plot(col = "red", main = "density of mpg (bootstrap)")
+```
+
+
+```{r}
+pipeline({
+    mtcars$mpg
+    sample(size = 10000, replace = T)
+    density(kernel = "gaussian", bw = 5)
+    plot(col = "red", main = "density of mpg (bootstrap)")
+})
+```
+
+```{r}
+pipeline({
+    mtcars$mpg
+    sample(size = 10000, replace = T)
+    "number of samples: "? length(.)
+    ~ mtcars_sample
+    density(kernel = "gaussian", bw = 5)
+    plot(col = "red", main = "density of mpg (bootstrap)")
+})
+```
+
+```{r}
+pipeline({
+    mtcars
+    "Total number of records" ? nrow(.)
+    subset(mpg >= quantile(mpg, 0.05) & mpg <= quantile(mpg, 0.95))
+    "Qualified number of records" ? nrow(.)
+    lm(formula = mpg ~ wt + cyl)
+    summary()
+    "R Squared" ? .$r.squared
+    coef
+})
+```
 
 
 

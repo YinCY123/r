@@ -1,8 +1,0 @@
-.news-list-d{font-family:"Microsoft Yahei", 微软雅黑, SimHei, 黑体, sans-serif;}
-.mews-list-d__txt{padding:0 10px;font-size:14px;line-height:20px;}
-.mews-list-d__title{display: inline-block;color:#333;}
-.mews-list-d__title:visited{color:#888}
-.mews-list-d__title:hover{color:#dd0000}
-.mews-list-d__txt,.mews-list-d__title,.news-list-d__intro p{overflow:hidden;}
-.news-list-d__intro{color:#888;}
-.news-list-d__icon{color:#fff;display:inline-block;background:url(//n.sinaimg.cn/products/base/latest/images/icon.png) no-repeat;position:absolute;top:0px;right:0px;width:46px;height:20px;text-indent:-999px;}

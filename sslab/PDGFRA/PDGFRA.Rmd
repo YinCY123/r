@@ -1,7 +1,6 @@
 ---
 title: "Pdgfra/b RNAi"
-author: "yincy"
-date: "11/14/2019"
+date: '`r Sys.Date()`'
 output: word_document
 
 csl: ../../../styles/elsevier-harvard.csl
