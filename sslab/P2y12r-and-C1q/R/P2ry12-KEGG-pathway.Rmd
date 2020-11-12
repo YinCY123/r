@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(org.Mm.eg.db)
 library(stringr)
+library(stringr.plus)
 ```
 
 # load data  
@@ -42,20 +43,406 @@ pvn_naive_col_index <- grep(str_c(naive, collapse = "|"), colnames(pvn))
 
 # filter out low expressed genes  
 ```{r}
+threshold <- 0.3
+filter_index <- rowSums(pvn[, c(pvn_A14_col_index)] > threshold) >= 2 &
+    rowSums(pvn[, c(pvn_L14_col_index)] > threshold) >= 2 &
+    rowSums(pvn[, c(pvn_A3_col_index)] > threshold) >= 2 &
+    rowSums(pvn[, c(pvn_L3_col_index)] > threshold) >= 2 &
+    rowSums(pvn[, c(pvn_naive_col_index)] > threshold) >= 2
+table(filter_index)
 
-filter_index <- pvn[, -1] %>% 
-    rowwise() %>% 
-    mutate()
+length(filter_index);dim(pvn)
 
-pvn[1:10, -1] %>% 
-    rowwise() %>% 
-    mutate(mean_A3 = )
+pvn_filtered <- pvn[filter_index, ]
+dim(pvn_filtered)
 ```
 
 ```{r}
-grep(A3 %>% str_c(collapse = "|"), colnames(pvn))
+pvn_filtered <- pvn_filtered %>% 
+    rowwise() %>% 
+    mutate(
+        pvn_A14_log2FC = log2(mean(PVN_14A1, PVN_14A2, PVN_14A3) / mean(PVN_naive1, PVN_naive2, PVN_naive3)), 
+        pvn_L14_log2FC = log2(mean(PVN_14L1, PVN_14L3_b1, PVN_14L4) / mean(PVN_naive1, PVN_naive2, PVN_naive3)),
+        pvn_A3_log2FC = log2(mean(PVN_3A1_b1, PVN_3A2, PVN_3A3_b1) / mean(PVN_naive1, PVN_naive2, PVN_naive3)),
+        pvn_L3_log2FC = log2(mean(PVN_3L1_b1, PVN_3L2_b1, PVN_3L3) / mean(PVN_naive1, PVN_naive2, PVN_naive3))
+    ) %>% 
+    relocate(geneid_symbol, contains("FC"), everything())
+
+pvn_filtered %>% head()
+```
+
+## determine DEGs  
+```{r}
+pvn_DEGs_A14 <- pvn_filtered %>% 
+    filter(abs(pvn_A14_log2FC) >= 1) %>% 
+    pull(geneid_symbol)
+
+pvn_DEGs_L14 <- pvn_filtered %>% 
+    filter(abs(pvn_L14_log2FC) >= 1) %>% 
+    pull(geneid_symbol)
+
+pvn_DEGs_A3 <- pvn_filtered %>% 
+    filter(abs(pvn_A3_log2FC) >= 1) %>% 
+    pull(geneid_symbol)
+
+pvn_DEGs_L3 <- pvn_filtered %>% 
+    filter(abs(pvn_L3_log2FC) >= 1) %>% 
+    pull(geneid_symbol)
+
+inter_3 <- intersect(pvn_DEGs_A3, pvn_DEGs_L3)
+inter_3 %>% length()
+
+inter_14 <- intersect(pvn_DEGs_A14, pvn_DEGs_L14)
+inter_14 %>% length()
+```
+
+## Veen  
+```{r}
+library(VennDiagram)
+?venn.diagram
+
+venn.diagram(x = list(A3_L3_inter = inter_3, A14_L14_inter = inter_14), 
+             filename = "../res/P2ry12/A3_L3_A14_L14_Venn.tiff", 
+             resolution = 1000, 
+             cex = 0.5, 
+             height = 5000, 
+             width = 5000)
 ```
 
 
+# load KEGG pathway  
+```{r}
+all_path_df <- read.csv(file = "../res/P2ry12/all_pathways_df.csv", 
+                        stringsAsFactors = F)
+
+all_path_df %>% dim()
+all_path_df %>% pull(type) %>% table()
+all_path_df %>% pull(subtype) %>% table()
+
+all_path_df %>% head()
+all_path_df <- all_path_df %>% distinct(from, to, .keep_all = T)
+all_path_df %>% dim()
+
+all_path_df %>% 
+  dplyr::filter(type == "maplink")
+
+all_path_df <- all_path_df %>% 
+  dplyr::filter(type != "maplink")
+all_path_df %>% dim()
+
+all_path_df$from <- gsub("mmu:", replacement = "", all_path_df$from)
+all_path_df$to <- gsub("mmu:", replacement = "", all_path_df$to)
+
+all_path_df %>% dim()
+all_path_df %>% head()
+```
+
+## add subtype information  
+```{r}
+# get KEGG compound information
+# KEGG_compounds <- keggList("compound")
+# KEGG_compounds[10:20]
+# saveRDS(object = KEGG_compounds, file = "KEGG_compounds.rds")
+KEGG_compounds <- readRDS(file = "KEGG_compounds.rds")
+KEGG_compound_ids <- names(KEGG_compounds)
+
+pat_location <- str_locate(string = KEGG_compounds, pattern = ";")
+ll <- pat_location[, 1]
+
+KEGG_compounds_value <- as.vector(KEGG_compounds)
+KEGG_compounds_value[10:20]
+
+extracted_str <- c()
+for(i in seq_along(ll)){
+  if(is.na(ll[i])){
+    extracted_str <- append(extracted_str, KEGG_compounds_value[i])
+  }else{
+    extracted_str <- append(extracted_str, substr(KEGG_compounds_value[i], start = 1, stop = ll[i] - 1))
+  }
+}
+
+KEGG_compounds_to_display <- str_trim(extracted_str, "both")
+names(KEGG_compounds_to_display) <- KEGG_compound_ids
+KEGG_compounds_to_display[10:20]
+```
+
+```{r}
+# get KEGG gene information
+# KEGG_mmu_genes <- keggList("mmu")
+# saveRDS(object = mmu_genes, file = "KEGG_mmu_genes.rds")
+KEGG_mmu_genes <- readRDS(file = "KEGG_mmu_genes.rds")
+KEGG_mmu_genes %>% head()
+
+library(org.Mm.eg.db)
+KEGG_mmu_genes_df <- AnnotationDbi::select(x = org.Mm.eg.db, 
+                       keys = KEGG_mmu_genes, 
+                       keytype = "ENTREZID", 
+                       columns = c("ENTREZID", "SYMBOL"))
+KEGG_mmu_genes_df
+
+KEGG_mmu_genes_to_display <- KEGG_mmu_genes_df$SYMBOL
+names(KEGG_mmu_genes_to_display) <- KEGG_mmu_genes_df$ENTREZID
+KEGG_mmu_genes_to_display %>% head()
+```
+
+```{r}
+# get KEGG glycan information  
+# KEGG_glycan <- keggList("glycan")
+# saveRDS(object = KEGG_glycan, file = "KEGG_glycan.rds")
+KEGG_glycan <- readRDS(file = "KEGG_glycan.rds")
+KEGG_glycan %>% head()
+
+KEGG_glycan_ids <- names(KEGG_glycan)
+KEGG_glycan_ids %>% head()
+
+KEGG_glycan_values <- KEGG_glycan %>% as.vector()
+KEGG_glycan_values %>% head()
+
+pat_location <- str_locate(KEGG_glycan, ";")
+pat_location %>% dim()
+ll <- pat_location[, 1]
+
+extracted_str <- c()
+for(i in seq_along(ll)){
+  if(is.na(ll[i])){
+    extracted_str <- append(extracted_str, KEGG_glycan_values[i])
+  }else{
+    extracted_str <- append(extracted_str, substr(KEGG_glycan_values[i], start = 1, stop = ll[i] - 1))
+  }
+}
+
+KEGG_glycan_to_dispaly <- str_trim(extracted_str, "both")
+names(KEGG_glycan_to_dispaly) <- KEGG_glycan_ids
+KEGG_glycan_to_dispaly[1:10]
+```
+
+```{r}
+# get KEGG drug information 
+# KEGG_drug <- keggList("drug")
+# saveRDS(object = KEGG_drug, file = "KEGG_drug.rds")
+KEGG_drug <- readRDS(file = "KEGG_drug.rds")
+KEGG_drug %>% head()
+
+KEGG_drug_ids <- names(KEGG_drug)
+KEGG_drug_values <- KEGG_drug %>% as.vector()
+KEGG_drug_values %>% head()
+
+pat_location <- str_locate(string = KEGG_drug, pattern = ";")
+ll <- pat_location[, 1]
+
+extracted_str <- c()
+for(i in seq_along(ll)){
+  if(is.na(ll[i])){
+    extracted_str <- append(extracted_str, KEGG_drug_values[i])
+  }else{
+    extracted_str <- append(extracted_str, substr(KEGG_drug_values[i], start = 1, stop = ll[i] - 1))
+  }
+}
+
+KEGG_drug_to_display <- extracted_str
+
+## remove parenthesis 
+KEGG_drug_to_display <- str_replace(KEGG_drug_to_display, "[ ]*\\(?[[:alnum:][:punct:]]*\\)?$", "")
+names(KEGG_drug_to_display) <- KEGG_drug_ids
+KEGG_drug_to_display %>% head()
+```
+
+```{r}
+# some rows in from and to contain multiple ids, retain only the first one
+ll <- str_locate(all_path_df$from, " ") %>% .[, 1]
+all_path_df[!(ll %>% is.na()), ]
+
+for(i in seq_along(ll)){
+  if(is.na(ll[i])){
+    all_path_df$from[i] <- all_path_df$from[i]
+  }else{
+    all_path_df$from[i] <- str_extract_before(all_path_df$from[i], " ")
+  }
+}
+
+
+ll <- str_locate(all_path_df$to, " ") %>% .[, 1]
+all_path_df[!(ll %>% is.na()), ]
+
+for(i in seq_along(ll)){
+  if(is.na(ll[i])){
+    all_path_df$to[i] <- all_path_df$to[i]
+  }else{
+    all_path_df$to[i] <- str_extract_before(all_path_df$to[i], " ")
+  }
+}
+
+all_path_df$from <- str_trim(string = all_path_df$from, side = "both")
+all_path_df$to <- str_trim(string = all_path_df$to, side = "both")
+
+names_to_display <- c(KEGG_mmu_genes_to_display, 
+                      KEGG_compounds_to_display, 
+                      KEGG_drug_to_display, 
+                      KEGG_glycan_to_dispaly)
+```
+
+
+# Visualization  
+```{r, message=FALSE, warning=FALSE}
+library(ggraph)
+library(tidygraph)
+library(igraph)
+```
+
+```{r}
+ig <- graph_from_data_frame(d = all_path_df[, c("from", "to")], directed = T)
+distance_to_p2ry12_all_path <- shortest_paths(ig, from = V(ig)$name == "70839", to = V(ig), mode = "out")[[1]]
+
+list2df <- function(list){
+  maxL <- sapply(list, length) %>% max()
+  for(i in seq_along(list)){
+    l = length(list[[i]])
+    if(l < maxL){
+      list[[i]] <- append(list[[i]], values = rep(NA, (maxL - l)))
+    }
+  }
+  list <- as.data.frame(list)
+  colnames(list) <- NULL
+  list <- t(list)
+  colnames(list) <- paste(rep("order", times = maxL), 0:(maxL - 1), sep = "_")
+  return(as.data.frame(list))
+}
+
+all_path_nodes <- list2df(lapply(distance_to_p2ry12_all_path, as_ids))
+all_path_nodes %>% dim()
+
+# 3 days
+inter_len_3 <- apply(all_path_nodes, 
+                   1, 
+                   intersect, 
+                   mapIds(org.Mm.eg.db, keys = inter_3, keytype = "SYMBOL", column = "ENTREZID")) %>% 
+  sapply(na.omit) %>% 
+  sapply(length)
+
+inter_len_3 %>% table()
+
+retained_path_3 <- all_path_nodes[inter_len_3 >= 1, ]
+retained_path_3 %>% apply(2, is.na) %>% colSums() 
+write.csv(x = retained_path_3[, 1:10], 
+          file = "../res/P2ry12/retained_path_3.csv", 
+          row.names = F, 
+          quote = F)
+
+# 14 days
+inter_len_14 <- apply(all_path_nodes, 1, intersect, 
+                      mapIds(org.Mm.eg.db, keys = inter_14, keytype = "SYMBOL", column = "ENTREZID")) %>% 
+  sapply(na.omit) %>% 
+  sapply(length)
+
+inter_len_14 %>% table()
+retained_path_14 <- all_path_nodes[inter_len_14 >= 1, ]
+retained_path_14 %>% apply(2, is.na) %>% colSums()
+write.csv(x = retained_path_14[, 1:13], 
+          file= "../res/P2ry12/retained_path_14.csv", 
+          row.names = F, 
+          quote = F)
+
+o1 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_0) %>% unique()), 
+         to %in% (retained_path %>% pull(order_1) %>% unique()))
+
+o2 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_1) %>% unique()), 
+         to %in% (retained_path %>% pull(order_2) %>% unique()))
+
+o3 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_2) %>% unique()), 
+         to %in% (retained_path %>% pull(order_3) %>% unique()))
+
+o4 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_3) %>% unique()), 
+         to %in% (retained_path %>% pull(order_4) %>% unique()))
+
+o5 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_4) %>% unique()), 
+         to %in% (retained_path %>% pull(order_5) %>% unique()))
+o6 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_5) %>% unique()), 
+         to %in% (retained_path %>% pull(order_6) %>% unique()))
+
+o7 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_6) %>% unique()), 
+         to %in% (retained_path %>% pull(order_7) %>% unique()))
+
+o8 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_7) %>% unique()), 
+         to %in% (retained_path %>% pull(order_8) %>% unique()))
+
+filtered_path <- rbind(o1, o2, o3, o4, o5, o6, o7, o8)
+filtered_path %>% pull(lty) 
+
+N <- tibble::tibble(
+  ids = c(filtered_path$from, filtered_path$to) %>% unique()
+) %>% 
+  mutate(shape = ifelse(grepl("^cpd:|^gl:|^dr:", ids, ignore.case = F), "21", "22")) 
+
+E <- filtered_path %>% 
+  dplyr::select(from, to, everything())
+```
+
+# number of DEGs in different orders  
+```{r}
+tg <- as_tbl_graph(all_path_df)
+
+DEG_3_orders <- tg %>% 
+  dplyr::mutate(dfsr = bfs_dist(root = .N()$name == "70839", mode = "out")) %>% 
+  dplyr::filter(.N()$name %in% intersect(mapIds(org.Mm.eg.db, as.character(pvn_DEGs_A3), "ENTREZID", "SYMBOL"), 
+                                  mapIds(org.Mm.eg.db, as.character(pvn_DEGs_L3), "ENTREZID", "SYMBOL"))) %>% 
+  as_tibble() %>% 
+  pull(dfsr) %>% 
+  table() %>% 
+  as.data.frame() %>% 
+  magrittr::set_colnames(c("order", "freq"))
+
+DEG_14_orders <- tg %>% 
+  dplyr::mutate(bfsr = bfs_dist(root = .N()$name == "70839", mode = "out")) %>% 
+  dplyr::filter(.N()$name %in% intersect(mapIds(x = org.Mm.eg.db, keys = as.character(pvn_DEGs_A14), column = "ENTREZID", keytype = "SYMBOL"), 
+                                         mapIds(x = org.Mm.eg.db, keys = as.character(pvn_DEGs_L14), column = "ENTREZID", keytype = "SYMBOL"))) %>% 
+  as_tibble() %>% 
+  pull(bfsr) %>% 
+  table() %>% 
+  as.data.frame() %>% 
+  magrittr::set_colnames(c("order", 'freq'))
+```
+
+```{r}
+tg %>% 
+  dplyr::mutate(bfsr = bfs_dist(root = .N()$name == "70839", mode = "out")) %>% 
+  dplyr::filter(.N()$name %in% intersect(mapIds(x = org.Mm.eg.db, keys = as.character(pvn_DEGs_A14), column = "ENTREZID", keytype = "SYMBOL"), 
+                                         mapIds(x = org.Mm.eg.db, keys = as.character(pvn_DEGs_L14), column = "ENTREZID", keytype = "SYMBOL"))) %>% 
+  as_tibble() %>% 
+  mutate(symbol = mapIds(org.Mm.eg.db, keys = .$name, keytype = "ENTREZID", column = "SYMBOL")) %>% 
+  magrittr::set_colnames(c("entrez", "order", "symbol")) %>% 
+  write.csv(file = "../res/P2ry12/A14_L14_genes_in_different_order.csv", row.names = F, quote = F)
+
+tg %>% 
+  dplyr::mutate(dfsr = bfs_dist(root = .N()$name == "70839", mode = "out")) %>% 
+  dplyr::filter(.N()$name %in% intersect(mapIds(org.Mm.eg.db, as.character(pvn_DEGs_A3), "ENTREZID", "SYMBOL"), 
+                                  mapIds(org.Mm.eg.db, as.character(pvn_DEGs_L3), "ENTREZID", "SYMBOL"))) %>% 
+  as_tibble() %>% 
+  mutate(symbol = mapIds(org.Mm.eg.db, keys = .$name, keytype = "ENTREZID", column = "SYMBOL")) %>% 
+  magrittr::set_colnames(c("entrez", "order", "symbol")) %>% 
+  write.csv(file = "../res/P2ry12/A3_L3_genes_in_different_order.csv", row.names = F, quote = F)
+```
+
+
+```{r}
+DEG_3_orders$group = '3'
+DEG_14_orders$group = '14'
+
+DEG_3_orders %>% 
+  rbind(DEG_14_orders) %>% 
+  ggplot(aes(order, freq)) +
+  geom_bar(stat = "identity", position = "dodge", aes(fill = group)) +
+  scale_fill_brewer(name = NULL, type = "qual", palette = "Set1", direction = -1) +
+  ggtitle(label = "Number of DEGs in different order")
+
+ggsave(filename = "../res/P2ry12/Number-of-DEGs-in-different-order.tiff")
+```
 
 

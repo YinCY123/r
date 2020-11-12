@@ -576,7 +576,7 @@ for(i in seq_along(ll)){
 KEGG_compounds_to_display <- str_trim(extracted_str, "both")
 names(KEGG_compounds_to_display) <- KEGG_compound_ids
 KEGG_compounds_to_display[10:20]
-
+```
 
 ```{r}
 # get KEGG gene information
