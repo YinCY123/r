@@ -1,0 +1,125 @@
+---
+title: "DRG"
+author: "yincy"
+date: "8/10/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+library(limma)
+library(tidyverse)
+library(edgeR)
+```
+
+data from 
+```
+GSE75811
+```
+
+```{r}
+m_f11 <- read.table(file = "f:/DRG/GSM1968259_NEW.F-11_mouse.counts.b.txt.gz", 
+                    sep = "\t", 
+                    stringsAsFactors = F)
+
+m_f11 %>% head()
+```
+
+```{r}
+m_ND723 <- read.table(file = "f:/DRG/GSM1968260_NEW.ND7_23_mouse.counts.b.txt.gz", 
+                      sep = "\t", 
+                      stringsAsFactors = F)
+
+m_ND723 %>% head()
+```
+
+```{r}
+m_neron <- read.table(file = "f:/DRG/GSM1968257_NEW.mouse_neurons.counts.txt.gz", 
+                      sep = "\t", 
+                      stringsAsFactors = F)
+m_neron %>% 
+    column_to_rownames(var = "V1") %>% 
+    cpm() %>% 
+    as.data.frame() %>% 
+    rownames_to_column(var = "symbol") %>% 
+    filter(symbol == "Calca")
+```
+
+
+```{r}
+m_drg <- merge(x = m_f11, y = m_ND723, by.x = "V1", by.y = "V1")
+m_drg <- merge(m_drg, m_neron, by.x = "V1", by.y = "V1")
+
+drg <- m_drg %>% 
+    column_to_rownames(var = "V1") %>% 
+    t() %>% 
+    as_tibble() %>% 
+    select(!starts_with("_")) %>% 
+    t() %>% 
+    magrittr::set_colnames(value = c("f11", "ND723", "neuron")) %>% 
+    as.data.frame()
+
+drg %>% head()
+```
+
+```{r}
+cpm(y = drg) %>% 
+    as.data.frame() %>% 
+    rownames_to_column(var = "symbol") %>% 
+    filter(symbol == "Calca") %>% 
+    gather(key = "cell", 
+           value = "expression", -symbol) %>% 
+    ggplot(aes(x = cell, y = expression)) +
+    geom_bar(stat = "identity") +
+    scale_y_continuous(trans = "log2")
+```
+
+
+
+***
+
+Dorsal root ganglia
+
+
+```{r}
+library(GEOquery)
+library(magrittr)
+
+GSE122108 <- getGEO(GEO = "GSE122108", GSEMatrix = T)
+GSE122108 %>% class()
+GSE122108 %>% GSMList()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
