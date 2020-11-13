@@ -73,6 +73,7 @@ pvn_filtered %>% head()
 
 ## determine DEGs  
 ```{r}
+# LNAME Ang DEGs
 pvn_DEGs_A14 <- pvn_filtered %>% 
     filter(abs(pvn_A14_log2FC) >= 1) %>% 
     pull(geneid_symbol)
@@ -95,6 +96,47 @@ inter_3 %>% length()
 inter_14 <- intersect(pvn_DEGs_A14, pvn_DEGs_L14)
 inter_14 %>% length()
 ```
+
+
+```{r}
+# PVN Top 100 GO DEGs
+files <- list.files(path = "../data/20201113/", pattern = "GO_down|GO_up", full.names = T)
+sheets <- c("PVN_3L", "PVN_3A")
+outs <- paste(rep(c("PVN_3L", "PVN_3A"), 2), rep(c("down", "up"), each = 2), sep = "_")
+
+pvn <- list()
+
+k = 0
+for(i in seq_along(files)){
+  for(j in seq_along(sheets)){
+    x <- readxl::read_xlsx(path = files[i], sheet = sheets[j]) %>% 
+      tibble::as_tibble() %>% 
+      dplyr::arrange(pvalue) %>% 
+      head(100) %>% 
+      dplyr::pull(geneID) %>% 
+      stringr::str_c(collapse = "/") %>% 
+      stringr::str_split(pattern = "/") %>% 
+      .[[1]] %>% 
+      unique()
+    k = k + 1
+    pvn[[outs[k]]] <- x
+  }
+}
+
+df <- pvn %>% 
+  unlist() %>% 
+  as.data.frame() %>% 
+  tibble::rownames_to_column("group") %>% 
+  magrittr::set_colnames(c("group", "symbol"))
+
+df$group <- gsub(pattern = "[0-9]{,2}$", replacement = "", x = df$group)
+write.csv(x = df, file = "../res/P2ry12/top100_GO_DEGs.csv")
+```
+
+```{r}
+all_DEG <- intersect(inter_3, df$symbol)
+```
+
 
 ## Veen  
 ```{r}
@@ -311,28 +353,36 @@ list2df <- function(list){
 all_path_nodes <- list2df(lapply(distance_to_p2ry12_all_path, as_ids))
 all_path_nodes %>% dim()
 
-# 3 days
-inter_len_3 <- apply(all_path_nodes, 
+inter_len <- apply(all_path_nodes[1:10], 
                    1, 
                    intersect, 
-                   mapIds(org.Mm.eg.db, keys = inter_3, keytype = "SYMBOL", column = "ENTREZID")) %>% 
-  sapply(na.omit) %>% 
+                   mapIds(org.Mm.eg.db, keys = all_DEG, keytype = "SYMBOL", column = "ENTREZID")) %>%
   sapply(length)
 
-inter_len_3 %>% table()
+retained_path <- all_path_nodes[inter_len >= 1, ] 
 
-retained_path_3 <- all_path_nodes[inter_len_3 >= 1, ]
-retained_path_3 %>% apply(2, is.na) %>% colSums() 
-write.csv(x = retained_path_3[, 1:10], 
-          file = "../res/P2ry12/retained_path_3.csv", 
-          row.names = F, 
-          quote = F)
-
-# 14 days
-inter_len_14 <- apply(all_path_nodes, 1, intersect, 
-                      mapIds(org.Mm.eg.db, keys = inter_14, keytype = "SYMBOL", column = "ENTREZID")) %>% 
-  sapply(na.omit) %>% 
-  sapply(length)
+# # 3 days
+# inter_len_3 <- apply(all_path_nodes, 
+#                    1, 
+#                    intersect, 
+#                    mapIds(org.Mm.eg.db, keys = inter_3, keytype = "SYMBOL", column = "ENTREZID")) %>% 
+#   sapply(na.omit) %>% 
+#   sapply(length)
+# 
+# inter_len_3 %>% table()
+# 
+# retained_path_3 <- all_path_nodes[inter_len_3 >= 1, ]
+# retained_path_3 %>% apply(2, is.na) %>% colSums() 
+# write.csv(x = retained_path_3[, 1:10], 
+#           file = "../res/P2ry12/retained_path_3.csv", 
+#           row.names = F, 
+#           quote = F)
+# 
+# # 14 days
+# inter_len_14 <- apply(all_path_nodes, 1, intersect, 
+#                       mapIds(org.Mm.eg.db, keys = inter_14, keytype = "SYMBOL", column = "ENTREZID")) %>% 
+#   sapply(na.omit) %>% 
+#   sapply(length)
 
 inter_len_14 %>% table()
 retained_path_14 <- all_path_nodes[inter_len_14 >= 1, ]
