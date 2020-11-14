@@ -98,14 +98,17 @@ inter_14 %>% length()
 ```
 
 
+
 ```{r}
 # PVN Top 100 GO DEGs
 files <- list.files(path = "../data/20201113/", pattern = "GO_down|GO_up", full.names = T)
 sheets <- c("PVN_3L", "PVN_3A")
 outs <- paste(rep(c("PVN_3L", "PVN_3A"), 2), rep(c("down", "up"), each = 2), sep = "_")
 
+
 pvn <- list()
 
+pvn <- list()
 k = 0
 for(i in seq_along(files)){
   for(j in seq_along(sheets)){
@@ -357,6 +360,7 @@ inter_len <- apply(all_path_nodes[1:10],
                    1, 
                    intersect, 
                    mapIds(org.Mm.eg.db, keys = all_DEG, keytype = "SYMBOL", column = "ENTREZID")) %>%
+  apply(na.omit) %>% 
   sapply(length)
 
 retained_path <- all_path_nodes[inter_len >= 1, ] 
@@ -392,6 +396,14 @@ write.csv(x = retained_path_14[, 1:13],
           row.names = F, 
           quote = F)
 
+  sapply(na.omit) %>% 
+  sapply(length)
+
+inter_len %>% table()
+
+retained_path <- all_path_nodes[inter_len >= 1, ] 
+
+
 o1 <- all_path_df %>% 
   filter(from %in% (retained_path %>% pull(order_0) %>% unique()), 
          to %in% (retained_path %>% pull(order_1) %>% unique()))
@@ -423,6 +435,7 @@ o8 <- all_path_df %>%
   filter(from %in% (retained_path %>% pull(order_7) %>% unique()), 
          to %in% (retained_path %>% pull(order_8) %>% unique()))
 
+
 filtered_path <- rbind(o1, o2, o3, o4, o5, o6, o7, o8)
 filtered_path %>% pull(lty) 
 
@@ -433,6 +446,77 @@ N <- tibble::tibble(
 
 E <- filtered_path %>% 
   dplyr::select(from, to, everything())
+```
+
+add edge information  
+```{r}
+subtype_element <- data.frame(
+  name = c("compound", "hidden compound", "activation", "inhibition", 
+           "expression", "repression", "indirect effect", "state change", 
+           "binding/association", "dissociation", "missing interaction", 
+           "phosphorylation", "dephosphorylation", "glycosylation", "ubiquitination", 
+           "methylation"), 
+  value = c(NA, 
+            NA, 
+            "-->", "--|", "-->", "--|", "..>", 
+            "...", "---", "-+-", "-/-",
+            "+p", "-p", "+g", "+u", "+m"), 
+  stringsAsFactors = F
+)
+
+subtype_element
+
+vl <- subtype_element$value
+names(vl) <- subtype_element$name
+
+all_path_df$subtype %>% unique()
+intersect(all_path_df$subtype %>% unique(), subtype_element$name)
+
+all_path_df$subtype_value <- vl[all_path_df$subtype]
+all_path_df %>% dplyr::filter(subtype != "compound")
+
+## add edge and node info
+all_path_df$angle <- ifelse(all_path_df$subtype == "inhibition", 90, 30)
+all_path_df$edge_label <- ifelse(grepl("[a-z]", all_path_df$subtype_value), all_path_df$subtype_value, NA)
+
+lty <- c(rep(1, 5), 5, 1, 3, 1, 5, 3, 5, 1, 3, 1)
+names(lty) <- all_path_df$subtype %>% unique() %>%  as.character()
+all_path_df$lty <- lty[all_path_df$subtype]
+all_path_df$lty <- ifelse(is.na(all_path_df$lty), 1, all_path_df$lty)
+all_path_df$edge_label <- ifelse(is.na(all_path_df$edge_label), "", all_path_df$edge_label)
+
+all_path_df %>% dplyr::filter(is.na(lty))
+
+# # 3 days
+# inter_len_3 <- apply(all_path_nodes, 
+#                    1, 
+#                    intersect, 
+#                    mapIds(org.Mm.eg.db, keys = inter_3, keytype = "SYMBOL", column = "ENTREZID")) %>% 
+#   sapply(na.omit) %>% 
+#   sapply(length)
+# 
+# inter_len_3 %>% table()
+# 
+# retained_path_3 <- all_path_nodes[inter_len_3 >= 1, ]
+# retained_path_3 %>% apply(2, is.na) %>% colSums() 
+# write.csv(x = retained_path_3[, 1:10], 
+#           file = "../res/P2ry12/retained_path_3.csv", 
+#           row.names = F, 
+#           quote = F)
+# 
+# # 14 days
+# inter_len_14 <- apply(all_path_nodes, 1, intersect, 
+#                       mapIds(org.Mm.eg.db, keys = inter_14, keytype = "SYMBOL", column = "ENTREZID")) %>% 
+#   sapply(na.omit) %>% 
+#   sapply(length)
+# 
+# inter_len_14 %>% table()
+# retained_path_14 <- all_path_nodes[inter_len_14 >= 1, ]
+# retained_path_14 %>% apply(2, is.na) %>% colSums()
+# write.csv(x = retained_path_14[, 1:13], 
+#           file= "../res/P2ry12/retained_path_14.csv", 
+#           row.names = F, 
+#           quote = F)
 ```
 
 # number of DEGs in different orders  
@@ -496,3 +580,40 @@ ggsave(filename = "../res/P2ry12/Number-of-DEGs-in-different-order.tiff")
 ```
 
 
+```{r, warning=FALSE, message=FALSE}
+g <- tbl_graph(nodes = N, edges = E, directed = T)
+
+# ll <- create_layout(g, "nicely")
+set.seed(123)
+g %>%  
+  mutate(names = names_to_display[ids]) %>% 
+  ggraph(layout = "nicely") +
+  geom_edge_link(aes(filter = (angle == 30), 
+                     edge_linetype = factor(lty)), 
+                 end_cap = circle(2.5, "mm"), 
+                 start_cap = circle(1, "mm"), 
+                 arrow = arrow(length = unit(1, "mm")), 
+                 show.legend = F, 
+                 edge_width = 0.2) +
+  geom_edge_link(aes(filter = (angle == 90), 
+                     edge_linetype = factor(lty)), 
+                 arrow = arrow(angle = 90, length = unit(1, "mm")), 
+                 end_cap = circle(2.5, "mm"), 
+                 show.legend = F, 
+                 edge_width = 0.2) +
+  geom_node_point(aes(shape = shape, filter = !(names %in% inter_3)), 
+                  fill ="grey", 
+                  size = 5, 
+                  show.legend = F, 
+                  color = "grey") +
+  geom_node_point(aes(shape = shape, filter = (names %in% inter_3)), 
+             fill = "red", 
+             color = "red", 
+             show.legend = F, 
+             size = 5) +
+  geom_node_text(aes(label = names), size = 2) +
+  scale_shape_manual(values = c("21" = 22, "22" = 21)) +
+  theme_graph() 
+
+ggsave(filename = "../res/P2ry12/p2ry12_downstream_signal.pdf")
+```

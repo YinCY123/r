@@ -768,6 +768,7 @@ inter_len <- apply(all_path_nodes[1:10],
                    1, 
                    intersect, 
                    mapIds(org.Mm.eg.db, keys = all_DEG, keytype = "SYMBOL", column = "ENTREZID")) %>%
+  sapply(na.omit) %>% 
   sapply(length)
 
 retained_path <- all_path_nodes[inter_len >= 1, ] 
