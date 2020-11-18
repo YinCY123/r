@@ -69,6 +69,8 @@ pvn_filtered <- pvn_filtered %>%
     relocate(geneid_symbol, contains("FC"), everything())
 
 pvn_filtered %>% head()
+
+write.csv(x = pvn_filtered, file = "../res/P2ry12/pvn_filtered.csv", row.names = F, quote = F)
 ```
 
 ## determine DEGs  
