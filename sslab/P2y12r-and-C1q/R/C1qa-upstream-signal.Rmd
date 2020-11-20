@@ -221,19 +221,35 @@ all_path_df %>% dplyr::filter(subtype != "compound")
 all_path_df$angle <- ifelse(all_path_df$subtype == "inhibition", 90, 30)
 all_path_df$edge_label <- ifelse(grepl("[a-z]", all_path_df$subtype_value), all_path_df$subtype_value, NA)
 
-lty <- c(rep(1, 5), 5, 1, 3, 1, 5, 3, 5, 1, 3, 1)
+# lty <- c(rep(1, 5), 5, 1, 3, 1, 5, 3, 5, 1, 3, 1)
+lty <- c("compound" = "blank", 
+         "NA" = "blank", 
+         "activation" = "solid", 
+         "inhibition" = "solid", 
+         "expression" = "dashed", 
+         "binding/association" = "longdash", 
+         "missing interaction" = "1F", 
+         "phosphorylation" = "solid", 
+         "ubiquitination" = "solid", 
+         "dephosphorylation" = "solid", 
+         "indirect effect" = "dotted", 
+         "dissociation"  = "dotdash", 
+         "repression" = "solid", 
+         "state change" = "4C88C488", 
+         "glycosylation" = "solid")
 names(lty) <- all_path_df$subtype %>% unique() %>%  as.character()
 all_path_df$lty <- lty[all_path_df$subtype]
-all_path_df$lty <- ifelse(is.na(all_path_df$lty), 1, all_path_df$lty)
+all_path_df$lty <- ifelse(is.na(all_path_df$lty), "blank", all_path_df$lty)
 all_path_df$edge_label <- ifelse(is.na(all_path_df$edge_label), "", all_path_df$edge_label)
 
-all_path_df %>% dplyr::filter(is.na(lty))
+all_path_df %>% pull(edge_label) %>% unique()
+all_path_df %>% pull(lty) %>% unique()
 ```
 
 
 ```{r}
 ig <- graph_from_data_frame(d = all_path_df[, c("from", "to")], directed = T)
-distance_to_C1qa_all_path <- shortest_paths(ig, from = V(ig)$name == "12259", to = V(ig), mode = "all")[[1]]
+distance_to_C3_all_path <- shortest_paths(ig, from = V(ig)$name == "12266", to = V(ig), mode = "in")[[1]]
 
 list2df <- function(list){
   maxL <- sapply(list, length) %>% max()
@@ -250,38 +266,140 @@ list2df <- function(list){
   return(as.data.frame(list))
 }
 
-all_path_nodes <- list2df(lapply(distance_to_C1qa_all_path, as_ids))
+all_path_nodes <- list2df(lapply(distance_to_C3_all_path, as_ids))
 all_path_nodes <- all_path_nodes %>% filter(!is.na(order_0))
 
 
-inter_len <- apply(all_path_nodes, 1, intersect, y = c("13136", "12259")) %>% 
-  lapply(na.omit) %>% 
-  sapply(length)
+# inter_len <- apply(all_path_nodes, 1, intersect, y = c("13136", "12266")) %>% 
+#   lapply(na.omit) %>% 
+#   sapply(length) %>% table()
+# 
+# 
+# filter_index <- apply(all_path_nodes, 1, is.na) %>% 
+#   apply(2, sum) 
 
-
-filter_index <- apply(all_path_nodes, 1, is.na) %>% 
-  apply(2, sum) 
-
-retained_path <- all_path_nodes[inter_len == 2, ]
+retained_path <- all_path_nodes
 
 o1 <- all_path_df %>% 
-  filter(to %in% (retained_path %>% pull(order_0) %>% unique())|
-         from %in% (retained_path %>% pull(order_1) %>% unique()))
+  filter(from %in% (retained_path %>% pull(order_1) %>% unique()),
+         to %in% (retained_path %>% pull(order_0) %>% unique()))
 
 o2 <- all_path_df %>% 
-  filter(to %in% (retained_path %>% pull(order_1) %>% unique())|
-         from %in% (retained_path %>% pull(order_2) %>% unique()))
+  filter(from %in% (retained_path %>% pull(order_2) %>% unique()),
+         to %in% (retained_path %>% pull(order_1) %>% unique()))
 
 o3 <- all_path_df %>% 
-  filter(from %in% (retained_path %>% pull(order_2) %>% unique())| 
-         to %in% (retained_path %>% pull(order_3) %>% unique()))
+  filter(from %in% (retained_path %>% pull(order_3) %>% unique()), 
+         to %in% (retained_path %>% pull(order_2) %>% unique()))
 
 o4 <- all_path_df %>% 
-  filter(from %in% (retained_path %>% pull(order_3) %>% unique())| 
+  filter(from %in% (retained_path %>% pull(order_4) %>% unique()), 
+         to %in% (retained_path %>% pull(order_3) %>% unique()))
+
+o5 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_5) %>% unique()), 
          to %in% (retained_path %>% pull(order_4) %>% unique()))
 
-filtered_path <- rbind(o1, o2, o3, o4)
-filtered_path %>% head()
+o6 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_6) %>% unique()), 
+         to %in% (retained_path %>% pull(order_5) %>% unique()))
+
+o7 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_7) %>% unique()), 
+         to %in% (retained_path %>% pull(order_6) %>% unique()))
+
+o8 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_8) %>% unique()), 
+         to %in% (retained_path %>% pull(order_7) %>% unique()))
+
+o9 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_9) %>% unique()), 
+         to %in% (retained_path %>% pull(order_8) %>% unique()))
+
+o10 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_10) %>% unique()), 
+         to %in% (retained_path %>% pull(order_9) %>% unique()))
+
+o11 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_11) %>% unique()), 
+         to %in% (retained_path %>% pull(order_10) %>% unique()))
+
+o12 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_12) %>% unique()), 
+         to %in% (retained_path %>% pull(order_11) %>% unique()))
+
+o13 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_13) %>% unique()), 
+         to %in% (retained_path %>% pull(order_12) %>% unique()))
+
+o14 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_14) %>% unique()), 
+         to %in% (retained_path %>% pull(order_13) %>% unique()))
+
+o15 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_15) %>% unique()), 
+         to %in% (retained_path %>% pull(order_14) %>% unique()))
+
+o16 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_16) %>% unique()), 
+         to %in% (retained_path %>% pull(order_15) %>% unique()))
+
+o17 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_17) %>% unique()), 
+         to %in% (retained_path %>% pull(order_16) %>% unique()))
+
+o18 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_18) %>% unique()), 
+         to %in% (retained_path %>% pull(order_17) %>% unique()))
+
+o19 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_19) %>% unique()), 
+         to %in% (retained_path %>% pull(order_18) %>% unique()))
+
+o20 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_20) %>% unique()), 
+         to %in% (retained_path %>% pull(order_19) %>% unique()))
+
+o21 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_21) %>% unique()), 
+         to %in% (retained_path %>% pull(order_20) %>% unique()))
+
+o22 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_22) %>% unique()), 
+         to %in% (retained_path %>% pull(order_21) %>% unique()))
+
+o23 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_23) %>% unique()), 
+         to %in% (retained_path %>% pull(order_22) %>% unique()))
+
+o24 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_24) %>% unique()), 
+         to %in% (retained_path %>% pull(order_23) %>% unique()))
+
+o25 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_25) %>% unique()), 
+         to %in% (retained_path %>% pull(order_24) %>% unique()))
+
+o26 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_26) %>% unique()), 
+         to %in% (retained_path %>% pull(order_25) %>% unique()))
+
+o27 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_27) %>% unique()), 
+         to %in% (retained_path %>% pull(order_26) %>% unique()))
+
+o28 <- all_path_df %>% 
+  filter(from %in% (retained_path %>% pull(order_28) %>% unique()), 
+         to %in% (retained_path %>% pull(order_27) %>% unique()))
+
+
+filtered_path <- rbind(o1, o2, o3, o4) 
+                       # o5, o6, o7, o8,
+                       # o9, o10, o11, o12, o13, o14, o15,
+                       # o16, o17, o18, o19, o20, o21, o22,
+                       # o23, o24, o25, o26, o27, o28)
+
+filtered_path <- filtered_path %>% dplyr::distinct(from, to, .keep_all = T)
 ```
 
 ```{r}
@@ -299,47 +417,42 @@ E <- filtered_path %>%
 g <- tbl_graph(nodes = N, edges = E, directed = T)
 
 # ll <- create_layout(g, "nicely")
-set.seed(123)
-g %>%  
-  mutate(names = names_to_display[ids]) %>% 
-  ggraph(layout = "lgl") +
-  geom_edge_link(aes(filter = (angle == 30), 
-                     edge_linetype = factor(lty)), 
-                 end_cap = circle(1.5, "mm"), 
-                 start_cap = circle(1, "mm"), 
-                 arrow = arrow(length = unit(1, "mm")), 
-                 show.legend = F, 
-                 edge_width = 0.2) +
-  geom_edge_link(aes(filter = (angle == 90), 
-                     edge_linetype = factor(lty)), 
-                 arrow = arrow(angle = 90, length = unit(1, "mm")), 
-                 end_cap = circle(1.5, "mm"), 
-                 show.legend = F, 
-                 edge_width = 0.2) +
-  geom_node_point(aes(shape = shape), 
-                  fill ="grey", 
-                  size = 2, 
-                  show.legend = F, 
-                  color = "grey") +
-  geom_node_point(aes(shape = shape, filter = (names %in% c("C1qa", "Cd55"))), 
-                  fill = "red", 
-                  size = 2, 
-                  show.legend = F, 
-                  color = "red") +
-  geom_node_text(aes(label = names), size = 0.5) +
-  scale_shape_manual(values = c("21" = 22, "22" = 21)) +
-  theme_graph() 
+```
 
-ggsave(filename = "../res/C1q-C3/C1qa-signal-path.pdf")
+```{r, message=FALSE, warning=FALSE}
+g %>% 
+  mutate(dist_to_C3 = bfs_dist(root = .N()$ids == "12266")) %>% 
+  ggraph(layout = "nicely") +
+  geom_edge_link(aes(filter = (angle == 90), 
+                     edge_linetype = lty, 
+                     label = edge_label), 
+                 end_cap = circle(1.5, "mm"), 
+                 arrow = arrow(angle = 90, length = unit(1, "mm"))) +
+  geom_edge_link(aes(filter = (angle == 30), 
+                     edge_linetype = lty, 
+                     label = edge_label), 
+                 end_cap = circle(1.5, "mm"), 
+                 arrow = arrow(angle = 30, length = unit(1, 'mm'))) +
+  geom_node_point(aes(shape = shape), 
+                  show.legend = F, 
+                  size = 2, 
+                  fill = "grey", 
+                  color = "grey") +
+  geom_node_point(aes(filter = (ids %in% c("12266"))), 
+                  fill = "red", 
+                  color = "red", 
+                  size = 2) +
+  scale_shape_manual(values = c("21" = 22, "22" = 21))
+
+ggsave(filename = "../res/C1q-C3/C3-signal-path_order4.pdf")
 ```
 
 ```{r}
-as_tbl_graph(all_path_df) %>% 
-  mutate(
-    dist_to_C1qa = bfs_dist(root = .N()$name == "12259", mode = "all")
-  ) %>% 
-  filter(!is.na(dist_to_C1qa), .N()$name == "13136")
+filtered_path %>% pull(subtype) %>% unique()
 ```
+
+
+
 
 
 
