@@ -1,6 +1,6 @@
 ---
 title: Choriocapillaris participate in the progress of age-related macular degeneration
-  by regulate COL10A1 expressed by retina pigment epithelial
+  by regulating COL10A1 expressed by retina pigment epithelial
 author: "Chunyou Yin^1\\*^; Chunhui Yin^2^"
 csl: elsevier-with-titles-alphabetical.csl
 output:
