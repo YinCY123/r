@@ -14,9 +14,11 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(edgeR)
 library(org.Mm.eg.db)
-library(stringr.plus)
+library(magrittr)
 library(ggraph)
 library(tidygraph)
+library(stringr.plus)
+library(stringr)
 ```
 
 
@@ -68,9 +70,16 @@ pvn_A14_L14_DEG_down <- intersect(pvn_A14_DEG_down, pvn_L14_DEG_down)
 
 
 ```{r}
-bg_genes <- filtered_pvn %>% pull(geneid_symbol)
-bg_genes_df <- select(org.Mm.eg.db, 
-                      keys = bg_genes, 
+# Using Ang and L-name intersects DEG as background genes
+bg_genes_3 <- c(pvn_A3_L3_DEG_up, pvn_A3_L3_DEG_down)
+bg_genes_df_3 <- AnnotationDbi::select(org.Mm.eg.db, 
+                      keys = bg_genes_3, 
+                      keytype = "SYMBOL", 
+                      columns = c("SYMBOL", "ENTREZID"))
+
+bg_genes_14 <- c(pvn_A14_L14_DEG_up, pvn_A14_L14_DEG_down)
+bg_genes_df_14 <- AnnotationDbi::select(org.Mm.eg.db, 
+                      keys = bg_genes_14, 
                       keytype = "SYMBOL", 
                       columns = c("SYMBOL", "ENTREZID"))
 ```
@@ -142,7 +151,7 @@ P2ry12_downstream_genes <- g %>%
   filter(!is.na(dist_to_p2ry12)) %>% 
   pull(ids)
 
-P2ry12_downstream_genes <- P2ry12_downstream_geens[grepl("^[0-9]", P2ry12_downstream_genes)]
+P2ry12_downstream_genes <- P2ry12_downstream_genes[grepl("^[0-9]", P2ry12_downstream_genes)]
 P2ry12_downstream_genes_df <- AnnotationDbi::select(org.Mm.eg.db, 
                                                     keys = P2ry12_downstream_genes, 
                                                     keytype = "ENTREZID", 
@@ -180,7 +189,7 @@ pvn_A14_L14_DEG_down_df <- AnnotationDbi::select(x = org.Mm.eg.db,
 # 3 days
 pvn_A3_L3_DEG_up_GO <- goana(de = pvn_A3_L3_DEG_up_df$ENTREZID, 
                              species = "Mm", 
-                             universe = bg_genes_df$ENTREZID) %>% 
+                             universe = bg_genes_df_3$ENTREZID) %>% 
   tibble::rownames_to_column("GOID") %>% 
   mutate(group = "up") %>% 
   arrange(P.DE)
@@ -188,7 +197,7 @@ pvn_A3_L3_DEG_up_GO <- goana(de = pvn_A3_L3_DEG_up_df$ENTREZID,
 
 pvn_A3_L3_DEG_down_GO <- goana(de = pvn_A3_L3_DEG_down_df$ENTREZID, 
                                species = "Mm", 
-                               universe = bg_genes_df$ENTREZID) %>% 
+                               universe = bg_genes_df_3$ENTREZID) %>% 
   tibble::rownames_to_column("GOID") %>% 
   mutate(group = "down") %>% 
   arrange(P.DE)
@@ -204,14 +213,14 @@ pvn_A3_L3_DEG_GO <- rbind(pvn_A3_L3_DEG_up_GO %>%
 # 14 days
 pvn_A14_L14_DEG_up_GO <- goana(de = pvn_A14_L14_DEG_up_df$ENTREZID, 
                                species = "Mm", 
-                               universe = bg_genes_df$ENTREZID) %>% 
+                               universe = bg_genes_df_14$ENTREZID) %>% 
   tibble::rownames_to_column("GOID") %>% 
   mutate(group = "up") %>% 
   arrange(P.DE)
 
 pvn_A14_L14_DEG_down_GO <- goana(de = pvn_A14_L14_DEG_down_df$ENTREZID, 
                                  species = "Mm", 
-                                 universe = bg_genes_df$ENTREZID) %>% 
+                                 universe = bg_genes_df_14$ENTREZID) %>% 
   tibble::rownames_to_column("GOID") %>% 
   mutate(group = "down") %>% 
   arrange(P.DE)
@@ -226,18 +235,25 @@ pvn_A14_L14_DEG_GO <- rbind(pvn_A14_L14_DEG_up_GO %>%
 
 
 ```{r}
+write.csv(x = pvn_A3_L3_DEG_GO, file = "pvn_A3_L3_DEG_GO.csv", row.names = F, quote = F)
+pvn_A3_L3_DEG_GO <- read.csv(file = "pvn_A3_L3_DEG_GO.csv")
+
 pvn_A3_L3_DEG_GO %>% 
   mutate(log10Pvalue = log10(P.DE),
          multi_factor = ifelse(group == "up", -1, 1), 
          p_value = log10Pvalue * multi_factor) %>%  
-  ggplot(aes(p_value, reorder(Term, p_value, ), fill = group)) +
+  ggplot(aes(p_value, reorder(Term, P.DE), fill = group)) +
   geom_bar(stat = "identity", show.legend = F) +
   scale_y_discrete(name = NULL) +
   scale_x_continuous(name = "log10(p.value)", 
-                     breaks = c(-10.0, -5.0, 0.0, 5.0, 10.0), 
-                     labels = c("10.0", "5.0", "0.0", "5.0", "10.0")) +
+                     breaks = c(-10.0, -5.0, 0.0, 5.0, 10.0, 15), 
+                     labels = c("10.0", "5.0", "0.0", "5.0", "10.0", "15"), 
+                     expand = c(0, 0)) +
   scale_fill_manual(name = NULL, values = c("up" = "red", "down" = "blue")) +
-  facet_grid(group ~ ., scales = "free_y")
+  facet_grid(group ~ ., scales = "free_y") +
+  theme(strip.background = element_rect(fill = "grey70"), 
+        strip.text.y = element_text(color = "black"), 
+        panel.background = element_rect(fill = "grey95"))
 
 ggsave(filename = "../res/P2ry12/A3_L3_GO.tiff")
 ```
@@ -245,27 +261,29 @@ ggsave(filename = "../res/P2ry12/A3_L3_GO.tiff")
 
 
 ```{r}
+write.csv(x = pvn_A14_L14_DEG_GO, file = "pvn_A14_L14_DEG_GO.csv", row.names = F, quote = F)
+pvn_A14_L14_DEG_GO <- read.csv(file = "pvn_A14_L14_DEG_GO.csv")
+
 pvn_A14_L14_DEG_GO %>% 
   mutate(log10Pvalue = log10(P.DE),
          multi_factor = ifelse(group == "up", -1, 1), 
          p_value = log10Pvalue * multi_factor) %>% 
-  ggplot(aes(p_value, reorder(Term, p_value), fill = group)) +
+  ggplot(aes(p_value, reorder(Term, P.DE), fill = group)) +
   geom_bar(stat = "identity", show.legend = F) +
   scale_y_discrete(name = NULL) +
   scale_x_continuous(name = "log10(p.value)", 
-                     breaks = ) +
-  scale_fill_manual(name = NULL, values = c("up" = "red", "down" = "blue")) +
-  facet_grid(group ~., scales = "free_y")
+                     breaks = c(-15, -10, -5, 0, 5, 10, 15, 20), 
+                     labels = c("15.0", "10.0", "5.0", "0.0", "5.0", "10.0", "15.0", "20.0"), 
+                     expand = c(0, 0)) +
+  scale_fill_manual(name = NULL, values = c("up" = "red", "down" = "blue"))+
+  facet_grid(group ~ ., scales = "free_y") +
+  theme(strip.background = element_rect(fill = "grey70"), 
+        strip.text.y = element_text(color = "black"), 
+        panel.background = element_rect(fill = "grey95"))
+
 
 ggsave(filename = "../res/P2ry12/A14_L14_GO.tiff")
 ```
-
-```{r}
-pvn_A14_L14_DEG_GO
-```
-
-
-
 
 
 
