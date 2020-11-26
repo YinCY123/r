@@ -188,6 +188,7 @@ names_to_display <- c(KEGG_mmu_genes_to_display,
                       KEGG_compounds_to_display, 
                       KEGG_drug_to_display, 
                       KEGG_glycan_to_dispaly)
+# saveRDS(object = names_to_display, file = "../data/KEGG/names_to_display.rds")
 ```
 
 
@@ -220,15 +221,16 @@ all_path_df %>% dplyr::filter(subtype != "compound")
 ## add edge and node info
 all_path_df$angle <- ifelse(all_path_df$subtype == "inhibition", 90, 30)
 all_path_df$edge_label <- ifelse(grepl("[a-z]", all_path_df$subtype_value), all_path_df$subtype_value, NA)
+all_path_df$edge_label <- ifelse(is.na(all_path_df$edge_label), "", all_path_df$edge_label)
 
 # lty <- c(rep(1, 5), 5, 1, 3, 1, 5, 3, 5, 1, 3, 1)
-lty <- c("compound" = "blank", 
-         "NA" = "blank", 
+lty <- c("compound" = "F1", 
+         "NA" = "solid", 
          "activation" = "solid", 
          "inhibition" = "solid", 
-         "expression" = "dashed", 
+         "expression" = "solid", 
          "binding/association" = "longdash", 
-         "missing interaction" = "1F", 
+         "missing interaction" = "12345678", 
          "phosphorylation" = "solid", 
          "ubiquitination" = "solid", 
          "dephosphorylation" = "solid", 
@@ -239,24 +241,37 @@ lty <- c("compound" = "blank",
          "glycosylation" = "solid")
 names(lty) <- all_path_df$subtype %>% unique() %>%  as.character()
 all_path_df$lty <- lty[all_path_df$subtype]
-all_path_df$lty <- ifelse(is.na(all_path_df$lty), "blank", all_path_df$lty)
-all_path_df$edge_label <- ifelse(is.na(all_path_df$edge_label), "", all_path_df$edge_label)
 
-all_path_df %>% pull(edge_label) %>% unique()
-all_path_df %>% pull(lty) %>% unique()
+all_path_df$lty <- ifelse(is.na(all_path_df$lty), "solid", all_path_df$lty)
+
+#saveRDS(object = all_path_df, file = "../data/KEGG/all_path_df_formated.rds")
+```
+
+```{r}
+names_to_display[names_to_display == "C3"]
+```
+
+```{r}
+
+df
 ```
 
 
-```{r}
-ig <- graph_from_data_frame(d = all_path_df[, c("from", "to")], directed = T)
-distance_to_C3_all_path <- shortest_paths(ig, from = V(ig)$name == "12266", to = V(ig), mode = "in")[[1]]
 
-list2df <- function(list){
+```{r}
+df <- all_path_df[, c("from", "to")]
+df$from_symbol <- names_to_display[df$from]
+df$to_symbol <- names_to_display[df$to]
+
+ig <- graph_from_data_frame(d = df[, c("from_symbol", "to_symbol")], directed = T)
+distance_to_C3_all_path <- shortest_paths(ig, from = 'C3', to = V(ig), mode = "in")[[1]]
+
+list2df <- function(list){ 
   maxL <- sapply(list, length) %>% max()
   for(i in seq_along(list)){
     l = length(list[[i]])
     if(l < maxL){
-      list[[i]] <- append(list[[i]], values = rep(NA, (maxL - l)))
+      list[[i]] <- append(list[[i]], values = rep("", (maxL - l)))
     }
   }
   list <- as.data.frame(list)
@@ -267,7 +282,8 @@ list2df <- function(list){
 }
 
 all_path_nodes <- list2df(lapply(distance_to_C3_all_path, as_ids))
-all_path_nodes <- all_path_nodes %>% filter(!is.na(order_0))
+all_path_nodes <- all_path_nodes %>% filter(!(nchar(order_0) == 0))
+write.table(x = all_path_nodes, file = "../res/C1q-C3/C3_signal_paths.csv", row.names = F, quote = F, sep = "|")
 
 
 # inter_len <- apply(all_path_nodes, 1, intersect, y = c("13136", "12266")) %>% 
@@ -406,7 +422,7 @@ filtered_path <- filtered_path %>% dplyr::distinct(from, to, .keep_all = T)
 N <- tibble::tibble(
   ids = c(filtered_path$from, filtered_path$to) %>% unique()
 ) %>% 
-  mutate(shape = ifelse(grepl("^cpd:|^gl:|^dr:", ids, ignore.case = F), "21", "22")) 
+  mutate(shape = ifelse(grepl("^cpd:|^gl:|^dr:", ids, ignore.case = F), "compound", "gene")) 
 
 E <- filtered_path %>% 
   dplyr::select(from, to, everything())
@@ -421,38 +437,58 @@ g <- tbl_graph(nodes = N, edges = E, directed = T)
 
 ```{r, message=FALSE, warning=FALSE}
 g %>% 
-  mutate(dist_to_C3 = bfs_dist(root = .N()$ids == "12266")) %>% 
+  mutate(dist_to_C3 = bfs_dist(root = .N()$ids == "12266", mode = "in")) %>% 
   ggraph(layout = "nicely") +
-  geom_edge_link(aes(filter = (angle == 90), 
-                     edge_linetype = lty, 
-                     label = edge_label), 
-                 end_cap = circle(1.5, "mm"), 
-                 arrow = arrow(angle = 90, length = unit(1, "mm"))) +
-  geom_edge_link(aes(filter = (angle == 30), 
-                     edge_linetype = lty, 
-                     label = edge_label), 
-                 end_cap = circle(1.5, "mm"), 
-                 arrow = arrow(angle = 30, length = unit(1, 'mm'))) +
+  geom_edge_link(aes(filter = (angle == "90"), edge_linetype = lty, label = edge_label), 
+                 arrow = arrow(angle = 90, length = unit(0.3, "mm")), 
+                 edge_width = 0.1, 
+                 start_cap = circle(1, "mm"), 
+                 end_cap = circle(1, "mm"), 
+                 angle_calc = "along", 
+                 label_size = 0.3, 
+                 show.legend = T) +
+  geom_edge_link(aes(filter = (angle == '30'), edge_linetype = lty, label = edge_label), 
+                 arrow = arrow(angle = 30, length = unit(0.5, "mm")), 
+                 edge_width = 0.1, 
+                 start_cap = circle(1, "mm"), 
+                 end_cap = circle(1, "mm"), 
+                 angle_calc = "along", 
+                 label_size = 0.3, 
+                 show.legend = T) +
   geom_node_point(aes(shape = shape), 
-                  show.legend = F, 
+                  color = "grey", 
                   size = 2, 
-                  fill = "grey", 
-                  color = "grey") +
-  geom_node_point(aes(filter = (ids %in% c("12266"))), 
-                  fill = "red", 
+                  show.legend = F) +
+  geom_node_point(aes(shape = shape, filter = (ids %in% c("12266"))), 
                   color = "red", 
-                  size = 2) +
-  scale_shape_manual(values = c("21" = 22, "22" = 21))
+                  size = 2, 
+                  show.legend = F) +
+  scale_shape_manual(values = c("compound" = 15, "gene" = 16)) +
+  geom_node_text(aes(label = names_to_display[.N()$ids]), size = 0.7) +
+  scale_edge_linetype_manual(name = "interaction type", 
+                             values = c("solid" = "solid", "longdash" = "longdash", 
+                                        "F1" = "F1", "dotted" = "dotted", 
+                                        "dotdash" = "dotdash", "12345678" = "12345678", 
+                                        "4C88C488" = "4C88C488"), 
+                             labels = c("state change", "dissiciation", 
+                                        "indirect effect", "compound", 
+                                        "binding/association", 
+                                        "activation/expression")) +
+  guides(shape = F)
 
-ggsave(filename = "../res/C1q-C3/C3-signal-path_order4.pdf")
+
+ggsave(filename = "../res/C1q-C3/C3.pdf")
 ```
+
 
 ```{r}
-filtered_path %>% pull(subtype) %>% unique()
+all_path_df %>% filter(from == "12269" | to == "12269")
 ```
 
 
-
+```{r}
+all_path_nodes
+```
 
 
 

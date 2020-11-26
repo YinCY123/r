@@ -1,0 +1,23 @@
+---
+title: "隐私说明"
+author: "yincy"
+date: "11/26/2020"
+output: 
+    bookdown:
+        word_document
+
+csl: elsevier-with-titles-alphabetical.csl
+        
+bibliography:
+    - f:/git/Data/mendeley-bib/library.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F)
+```
+
+
+在名为《Choriocapillaris participate in the progress of age-related macular degeneration by regulating COL10A1 expressed by retina pigment epithelial》的文章中作者使用的数据均来自于公共开放数据库 NCBI GEO[@Barrett2013]，该数据库中存储的数据都遵守了该数据库的数据分享政策[@NationalInstitutesofHealth2014]以及所发表杂志的要求。文章中作者使用的数据只包含了年龄、性别以及个人的疾病状态信息，不包括其他个人生物信息，使用这些数据不存在泄露个人信息的风险。
+
+
+## Reference

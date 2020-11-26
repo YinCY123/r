@@ -1,0 +1,38 @@
+---
+title: "glomerulus podocyte"
+author: "yincy"
+date: "11/26/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(magrittr)
+library(stringr)
+```
+
+
+```{r}
+kidney <- readLines("f:/GSE107585/Mouse_kidney_single_cell_datamatrix.txt", n = 3)
+cells <- kidney[1] %>% str_split(pattern = "\t") %>% .[[1]] 
+clusters <- kidney[2] %>% str_split(pattern = "\t") %>% .[[1]] %>% .[-1]
+length(cells);length(clusters)
+table(clusters) %>% sort()
+```
+
+
+```{r}
+kidney[3] %>% str_split(pattern = "\t") %>% .[[1]] %>% length()
+```
+
+```{r}
+cells <- c("geneid", cells)
+clusters <- c("geneid", clusters)
+
+kidney <- read.table("f:/GSE107585/Mouse_kidney_single_cell_datamatrix.txt", sep = "\t")
+```
+
