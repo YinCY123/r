@@ -58,7 +58,7 @@ lapply(people, function(x){
 list.map(people, Name)
 ```
 
-List mapping is to evaluate an expression for each list member. It is the fundamental operation in rlist functionality. Almost all functions in this package that work with expressions are using mapping but in different ways.  
+List mapping is to evaluate an expression for each list member. It is the fundamental operation in `rlist` functionality. Almost all functions in this package that work with expressions are using mapping but in different ways.  
 
 ### list.map  
 ```{r}

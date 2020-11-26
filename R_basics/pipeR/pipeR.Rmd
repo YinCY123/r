@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Getting started  
-`pipeR` is an Rpackage that helps you better organize your code in pipeline built with `%》>%`, `Pipe()` or `pipeline()` which is much easier to read, wirte and maintain.  
+`pipeR` is an R package that helps you better organize your code in pipeline built with `%>>%`, `Pipe()` or `pipeline()` which is much easier to read, wirte and maintain.  
 
 ```{r}
 sample_mtcars <- sample(mtcars$mpg, 10000, replace = T)
@@ -21,16 +21,16 @@ plot(density_mtcars, col = "red", main = "density of mpg (bootstrap)")
 ```{r}
 mtcars$mpg %>>% 
     sample(size = 10000, replace = T) %>>% 
-    density(kernel = "guassian") %>>% 
+    density(kernel = "gaussian") %>>% 
     plot(col = "red", main = "density of mpg")
 ```
 
 ```{r}
 mtcars %>>% 
-    subset(mpg >= quantile(mpg, 0.05) & mpg <= quantile(mpg, 0.05)) %>% 
+    subset(mpg >= quantile(mpg, 0.05) & mpg <= quantile(mpg, 0.95)) %>>% 
     (mpg) %>>% 
     sample(size = 10000, replace = T) %>>% 
-    density(kernel = "guassian") %>>% 
+    density(kernel = "gaussian") %>>% 
     plot(col = "red", main = "density of mpg")
 ```
 
@@ -44,7 +44,7 @@ mtcars %>>%
 **Pipe operator**  
 - to first argument of a function  
 - to `.` in an expression  
-- by formula to avoid ambiguity in symbol names.  
+- by formula to avoid ambiguity in symbol names  
 - to an expression only for its side effect  
 - to an expression and save the intermediate results  
 - to a symbol in order to extract that element  
@@ -63,8 +63,11 @@ rnorm(100, 0) %>>%
 ```
 
 ```{r}
-mtcars$mpg %>% 
-    plot(col = "red", main = sprintf("number of points: %d", length(.)))
+mtcars$mpg %>>% 
+    plot(col = "red", 
+         main = sprintf("number of points: %d", length(.)), 
+         pch = 19, 
+         cex = 0.7)
 ```
 
 
@@ -75,7 +78,7 @@ mtcars$mpg %>>%
     stats::median()
 
 mtcars$mpg %>>% 
-    graphics::plot(col = "red")
+    graphics::plot(col = "red", pch = 19, cex = 0.7)
 ```
 
 ```{r}
@@ -87,11 +90,11 @@ mtcars$mpg %>>% functions[["average"]]() # need parenthese
 
 ```{r}
 mtcars %>>% 
-    subset(mpg <= quantile(mpg, 0.95), c(mpg, wt)) %>>% 
+    subset(subset = mpg <= quantile(mpg, 0.95), select = c(mpg, wt)) %>>% 
     summary()
 ```
 
-One important thing to notice here is that pipeR does not support lazy evaluation on left value, that is, the left value will be evaluated immediately which cannot be substituted by the function on the right.  
+One important thing to notice here is that `pipeR` does not support lazy evaluation on left value, that is, the left value will be evaluated immediately which cannot be substituted by the function on the right.  
 
 ```{r}
 10000 %>>% 
@@ -105,7 +108,8 @@ system.time(replicate(10000, rnorm(1000)))
 
 ```{r}
 mtcars %>>% 
-    lm(mpg ~ cyl + wt)
+    lm(formula = mpg ~ cyl + wt) %>>% 
+    summary()
 ```
 
 ```{r}
@@ -173,21 +177,22 @@ density_plot <- mtcars$mpg %>>%
     sample(size = 10000, replace = T) %>>% 
     (function(kernel){
         . %>>% 
-            density(kernel = kernel) %>% 
+            density(kernel = kernel) %>>% 
             plot(main = sprintf("%s kernel", kernel))
     })
 ```
 
 ```{r}
 par(mfrow = c(1,3))
-density_plot("guassian")
-density_plot("rectanglar")
-density_plot("trianglar")
+density_plot("gaussian")
+density_plot("rectangular")
+density_plot("triangular")
 ```
 
 
 ```{r}
-1:10 %>>% (function(x, pow) x^pow)(2)
+1:10 %>>% (function(x, pow) x^pow)(pow = 2)
+1:10 %>>% ((function(x, pow) x^pow)(x = 2, pow = .))
 ```
 
 ```{r}
