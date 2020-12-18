@@ -49,6 +49,7 @@ filter_index <- rowSums(pvn[, c(pvn_A14_col_index)] > threshold) >= 2 &
     rowSums(pvn[, c(pvn_A3_col_index)] > threshold) >= 2 &
     rowSums(pvn[, c(pvn_L3_col_index)] > threshold) >= 2 &
     rowSums(pvn[, c(pvn_naive_col_index)] > threshold) >= 2
+
 table(filter_index)
 
 length(filter_index);dim(pvn)
@@ -56,6 +57,7 @@ length(filter_index);dim(pvn)
 pvn_filtered <- pvn[filter_index, ]
 dim(pvn_filtered)
 ```
+
 
 ```{r}
 pvn_filtered <- pvn_filtered %>% 
@@ -103,7 +105,7 @@ inter_14 %>% length()
 
 ```{r}
 # PVN Top 100 GO DEGs
-files <- list.files(path = "../data/20201113/", pattern = "GO_down|GO_up", full.names = T)
+files <- list.files(path = "../data/20201204/", pattern = "GO_down|GO_up", full.names = T)
 sheets <- c("PVN_3L", "PVN_3A")
 outs <- paste(rep(c("PVN_3L", "PVN_3A"), 2), rep(c("down", "up"), each = 2), sep = "_")
 
@@ -139,6 +141,8 @@ write.csv(x = df, file = "../res/P2ry12/top100_GO_DEGs.csv")
 ```
 
 ```{r}
+table(df$symbol %in% inter_3)
+
 all_DEG <- intersect(inter_3, df$symbol)
 ```
 
@@ -361,9 +365,11 @@ all_path_nodes %>% dim()
 inter_len <- apply(all_path_nodes[1:10], 
                    1, 
                    intersect, 
-                   mapIds(org.Mm.eg.db, keys = all_DEG, keytype = "SYMBOL", column = "ENTREZID")) %>%
-  apply(na.omit) %>% 
+                   mapIds(org.Mm.eg.db, keys = df$symbol %>% unique(), keytype = "SYMBOL", column = "ENTREZID")) %>%
+  lapply(na.omit) %>% 
   sapply(length)
+
+inter_len %>% table()
 
 retained_path <- all_path_nodes[inter_len >= 1, ] 
 
@@ -398,10 +404,6 @@ write.csv(x = retained_path_14[, 1:13],
           row.names = F, 
           quote = F)
 
-  sapply(na.omit) %>% 
-  sapply(length)
-
-inter_len %>% table()
 
 retained_path <- all_path_nodes[inter_len >= 1, ] 
 
@@ -436,7 +438,6 @@ o7 <- all_path_df %>%
 o8 <- all_path_df %>% 
   filter(from %in% (retained_path %>% pull(order_7) %>% unique()), 
          to %in% (retained_path %>% pull(order_8) %>% unique()))
-
 
 filtered_path <- rbind(o1, o2, o3, o4, o5, o6, o7, o8)
 filtered_path %>% pull(lty) 
@@ -520,6 +521,12 @@ all_path_df %>% dplyr::filter(is.na(lty))
 #           row.names = F, 
 #           quote = F)
 ```
+
+```{r}
+# saveRDS(object = all_path_df, file = "../data/KEGG/KEGG_pathways_formatted.rds")
+# saveRDS(object = names_to_display, file = "../data/KEGG/names_to_display.rds")
+```
+
 
 # number of DEGs in different orders  
 ```{r}
@@ -617,5 +624,5 @@ g %>%
   scale_shape_manual(values = c("21" = 22, "22" = 21)) +
   theme_graph() 
 
-ggsave(filename = "../res/P2ry12/p2ry12_downstream_signal.pdf")
+ggsave(filename = "../res/P2ry12/p2ry12_downstream_signal-20201209.pdf")
 ```
