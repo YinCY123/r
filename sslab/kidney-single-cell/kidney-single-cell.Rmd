@@ -8,73 +8,14 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
 ```
 
-```{r}
-library(magrittr)
-library(Seurat)
+```{r, message=FALSE}
+library(tidyverse)
 ```
 
-
-## Reading data into R  
-The first two rows are barcodes and clusters of each cell.   
+load data from GSE107585 
 ```{r}
-clusters <- read.table(file = "datamatrix.txt", header = F, skip = 1, nrows = 1)
-
-datatable <- read.table(file = 'datamatrix.txt', header = F, skip = 2, stringsAsFactors = F)
+kidney_sc <- read.table(file = "f:/GSE107585/GSE107585_Mouse_kidney_single_cell_datamatrix.txt.gz")
 ```
-
-
-```{r}
-rownames(datatable) <- datatable[, 1]
-datatable <- datatable[, -1]
-dim(datatable)
-datatable[1:5, 1:5]
-```
-
-
-```{r}
-clusters <- clusters[,-1] %>% .[1, , drop = T] %>% as.numeric()
-```
-
-
-```{r}
-pt <- datatable[, clusters == 3]
-pt_s <- pt[, sample(x = dim(pt)[2], size = dim(pt)[2] * 0.5, replace = F)]
-dct <- datatable[, clusters == 5]
-```
-
-
-```{r}
-pt_s_seurat <- CreateSeuratObject(counts = pt_s, project = "pt_s") %>% 
-    PercentageFeatureSet(pattern = "^MT-", col.name = "percent.mt") %>% 
-    subset(nFeature_RNA >= 200 & nFeature_RNA <= 2500 & percent.mt < 5) %>% 
-    SCTransform(vars.to.regress = "percent.mt")
-
-dct_seurat <- CreateSeuratObject(counts = dct, project = "dct") %>% 
-    PercentageFeatureSet(pattern = "^MT-", col.name = "percent.mt") %>% 
-    subset(nFeature_RNA >= 200 & nFeature_RNA <= 2500 & percent.mt < 5) %>% 
-    SCTransform(vars.to.regress = "percent.mt")
-```
-
-
-```{r}
-dct_meta_feature$symbol <- rownames(dct_meta_feature)
-
-dct_meta_feature <- dct_meta_feature %>% 
-    arrange(desc(sct.gmean)) %>% 
-    select(symbol, sct.detection_rate: sct.residual_variance)
-
-write.csv(x = dct_meta_feature, file = "dct.csv", quote = F, row.names = F)
-```
-
-
-
-```{r}
-pt_s_meta_feature <- pt_s_seurat@assays$SCT@meta.features
-pt_s_meta_feature$symbol <- rownames(pt_s_meta_feature)
-pt_s_meta_feature <- pt_s_meta_feature %>% 
-    
-```
-
 
 
 

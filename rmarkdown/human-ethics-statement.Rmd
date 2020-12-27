@@ -1,0 +1,25 @@
+---
+title: "隐私说明"
+author: "yincy"
+date: "11/26/2020"
+output: 
+    bookdown:
+        word_document
+
+csl: elsevier-with-titles-alphabetical.csl
+        
+bibliography:
+    - f:/git/Data/mendeley-bib/Retina.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F)
+```
+
+
+在名为《Choriocapillaris participate in the progress of age-related macular degeneration by regulating COL10A1 expressed by retina pigment epithelial》的文章中作者使用的数据来自于公共开放数据库 NCBI GEO[@Barrett2013]，NCBI GEO 数据库是 NIH 所属部门 NCBI 维护的公共开放数据库。该数据库用于存储微阵列测序数据，二代测序数据以及其他高通量数据，上传到该数据库的数据都遵守了 NIH 的数据分享政策以及所发表杂志的要求[@NationalInstitutesofHealth2014]。文章中作者使用的数据是 Web of Science 数据库中几篇不同文章所上传的数据，数据只包含了年龄、性别以及个人的疾病状态信息，不包括其他个人生物信息，使用这些数据不存在泄露个人信息的风险。
+
+The dataset used in the manuscripts entitled "Choriocapillaris participate in the progress of age-related macular degeneration by regulating COL10A1 expressed by retina pigment epithelial" was all comes from The Gene Expression Omnibus (GEO)[@Barrett2013], which is maintained by the NCBI, a subdivision of NIH. The Gene Expression Omnibus (GEO) is an international public database for high-throughput microarray and next-generation sequence, and other forms of high-throughput functional genomic data submitted by the scientific comminity, all the data submitted to the repository comply with the NIH data sharing policy and the journal artical the paper published[@NationalInstitutesofHealth2014]. The data used in this paper submitted by serval papers from Web of Science database, which only contains age, gender and personal health states, do not include any other informations, use of this data do not have any risk of personal information. 
+
+
+## Reference
