@@ -1,0 +1,337 @@
+---
+title: "R Statistics"
+author: "yincy"
+date: "12/31/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+This tutorial comes from [this site](https://www.tutorialspoint.com/r/index.htm)
+
+```{r}
+library(magrittr)
+```
+
+
+# Statistics Example  
+## Mean, Median and Mode  
+### Mean  
+```{r}
+x <- c(12, 7, 3, 4.2, 18, 2, 54, -21, 8, -5)
+?mean
+mean(x)
+```
+
+**Applying Trim Option**  
+When trim parameter is supplied, the values in the vector get sorted and then the required numbers of observations are dropped from calculating the mean.  
+
+When trim = 0.3 (30% of each end), 3 values from each end will be dropped from the calculations to find mean.  
+
+In this case the sorted vector is (−21, −5, 2, 3, 4.2, 7, 8, 12, 18, 54) and the values removed from the vector for calculating mean are (−21,−5,2) from left and (12,18,54) from right.  
+
+```{r}
+mean(x, trim = 0.3)
+```
+
+**Applying NA Option**  
+If there are missing values, then the mean function returns NA.  
+
+To drop the missing values from the calculation use na.rm = TRUE. which means remove the NA values.  
+
+```{r}
+x <- c(12,7,3,4.2,18,2,54,-21,8,-5,NA)
+
+mean(x)
+
+mean(x, na.rm = T)
+```
+
+### Median  
+The middle most value in a data series is called the median.  
+
+```{r}
+?median
+
+x <- c(12,7,3,4.2,18,2,54,-21,8,-5)
+median(x)
+```
+
+
+### Mode  
+The mode is the value that has highest number of occurrences in a set of data. Unike mean and median, mode can have both numeric and character data.  
+
+R does not have a standard in-built function to calculate mode. So we create a user function to calculate mode of a data set in R. This function takes the vector as input and gives the mode value as output.  
+
+```{r}
+getmode <- function(v){
+    uniqv <- unique(v)
+    uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+
+v <- c(2,1,2,3,1,2,3,4,1,5,5,3,2,3)
+getmode(v)
+
+charv <- c("o","it","the","it","it")
+getmode(charv)
+```
+
+
+## Linear Regression  
+Regression analysis is a very widely used statistical tool to establish a relationship model between two variables. One of these variable is called predictor variable whose value is gathered through experiments. The other variable is called response variable whose value is derived from the predictor variable.  
+
+In Linear Regression these two variables are related through an equation, where exponent (power) of both these variables is 1. Mathematically a linear relationship represents a straight line when plotted as a graph. A non-linear relationship where the exponent of any variable is not equal to 1 creates a curve.  
+
+The general mathematical equation for a linear regression is −  
+
+```
+y = ax + b
+```
+
+- **y** is the response variable.  
+- **x** is the predictor variable.  
+- **a** and **b** are constants which are called the coefficients.  
+
+### Steps to Establish a Regression  
+A simple example of regression is predicting weight of a person when his height is known. To do this we need to have the relationship between height and weight of a person.  
+
+The steps to create the relationship is −  
+
+- Carry out the experiment of gathering a sample of observed values of height and corresponding weight.  
+- Create a relationship model using the `lm()` functions in R.  
+- Find the coefficients from the mode created and create the mathematical equation using these  
+- Get a summary of the relationship model to know the average error in prediction. Also called **residuals**.  
+- To predict the weight of new persons, use the **predict()** function in R.  
+
+```{r}
+height <- c(151, 174, 138, 186, 128, 136, 179, 163, 152, 131)
+weight <- c(63, 81, 56, 91, 47, 57, 76, 72, 62, 48)
+```
+
+
+```
+lm(formula, data)
+```
+
+Following is the description of the parameters used -  
+
+- **formula** is a symbol presenting the relationship between x and y.  
+- **data** is the vector on which the formula will be applied.  
+
+```{r}
+relation <- lm(height ~ weight) 
+# weight is the predictor variable, height is the response variable
+
+relation
+```
+
+```{r}
+relation %>% class()
+
+methods(class = "lm")
+```
+
+
+```{r}
+summary(relation)
+```
+
+
+```{r}
+coef(relation)
+```
+
+```{r}
+residuals(relation)
+```
+
+**predict() function**  
+```
+predict(object, newdata)
+```
+
+- **object** is the formula which is already created using `lm()` function.  
+- **newdata** is the vector containing the new value for predictor variable.  
+
+```{r}
+a <- data.frame(weight = 80)
+predict(relation, a)
+```
+
+
+```{r}
+plot(weight, height, pch = 19, col = "blue")
+abline(relation, col = "grey", lty = 2)
+```
+
+
+## Multiple Regresssion  
+Multiple regression is an extension of linear regression into relationship between more than two variables. In simple linear relation we have one predictor and one response variable, but in multiple regression we have more than one predictor variable and one response variable.  
+
+The general mathematical equation for multiple regression is -  
+
+y = a + b~1~x + b~2~x + ... + b~n~x~n~
+
+
+- **y** is the response variable  
+- **a**, **b**, ..., **b~n~** are the coefficents  
+- **x1**, **x2**, ..., **x~n~** are the predictor variables  
+
+We create the regression model using the lm() function in R. The model determines the value of the coefficients using the input data. Next we can predict the value of the response variable for a given set of predictor variables using these coefficients.  
+
+**lm() function**
+```
+lm(y ~ x1 + x2 + ..., data)
+```
+
+```{r}
+input <- mtcars[, c("mpg", "disp", "hp", "wt")]
+
+input %>% head()
+```
+
+```{r}
+model <- lm(mpg ~ disp + hp + wt, data = input)
+
+model
+```
+
+```{r}
+coef(model)
+```
+
+**prediction**    
+```{r}
+df <- data.frame(disp = 221, hp = 102, wt = 2.91)
+
+predict(model, df)
+```
+
+
+## Logistic Regression  
+The Logistic Regression is a regression model in which the response variable (dependent variable) has categorical values such as True/False or 0/1. **It actually measures the probability of a binary response as the value of response variable based on the mathematical equation relating it with the predictor variables**.  
+
+The general mathematical equation for logistic regression is -  
+
+y = 1/(1 + e^-(a + b~1~x~1~ + b~2~x~2~ + b~3~x~3~ + ...))
+
+- **y** is the response variable  
+- **x** is the predictor variable  
+- **a** and **b** are the coefficients which are numeric constants.   
+
+The function used to create the regression model is the **glm()** function.  
+
+```
+glm(formula, data, family)
+```
+
+- **formula** is the symbol presenting the relationship between the variables.  
+- **data** is the data set giving the value of these variables.  
+- **family** is R object to specify the details of the model. It's value is binomial for logistic regression.  
+
+```{r}
+input <- mtcars[, c("am", "cyl", "hp", "wt")]
+
+input %>% head()
+```
+
+```{r}
+am.data <- glm(formula = am ~ cyl + hp + wt, data = input, family = binomial)
+
+am.data
+```
+
+```{r}
+summary(am.data)
+```
+
+
+**conclusion**  
+In the summary as the p-value in the last column is more than 0.05 for the variables "cyl" and "hp", we consider them to be insignificant in contributing to the value of the variable "am". Only weight (wt) impacts the "am" value in this regression model.   
+
+
+## Normal Distribution  
+In a random collection of data from independent sources, it is generally observed that the distribution of data is normal. Which means, on plotting a graph with the value of the variable in the horizontal axis and the count of the values in the vertical axis we get a bell shape curve. The center of the curve represents the mean of the data set. In the graph, fifty percent of values lie to the left of the mean and the other fifty percent lie to the right of the graph. This is referred as normal distribution in statistics.  
+
+R built-in normal functions  
+
+```
+dnorm(x, mean, sd)
+pnorm(x, mean, sd)
+qnorm(p, mean, sd)
+rnorm(n, mean, sd)
+```
+
+- **x** is a vector of numbers.  
+- **p** is a vector of probabilities.  
+- **n** is number of observations (sample size).  
+- **mean** is the mean value of the sample data. It's default value is zero.  
+- **sd** is the standard deviation. It's default value is 1.  
+
+### dnorm  
+This function gives height of the probability distribution at each point for a given mean and standard deviation.  
+
+```{r}
+x <- seq(-10, 10, by = 0.1)
+y <- dnorm(x, mean = 2.5, sd = 0.5)
+
+plot(x, y, type = "b", cex = 0.7, pch = 19)
+```
+
+### pnorm  
+This function gives the probability of a normally distributed random number to be less that the value of a given number. It is also called "Cumulative Distribution Function".   
+
+```{r}
+x <- seq(-10, 10, 0.2)
+y <- pnorm(x, mean = 2.5, sd = 2)
+
+plot(x, y, pch = 19)
+```
+
+### qnorm  
+This function takes the probability value and gives a number whose cumulative value matches the probability value.  
+
+```{r}
+x <- seq(0, 1, by = 0.02)
+y <- qnorm(x, mean = 2, sd = 1)
+
+plot(x, y, pch = 19)
+```
+
+### rnorm  
+This function is used to generate random numbers whose distribution is normal. It takes the sample size as input and generates that many random numbers.  
+
+```{r}
+y <- rnorm(n = 1000)
+hist(y， breaks = 20)
+```
+
+
+## Binomial Distribution  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
