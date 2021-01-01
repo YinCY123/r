@@ -239,7 +239,7 @@ input %>% head()
 ```
 
 ```{r}
-am.data <- glm(formula = am ~ cyl + hp + wt, data = input, family = binomial)
+am.data <- glm(formula = am ~ cyl + hp + wt, data = input, family = "binomial")
 
 am.data
 ```
@@ -306,20 +306,224 @@ This function is used to generate random numbers whose distribution is normal. I
 
 ```{r}
 y <- rnorm(n = 1000)
-hist(y， breaks = 20)
+hist(y, breaks = 20)
 ```
 
 
 ## Binomial Distribution  
+The binomial distribution model deals with finding the probability of success of an event which has only two possible outcomes in a series of experiments. For example, tossing of a coin always gives a head or a tail. The probability of finding exactly 3 heads in tossing a coin repeatedly for 10 times is estimated during the binomial distribution.  
+
+R has four in-built functions to generate binomial distribution:  
+
+```
+dbinom(x, size, prob)
+pbinom(x, size, prob)
+qbinom(p, size, prob)
+rbinom(n, size, prob)
+```
+
+- **x** is a vector of numbers.  
+- **p** is a vector of probabilities.  
+- **n** is number of observations.  
+- **size** is the number of trials.  
+- **prob** is the probability of success of each trial.  
+
+### dbinom  
+This function gives the probability density distribution at each point.  
+
+```{r}
+x <- seq(0, 50, 1)
+y <- dbinom(x, size = 50, prob = 0.5)
+
+plot(x, y, pch = 19)
+abline(v = 25)
+```
+
+### pbinom  
+This function gives the cumulative probability of an event. It is a single value representing the probability.  
+
+```{r}
+# Probability of getting 26 or less heads from a 51 tosses of a coin.
+q <-  seq(1, 51, 1)
+x <- pbinom(q, size = 51, prob = 0.5)
+plot(q, x, pch = 19)
+```
+
+### qbinom  
+This function takes the probability value and gives a number whose cumulative value matches the probability value.  
+
+```{r}
+# How many heads will have a probability of 0.25 will come out when a coin
+# is tossed 51 times.  
+
+x <- qbinom(p = 0.25, size = 51, prob = 0.5)
+x
+```
 
 
+### rbinom  
+This function generates required number of random values of given probability from a given sample.  
+
+```{r}
+# Find 8 random values from a sample of 150 with probability of 0.4.  
+
+x <- rbinom(8, 150, 0.4)
+x
+```
 
 
+## Poisson Regression  
+Poisson Regression involves regression models in which the response variable is in the form of counts and not fractional numbers. For example, the count of number of births or number of wins in a football match series. Also the values of the response variables follow a Poisson distribution.  
+
+The general mathematical equation for Poisson regression is  
+
+```
+log(y) = a + b~1~x~1~ + b~2~x~2~ + ... + b~n~x~n~
+```
+
+- **y** is the response variable.  
+- **a** and **b** are the numeric coefficients.  
+- **x** is the predictor variable.  
+
+The function used to create the poisson regression model is the **glm()** function.  
+
+```
+glm(formula, data, family)
+```
+
+- **formula** is the symbol presenting the relationship between the variables.  
+- **data** is the data set giving the value of these variables.  
+- **family** is R object to specify the details of the model. It's value is 'Poisson' for Logistic Regression.  
 
 
+**Example**  
+We have the in-built data set "warpbreaks" which describes the effect of wool type (A or B) and tension (low, medium or high) on the number of warp breaks per loom. Let's consider "breaks" as the response variable which is a count of number of breaks. The wool "type" and "tension" are taken as predictor variables.  
+
+```{r}
+input <- warpbreaks
+input %>% head()
+```
+
+```{r}
+output <- glm(formula = breaks ~ wool + tension, 
+              data = warpbreaks, 
+              family = "poisson")
+
+summary(output)
+```
+
+In the summary we look for the p-value in the last column to be less than 0.05 to consider an impact of the predictor variable on the response variable. As seen the wooltype B having tension type M and H have impact on the count of breaks.  
 
 
+## Analysis of Covariance  
+We use Regression analysis to create models which describe the effect of variation in predictor variables on the response variable. Sometimes, if we have a categorical variable with values like Yes/No or Male/Female etc. The simple regression analysis gives multiple results for each value of the categorical variable. In such scenario, we can study the effect of the categorical variable by using it along with the predictor variable and comparing the regression lines for each level of the categorical variable. Such an analysis is termed as **Analysis of Covariance** also called as **ANCOVA**.  
 
+**Example**  
+Consider the R built in data set mtcars. In it we observer that the field "am" represents the type of transmission (auto or manual). It is a categorical variable with values 0 and 1. The miles per gallon value(mpg) of a car can also depend on it besides the value of horse power("hp").  
+
+We study the effect of the value of "am" on the regression between "mpg" and "hp". It is done by using the `aov()` function followed by the `anova()` function to compare the multiple regressions.  
+
+```{r}
+input <- mtcars[, c("am", "mpg", "hp")]
+input %>% head()
+```
+
+
+**ANCOVA Analysis**  
+We create a regression model taking "hp" as the predictor variable and "mpg" as the response variable taking into account the interaction between "am" and "hp".  
+
+Model with interaction between categorical variable and predictor variable  
+```{r}
+result <- aov(formula = mpg ~ hp * am, data = input)
+summary(result)
+```
+
+This result shows that both horse power and transmission type has significant effect on miles per gallon as the p value in both cases is less than 0.05. But the interaction between these two variables is not significant as the p-value is more than 0.05.  
+
+
+Model without interaction between categorical variable and predictor variable.  
+```{r}
+input <- mtcars
+
+result <- aov(mpg ~ hp + am, data = input)
+summary(result)
+```
+
+This result shows that both horse power and transmission type has significant effect on miles per gallon as the p value in both cases is less than 0.05.  
+
+**Comparing Two Models**
+Now we can compare the two models to conclude if the interaction of the variables is truly in-significant. For this we use the `anova()` function.  
+
+```{r}
+input <- mtcars
+
+result1 <- aov(mpg ~ hp * am, data = input)
+result2 <- aov(mpg ~ hp + am, data = input)
+
+# compare the two models  
+anova(result1, result2)
+```
+
+As the p-value is greater than 0.05 we conclude that the interaction between horse power and transmission type is not significant. So the mileage per gallon will depend in a similar manner on the horse power of the car in both auto and manual transmission mode.  
+
+
+## Time Series Analysis  
+Time series is a series of data points in which each data point is associated with a timestamp. A simple example is the price of a stock in the stock market at different points of time on a given day. Another example is the amount of rainfall in a region at different months of the year. R language uses many functions to create, manipulate and plot the time series data. The data for the time series is stored in an R object called time-series object. It is also a R data object like a vector or data frame.  
+
+The time series object is created by using the `ts()` function.  
+
+```
+ts(data, start, end, frequency)
+```
+
+- **data** is a vector or matrix containing the value used in the time series.  
+- **start** specifies the start time for the first observation in time series.  
+- **end** specifies the end time for the last observation in time series.  
+- **frequency** specifies the number of observations per unit time.  
+
+**Example**  
+Consider the annual rainfall details at a place starting from January 2012. We create an R time series object for a period of 12 months and plot it.  
+
+```{r}
+rainfall <- c(799,1174.8,865.1,1334.6,635.4,918.5,685.5,998.6,784.2,985,882.8,1071)
+
+# convert it to a time series data.  
+rainfall.timeseries <- ts(data = rainfall, 
+                         start = c(2012, 1), 
+                         frequency = 12)
+
+plot(rainfall.timeseries)
+```
+
+
+**Different Time intervals**  
+The value of the frequency parameter in the ts() function decides the time intervals at which the data points are measured. A value of 12 indicates that the time series is for 12 months. Other values and its meaning is as below  
+
+- **frequency=12** peges the data points for every moth of a year.  
+- **frequency=4** peges the data points for every quarter of a year.  
+- **frequency=6** peges the data points every 10 minutes of an hour.  
+- **frequency=24 x 6** peges the data points for every 10 minutes of a day.  
+
+
+**Multiple Time Series**  
+We can plot multiple time series in one chart by combinin both the series into a matrix.  
+
+```{r}
+rainfall1 <- c(799,1174.8,865.1,1334.6,635.4,918.5,685.5,998.6,784.2,985,882.8,1071)
+rainfall2 <- c(655,1306.9,1323.4,1172.2,562.2,824,822.4,1265.5,799.6,1105.6,1106.7,1337.8)
+
+# convert to matrix  
+combined.rainfall <- matrix(c(rainfall1, rainfall2), nrow = 12, byrow = F)
+
+# convert to time series 
+rainfall.timeseries <- ts(combined.rainfall, start = c(2012, 1), frequency = 12)
+
+
+plot(rainfall.timeseries, main = "Multiple Time Series")
+```
+
+
+## Nonlinear Least Square  
 
 
 
