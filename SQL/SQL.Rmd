@@ -1,0 +1,55 @@
+---
+title: "SQL"
+author: "yincy"
+date: "12/27/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Learn from [this site](https://blog.jooq.org/2016/03/17/10-easy-steps-to-a-complete-understanding-of-sql/)
+
+# 1. SQL syntax is not "well-ordered"  
+
+**lexical order**  
+- SELECT [DISTINCT]  
+- FROM  
+- WHERE  
+- GROUP BY  
+- HAVING  
+- UNION  
+- ORDER BY  
+
+
+**logical order**  
+- FROM  
+- WHERE  
+- GROUP BY  
+- HAVING  
+- SELECT  
+- DISTINCT  
+- UNION  
+- ORDER BY  
+
+
+# 2. SQL is about table references  
+The "output" of the FROM claus is a combined table reference of the combined degreee of all table references.   
+
+```
+FROM a, b
+```
+
+The above produces a combined table reference of the degreee of a + the degree of b. If a has 3 columns and b has 5 columns, then the "output table" will have 8 (3 + 5) columns.  
+
+The records contained in this combined table reference are those of the cross product / cartesian product of a x b. In other words, each record of a is paired with each record of b. If a has 3 records and b has 5 records, then the above combined table reference will produce 15 records (3 x 5).  
+
+If we're looking at these things from a relational algebra / set theory perspective, a SQL table is a *relation* or *set of tuples*. And each SQL clause will transform one or serveral relations in order to produce new relations.  
+
+
+# 3. SQL table reference can be rather powerfull  
+
+
+
+
