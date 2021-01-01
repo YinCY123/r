@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Chapter 1 Data Types  
 The `<-` operator for the assignment will work in any context while the `=` operator only works for complete expressions.  
 
-Another option is to use the `<<-` operator. The advantage of the `<<-` operator is that it instructs the R environment to search parent environments to see whether the variable already exists. In some contexts, within a function for example, the `<-` operator will create a new variable; however, the `<<-` operator will make use of an existing variable outside of the function if it is found.   
+Another option is to use the `<<-` operator. The advantage of the `<<-` operator is that it instructs the R environment to search parent environments to see whether the variable already exists. In some contexts, within a function for example, the `<-` operator will create a new variable; however, **the `<<-` operator will make use of an existing variable outside of the function if it is found**.   
 
 
 reverse assignment: -> or ->>  
@@ -628,10 +628,10 @@ repeat {
         
         angle <- angle + rnorm(1, 0, stdDev)
         currentPos <- currentPos + exp(angle * 1.0i)
-        positions <- c(positions, currentPos)
+        positions <- append(positions, currentPos)
 }
 
-plot(Re(positions), Im(positions), type = "l")
+plot(Re(positions), Im(positions), type = "l", pch = 19, cex = 0.5)
 ```
 
 
@@ -660,7 +660,6 @@ repeat{
 
 plot(Re(positions), Im(positions), type = "l")
 ```
-
 
 
 #### Functions  
@@ -804,8 +803,8 @@ updatePosition(0, 0)
 updatePosition(0, 0, "uniform")
 ```
 
-```
-updatePosition(0, 0, "neither")
+```{r}
+updatePosition(0, 0, "nor")
 ```
 
 
@@ -919,7 +918,7 @@ farmerJoe$sellRutabagas(10)
 ### Defining classes and methods  
 The `class` command is similar to other attribute commands, and it can be used to either set or get information about an object's class.  
 
-An object's class is a vector, and each item in the vector is the name of a class. The first element in the class vector is the object's base class, and it inherits from the other classes as you read from left to right.  
+**An object's class is a vector, and each item in the vector is the name of a class. The first element in the class vector is the object's base class, and it inherits from the other classes as you read from left to right**.  
 
 ```{r}
 oneDie <- list(trials = character(0))
@@ -987,7 +986,8 @@ v
 
 
 ### Defining objects and inheritance  
-define class function and inheritance  
+define class function and inheritance.  
+
 ```{r}
 GeometricTrial <- function(){
         # Create the basic data structure - a list that keeps track of a set of trials.  
@@ -1012,6 +1012,8 @@ Die <- function(){
         class(me) <- append(x = class(me), values = "Die")
         return(me)
 }
+
+Die()
 ```
 
 ```{r}
@@ -1023,6 +1025,8 @@ Coin <- function(){
         class(me) <- append(x = class(me), values = "Coin")
         return(me)
 }
+
+Coin()
 ```
 
 define methods  
@@ -1078,7 +1082,7 @@ singleTrial.Coin <- function(theObject){
 
 singleTrial.Die <- function(theObject){
         # perform a single die roll
-        value <- as.integer(1 + trunc(runif(1, 0, 100)))
+        value <- as.integer(1 + trunc(runif(1, 0, 6)))
         return(list(result = value, success = (value == 1)))
 }
 ```
