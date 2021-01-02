@@ -245,6 +245,17 @@ am.data
 ```
 
 ```{r}
+set.seed(111)
+df <- data.frame(cyl = sample(c(4, 6, 8), 10, replace = T), 
+                 hp = runif(n = 10, min = 90, max = 120), 
+                 wt = runif(n = 10, min = 2.3, max = 3.5))
+
+
+predict(am.data, newdata = df)
+```
+
+
+```{r}
 summary(am.data)
 ```
 
@@ -402,13 +413,26 @@ We have the in-built data set "warpbreaks" which describes the effect of wool ty
 ```{r}
 input <- warpbreaks
 input %>% head()
+
+input %>% dplyr::pull(wool) %>% unique()
+input %>% dplyr::pull(tension) %>% unique()
 ```
 
 ```{r}
 output <- glm(formula = breaks ~ wool + tension, 
               data = warpbreaks, 
               family = "poisson")
+```
 
+```{r}
+df <- data.frame(wool = sample(c("A", "B"), size = 10, replace = T), 
+                 tension = sample(c("L", "M", "H"), 10, replace = T))
+
+predict.glm(output, df)
+```
+
+
+```{r}
 summary(output)
 ```
 
@@ -451,8 +475,8 @@ summary(result)
 
 This result shows that both horse power and transmission type has significant effect on miles per gallon as the p value in both cases is less than 0.05.  
 
-**Comparing Two Models**
-Now we can compare the two models to conclude if the interaction of the variables is truly in-significant. For this we use the `anova()` function.  
+**Comparing Two Models**  
+Now we can **compare the two models to conclude if the interaction of the variables is truly in-significant**. For this we use the `anova()` function.  
 
 ```{r}
 input <- mtcars
@@ -497,7 +521,7 @@ plot(rainfall.timeseries)
 
 
 **Different Time intervals**  
-The value of the frequency parameter in the ts() function decides the time intervals at which the data points are measured. A value of 12 indicates that the time series is for 12 months. Other values and its meaning is as below  
+The value of the frequency parameter in the `ts()` function decides the time intervals at which the data points are measured. A value of 12 indicates that the time series is for 12 months. Other values and its meaning is as below  
 
 - **frequency=12** peges the data points for every moth of a year.  
 - **frequency=4** peges the data points for every quarter of a year.  
@@ -524,8 +548,95 @@ plot(rainfall.timeseries, main = "Multiple Time Series")
 
 
 ## Nonlinear Least Square  
+When modeling real world data for regression analysis, we observe that it is rarely the case that the equation of the model is a linear equation giving a linear graph. Most of the time, the equation of the model of real world data involves mathematical functions of higher degree like an exponent of 3 or a sin function. In such a scenario, the plot of the model gives a curve rather than a line. The goal of both linear and non-linear regression is to adjust the values of the model's parameters to find the line or curve that comes closest to your data. On finding these values we will be able to estimate the response variable with good accuracy.  
+
+In Least Square regression, we establish a regression model in which the sum of the squares of the vertical distances of different points from the regression curve is minimized. We generally start with a defined model and assume some values for the coefficients. We then apply the `nls()` function of R to get the more accurate values along with the confidence intervals.  
+
+```
+nls(formula, data, start)
+```
+
+- **formula** is a nonlinear model formula including variables and parameters.  
+- **data** is a data frame used to evaluate the variables in the formula.  
+- **start** is a named list or named numeric vector of starting estimates.  
 
 
+**Examples**  
+We will consider a nonlinear model with assumption of initial values of its coefficients. Next we will see what is the confidence intervals of these assumed values so that we can judge how well these values fir into the model.  
+
+a = b1 * x^2^ + b2
+
+Let's assume the initial coefficients to be 1 and 3 and fit these values into nls() function.  
+
+```{r}
+x <- c(1.6,2.1,2,2.23,3.71,3.25,3.4,3.86,1.19,2.21)
+y <- c(5.19,7.43,6.94,8.11,18.75,14.88,16.06,19.12,3.21,7.58)
+
+model <- nls(y ~ b1 * x ^ 2 + b2 , 
+             start = list(b1 = 1, b2 = 3))
+
+
+df <- data.frame(
+    x = seq(min(x), max(x), len = 100)
+)
+```
+
+```{r}
+plot(x, y)
+lines(df$x, predict(model, df))
+```
+
+get the sum of the squared residuals.  
+```{r}
+sum(residuals(model)^2)
+```
+
+
+get the confidence intervals on the chosen values of the coefficients.  
+```{r}
+confint(model)
+```
+
+We can conclude that the value of b1 is more close to 1 while the value of b2 is more close to 2 and not 3.  
+
+```{r}
+summary(model)
+```
+
+
+## Decison Tree  
+Decision tree is a graph to represent choices and their results in form of a tree. The nodes in the graph represent an event or choice and the edges of the graph represent the decision rules or conditions. It is mostly used in Machine Learning and Data Mining applications using R.  
+
+Examples of use of decision tress is − predicting an email as spam or not spam, predicting of a tumor is cancerous or predicting a loan as a good or bad credit risk based on the factors in each of these. Generally, a model is created with observed data also called training data. Then a set of validation data is used to verify and improve the model. R has packages which are used to create and visualize decision trees. For new set of predictor variable, we use this model to arrive at a decision on the category (yes/No, spam/not spam) of the data.  
+
+The R package `party`'s `ctree()` function is used to create decision trees
+
+```{r, message=FALSE}
+library(party)
+```
+
+```
+ctree(formula, data)
+```
+
+- **formula** is a formula describing the predictor and response variables.  
+- **data** is the name of the data set used.  
+
+We will use the R in-built data set named **readingSkills** to create a decision tree. It describes the score of someone's readingSkills if we know the variables "age","shoesize","score" and whether the person is a native speaker or not.  
+
+```{r}
+readingSkills %>% head()
+
+input <- readingSkills[1:105, ]
+
+# create the tree
+output.tree <- ctree(
+    formula = nativeSpeaker ~ age + shoeSize + score, 
+    data = input
+)
+
+plot(output.tree)
+```
 
 
 
