@@ -638,13 +638,112 @@ output.tree <- ctree(
 plot(output.tree)
 ```
 
+## Random Forest  
+In the random forest approach, a large number of decision trees are created. Every observation is fed into every decision tree. The most common outcome for each observation is used as the final output. A new observation is fed into all the trees and taking a majority vote for each classification model.  
+
+An error estimate is made for the cases which were not used while building the tree. That is called an **OOB (Out-of-bag)** error estimate which is mentioned as a percentage.  
+
+The R package **"randomForest"** is used to create random forests.  
+
+```{r, message=FALSE}
+library(randomForest)
+library(party)
+```
+
+The function `randomForest()` which is used to create and analyze random forest.  
+
+```
+randomForest(formula, data)
+```
+
+- **formula** is a formula describing the predictor and response variables.  
+- **data** is the name of the data set used.  
+
+We will use the R in-built data set named readingSkills to create a decision tree. It describes the score of someone's readingSkills if we know the variables "age","shoesize","score" and whether the person is a native speaker.  
+
+```{r}
+readingSkills %>% head
+```
 
 
+**Example**  
+```{r}
+output.forest <- randomForest(nativeSpeaker ~ age + shoeSize + score, 
+                              data = readingSkills)
+
+output.forest
+```
+
+```{r}
+importance(output.forest, type = 2)
+```
+
+From the random forest shown above we can conclude that the shoesize and score are the important factors deciding if someone is a native speaker or not. Also the model has only 1% error which means we can predict with 99% accuracy.  
 
 
+## Survival Analysis  
+Survival analysis deals with predicting the time when a specific event is going to occur. It is also known as failure time analysis or analysis of time to death. For example predicting the number of days a person with cancer will survive or predicting the time when a mechanical system is going to fail.
 
+The R package named `survival` is used to carry out survival analysis. This package contains the function `Surv()` which takes the input data as a R formula and creates a survival object among the chosen variables for analysis. Then we use the function `survfit()` to create a plot for the analysis.  
 
+```{r}
+library(survival)
+```
 
+```
+Surv(time, event)
+survfit(formula)
+```
+
+- **time** is the follow up time until the event occurs.  
+- **event** indicates the status of occurrence of the expected event.  
+- **formula** is the relationship between the predictor variables.  
+
+**Example** 
+We will consider the data set named "pbc" present in the survival packages installed above. It describes the survival data points about people affected with primary biliary cirrhosis (PBC) of the liver. Among the many columns present in the data set we are primarily concerned with the fields "time" and "status". Time represents the number of days between registration of the patient and earlier of the event between the patient receiving a liver transplant or death of the patient.  
+
+```{r}
+pbc %>% head
+```
+
+**Applying Surv() and survfit() function**  
+
+```{r}
+survfit(Surv(pbc$time, pbc$stage == 2) ~ 1)
+
+plot(survfit(Surv(pbc$time, pbc$stage == 2) ~ 1))
+```
+
+The trend in the above graph helps us predicting the probability of survival at the end of a certain number of days.  
+
+## Chi Square Test  
+**Chi-Square test** is a statistical method to determine if two categorical variables have a significant correlation between them. Both those variables should be from same population and they should be categorical like − Yes/No, Male/Female, Red/Green etc.  
+
+For example, we can build a data set with observations on people's ice-cream buying pattern and try to correlate the gender of a person with the flavor of the ice-cream they prefer. If a correlation is found we can plan for appropriate stock of flavors by knowing the number of gender of people visiting.  
+
+```
+chisq.test(data)
+```
+
+- **data** is the data in form of a table containing the count value of the variables in the observation.  
+
+**Example**  
+We will take the Cars93 data in the "MASS" library which represents the sales of different models of car in the year 1993.  
+
+```{r}
+library(MASS)
+str(Cars93)
+```
+
+The above result shows the dataset has many Factor variables which can be considered as categorical variables. For our model we will consider the variables "AirBags" and "Type". Here we aim to find out any significant correlation between the types of car sold and the type of Air bags it has. If correlation is observed we can estimate which types of cars can sell better with what types of air bags.  
+
+```{r}
+car.data <- data.frame(Cars93$AirBags, Cars93$Type)
+car.data <- car.data %>% table()
+chisq.test(car.data)
+```
+
+The result shows the p-value of less than 0.05 which indicates a string correlation.   
 
 
 
