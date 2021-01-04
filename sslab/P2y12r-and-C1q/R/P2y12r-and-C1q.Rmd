@@ -353,64 +353,66 @@ intersects <- intersect(L3_DEG_order3, A3_DEG_order3)
 ```
 
 
-## GO  
-```{r}
-go_list_pvn_2 <- readxl::read_xlsx(path = "GO list/20200812_geneid_updown_go_list_PVN_uniq.xlsx", 
-                                   sheet = 1)
-
-go_list_pvn_2 %>% 
-    as_tibble() %>% 
-    dplyr::arrange(pvalue) %>% 
-    head(n = 100) %>% 
-    pull(geneID) %>% 
-    str_c(collapse = "/") %>% 
-    str_split(pattern = "/") %>% 
-    .[[1]] %>% 
-    unique() 
-```
-
-
-```{r}
-files <- list.files(path = "GO list", pattern = "BS_|CTX_", full.names = T)
-sheets <- c("3up_GO", "3down_GO", "co_up_GO", "co_down_GO")
-file_names <- c("BS_2.xlsx", "BS_uniq.xlsx", "CTX_2.xlsx", "CTX_uniq.xlsx")
-
-for(i in files[4]){
-    for(sheet in sheets){
-        p <- read.xlsx(file = i, sheetName = sheet)
-        p$overlap <- p$geneID %>% str_split(pattern = "/") %>% 
-            lapply(FUN = intersect, y = intersects) %>% 
-            sapply(FUN = str_c, collapse = "/")
-        write.xlsx(x = p, file = "CTX_uniq.xlsx", append = T, sheetName = sheet)
-    }
-}
-```
-
 ## top 100 GO term genes  
 ```{r}
-brain_region <- rep(c("BS", "CTX", "PVN"), each = 8)
-file_index <- rep(rep(c("2", "uniq"), each = 4), time = 3)
-sheets <- rep(c("3up_GO", "3down_GO", "co_up_GO", "co_down_GO"), time = 6)
-files <- paste("GO list/", list.files(path = "GO list", pattern = "_PVN_|_BS_|_CTX_"), sep = "") %>% rep(each = 4)
+# brain_region <- rep(c("BS", "CTX", "PVN"), each = 8)
+# file_index <- rep(rep(c("2", "uniq"), each = 4), time = 3)
+# sheets <- rep(c("3up_GO", "3down_GO", "co_up_GO", "co_down_GO"), time = 6)
+# files <- paste("../data/GO list/", 
+#                list.files(path = "../data/GO list", 
+#                           pattern = "_PVN_|_BS_|_CTX_"), 
+#                sep = "") %>% 
+#   rep(each = 4)
 
-out <- paste(brain_region, file_index, sheets, sep = "_")
+library(readxl)
+
+# using data in 20201204 folder
+files <- list.files(path = "../data/20201204/", full.names = T)
+brain_region <- rep(c("BS", "CTX", "PVN"), each = 4)
+treatments <- rep(c("3L", "3A", "14L", "14A"), time = 3)
+change <- c("GO_up", "GO_down")
+sheets <- paste(brain_region, treatments, sep = "_")
 
 out_list <- list()
-len <- c()
 
-for(i in seq_along(out)){
-    x <- xlsx::read.xlsx(file = files[i], sheetName = sheets[i]) %>% 
-        tibble::as_tibble() %>% 
-        dplyr::arrange(pvalue) %>% 
-        head(n = 100) %>% 
-        dplyr::pull(geneID) %>% 
-        stringr::str_c(collapse = "/") %>% 
-        stringr::str_split(pattern = "/") %>% 
-        .[[1]] %>% 
-        unique()
-    y <- length(x)
-    out_list[[i]] <- x
+
+for(i in seq_along(files)){
+  if(grepl("GO_down", files[i])){
+    out_names <- paste(sheets, "GO_down", sep = "_")
+  }else{
+    out_names <- paste(sheets, "GO_up", sep = "_")
+  }
+  for(j in seq_along(brain_region)){
+    x <- read_xlsx(path = files[i], sheet = sheets[j]) %>% 
+      as_tibble() %>% 
+      arrange(pvalue) %>% 
+      head(n = 100) %>% 
+      pull(geneID) %>% 
+      str_c(collapse = "/") %>% 
+      str_split(pattern = "/") %>% 
+      .[[1]] %>% 
+      unique()
+    out_list[[out_names[j]]] <- x
+  }
 }
+
+names(out_list)
+
+# for(i in seq_along(out)){
+#     x <- readxl::read_xlsx(path = files[i], sheet = sheets[i]) %>% 
+#         tibble::as_tibble() %>% 
+#         dplyr::arrange(pvalue) %>% 
+#         head(n = 100) %>% 
+#         dplyr::pull(geneID) %>% 
+#         stringr::str_c(collapse = "/") %>% 
+#         stringr::str_split(pattern = "/") %>% 
+#         .[[1]] %>% 
+#         unique()
+#     y <- length(x)
+#     out_list[[i]] <- x
+# }
+# 
+# names(out_list) <- out
 ```
 
 ```{r}
@@ -420,20 +422,22 @@ df <- out_list %>%
     tibble::rownames_to_column("group") %>% 
     magrittr::set_colnames(c("group", "symbol"))
 
-df$sample <- gsub(pattern = "[0-9]{,2}$", replacement = "", x = df$sample)
+df$group <- gsub(pattern = "[0-9]{,2}$", replacement = "", x = df$group)
 
-df %>% 
-    group_by(sample) %>% 
-    summarise(n_genes = n()) %>% 
-    arrange(sample) %>% 
-    write.csv(file = "number_of_unique_genes_per_group.csv", 
+df %>%
+#  filter(!(nchar(symbol) == 0)) %>% 
+  group_by(group) %>% 
+  summarise(n_genes = n()) %>% 
+  mutate(n_genes = ifelse(n_genes == 1, 0, n_genes)) %>% 
+  arrange(group) %>% 
+  write.csv(file = "../res/P2ry12/number_of_unique_genes_per_group-20200104.csv", 
               row.names = F, 
               quote = F)
 ```
 
 ```{r}
 df %>% 
-    write.csv(file = "genes_per_group.csv", row.names = F, quote = F)
+    write.csv(file = "../res/P2ry12/genes_per_group-20200104.csv", row.names = F, quote = F)
 ```
 
 
