@@ -1,0 +1,61 @@
+---
+title: "neuron microglia"
+author: "yincy"
+date: "1/4/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# kv4.3 and Pdgfrb in KEGG pathway  
+
+```{r, message=FALSE}
+library(tidygraph)
+library(ggraph)
+library(igraph)
+library(org.Mm.eg.db)
+```
+
+
+```{r}
+kegg_pathways <- readRDS(file = "../../P2y12r-and-C1q/data/KEGG/KEGG_pathways_formatted.rds")
+names_to_display <- readRDS(file = "../../P2y12r-and-C1q/data/KEGG/names_to_display.rds")
+```
+
+
+```{r}
+genes_info <- select(x = org.Mm.eg.db, 
+                    keys = c("Kcnd3", "Pdgfrb"), 
+                    keytype = "SYMBOL", 
+                    columns = c("SYMBOL", "ENTREZID", "ENSEMBL"))
+
+genes_info
+```
+
+```{r}
+ig <- graph_from_data_frame(d = kegg_pathways, directed = T)
+
+x <- shortest_paths(graph = ig, 
+                    from = V(ig)$name == "18596", 
+                    to = V(ig)$name == "56543", 
+                    mode = "all")
+
+x
+```
+
+
+
+```{r}
+g <- tbl_graph(nodes = kegg_pathways[, 1:2], edges = kegg_pathways, directed = T)
+```
+
+```{r}
+kegg_pathways %>% 
+    as_tibble() %>% 
+    dplyr::filter(to == "56543")
+```
+
+
