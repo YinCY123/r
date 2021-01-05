@@ -112,51 +112,6 @@ pathview(gene.data = agg_FC_df,
 ```
 
 
-## parse pathway to data frame   
-```{r}
-KGML_files <- list.files(path = "/home/yincy/git/Data/KEGG/pathways/mouse/", 
-                         full.names = T, 
-                         pattern = ".xml$")
-# KGML_files <- KGML_files[file.size(KGML_files) < 2300000]
-
-df <- data.frame()
-for(i in KGML_files){
-    pathway <- do.call(
-        what = "parseKGML2DataFrame", 
-        args = list(
-            file = i, 
-            genesOnly = T, 
-            expandGene = T
-        )
-    )
-    df <- rbind(df, pathway)
-}
-
-df <- df %>% as_tibble()
-write.csv(x = df, file = "all_path_dataframe.csv", 
-          row.names = F, 
-          quote = F)
-
-all_path_df <- read.csv(file = "all_path_dataframe.csv", 
-                        stringsAsFactors = F)
-all_path_df %>% dim()
-all_path_df %>% pull(type) %>% table()
-all_path_df %>% pull(subtype) %>% table()
-
-all_path_df %>% head()
-all_path_df <- all_path_df %>% distinct(from, to, .keep_all = T)
-all_path_df %>% dim()
-
-from <- all_path_df %>% pull(from)
-to <- all_path_df %>% pull(to)
-c(from, to) %>% unique() %>% length()
-```
-
-```{r}
-all_path_df$from <- gsub("mmu:", "", all_path_df$from)
-all_path_df$to <- gsub("mmu:", "", all_path_df$to)
-all_path_df
-```
 
 ```{r}
 mmart <- useMart(biomart = "ensembl", dataset = "mmusculus_gene_ensembl")
@@ -366,10 +321,10 @@ intersects <- intersect(L3_DEG_order3, A3_DEG_order3)
 
 library(readxl)
 
-# using data in 20201204 folder
-files <- list.files(path = "../data/20201204/", full.names = T)
-brain_region <- rep(c("BS", "CTX", "PVN"), each = 4)
-treatments <- rep(c("3L", "3A", "14L", "14A"), time = 3)
+# using data in 20201204_common folder
+files <- list.files(path = "../data/20201204_common/", full.names = T)
+brain_region <- rep(c("BS", "CTX", "PVN"), each = 2)
+treatments <- rep(c("3", "14"), time = 3)
 change <- c("GO_up", "GO_down")
 sheets <- paste(brain_region, treatments, sep = "_")
 
@@ -397,6 +352,7 @@ for(i in seq_along(files)){
 }
 
 names(out_list)
+
 
 # for(i in seq_along(out)){
 #     x <- readxl::read_xlsx(path = files[i], sheet = sheets[i]) %>% 
@@ -430,288 +386,60 @@ df %>%
   summarise(n_genes = n()) %>% 
   mutate(n_genes = ifelse(n_genes == 1, 0, n_genes)) %>% 
   arrange(group) %>% 
-  write.csv(file = "../res/P2ry12/number_of_unique_genes_per_group-20200104.csv", 
+  write.csv(file = "../res/P2ry12/number_of_unique_genes_per_group-20210104.csv", 
               row.names = F, 
               quote = F)
 ```
 
 ```{r}
 df %>% 
-    write.csv(file = "../res/P2ry12/genes_per_group-20200104.csv", row.names = F, quote = F)
+    write.csv(file = "../res/P2ry12/genes_per_group-20210104.csv", row.names = F, quote = F)
 ```
+
+
 
 
 # PVN DGE in top100 GO DGE map to KEGG pathway  
 ## get intersects genes  
 ```{r}
-pvn_top_100_GO_DEG <- read.csv(file = "../res/P2ry12/genes_per_group.csv") %>% 
-    dplyr::filter(group %in% c("PVN_2_3up_GO", "PVN_2_3down_GO")) %>% 
-    .[[2]] %>% 
+pvn_top_100_GO_DEG <- df %>% 
+    dplyr::filter(grepl("^PVN_3", group)) %>% 
+    pull(symbol) %>% 
     unique()
 
-A3_DEG_order3_intersect <- read.csv(file = "../res/P2ry12/A3_DEG_order3_intersect.csv",
-                                    header = F) %>% .[[1]]
-
-L3_DEG_order3_intersect <- read.csv(file = "../res/P2ry12/L3_DEG_order3_intersect.csv", 
-                                    header = F) %>% .[[1]] 
-
-intersects_A3_L3 <- intersect(A3_DEG_order3_intersect, L3_DEG_order3_intersect)
-
-intersects_pvn_top100_DEG_A3_L3_DGE <- intersect(pvn_top_100_GO_DEG, intersects_A3_L3)
-```
-
-
-## parse pathway to data frame  
-```{r}
-KGML_files <- list.files(path = "/home/yincy/git/Data/KEGG/pathways/mouse", 
-                         full.names = T, 
-                         pattern = ".xml$")
-
-df <- data.frame()
-for(i in KGML_files){
-    pathway <- do.call(
-        what = "parseKGML2DataFrame", 
-        args = list(
-            file = i, 
-            genesOnly = F, 
-            expandGene = T, 
-            reaction = T
-        )
-    )
-    df <- rbind(df, pathway)
-}
-
-df <- df %>% tibble::as_tibble()
-write.csv(x = df, 
-          file = "../res/P2ry12/all_pathways_df.csv", 
-          row.names = F, 
-          quote = F)
-
-all_path_df <- read.csv(file = "../res/P2ry12/all_pathways_df.csv", 
-                        stringsAsFactors = F)
-
-all_path_df %>% dim()
-all_path_df %>% pull(type) %>% table()
-all_path_df %>% pull(subtype) %>% table()
-
-all_path_df %>% head()
-all_path_df <- all_path_df %>% distinct(from, to, .keep_all = T)
-all_path_df %>% dim()
-
-all_path_df %>% 
-  dplyr::filter(type == "maplink")
-
-all_path_df <- all_path_df %>% 
-  dplyr::filter(type != "maplink")
-all_path_df %>% dim()
-
-all_path_df$from <- gsub("mmu:", replacement = "", all_path_df$from)
-all_path_df$to <- gsub("mmu:", replacement = "", all_path_df$to)
-
-all_path_df %>% dim()
-all_path_df %>% head()
-```
-
-## add subtype information  
-```{r}
-subtype_element <- data.frame(
-  name = c("compound", "hidden compound", "activation", "inhibition", 
-           "expression", "repression", "indirect effect", "state change", 
-           "binding/association", "dissociation", "missing interaction", 
-           "phosphorylation", "dephosphorylation", "glycosylation", "ubiquitination", 
-           "methylation"), 
-  value = c(NA, 
-            NA, 
-            "-->", "--|", "-->", "--|", "..>", 
-            "...", "---", "-+-", "-/-",
-            "+p", "-p", "+g", "+u", "+m"), 
-  stringsAsFactors = F
-)
-
-subtype_element
-
-vl <- subtype_element$value
-names(vl) <- subtype_element$name
-
-all_path_df$subtype %>% unique()
-intersect(all_path_df$subtype %>% unique(), subtype_element$name)
-
-all_path_df$subtype_value <- vl[all_path_df$subtype]
-all_path_df %>% dplyr::filter(subtype != "compound")
-
-## add edge and node info
-all_path_df$angle <- ifelse(all_path_df$subtype == "inhibition", 90, 30)
-all_path_df$edge_label <- ifelse(grepl("[a-z]", all_path_df$subtype_value), all_path_df$subtype_value, NA)
-
-lty <- c(rep(1, 5), 5, 1, 3, 1, 5, 3, 5, 1, 3, 1)
-names(lty) <- all_path_df$subtype %>% unique() %>%  as.character()
-all_path_df$lty <- lty[all_path_df$subtype]
-all_path_df$lty <- ifelse(is.na(all_path_df$lty), 1, all_path_df$lty)
-all_path_df$edge_label <- ifelse(is.na(all_path_df$edge_label), "", all_path_df$edge_label)
-
-all_path_df %>% dplyr::filter(is.na(lty))
-```
-
-
-## add gene and compound information  
-```{r}
-# get KEGG compound information
-KEGG_compounds <- keggList("compound")
-KEGG_compounds[10:20]
-saveRDS(object = KEGG_compounds, file = "KEGG_compounds.rds")
-KEGG_compounds <- readRDS(file = "KEGG_compounds.rds")
-KEGG_compound_ids <- names(KEGG_compounds)
-
-pat_location <- str_locate(string = KEGG_compounds, pattern = ";")
-ll <- pat_location[, 1]
-
-KEGG_compounds_value <- as.vector(KEGG_compounds)
-KEGG_compounds_value[10:20]
-
-extracted_str <- c()
-for(i in seq_along(ll)){
-  if(is.na(ll[i])){
-    extracted_str <- append(extracted_str, KEGG_compounds_value[i])
-  }else{
-    extracted_str <- append(extracted_str, substr(KEGG_compounds_value[i], start = 1, stop = ll[i] - 1))
-  }
-}
-
-KEGG_compounds_to_display <- str_trim(extracted_str, "both")
-names(KEGG_compounds_to_display) <- KEGG_compound_ids
-KEGG_compounds_to_display[10:20]
+# A3_DEG_order3_intersect <- read.csv(file = "../res/P2ry12/A3_DEG_order3_intersect.csv",
+#                                     header = F) %>% .[[1]]
+# 
+# L3_DEG_order3_intersect <- read.csv(file = "../res/P2ry12/L3_DEG_order3_intersect.csv", 
+#                                     header = F) %>% .[[1]] 
+# 
+# intersects_A3_L3 <- intersect(A3_DEG_order3_intersect, L3_DEG_order3_intersect)
+# 
+# intersects_pvn_top100_DEG_A3_L3_DGE <- intersect(pvn_top_100_GO_DEG, intersects_A3_L3)
 ```
 
 ```{r}
-# get KEGG gene information
-KEGG_mmu_genes <- keggList("mmu")
-saveRDS(object = mmu_genes, file = "KEGG_mmu_genes.rds")
-KEGG_mmu_genes <- readRDS(file = "KEGG_mmu_genes.rds")
-KEGG_mmu_genes %>% head()
+formatted_pathways <- readRDS(file = "../data/KEGG/KEGG_pathways_formatted.rds")
+g <- as_tbl_graph(formatted_pathways[, 1:2], directed = T)
+
+dist_to_p2ry12 <- g %>% 
+  mutate(dist = bfs_dist(root = .N()$name == "70839", mode = "out")) %>% 
+  as_tibble() %>% 
+  filter(!is.na(dist))
 
 library(org.Mm.eg.db)
-KEGG_mmu_genes_df <- select(x = org.Mm.eg.db, 
-                       keys = KEGG_mmu_genes, 
-                       keytype = "ENTREZID", 
-                       columns = c("ENTREZID", "SYMBOL"))
-KEGG_mmu_genes_df
 
-KEGG_mmu_genes_to_display <- KEGG_mmu_genes_df$SYMBOL
-names(KEGG_mmu_genes_to_display) <- KEGG_mmu_genes_df$ENTREZID
-KEGG_mmu_genes_to_display %>% head()
+dist_to_p2ry12$symbol <- mapIds(org.Mm.eg.db, 
+                                keys = dist_to_p2ry12$name, 
+                                keytype = "ENTREZID", 
+                                column = "SYMBOL") 
+
+dist_to_p2ry12 <- dist_to_p2ry12 %>% 
+  relocate(symbol, name)
+
+top100_GO_DEG3_inter_p2ry12_down_streams <- intersect(dist_to_p2ry12$symbol, pvn_top_100_GO_DEG)
 ```
 
-```{r}
-# get KEGG glycan information  
-KEGG_glycan <- keggList("glycan")
-saveRDS(object = KEGG_glycan, file = "KEGG_glycan.rds")
-KEGG_glycan <- readRDS(file = "KEGG_glycan.rds")
-KEGG_glycan %>% head()
-
-KEGG_glycan_ids <- names(KEGG_glycan)
-KEGG_glycan_ids %>% head()
-
-KEGG_glycan_values <- KEGG_glycan %>% as.vector()
-KEGG_glycan_values %>% head()
-
-pat_location <- str_locate(KEGG_glycan, ";")
-pat_location %>% dim()
-ll <- pat_location[, 1]
-
-extracted_str <- c()
-for(i in seq_along(ll)){
-  if(is.na(ll[i])){
-    extracted_str <- append(extracted_str, KEGG_glycan_values[i])
-  }else{
-    extracted_str <- append(extracted_str, substr(KEGG_glycan_values[i], start = 1, stop = ll[i] - 1))
-  }
-}
-
-KEGG_glycan_to_dispaly <- str_trim(extracted_str, "both")
-names(KEGG_glycan_to_dispaly) <- KEGG_glycan_ids
-KEGG_glycan_to_dispaly[1:10]
-```
-
-
-```{r}
-# get KEGG drug information 
-KEGG_drug <- keggList("drug")
-saveRDS(object = KEGG_drug, file = "KEGG_drug.rds")
-KEGG_drug <- readRDS(file = "KEGG_drug.rds")
-KEGG_drug %>% head()
-
-KEGG_drug_ids <- names(KEGG_drug)
-KEGG_drug_values <- KEGG_drug %>% as.vector()
-KEGG_drug_values %>% head()
-
-pat_location <- str_locate(string = KEGG_drug, pattern = ";")
-ll <- pat_location[, 1]
-
-extracted_str <- c()
-for(i in seq_along(ll)){
-  if(is.na(ll[i])){
-    extracted_str <- append(extracted_str, KEGG_drug_values[i])
-  }else{
-    extracted_str <- append(extracted_str, substr(KEGG_drug_values[i], start = 1, stop = ll[i] - 1))
-  }
-}
-
-KEGG_drug_to_display <- extracted_str
-
-## remove parenthesis 
-KEGG_drug_to_display <- str_replace(KEGG_drug_to_display, "[ ]*\\(?[[:alnum:][:punct:]]*\\)?$", "")
-names(KEGG_drug_to_display) <- KEGG_drug_ids
-KEGG_drug_to_display %>% head()
-```
-
-
-```{r}
-# some rows in from and to contain multiple ids, retain only the first one
-ll <- str_locate(all_path_df$from, " ") %>% .[, 1]
-all_path_df[!(ll %>% is.na()), ]
-
-for(i in seq_along(ll)){
-  if(is.na(ll[i])){
-    all_path_df$from[i] <- all_path_df$from[i]
-  }else{
-    all_path_df$from[i] <- str_extract_before(all_path_df$from[i], " ")
-  }
-}
-
-
-ll <- str_locate(all_path_df$to, " ") %>% .[, 1]
-all_path_df[!(ll %>% is.na()), ]
-
-for(i in seq_along(ll)){
-  if(is.na(ll[i])){
-    all_path_df$to[i] <- all_path_df$to[i]
-  }else{
-    all_path_df$to[i] <- str_extract_before(all_path_df$to[i], " ")
-  }
-}
-
-all_path_df$from <- str_trim(string = all_path_df$from, side = "both")
-all_path_df$to <- str_trim(string = all_path_df$to, side = "both")
-
-names_to_display <- c(KEGG_mmu_genes_to_display, KEGG_compounds_to_display, 
-                      KEGG_drug_to_display, KEGG_glycan_to_dispaly)
-
-# all_path_df$from_symbol <- names_to_display[all_path_df$from]
-# all_path_df$to_symbol <- names_to_display[all_path_df$to]
-# all_path_df <- all_path_df %>% 
-#   dplyr::rename(from = from_symbol, to = to_symbol, from_entrez = from, to_entrez = to)
-# all_path_df %>% dplyr::filter(is.na(from)|is.na(to))
-```
-
-
-**Type attribute**  
-attribute value| explanation
----------------|-----------------------
-ECrel| enzyme-enzyme relation, indicating two enzyme catalyzing successive reaction steps  
-PPrel| protein-protein interaction, such as binding and modification
-GErel| gene expression interaction, indicating relation of transcription factor and target gene product
-PCrel| protein-compound interaction 
-maplink| link to another map
 
 
 ## visulization with `ggraph`  
