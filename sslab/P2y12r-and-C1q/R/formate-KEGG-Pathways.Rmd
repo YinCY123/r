@@ -9,55 +9,66 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r, message=FALSE}
+library(KEGGgraph)
+```
+
+
 ## parse pathway to data frame  
 ```{r}
-KGML_files <- list.files(path = "/home/yincy/git/Data/KEGG/pathways/mouse", 
+KGML_files <- list.files(path = "f:/git/Data/KEGG/pathways/mouse", 
                          full.names = T, 
                          pattern = ".xml$")
 
-df <- data.frame()
-for(i in KGML_files){
+l <- vector(mode = 'list', length = length(KGML_files))
+
+for(i in seq_along(KGML_files)){
     pathway <- do.call(
         what = "parseKGML2DataFrame", 
         args = list(
-            file = i, 
-            genesOnly = F, 
+            file = KGML_files[i], 
+            genesOnly = T, 
             expandGene = T, 
             reaction = T
         )
     )
-    df <- rbind(df, pathway)
+    n <- gsub(".xml", "", basename(KGML_files[i]))
+    l[[i]] <- pathway
+    names(l)[[i]] <- n
 }
 
+df <- data.frame()
+for(i in seq_along(l)){
+  df <- rbind(df, l[[i]])
+}
+
+df %>% head()
+
 df <- df %>% tibble::as_tibble()
-write.csv(x = df, 
-          file = "../res/P2ry12/all_pathways_df.csv", 
-          row.names = F, 
-          quote = F)
 
-all_path_df <- read.csv(file = "../res/P2ry12/all_pathways_df.csv", 
-                        stringsAsFactors = F)
+df %>% dplyr::pull(type) %>% table()
+df %>% dplyr::pull(subtype) %>% table()
 
-all_path_df %>% dim()
-all_path_df %>% pull(type) %>% table()
-all_path_df %>% pull(subtype) %>% table()
+df <- df %>% 
+  dplyr::distinct(from, to, .keep_all = T)
 
-all_path_df %>% head()
-all_path_df <- all_path_df %>% distinct(from, to, .keep_all = T)
-all_path_df %>% dim()
 
-all_path_df %>% 
-  dplyr::filter(type == "maplink")
-
-all_path_df <- all_path_df %>% 
+df <- df %>% 
   dplyr::filter(type != "maplink")
-all_path_df %>% dim()
+df %>% dim()
+
+all_path_df <- df
 
 all_path_df$from <- gsub("mmu:", replacement = "", all_path_df$from)
 all_path_df$to <- gsub("mmu:", replacement = "", all_path_df$to)
 
 all_path_df %>% dim()
 all_path_df %>% head()
+```
+
+```{r}
+all_path_df %>% 
+  dplyr::filter(from == "56543" | to == "56543")
 ```
 
 

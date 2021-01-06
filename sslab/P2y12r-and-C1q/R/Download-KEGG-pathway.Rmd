@@ -24,6 +24,6 @@ mmu_pathways <- mmu_pathways %>%
 
 download.kegg(pathway.id = mmu_pathways, 
               species = "mmu", 
-              kegg.dir = "/home/yincy/git/Data/KEGG/pathways/mouse/", 
+              kegg.dir = "f:/git/Data/KEGG/pathways/mouse/", 
               file.type = "xml")
 ```
