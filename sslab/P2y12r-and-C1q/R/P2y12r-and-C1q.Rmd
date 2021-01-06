@@ -12,12 +12,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 library(tidyverse)
-library(EnsDb.Mmusculus.v79)
-library(KEGGREST)
-library(pathview)
-library(KEGGgraph)
-library(biomaRt)
+library(xlsx)
 library(igraph)
+library(org.Mm.eg.db)
 ```
 
 
@@ -64,20 +61,6 @@ agg_FC_df <- aggregate.data.frame(FC_df[, 3:6], list(FC_df$geneid_symbol), FUN =
 agg_FC_df
 ```
 
-```{r}
-agg_FC_df_log2 <- agg_FC_df %>% log2()
-
-for(i in dim(agg_FC_df_log2)[1]){
-    for(j in dim(agg_FC_df_log2)[2]){
-        ifelse(agg_FC_df_log2[i, j] == -Inf, -5, agg_FC_df_log2[i, j])
-        ifelse(agg_FC_df_log2[i, j] == Inf, 5, agg_FC_df_log2[i, j])
-        ifelse(is.na(agg_FC_df_log2[i, j]), 0, agg_FC_df_log2[i, j])
-        ifelse(abs(agg_FC_df_log2[i, j]) > 5, 5 * sign(agg_FC_df_log2[i, j]), agg_FC_df_log2[i, j])
-    }
-}
-
-agg_FC_df_log2
-```
 
 ```{r}
 par(mfrow = c(3, 1))
@@ -245,67 +228,6 @@ legend("topright",
 dev.off()
 ```
 
-```{r}
-write.csv(x = p2ry12_sig_df[, 1:2] %>% distinct(from_symbol, to_symbol), 
-          file = "p2ry12_order3_df.csv", 
-          row.names = F, 
-          quote = F)
-```
-
-
-## DEG in p2ry12 order 3 genes  
-```{r}
-A3 <- read.csv(file = "../data/20200702_3A_naive_DE_FDR.csv", header = T)
-A3_DEG <- A3 %>% dplyr::filter(abs(logFC) >= 1) %>% 
-    dplyr::pull(geneid_symbol)
-
-L3 <- read.csv(file = "../data/20200702_3L_naive_DE_FDR.csv", header = T)
-L3_DEG <- L3 %>% 
-    dplyr::filter(abs(logFC) >= 1) %>% 
-    dplyr::pull(geneid_symbol)
-```
-
-
-```{r}
-A14 <- read.csv(file = "../data/20200702_14A_naive_DE_FDR.csv")
-A14_DEG <- A14 %>% 
-  dplyr::filter(abs(logFC) >= 1) %>% 
-  dplyr::pull(geneid_symbol)
-
-L14 <- read.csv(file = "../data/20200702_14L_naive_DE_FDR.csv")
-L14_DEG <- L14 %>%
-  dplyr::filter(abs(logFC) >= 1) %>% 
-  dplyr::pull(geneid_symbol)
-```
-
-
-```{r}
-p2ry12_order3_sig_df <- read.csv(file = "p2ry12_order3_df.csv", header = T, stringsAsFactors = F)
-
-from_to_vector <- c(p2ry12_order3_sig_df[[1]], p2ry12_order3_sig_df[[2]]) %>% unique()
-```
-
-```{r}
-A3_DEG_order3 <- intersect(from_to_vector, A3_DEG)
-L3_DEG_order3 <- intersect(from_to_vector, L3_DEG)
-```
-
-
-```{r}
-write.csv(x = A3_DEG_order3, 
-          file = "A3_DEG_order3_intersect.csv", 
-          row.names = F, 
-          quote = F)
-
-write.csv(x = L3_DEG_order3, 
-          file = "L3_DEG_order3_intersect.csv", 
-          row.names = F, 
-          quote = F)
-```
-
-```{r}
-intersects <- intersect(L3_DEG_order3, A3_DEG_order3)
-```
 
 
 ## top 100 GO term genes  
@@ -319,10 +241,11 @@ intersects <- intersect(L3_DEG_order3, A3_DEG_order3)
 #                sep = "") %>% 
 #   rep(each = 4)
 
-library(readxl)
 
 # using data in 20201204_common folder
-files <- list.files(path = "../data/20201204_common/", full.names = T)
+files <- list.files(path = "../data/20201204_common", 
+                    full.names = T, 
+                    pattern = "_list_GO_")
 brain_region <- rep(c("BS", "CTX", "PVN"), each = 2)
 treatments <- rep(c("3", "14"), time = 3)
 change <- c("GO_up", "GO_down")
@@ -338,7 +261,7 @@ for(i in seq_along(files)){
     out_names <- paste(sheets, "GO_up", sep = "_")
   }
   for(j in seq_along(brain_region)){
-    x <- read_xlsx(path = files[i], sheet = sheets[j]) %>% 
+    x <- read.xlsx(file = files[i], sheetName = sheets[j]) %>% 
       as_tibble() %>% 
       arrange(pvalue) %>% 
       head(n = 100) %>% 
@@ -353,22 +276,17 @@ for(i in seq_along(files)){
 
 names(out_list)
 
+read_xlsx(path = "../data/20201204_common/20201204_result_DE_FDR_list_GO_down_common.xlsx", 
+               sheet = 1) %>% 
+  as_tibble() %>% 
+  arrange(pvalue) %>% 
+  head(100) %>% 
+  pull(geneID) %>% 
+  str_c(collapse = "/") %>% 
+  str_split(pattern = "/") %>% 
+  .[[1]] %>% 
+  unique()
 
-# for(i in seq_along(out)){
-#     x <- readxl::read_xlsx(path = files[i], sheet = sheets[i]) %>% 
-#         tibble::as_tibble() %>% 
-#         dplyr::arrange(pvalue) %>% 
-#         head(n = 100) %>% 
-#         dplyr::pull(geneID) %>% 
-#         stringr::str_c(collapse = "/") %>% 
-#         stringr::str_split(pattern = "/") %>% 
-#         .[[1]] %>% 
-#         unique()
-#     y <- length(x)
-#     out_list[[i]] <- x
-# }
-# 
-# names(out_list) <- out
 ```
 
 ```{r}
@@ -393,307 +311,112 @@ df %>%
 
 ```{r}
 df %>% 
-    write.csv(file = "../res/P2ry12/genes_per_group-20210104.csv", row.names = F, quote = F)
+    write.csv(file = "../res/P2ry12/genes_per_group-20210104.csv", 
+              row.names = F, 
+              quote = F)
 ```
 
 
-
-
-# PVN DGE in top100 GO DGE map to KEGG pathway  
-## get intersects genes  
-```{r}
-pvn_top_100_GO_DEG <- df %>% 
-    dplyr::filter(grepl("^PVN_3", group)) %>% 
-    pull(symbol) %>% 
-    unique()
-
-# A3_DEG_order3_intersect <- read.csv(file = "../res/P2ry12/A3_DEG_order3_intersect.csv",
-#                                     header = F) %>% .[[1]]
-# 
-# L3_DEG_order3_intersect <- read.csv(file = "../res/P2ry12/L3_DEG_order3_intersect.csv", 
-#                                     header = F) %>% .[[1]] 
-# 
-# intersects_A3_L3 <- intersect(A3_DEG_order3_intersect, L3_DEG_order3_intersect)
-# 
-# intersects_pvn_top100_DEG_A3_L3_DGE <- intersect(pvn_top_100_GO_DEG, intersects_A3_L3)
-```
-
+P2ry12 down stream genes  
 ```{r}
 formatted_pathways <- readRDS(file = "../data/KEGG/KEGG_pathways_formatted.rds")
-g <- as_tbl_graph(formatted_pathways[, 1:2], directed = T)
+names_to_display <- readRDS(file = "../data/KEGG/names_to_display.rds")
 
-dist_to_p2ry12 <- g %>% 
-  mutate(dist = bfs_dist(root = .N()$name == "70839", mode = "out")) %>% 
+ig <- graph_from_data_frame(d = formatted_pathways, directed = T)
+dist <- distances(ig, v = V(ig)$name == "70839", to = V(ig), mode = "out")
+
+dist <- dist %>% 
+  t() %>% 
+  as.data.frame() %>% 
+  rownames_to_column("entrez") %>% 
   as_tibble() %>% 
-  filter(!is.na(dist))
+  filter(grepl("^[0-9]", x = .$entrez))
 
-library(org.Mm.eg.db)
+colnames(dist) <- c("entrez", "dist_to_p2ry12")
 
-dist_to_p2ry12$symbol <- mapIds(org.Mm.eg.db, 
-                                keys = dist_to_p2ry12$name, 
-                                keytype = "ENTREZID", 
-                                column = "SYMBOL") 
+dist$symbol <- mapIds(org.Mm.eg.db, 
+                      keys = dist$entrez, 
+                      keytype = "ENTREZID", 
+                      column = "SYMBOL")
 
-dist_to_p2ry12 <- dist_to_p2ry12 %>% 
-  relocate(symbol, name)
-
-top100_GO_DEG3_inter_p2ry12_down_streams <- intersect(dist_to_p2ry12$symbol, pvn_top_100_GO_DEG)
-```
-
-
-
-## visulization with `ggraph`  
-
-```{r}
-library(ggraph)
-library(tidygraph)
-```
-
-### determine order of genes  
-```{r}
-# all_path_gene_df <- read.csv(file = "../res/P2ry12/all_path_dataframe.csv") %>% 
-#   distinct(from, to, .keep_all = T)
-# write.csv(x = all_path_gene_df, file = "../res/P2ry12/all_path_gene_df.csv")
-
-# all_path_gene_df$from <- gsub("mmu:", "", all_path_gene_df$from)
-# all_path_gene_df$to <- gsub("mmu:", "", all_path_gene_df$to)
-# 
-# all_path_gene_df$from_symbol <- KEGG_mmu_genes_to_display[all_path_gene_df$from]
-# all_path_gene_df$to_symbol <- KEGG_mmu_genes_to_display[all_path_gene_df$to]
-# 
-# all_path_gene_df <- all_path_gene_df %>% 
-#   relocate(from_symbol, to_symbol, everything())
+dist <- dist %>% filter(dist_to_p2ry12 != Inf)
 ```
 
 
 ```{r}
-all_path_df
-```
+library(xlsx)
 
+gene_files <- list.files(path = "../data/20201204_common", 
+                    pattern = "_common_", 
+                    full.names = T)
+go_files <- list.files(path = "../data/20201204_common", 
+                       pattern = "_GO_", 
+                       full.names = T)
 
-```{r}
-# all_path_df <- all_path_df %>% 
-#   as.tibble() %>% 
-#   dplyr::rename(from = from_symbol, to = to_symbol, from_entrez = from, to_entrez = to)
+brain_region <- rep(c("BS", "CTX", "PVN"), each = 2)
+treatments <- rep(c("3", "14"), time = 3)
+change <- c("GO_up", "GO_down")
+sheets <- paste(brain_region, treatments, sep = "_")
 
-ig <- graph_from_data_frame(d = all_path_df[, c("from", "to")], directed = T)
-distance_to_p2ry12_all_path <- shortest_paths(ig, from = V(ig)$name == "70839", to = V(ig), mode = "out")[[1]]
-
-list2df <- function(list){
-  maxL <- sapply(list, length) %>% max()
-  for(i in seq_along(list)){
-    l = length(list[[i]])
-    if(l < maxL){
-      list[[i]] <- append(list[[i]], values = rep(NA, (maxL - l)))
-    }
+for(i in seq_along(gene_files)){
+  if(grepl("down", gene_files[i])){
+    file_name = "20201204_GO_down_common"
+  }else{
+    file_name = "20201204_GO_up_common"
   }
-  list <- as.data.frame(list)
-  colnames(list) <- NULL
-  list <- t(list)
-  colnames(list) <- paste(rep("order", times = maxL), 0:(maxL - 1), sep = "_")
-  return(as.data.frame(list))
+  for(j in seq_along(sheets)){
+    gene = read.xlsx(file = gene_files[i], sheetName = sheets[j]) %>% 
+      pull(1) %>% 
+      as.character()
+    
+    inter_gene <- intersect(dist$symbol, gene)
+    
+    go <- read.xlsx(file = go_files[i], sheetName = sheets[j])
+    
+    overlap <- read.xlsx(file = go_files[i], sheetName = sheets[j]) %>% 
+      pull(geneID) %>% 
+      str_split(pattern = "/") %>% 
+      lapply(intersect, y = inter_gene) %>% 
+      lapply(str_c, collapse = "/")
+    
+    go$overlap <- overlap
+    
+    write.xlsx(x = go, 
+               file = paste(file_name, "_overlap",".xlsx", sep = ""),
+               append = T, 
+               sheetName = sheets[j])
+  }
 }
-
-all_path_nodes <- list2df(lapply(distance_to_p2ry12_all_path, as_ids))
-
-inter_len <- apply(all_path_nodes[1:10], 
-                   1, 
-                   intersect, 
-                   mapIds(org.Mm.eg.db, keys = all_DEG, keytype = "SYMBOL", column = "ENTREZID")) %>%
-  sapply(na.omit) %>% 
-  sapply(length)
-
-retained_path <- all_path_nodes[inter_len >= 1, ] 
-
-o1 <- all_path_df %>% 
-  filter(from %in% (retained_path %>% pull(order_0) %>% unique()), 
-         to %in% (retained_path %>% pull(order_1) %>% unique()))
-
-o2 <- all_path_df %>% 
-  filter(from %in% (retained_path %>% pull(order_1) %>% unique()), 
-         to %in% (retained_path %>% pull(order_2) %>% unique()))
-
-o3 <- all_path_df %>% 
-  filter(from %in% (retained_path %>% pull(order_2) %>% unique()), 
-         to %in% (retained_path %>% pull(order_3) %>% unique()))
-
-o4 <- all_path_df %>% 
-  filter(from %in% (retained_path %>% pull(order_3) %>% unique()), 
-         to %in% (retained_path %>% pull(order_4) %>% unique()))
-
-o5 <- all_path_df %>% 
-  filter(from %in% (retained_path %>% pull(order_4) %>% unique()), 
-         to %in% (retained_path %>% pull(order_5) %>% unique()))
-o6 <- all_path_df %>% 
-  filter(from %in% (retained_path %>% pull(order_5) %>% unique()), 
-         to %in% (retained_path %>% pull(order_6) %>% unique()))
-
-o7 <- all_path_df %>% 
-  filter(from %in% (retained_path %>% pull(order_6) %>% unique()), 
-         to %in% (retained_path %>% pull(order_7) %>% unique()))
-
-o8 <- all_path_df %>% 
-  filter(from %in% (retained_path %>% pull(order_7) %>% unique()), 
-         to %in% (retained_path %>% pull(order_8) %>% unique()))
-
-
-filtered_path <- rbind(o1, o2, o3, o4, o5, o6, o7, o8)
-filtered_path %>% pull(lty) 
-
-N <- tibble::tibble(
-  ids = c(filtered_path$from, filtered_path$to) %>% unique()
-) %>% 
-  mutate(shape = ifelse(grepl("^cpd:|^gl:|^dr:", ids, ignore.case = F), "21", "22")) 
-
-E <- filtered_path %>% 
-  dplyr::select(from, to, everything())
 ```
 
 
-DEG   
 ```{r}
-A3_DEG_order3_intersect <- read.csv(file = "../res/P2ry12/A3_DEG_order3_intersect.csv")[[1]]
-L3_DEG_order3_intersect <- read.csv(file = "../res/P2ry12/L3_DEG_order3_intersect.csv")[[1]]
-A3_L3_DEG_inter <- intersect(A3_DEG_order3_intersect, L3_DEG_order3_intersect)
-
-pvn_top100_GO_DEG <- read.csv(file = "../res/P2ry12/genes_per_group.csv") %>% 
-  filter(grepl("^PVN_2_3up|^PVN_2_3down", group)) %>% 
-  pull(symbol)
-
-write.csv(x = pvn_top100_GO_DEG, file = "../res/P2ry12/pvn_top100_GO_DEG.csv")
-
-intersect(A3_DEG_order3_intersect, pvn_top100_GO_DEG)
-intersect(L3_DEG_order3_intersect, pvn_top100_GO_DEG)
-all_DEG <- intersect(A3_L3_DEG_inter, pvn_top100_GO_DEG)
-```
-
-```{r, warning=FALSE, message=FALSE}
-g <- tbl_graph(nodes = N, edges = E, directed = T)
-
-# ll <- create_layout(g, "nicely")
-set.seed(123)
-g %>%  
-  mutate(names = names_to_display[ids]) %>% 
-  ggraph(layout = "lgl") +
-  geom_edge_link(aes(filter = (angle == 30), 
-                     edge_linetype = factor(lty)), 
-                 end_cap = circle(2.5, "mm"), 
-                 start_cap = circle(1, "mm"), 
-                 arrow = arrow(length = unit(1, "mm")), 
-                 show.legend = F, 
-                 edge_width = 0.2) +
-  geom_edge_link(aes(filter = (angle == 90), 
-                     edge_linetype = factor(lty)), 
-                 arrow = arrow(angle = 90, length = unit(1, "mm")), 
-                 end_cap = circle(2.5, "mm"), 
-                 show.legend = F, 
-                 edge_width = 0.2) +
-  geom_node_point(aes(shape = shape, filter = !(names %in% A3_L3_DEG_inter)), 
-                  fill ="grey", 
-                  size = 5, 
-                  show.legend = F, 
-                  color = "grey") +
-  geom_node_point(aes(shape = shape, filter = (names %in% A3_L3_DEG_inter)), 
-             fill = "red", 
-             color = "red", 
-             show.legend = F, 
-             size = 5) +
-  geom_node_text(aes(label = names), size = 2) +
-  scale_shape_manual(values = c("21" = 22, "22" = 21)) +
-  theme_graph() 
-
-ggsave(filename = "p2ry12_downstream_signal.pdf")
-```
-
-
-### number of DEGs in different order  
-```{r}
-tg <- as_tbl_graph(all_path_df)
-
-DEG_14_orders <- tg %>% 
-  dplyr::mutate(bfsr = bfs_dist(root = .N()$name == "70839", mode = "out")) %>% 
-  dplyr::filter(.N()$name %in% intersect(mapIds(x = org.Mm.eg.db, keys = as.character(A14_DEG), column = "ENTREZID", keytype = "SYMBOL"), 
-                                         mapIds(x = org.Mm.eg.db, keys = as.character(L14_DEG), column = "ENTREZID", keytype = "SYMBOL"))) %>% 
-  as_tibble() %>% 
-  pull(bfsr) %>% 
-  table() %>% 
+top100_GO_geneID_p2ry12_downstream_overlap_length <- lapply(out_list, intersect, dist$symbol) %>% 
+  lapply(length) %>% 
+  unlist(use.names = T) %>% 
   as.data.frame() %>% 
-  magrittr::set_colnames(c("order", 'freq'))
+  rownames_to_column("group")
 
-DEG_3_orders <- tg %>% 
-  dplyr::mutate(dfsr = bfs_dist(root = .N()$name == "70839", mode = "out")) %>% 
-  dplyr::filter(.N()$name %in% intersect(mapIds(org.Mm.eg.db, as.character(A3_DEG), "ENTREZID", "SYMBOL"), 
-                                  mapIds(org.Mm.eg.db, as.character(L3_DEG), "ENTREZID", "SYMBOL"))) %>% 
-  as_tibble() %>% 
-  pull(dfsr) %>% 
-  table() %>% 
+colnames(top100_GO_geneID_p2ry12_downstream_overlap_length) <- c("group", "n_overlap_genes")
+
+write.csv(x = top100_GO_geneID_p2ry12_downstream_overlap_length, 
+          file = "../data/20201204_common/overlap_length.csv")
+```
+
+```{r}
+top100_GO_geneID_p2ry12_downstream_overlap <- 
+  lapply(out_list, intersect, dist$symbol) %>% 
+  unlist(use.names = T) %>% 
   as.data.frame() %>% 
-  magrittr::set_colnames(c("order", "freq"))
+  rownames_to_column("group")
 
-g %>% 
-  dplyr::mutate(dfsr = bfs_dist(root = .N()$name == "P2ry12", mode = "out")) %>% 
-  filter(.N()$name %in% all_DEG) %>% 
-  as_tibble() %>% 
-  filter(dfsr == 3) %>% 
-  pull(name) -> o3_DEG
+colnames(top100_GO_geneID_p2ry12_downstream_overlap) <- c("group", "genes")
+top100_GO_geneID_p2ry12_downstream_overlap <- top100_GO_geneID_p2ry12_downstream_overlap %>% 
+  mutate(group = gsub("[0-9]{,2}$", replacement = "", x = group))
+
+write.csv(x = top100_GO_geneID_p2ry12_downstream_overlap, 
+          file = "../data/20201204_common/overlap_genes.csv")
 ```
-
-
-```{r}
-DEG_3_orders$group = '3'
-DEG_14_orders$group = '14'
-
-DEG_3_orders %>% 
-  rbind(DEG_14_orders) %>% 
-  ggplot(aes(order, freq)) +
-  geom_bar(stat = "identity", position = "dodge", aes(fill = group)) +
-  scale_fill_brewer(name = "group", type = "qual", palette = "Set1", direction = -1) +
-  ggtitle(label = "Number of DEGs in different order")
-
-ggsave(filename = "Number-of-DEGs-in-different-order.tiff")
-```
-
-
-```{r}
-all_DEG
-```
-
-```{r, warning=FALSE, message=FALSE}
-tg %>% 
-  dplyr::mutate(bfsr = bfs_dist(root = .N()$name == "70839", mode = "out")) %>% 
-  dplyr::filter(.N()$name %in% intersect(mapIds(x = org.Mm.eg.db, keys = as.character(A14_DEG), column = "ENTREZID", keytype = "SYMBOL"), 
-                                         mapIds(x = org.Mm.eg.db, keys = as.character(L14_DEG), column = "ENTREZID", keytype = "SYMBOL"))) %>% 
-  as_tibble() %>% 
-  mutate(symbol = mapIds(org.Mm.eg.db, keys = .$name, keytype = "ENTREZID", column = "SYMBOL")) %>% 
-  magrittr::set_colnames(c("entrez", "order", "symbol")) %>% 
-  write.csv(file = "A14_L14_genes_in_different_order.csv", row.names = F, quote = F)
-```
-
-
-```{r, warning=FALSE, message=FALSE}
-tg %>% 
-  dplyr::mutate(dfsr = bfs_dist(root = .N()$name == "70839", mode = "out")) %>% 
-  dplyr::filter(.N()$name %in% intersect(mapIds(org.Mm.eg.db, as.character(A3_DEG), "ENTREZID", "SYMBOL"), 
-                                  mapIds(org.Mm.eg.db, as.character(L3_DEG), "ENTREZID", "SYMBOL"))) %>% 
-  as_tibble() %>% 
-  mutate(symbol = mapIds(org.Mm.eg.db, keys = .$name, keytype = "ENTREZID", column = "SYMBOL")) %>% 
-  magrittr::set_colnames(c("entrez", "order", "symbol")) %>% 
-  write.csv(file = "A3_L3_genes_in_different_order.csv", row.names = F, quote = F)
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
