@@ -19,6 +19,12 @@ A **class** defines the behaviour of **objects** by describing their attributes 
 
 Classes are usually organised in a hierarchy: if a method does not exist for a child, then the parent's method is used instead; the child **inherits** behavious from the parent.  
 
+- **S3** implements a style of OO programming called generic-function OO.  
+- **S4** works similarly to S3, but is more formal. There are two major differences to S3. S4 has formal class definitions, which describe the representation and inheritance for each class, and has special helper functions for defining generics for each class, and has special helper functions for defining generics and methods. S4 also has multiple dispatch, which means that generic functions can pick methods based on the class of any number of arguments, not just one.  
+
+- **Reference classes**, called RC for short, are quite different from S3 and S4. RC implements message-passing OO, so methods belong to classes, not functions.  
+
+- **base types**, the internal C-level types that underlie the other OO systems. Base types are mostly manipulated using C code, but they're important to known about because they provide the building blocks for the other OO systems.  
 
 
 ## Base types  
@@ -31,6 +37,8 @@ determine an object's base type with `typeof()`.
 Unfortunately the names of base types are not used consistently throughout R, and type and the corresponding 'is' function may use different names.  
 
 ```{r}
+library(pryr)
+
 f <- function(){}
 typeof(f)
 is.function(f)
@@ -52,9 +60,9 @@ library(pryr)
 ```
 
 ```{r}
-df <- data.frame(x = 1:10, y = letters[1:10])
+df <- data.frame(x = 1:10, y = factor(letters[1:10]))
 otype(df) # data frame is an S3 class
-otype(df$x) # vector isn't
+otype(df$x) # vector isn't an S3 class
 otype(df$y) # factor is an S3 class
 ```
 
