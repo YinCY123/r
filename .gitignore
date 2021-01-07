@@ -21,8 +21,7 @@
 *.csv
 
 # ignore tiff pnd jpef figures
-*.png
-*.tiff
+#*.tiff
 *.jpeg
 
 # ignore xml file
