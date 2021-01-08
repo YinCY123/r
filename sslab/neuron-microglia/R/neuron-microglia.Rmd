@@ -28,7 +28,7 @@ names_to_display <- readRDS(file = "../../P2y12r-and-C1q/data/KEGG/names_to_disp
 
 
 ```{r}
-genes_info <- select(x = org.Mm.eg.db, 
+genes_info <- AnnotationDbi::select(x = org.Mm.eg.db, 
                     keys = c("Kcnd3", "Pdgfrb"), 
                     keytype = "SYMBOL", 
                     columns = c("SYMBOL", "ENTREZID", "ENSEMBL"))
@@ -36,7 +36,8 @@ genes_info <- select(x = org.Mm.eg.db,
 genes_info
 ```
 
-Kcnd3 predicted transcription factors  
+Kcnd3 predicted transcription factors PROMO  
+
 ```{r}
 entrez <- c("YY1" = "22632", 
             "POU2F2" = "18987", 
@@ -87,13 +88,17 @@ entrez <- c("YY1" = "22632",
             "HOXA5" = "15402", 
             "c-Fos" = "14281", 
             "C/EBPbeta" = "12608")
-entrez
-tf <- select(EnsDb.Mmusculus.v79, 
-             keys = entrez, 
+
+entrez <- entrez %>% as.data.frame() %>% 
+    rownames_to_column("PROMO") %>% 
+    magrittr::set_colnames(c("PROMO", "ENTREZ"))
+
+tf <- AnnotationDbi::select(org.Mm.eg.db, 
+             keys = entrez$ENTREZ, 
              keytype = "ENTREZID", 
              columns = c("SYMBOL", "ENTREZID"))
 
-tf
+tf %>% right_join(y = entrez, by = c("ENTREZID" = "ENTREZ"))
 ```
 
 ```{r}
@@ -103,8 +108,8 @@ colnames(tf_info) <- cn
 tf_info <- tf_info[, c(-1, - dim(tf_info)[2])]
 
 tf_info$Factor.name <- str_replace(tf_info$Factor.name, " \\[[:alnum:]+\\]$", "")
-tf_info %>% 
-    arrange(RE.equally) %>% 
+tf_info %>%
+    arrange(RE.equally) %>%
     pull(Factor.name) %>% unique()
 ```
 
@@ -121,8 +126,8 @@ ig <- graph_from_data_frame(d = pathways[, 1:2], directed = T)
 dist_to_pdgfrb <- distances(graph = ig, 
                             v = V(ig), 
                             to = V(ig)$name == "18596", 
-                            mode = "in", 
-                            algorithm = "unweighted")
+                            mode = "all", 
+                            algorithm = "unweighted") 
 
 dist_to_pdgfrb_genes <- dist_to_pdgfrb %>% 
     as.data.frame() %>% 
@@ -132,7 +137,7 @@ dist_to_pdgfrb_genes <- dist_to_pdgfrb %>%
     dplyr::filter(grepl("^[0-9]", entrez))
 
 tf_downstream_Pdgfrb <- distances(graph = ig, 
-                            v = V(ig)$name %in% entrez, 
+                            v = V(ig)$name %in% entrez$ENTREZ, 
                             to = V(ig)$name == "18596", 
                             mode = "in", 
                             algorithm = "unweighted") %>% 
@@ -143,6 +148,8 @@ tf_downstream_Pdgfrb <- distances(graph = ig,
     dplyr::pull(entrez)
 
 tf_downstream_Pdgfrb <- tf[tf$ENTREZID %in% tf_downstream_Pdgfrb, ]
+
+tf_downstream_Pdgfrb %>% distinct(ENTREZID, SYMBOL) %>% write.csv(file = "../res/kv4.3_tf.csv")
 ```
 
 ```{r}
@@ -191,18 +198,30 @@ ig <- graph_from_data_frame(d = filtered_path, directed = T)
 vc <- rep("gray", length(V(ig)))
 vc[V(ig)$name %in% tf_downstream_Pdgfrb$ENTREZID] <- "orange"
 vc[V(ig)$name == "18596"] <- "blue"
+ll <- layout_nicely(graph = ig)
 
+pdf("../res/Pdgfrb_downstream_tf.pdf")
 plot(ig, 
-     vertex.size = 10, 
+     vertex.size = 5, 
      vertex.color = vc, 
      vertex.label = names_to_display[V(ig)$name], 
-     vertex.label.cex = 0.6, 
+     vertex.label.cex = 0.4, 
      vertex.label.dist = 0, 
      vertex.label.color = "black",
-     vertex.frame.color = NULL, 
-     edge.arrow.size = 0.4, 
+     vertex.frame.color = NA, 
+     edge.arrow.size = 0.1, 
      edge.label = E(ig)$edge_label, 
-     edge.lty = E(ig)$lty)
+     edge.label.cex = 0.6,
+#     edge.lty = E(ig)$lty,
+     layout = ll, 
+    # rescale = F, 
+    # xlim = ll %>% apply(2, range) %>% .[, 1], 
+    # ylim = ll %>% apply(2, range) %>% .[, 2],
+    frame = F, 
+    edge.width = 0.3
+)
+
+dev.off()
 ```
 
 
