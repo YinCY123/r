@@ -1194,7 +1194,7 @@ Ant <- setClass(Class = "Ant",
 Create an Ant object:  
 
 - using `new` command  
-- using Ant generator  
+- using `Ant` generator  
 
 ```{r}
 ant1 <- new(Class = "Ant")
@@ -1208,7 +1208,7 @@ ant2
 ```
 
 ```{r}
-ant3 <- Ant(Len = 5.0, Position = c(3, 2, 1))
+ant3 <- Ant(Position = c(3, 2, 1), Len = 5.0)
 ant3
 ```
 
@@ -1221,7 +1221,7 @@ getClass(ant3)
 slotNames(ant3)
 ```
 
-```
+```{r, eval=FALSE}
 ant4 <- Ant(Len = -1, Position = c(3, 2, 1)) # pass an invalid value cause an error
 ```
 
@@ -1293,6 +1293,14 @@ ant2@Len
 
 
 #### Polymorphism  
+The definition of S4 classes allows methods to be overloaded. That is, multiple functions that have the same name can be defined, and the function that is executed is determined by the arguments' types.  
+
+Two or more functions can have the same name, but the types of the arguments passed to them differ. There are two methods to set the activity level. One takes a floating point number and sets the activity level based to the value passed to it. The other takes a logical value and sets the activity level to zero if the argument is FALSE; otherwise, it sets it to a default value.  
+
+The idea is to use the `signature` option in the `setMethod` command. It is set to a vector of class names, and **the order of the class names is used to determine which function should be called for a given set of arguments**.  
+
+An important thing to note, though, is that **the prototype defined in the `setGeneric` command defines the names of the arguments, and the argument names in both methods must be exactly the same and in the same order**.  
+
 ```{r}
 setGeneric(name = "SetActivityLevel", 
            def = function(antie, activity){
@@ -1322,7 +1330,7 @@ setMethod(f = "SetActivityLevel",
           })
 ```
 
-
+Once the two methods are defined, R will use the class names of the arguments to determine which function to call in a given context.  
 ```{r}
 ant2 <- SetActivityLevel(antie = ant2, activity = 0.1)
 ant2
@@ -1353,9 +1361,12 @@ Coordinate <- setClass(Class = "Coordinate",
                        ), 
                        # check if the coordinate is outside of a circle of radius 100
                        validity = function(object){
-                               print("Checking the validity of the point")
+                               print("Checking the validity of the point ...")
+                               Sys.sleep(2)
                                if(object@x*object@x + object@y * object@y > 100.0 * 100.0){
                                        return(paste("Error: the point is too far away from the origin."))
+                               }else{
+                                       print("Validity is confirmed!")
                                }
                                return(TRUE)
                        })
@@ -1421,7 +1432,11 @@ point
 ```
 
 
-#### Inheritance  
+#### Inheritance 
+When a new class is created, it can inherit from an existing class by setting the `contains` parameter. **This can be set to a vector of classes for multiple inheritance**.  
+
+To make an class as an `VIRTUAL` class just add the `VRUTUAL` character string in the `contains` parameter.  
+
 define the female ant class  
 ```{r}
 FemaleAnt <- setClass(Class = "FemaleAnt", 
@@ -1453,7 +1468,7 @@ WorkerAnt <- setClass(Class = "WorkerAnt",
                               }
                               return(TRUE)
                       }, 
-                      contains = "FemaleAnt")
+                      contains = c("FemaleAnt"))
 ```
 
 
