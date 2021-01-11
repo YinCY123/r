@@ -1235,7 +1235,7 @@ adomAnt@Len
 adomAnt@Position
 ```
 
-modify the value in place do not triger the validity function  
+**modify the value in place do not trigger the validity function**  
 ```{r}
 adomAnt@ActivityLevel <- -5.0
 adomAnt@ActivityLevel
