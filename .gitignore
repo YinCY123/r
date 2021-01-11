@@ -1,28 +1,28 @@
 # ignore auto-generated R history
 .Rhistory
+*.RData
 
 # ignore generated html file
 *.html
-
-# ignore auto saved R data
-*.RData
+*.xml
 
 # ignore .zip .gz .tar file
 *.zip
 *.gz
 *.tar
 
-# ignore log file
+# ignore programme file
 *.log
 .Rproj.user
 
-# ignore PDF csv files
+# ignore files
 *.pdf
 *.csv
+*.txt
+*.doc
+*.docx
 
-# ignore tiff pnd jpef figures
-#*.tiff
+# ignore figures
+*.tiff
 *.jpeg
-
-# ignore xml file
-*.xml
+*.png
