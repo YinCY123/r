@@ -32,12 +32,9 @@ genes_info <- AnnotationDbi::select(x = org.Mm.eg.db,
                     keys = c("Kcnd3", "Pdgfrb"), 
                     keytype = "SYMBOL", 
                     columns = c("SYMBOL", "ENTREZID", "ENSEMBL"))
-
-genes_info
 ```
 
 Kcnd3 predicted transcription factors PROMO  
-
 ```{r}
 entrez <- c("YY1" = "22632", 
             "POU2F2" = "18987", 
@@ -149,7 +146,7 @@ tf_downstream_Pdgfrb <- distances(graph = ig,
 
 tf_downstream_Pdgfrb <- tf[tf$ENTREZID %in% tf_downstream_Pdgfrb, ]
 
-tf_downstream_Pdgfrb %>% distinct(ENTREZID, SYMBOL) %>% write.csv(file = "../res/kv4.3_tf.csv")
+#tf_downstream_Pdgfrb %>% distinct(ENTREZID, SYMBOL) %>% write.csv(file = "../res/kv4.3_tf.csv")
 ```
 
 ```{r}
@@ -185,10 +182,17 @@ p5 <- pathways %>%
     dplyr::filter(from %in% o5 & to %in% o6)
 p6 <- pathways %>% 
     dplyr::filter(from %in% o6 & to %in% o7)
+p7 <- pathways %>% 
+    dplyr::filter(from %in% o6)
 
 
-filtered_path <- rbind(p1, p2, p3, p4, p5, p6)
+filtered_path <- rbind(p1, p2, p3, p4, p5, p6, p7)
 ```
+
+```{r}
+tf_in_neuron <- readxl::read_xlsx("../res/20210108_result_kv4.3_tf.xlsx", sheet = 1) %>% arrange(PValue) %>% .[, -1]
+```
+
 
 ```{r}
 ig <- graph_from_data_frame(d = filtered_path, directed = T)
@@ -224,6 +228,76 @@ plot(ig,
 dev.off()
 ```
 
+```{r}
+N <- tibble(
+    ids = c(filtered_path$from, filtered_path$to) %>% unique()
+) %>% 
+    mutate(symbol = names_to_display[ids])
+
+E <- filtered_path
+E$lty <- factor(E$lty)
+
+g <- tbl_graph(nodes = N, edges = E, directed = T)
+```
+
+```{r, message=FALSE, warning=FALSE}
+g %>% 
+    ggraph(layout = "nicely") +
+    geom_edge_link(aes(filter = (.E()$angle == 90), 
+                       label = .E()$edge_label, 
+                       edge_linetype = .E()$lty), 
+                   arrow = arrow(angle = 90, length = unit(1, "mm")), 
+                   end_cap = circle(3, "mm"), 
+                   edge_width = 0.5, 
+                   edge_color = "gray", 
+                   show.legend = F) +
+    geom_edge_link(aes(filter = (.E()$angle == 30), 
+                       label = .E()$edge_label, 
+                       edge_linetype = .E()$lty), 
+                   arrow = arrow(angle = 30, length = unit(1, "mm")), 
+                   end_cap = circle(3, "mm"), 
+                   edge_width = 0.5, 
+                   edge_color = "gray", 
+                   show.legend = F) +
+    geom_edge_link(aes(filter = (is.na(.E()$angle)), 
+                       label = .E()$edge_label, 
+                       edge_linetype = .E()$lty), 
+                   arrow = arrow(angle = 30, length = unit(1, "mm")), 
+                   end_cap = circle(3, "mm"), 
+                   edge_width = 0.5, 
+                   edge_color = "gray", 
+                   show.legend = F) +
+    geom_node_point(size = 5, color = "gold") +
+    geom_node_point(aes(filter = (.N()$symbol %in% tf_in_neuron$geneid)), 
+                    color = "red", 
+                    stroke = 3.5) +
+    geom_node_point(aes(filter = (.N()$symbol == "Pdgfrb")), 
+               color = "blue", 
+               stroke = 3.5) +
+    geom_node_text(aes(label = .N()$symbol), size = 3) +
+    scale_edge_linetype_manual(name = "", values = c("1" = "solid", "3" = "solid", "5" = "dashed")) +
+    theme_graph()
+
+ggsave("../res/tf_signale.pdf")
+```
+
+
+get transcription factor information  
+```{r}
+definition <- getBM(attributes = c("mgi_symbol", "definition_1006"), 
+      filters = "mgi_symbol", 
+      values = tf_in_neuron$geneid, 
+      mart = mmart)
+
+definition_1006 <- tapply(definition$definition_1006, definition$mgi_symbol, str_c, collapse = ". ")
+
+definition_1006 %>% 
+    as.data.frame() %>% 
+    rownames_to_column("symbol") %>% 
+    magrittr::set_colnames(c("symbol", "definition_1006")) %>% 
+    left_join(tf_in_neuron, by = c("symbol" = "geneid")) %>% 
+    write.csv("../res/tf_definition.csv", row.names = F)
+```
 
 
 
