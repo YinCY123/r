@@ -1516,11 +1516,10 @@ worker <- WorkerAnt(Position = c(-1, 3, 5), Len = 2.5)
 
 
 Four usefull command:  
-
 - `slotNames`: pass an instance of an class to the function.     
 - `getSlots`: pass an class to the function.  
-- `getClass`: can ba instance class or class itself.  
-- `slot`: pass an instance of an class and an slot name while retrive the content of the slot.  
+- `getClass`: can be instance class or class itself.  
+- `slot`: pass an instance of an class and an slot name while retrieve the content of the slot.  
 
 
 ## Chapter 10: Case Study  
