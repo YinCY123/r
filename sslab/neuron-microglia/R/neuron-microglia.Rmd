@@ -99,15 +99,20 @@ tf %>% right_join(y = entrez, by = c("ENTREZID" = "ENTREZ"))
 ```
 
 ```{r}
-tf_info <- read.table(file = "clipboard", header = T, sep = ";", row.names = NULL)
-cn <- colnames(tf_info) %>% .[-1]
-colnames(tf_info) <- cn
-tf_info <- tf_info[, c(-1, - dim(tf_info)[2])]
+tf_info <- read.table(file = "clipboard", header = F, sep = ";", row.names = NULL)
+colnames(tf_info) <- c("PROMO", "Width", "ENSEMBL")
+tf_info[, c("PROMO", "ID")] <- str_split(tf_info$PROMO, " \\[", n = 2, simplify = T)
+tf_info$ID <- str_replace(tf_info$ID, "\\]$", "")
+tf_info 
 
-tf_info$Factor.name <- str_replace(tf_info$Factor.name, " \\[[:alnum:]+\\]$", "")
-tf_info %>%
-    arrange(RE.equally) %>%
-    pull(Factor.name) %>% unique()
+tf_info <- select(org.Mm.eg.db, 
+                  keys = tf_info$ENSEMBL, 
+                  keytype = "ENSEMBL", 
+                  columns = c("ENSEMBL", "SYMBOL", "ENTREZID")) %>% 
+  right_join(tf_info, by = c("ENSEMBL" = "ENSEMBL")) %>% 
+  distinct(ENSEMBL, ENTREZID, SYMBOL, .keep_all = T)
+
+tf_info
 ```
 
 load KEGG pathways  
@@ -134,7 +139,7 @@ dist_to_pdgfrb_genes <- dist_to_pdgfrb %>%
     dplyr::filter(grepl("^[0-9]", entrez))
 
 tf_downstream_Pdgfrb <- distances(graph = ig, 
-                            v = V(ig)$name %in% entrez$ENTREZ, 
+                            v = V(ig)$name %in% tf_info$ENTREZID, 
                             to = V(ig)$name == "18596", 
                             mode = "in", 
                             algorithm = "unweighted") %>% 
@@ -144,9 +149,11 @@ tf_downstream_Pdgfrb <- distances(graph = ig,
     dplyr::filter(!is.infinite(dist_to_pdgfrb)) %>% 
     dplyr::pull(entrez)
 
-tf_downstream_Pdgfrb <- tf[tf$ENTREZID %in% tf_downstream_Pdgfrb, ]
+tf_downstream_Pdgfrb <- tf_info[tf_info$ENTREZID %in% tf_downstream_Pdgfrb, ]
 
-#tf_downstream_Pdgfrb %>% distinct(ENTREZID, SYMBOL) %>% write.csv(file = "../res/kv4.3_tf.csv")
+# tf_downstream_Pdgfrb %>% 
+#   distinct(ENTREZID, SYMBOL) %>% 
+#   write.csv(file = "../res/kv4.3_tf_downstream_pdgfrb.csv")
 ```
 
 ```{r}
@@ -186,11 +193,20 @@ p7 <- pathways %>%
     dplyr::filter(from %in% o6)
 
 
-filtered_path <- rbind(p1, p2, p3, p4, p5, p6, p7)
+filtered_path <- rbind(p1, p2, p3, p4, p5, p6)
 ```
 
 ```{r}
 tf_in_neuron <- readxl::read_xlsx("../res/20210108_result_kv4.3_tf.xlsx", sheet = 1) %>% arrange(PValue) %>% .[, -1]
+```
+
+```{r}
+neuron <- readxl::read_xlsx("../data/neuron-20210104_rpkm_count.xlsx", 
+                            skip = 1, 
+                            sheet = 2) 
+neuron %>% 
+  select(geneid, matches("_label_[0-9]$")) %>% 
+  filter(geneid %in% tf_info$SYMBOL)
 ```
 
 
