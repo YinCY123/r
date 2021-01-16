@@ -136,7 +136,8 @@ df <- pvn %>%
   tibble::rownames_to_column("group") %>% 
   magrittr::set_colnames(c("group", "symbol"))
 
-df$group <- gsub(pattern = "[0-9]{,2}$", replacement = "", x = df$group)
+df$group <- gsub("[0-9]{,3}$", "", df$group)
+
 write.csv(x = df, file = "../res/P2ry12/top100_GO_DEGs.csv")
 ```
 
@@ -163,8 +164,11 @@ venn.diagram(x = list(A3_L3_inter = inter_3, A14_L14_inter = inter_14),
 
 # load KEGG pathway  
 ```{r}
-all_path_df <- read.csv(file = "../res/P2ry12/all_pathways_df.csv", 
-                        stringsAsFactors = F)
+
+# all_path_df <- read.csv(file = "../res/P2ry12/all_pathways_df.csv", 
+#                         stringsAsFactors = F)
+all_path_df <- readRDS("../data/KEGG/KEGG_pathways_formatted.rds")
+names_to_display <- readRDS("../data/KEGG/names_to_display.rds")
 
 all_path_df %>% dim()
 all_path_df %>% pull(type) %>% table()
@@ -253,13 +257,13 @@ retained_path <- all_path_nodes[inter_len >= 1, ]
 #   sapply(na.omit) %>% 
 #   sapply(length)
 
-inter_len_14 %>% table()
-retained_path_14 <- all_path_nodes[inter_len_14 >= 1, ]
-retained_path_14 %>% apply(2, is.na) %>% colSums()
-write.csv(x = retained_path_14[, 1:13], 
-          file= "../res/P2ry12/retained_path_14.csv", 
-          row.names = F, 
-          quote = F)
+# inter_len_14 %>% table()
+# retained_path_14 <- all_path_nodes[inter_len_14 >= 1, ]
+# retained_path_14 %>% apply(2, is.na) %>% colSums()
+# write.csv(x = retained_path_14[, 1:13], 
+#           file= "../res/P2ry12/retained_path_14.csv", 
+#           row.names = F, 
+#           quote = F)
 
 
 retained_path <- all_path_nodes[inter_len >= 1, ] 
@@ -371,6 +375,10 @@ ggsave(filename = "../res/P2ry12/Number-of-DEGs-in-different-order.tiff")
 
 
 ```{r, warning=FALSE, message=FALSE}
+df$col <- ifelse(grepl("up", df$group), "darkred", "darkblue")
+df_up <- df %>% filter(col == "darkred")
+df_down <- df %>% filter(col == "darkblue")
+
 g <- tbl_graph(nodes = N, edges = E, directed = T)
 
 # ll <- create_layout(g, "nicely")
@@ -391,19 +399,29 @@ g %>%
                  end_cap = circle(2.5, "mm"), 
                  show.legend = F, 
                  edge_width = 0.2) +
-  geom_node_point(aes(shape = shape, filter = !(names %in% inter_3)), 
+  geom_node_point(aes(shape = shape), 
                   fill ="grey", 
                   size = 5, 
                   show.legend = F, 
                   color = "grey") +
-  geom_node_point(aes(shape = shape, filter = (names %in% inter_3)), 
-             fill = "red", 
-             color = "red", 
-             show.legend = F, 
-             size = 5) +
-  geom_node_text(aes(label = names), size = 2) +
+  geom_node_point(aes(shape = shape, filter = (names_to_display[.N()$ids] %in% df_up$symbol)), 
+                 size = 5, 
+                 color = "darkred", 
+                 fill = "darkred") +
+  # geom_node_point(aes(shape = shape, filter = (names_to_display[.N()$ids %in% df_down$symbol])), 
+  #                 size = 5, 
+  #                 color = "darkblue", 
+  #                 fill = "darkblue") +
+  geom_node_text(aes(label = names_to_display[.N()$ids]), size = 2) +
   scale_shape_manual(values = c("21" = 22, "22" = 21)) +
-  theme_graph() 
+  theme_graph() +
+  guides(shape = F, size = F)
 
-ggsave(filename = "../res/P2ry12/p2ry12_downstream_signal-20201209.pdf")
+ggsave(filename = "../res/P2ry12/p2ry12_downstream_signal-20210116.pdf")
 ```
+
+```{r}
+df
+```
+
+
