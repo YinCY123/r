@@ -1,0 +1,22 @@
+---
+title: "Extending R"
+author: "yincy"
+date: "1/18/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Part I
+## Chapter 1  
+## Objects, Functions and Interfaces  
+### Three Principles  
+- Everything that exists in R is an object. **Object**  
+- Everything that happens in R is a function call. **Function**  
+- Interfaces to other sofware are part of R. **Interface**  
+
+> R is a functional, object-based language.  
+
+
