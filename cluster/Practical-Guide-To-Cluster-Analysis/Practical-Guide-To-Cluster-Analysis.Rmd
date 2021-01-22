@@ -1,0 +1,48 @@
+---
+title: "Practical-Guide-To-Cluster-Analysis"
+author: "yincy"
+date: "1/22/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**The goal of clustering is to identify pattern or groups of similar objects within a data set of interest**.  
+
+# I Basics  
+- Introduction to R  
+- Data Preparation  
+- Required R Packages  
+- Distance Measures  
+
+# II Partitioning Clustering  
+- K-means 
+- K-medoids (PAM)  
+- CLARA  
+
+# III Hierarchical Clustering  
+- Agglomerative Clustering  
+- Comparing Dendrograms  
+- Visualizing Dendrograms  
+- Heatmap: Static & Interactive  
+
+# IV Cluster Validation  
+- Clustering Tendency  
+- Optimal Number of Clusters  
+- Validation Statistics  
+- P-value for Hierarchical Clustering  
+
+# V Advanced Clustering  
+- Hybrid Methods  
+- Fuzzy Clustering  
+- Model-Based Clustering  
+- Density-Based Clustering  
+
+
+
+
+
+
+
