@@ -105,7 +105,7 @@ tf_info[, c("PROMO", "ID")] <- str_split(tf_info$PROMO, " \\[", n = 2, simplify 
 tf_info$ID <- str_replace(tf_info$ID, "\\]$", "")
 tf_info 
 
-tf_info <- select(org.Mm.eg.db, 
+tf_info <- AnnotationDbi::select(org.Mm.eg.db, 
                   keys = tf_info$ENSEMBL, 
                   keytype = "ENSEMBL", 
                   columns = c("ENSEMBL", "SYMBOL", "ENTREZID")) %>% 
@@ -119,6 +119,9 @@ load KEGG pathways
 ```{r}
 pathways <- readRDS(file = "../../P2y12r-and-C1q/data/KEGG/KEGG_pathways_formatted.rds")
 names_to_display <- readRDS(file = "../../P2y12r-and-C1q/data/KEGG/names_to_display.rds")
+
+pathways <- pathways %>% 
+  filter(grepl("^[0-9]", from), grepl("^[0-9]", to))
 ```
 
 
@@ -189,8 +192,6 @@ p5 <- pathways %>%
     dplyr::filter(from %in% o5 & to %in% o6)
 p6 <- pathways %>% 
     dplyr::filter(from %in% o6 & to %in% o7)
-p7 <- pathways %>% 
-    dplyr::filter(from %in% o6)
 
 
 filtered_path <- rbind(p1, p2, p3, p4, p5, p6)
@@ -231,8 +232,8 @@ plot(ig,
      vertex.frame.color = NA, 
      edge.arrow.size = 0.1, 
      edge.label = E(ig)$edge_label, 
-     edge.label.cex = 0.6,
-#     edge.lty = E(ig)$lty,
+     edge.label.cex = 0.5,
+     edge.lty = E(ig)$lty,
      layout = ll, 
     # rescale = F, 
     # xlim = ll %>% apply(2, range) %>% .[, 1], 
