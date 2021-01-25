@@ -1,0 +1,39 @@
+---
+title: "time line of tumor associated macrophage"
+author: "yincy"
+date: "1/25/2021"
+output: html_document
+
+bibliography: 
+    ["f:/git/Data/mendeley-bib/Tumor-Tumor-Macrophage.bib", 
+    "f:/git/Data/mendeley-bib/Tumor-Macrophage.bib"] 
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The minestone papers in the field of tumor-associatted macrophage.  
+
+1. This papaer [@Balkwill2001] identified the links between inflammation and cancer, on the basis of observations that tumors often arose at sites of chronic inflammation and that inflammatory cells were present in biopsied samples from tumours.    
+
+2. The activation of RET induces a transcriptional program that is similar to that which occurs during inflammation[@Borrello2005, @DeFalco2007].  
+
+
+    + inflammatory diseases increase the risk of developing many types of cancer.  
+    + non-steroidal anti-inflammatory drugs reduce the risk of developing certain cancers and reduce the mortality caused by these cancers.  
+    + Signalling pathways involved in inflammation operate downstream of oncogenic mutations.  
+    + Inflammatory cells, chemokines and cytokines are present in the microenivironment of all tumors in experimental animal models and humans from the earliest of development.  
+    + The targeting of inflammatory mediators, key transcription factors involved in inflammation or inflammatory cells decreases the incidence and spread of cancer.  
+    + Adoptive transfer of inflammatory cells or overexpression of inflammatory cytokines promotes the development of tumors.  
+
+
+```{r,echo=FALSE, fig.align='center',fig.cap="oncogenes and cancer related inflammation"}
+knitr::include_graphics("figure/oncogenes-and-cancer-related-inflammation.PNG")
+```
+
+
+
+# References  
+
