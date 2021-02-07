@@ -4,6 +4,7 @@ author: "yincy"
 date: "1/25/2021"
 output: html_document
 
+
 bibliography: 
     ["f:/git/Data/mendeley-bib/Tumor-Tumor-Macrophage.bib", 
     "f:/git/Data/mendeley-bib/Tumor-Macrophage.bib"] 
@@ -15,15 +16,18 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Links between inflammation and cancer  
-1. This papaer [@Balkwill2001] identified the links between inflammation and cancer, on the basis of observations that tumors often arose at sites of chronic inflammation and that inflammatory cells were present in biopsied samples from tumours.    
+## pro-tumor inflammation
+1. This papaer[@Balkwill2001] identified the links between inflammation and cancer, on the basis of observations that tumors often arose at sites of chronic inflammation and that inflammatory cells were present in biopsied samples from tumours.    
 
-2. The activation of RET induces a transcriptional program that is similar to that which occurs during inflammation[@Borrello2005;@DeFalco2007].  
+2. The activation of RET (protein tyrosine kinase) induces a transcriptional program that is similar to that which occurs during inflammation[@Borrello2005;@DeFalco2007].  
 
 3. Tumor-associated inflammation might caused by abnormal release and local accumulation of "irritating" tumor products[@Mantovani1992].
 
 4. for many neoplasms, specific immunity is not a major determinant of macrophage infiltration and that factors derived from the tumor itself play a pivotal role in the regulation of macrophage levels in poorly immunogenic metasatatic tumors. This consideration led to search for tumor-derived chemotactic factors released by neoplastic lines:  
 
 5. 
+
+---
 
 **Cytokine**|**Role**
 --|--|--
@@ -33,26 +37,31 @@ Granulocyte-macrophage colony-stimulating factor(**GM-CSF**)|Recruitment via int
 Vascular permeability factor(**VPF**)|Recruitment via chemotaxis, angiogenesis, leakiness of tumor vasculature
 Inhibitors|Downregulation of recruitment and activation;and activation;systemic anti-inflammation
 
+---
 
-
-    + inflammatory diseases increase the risk of developing many types of cancer.  
-    + non-steroidal anti-inflammatory drugs reduce the risk of developing certain cancers and reduce the mortality caused by these cancers.  
-    + Signalling pathways involved in inflammation operate downstream of oncogenic mutations.  
-    + Inflammatory cells, chemokines and cytokines are present in the microenivironment of all tumors in experimental animal models and humans from the earliest of development.  
-    + The targeting of inflammatory mediators, key transcription factors involved in inflammation or inflammatory cells decreases the incidence and spread of cancer.  
-    + Adoptive transfer of inflammatory cells or overexpression of inflammatory cytokines promotes the development of tumors.  
+## the evidence that links cancer and inflammation  
++ inflammatory diseases increase the risk of developing many types of cancer.  
++ non-steroidal anti-inflammatory drugs reduce the risk of developing certain cancers and reduce the mortality caused by these cancers.  
++ Signalling pathways involved in inflammation operate downstream of oncogenic mutations.  
++ Inflammatory cells, chemokines and cytokines are present in the microenivironment of all tumors in experimental animal models and humans from the earliest of development.  
++ The targeting of inflammatory mediators, key transcription factors involved in inflammation or inflammatory cells decreases the incidence and spread of cancer.  
++ Adoptive transfer of inflammatory cells or overexpression of inflammatory cytokines promotes the development of tumors.  
 
 
 ```{r,echo=FALSE, fig.align='center',fig.cap="oncogenes and cancer related inflammation"}
 knitr::include_graphics("figure/oncogenes-and-cancer-related-inflammation.PNG")
 ```
 
+---
 
-# Cnacer-inhibitory inflammation  
+## anti-tumor inflammation  
 1. In certain tumors or subsets of tumors the presence of inflammatory cells is associated with better prognosis [@Mantovani1992;@Nickoloff2005].  
 2. Evidence indicates that NF-kB is important in determining this balance between the protumor and antitumor properties of macrophage[@Saccani2006;@Hagemann2008].  
 3. re-educate tumor-promoting macrophage from protumor to antimor phenotype[@Hagemann2008].  
+4. In a skin model, the overexpression of NF-kB was found to inhibit invasive epidermal neoplasia[@], wherease blocking NF-kB activity inhibited the development of experimental liver and colon cancers[@Dajee2003;@Pikarsky2004].
+5. some patients with cancer who had servere postoperative infections at the tumor site underwent spontaneous and sustained tumor regressions[@Mantovani2008].  
 
+---
 
 # Unanswered questions about cancer-related inflammation  
 1. is inflammation sufficient for cancer development?  
