@@ -109,10 +109,8 @@ files <- list.files(path = "../data/20201204/", pattern = "GO_down|GO_up", full.
 sheets <- c("PVN_3L", "PVN_3A")
 outs <- paste(rep(c("PVN_3L", "PVN_3A"), 2), rep(c("down", "up"), each = 2), sep = "_")
 
-
 pvn <- list()
 
-pvn <- list()
 k = 0
 for(i in seq_along(files)){
   for(j in seq_along(sheets)){
@@ -145,6 +143,20 @@ write.csv(x = df, file = "../res/P2ry12/top100_GO_DEGs.csv")
 table(df$symbol %in% inter_3)
 
 all_DEG <- intersect(inter_3, df$symbol)
+```
+
+
+```{r}
+# common up and down genes
+pvn3_common_up_genes <- xlsx::read.xlsx("../data/20201204_common/20201204_geneid_up_common_list.xlsx", 
+                                        sheetName = "PVN_3") %>% 
+  pull(up_PVN_3) %>% 
+  as.character()
+
+pvn3_common_down_genes <- xlsx::read.xlsx("../data/20201204_common/20201204_geneid_down_common_list.xlsx", 
+                                          sheetName = "PVN_3") %>% 
+  pull(down_PVN_3) %>% 
+  as.character()
 ```
 
 
@@ -226,7 +238,10 @@ all_path_nodes %>% dim()
 inter_len <- apply(all_path_nodes[1:10], 
                    1, 
                    intersect, 
-                   mapIds(org.Mm.eg.db, keys = df$symbol %>% unique(), keytype = "SYMBOL", column = "ENTREZID")) %>%
+                   mapIds(org.Mm.eg.db, 
+                          keys = c(pvn3_common_down_genes, pvn3_common_up_genes), 
+                          keytype = "SYMBOL", 
+                          column = "ENTREZID")) %>%
   lapply(na.omit) %>% 
   sapply(length)
 
@@ -265,10 +280,6 @@ retained_path <- all_path_nodes[inter_len >= 1, ]
 #           row.names = F, 
 #           quote = F)
 
-
-retained_path <- all_path_nodes[inter_len >= 1, ] 
-
-
 o1 <- all_path_df %>% 
   filter(from %in% (retained_path %>% pull(order_0) %>% unique()), 
          to %in% (retained_path %>% pull(order_1) %>% unique()))
@@ -292,16 +303,16 @@ o6 <- all_path_df %>%
   filter(from %in% (retained_path %>% pull(order_5) %>% unique()), 
          to %in% (retained_path %>% pull(order_6) %>% unique()))
 
-o7 <- all_path_df %>% 
-  filter(from %in% (retained_path %>% pull(order_6) %>% unique()), 
+o7 <- all_path_df %>%
+  filter(from %in% (retained_path %>% pull(order_6) %>% unique()),
          to %in% (retained_path %>% pull(order_7) %>% unique()))
 
-o8 <- all_path_df %>% 
-  filter(from %in% (retained_path %>% pull(order_7) %>% unique()), 
+o8 <- all_path_df %>%
+  filter(from %in% (retained_path %>% pull(order_7) %>% unique()),
          to %in% (retained_path %>% pull(order_8) %>% unique()))
 
 filtered_path <- rbind(o1, o2, o3, o4, o5, o6, o7, o8)
-filtered_path %>% pull(lty) 
+filtered_path
 
 N <- tibble::tibble(
   ids = c(filtered_path$from, filtered_path$to) %>% unique()
@@ -310,6 +321,54 @@ N <- tibble::tibble(
 
 E <- filtered_path %>% 
   dplyr::select(from, to, everything())
+```
+
+
+```{r, warning=FALSE, message=FALSE}
+g <- tbl_graph(nodes = N, edges = E, directed = T)
+
+# ll <- create_layout(g, "nicely")
+set.seed(123)
+g %>%  
+  mutate(names = names_to_display[ids]) %>% 
+  ggraph(layout = "nicely") +
+  geom_edge_link(aes(filter = (angle == 30), 
+                     edge_linetype = factor(lty)), 
+                 end_cap = circle(2.5, "mm"), 
+                 start_cap = circle(1, "mm"), 
+                 arrow = arrow(length = unit(1, "mm")), 
+                 show.legend = F, 
+                 edge_width = 0.2) +
+  geom_edge_link(aes(filter = (angle == 90), 
+                     edge_linetype = factor(lty)), 
+                 arrow = arrow(angle = 90, length = unit(1, "mm")), 
+                 end_cap = circle(2.5, "mm"), 
+                 show.legend = F, 
+                 edge_width = 0.2) +
+  geom_edge_link(aes(edge_linetype = factor(lty), filter = (is.na(angle))), 
+                 arrow = arrow(angle = 30, length = unit(1, "mm")),
+                 end_cap = circle(2.5, "mm"),
+                 show.legend = F, 
+                 edge_width = 0.2) +
+  geom_node_point(aes(shape = shape), 
+                  fill ="grey", 
+                  size = 5, 
+                  show.legend = F, 
+                  color = "grey") +
+  geom_node_point(aes(shape = shape, filter = (names_to_display[.N()$ids] %in% pvn3_common_up_genes)), 
+                 size = 5, 
+                 color = "darkred", 
+                 fill = "darkred") +
+  geom_node_point(aes(shape = shape, filter = (names_to_display[.N()$ids] %in% pvn3_common_down_genes)),
+                  size = 5,
+                  color = "darkblue",
+                  fill = "darkblue") +
+  geom_node_text(aes(label = names_to_display[.N()$ids]), size = 2) +
+  scale_shape_manual(values = c("21" = 22, "22" = 21)) +
+  theme_graph() +
+  guides(shape = F, size = F)
+
+ggsave(filename = "../res/P2ry12/p2ry12_downstream_signal-20210206.pdf")
 ```
 
 
@@ -371,57 +430,6 @@ DEG_3_orders %>%
   ggtitle(label = "Number of DEGs in different order")
 
 ggsave(filename = "../res/P2ry12/Number-of-DEGs-in-different-order.tiff")
-```
-
-
-```{r, warning=FALSE, message=FALSE}
-df$col <- ifelse(grepl("up", df$group), "darkred", "darkblue")
-df_up <- df %>% filter(col == "darkred")
-df_down <- df %>% filter(col == "darkblue")
-
-g <- tbl_graph(nodes = N, edges = E, directed = T)
-
-# ll <- create_layout(g, "nicely")
-set.seed(123)
-g %>%  
-  mutate(names = names_to_display[ids]) %>% 
-  ggraph(layout = "nicely") +
-  geom_edge_link(aes(filter = (angle == 30), 
-                     edge_linetype = factor(lty)), 
-                 end_cap = circle(2.5, "mm"), 
-                 start_cap = circle(1, "mm"), 
-                 arrow = arrow(length = unit(1, "mm")), 
-                 show.legend = F, 
-                 edge_width = 0.2) +
-  geom_edge_link(aes(filter = (angle == 90), 
-                     edge_linetype = factor(lty)), 
-                 arrow = arrow(angle = 90, length = unit(1, "mm")), 
-                 end_cap = circle(2.5, "mm"), 
-                 show.legend = F, 
-                 edge_width = 0.2) +
-  geom_node_point(aes(shape = shape), 
-                  fill ="grey", 
-                  size = 5, 
-                  show.legend = F, 
-                  color = "grey") +
-  geom_node_point(aes(shape = shape, filter = (names_to_display[.N()$ids] %in% df_up$symbol)), 
-                 size = 5, 
-                 color = "darkred", 
-                 fill = "darkred") +
-  # geom_node_point(aes(shape = shape, filter = (names_to_display[.N()$ids %in% df_down$symbol])), 
-  #                 size = 5, 
-  #                 color = "darkblue", 
-  #                 fill = "darkblue") +
-  geom_node_text(aes(label = names_to_display[.N()$ids]), size = 2) +
-  scale_shape_manual(values = c("21" = 22, "22" = 21)) +
-  theme_graph() +
-  guides(shape = F, size = F)
-
-ggsave(filename = "../res/P2ry12/p2ry12_downstream_signal-20210116.pdf")
-```
-
-```{r}
-df
 ```
 
 

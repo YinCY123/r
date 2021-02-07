@@ -254,8 +254,10 @@ for(i in seq_along(ll)){
 all_path_df$from <- str_trim(string = all_path_df$from, side = "both")
 all_path_df$to <- str_trim(string = all_path_df$to, side = "both")
 
-names_to_display <- c(KEGG_mmu_genes_to_display, KEGG_compounds_to_display, 
-                      KEGG_drug_to_display, KEGG_glycan_to_dispaly)
+names_to_display <- c(KEGG_mmu_genes_to_display, 
+                      KEGG_compounds_to_display, 
+                      KEGG_drug_to_display, 
+                      KEGG_glycan_to_dispaly)
 
 # all_path_df$from_symbol <- names_to_display[all_path_df$from]
 # all_path_df$to_symbol <- names_to_display[all_path_df$to]
