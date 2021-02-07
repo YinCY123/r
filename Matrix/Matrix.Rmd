@@ -1,0 +1,125 @@
+---
+title: "Matrix"
+author: "yincy"
+date: "1/23/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Introduction  
+The most automatic way to use the **Matrix** package is via the `Matrix()` function which is very similar to the standard R function `matrix()`.  
+
+```{r}
+library(Matrix)
+
+M <- Matrix(data = 10 + 1:28, nrow = 4, ncol = 7)
+M
+```
+
+```{r}
+t(M)
+```
+
+```{r}
+cbind(1, M)
+```
+
+```{r}
+M[2, 1]
+```
+
+```{r}
+M[4, ]
+```
+
+```{r}
+M2 <- cbind(1, M)
+M2[, c(2, 4, 6)] <- 0
+M2[2, ] <- 0
+M2 <- rbind(0, M2, 0)
+M2[1:2, 2] <- M2[3, 4:5] <- NA
+M2
+```
+
+```{r}
+sM <- as(M2, Class = "sparseMatrix")
+10 * sM
+```
+
+```{r}
+identical(sM * 2,  sM + sM)
+```
+
+```{r}
+is(sM / 10 + M2 %% 2, "sparseMatrix")
+```
+
+Where the last three calls show that multiplication by a scalar keeps sparcity, as does other arithmetic, but addition to a "dense" object does not, as you might have expected after some thought about "sensible" behavior.  
+
+```{r}
+sM + 10
+```
+
+
+```{r}
+Mg2 <- (sM > 2)
+Mg2
+```
+
+```{r}
+str(Mg2)
+```
+
+```{r}
+summary(Mg2)
+```
+
+As you see from both of these, Mg2 contains “extra zero” (here FALSE) entries; such sparse matrices may be created for different reasons, and you can use drop0() to remove (“drop”) these extra zeros.  
+
+```{r}
+Mg2 <- drop0(Mg2)
+str(Mg2@x)
+```
+
+For large sparse matrices, visualization (of the sparsity pattern) is important, and we provide `image()` methods for that.  
+
+```{r}
+data(CAex)
+
+print(image(CAex, main = "image(CAex)"))
+```
+
+# Matrix Classes  
+The **Matrix** package provides classes for real (stored as double precision), logical and so-called "pattern" (binary) dense and sparse matrices. There are provisions to also provide integer and complex (stored as double precision complex) matrices.  
+
+Note that in R, logical means entries TRUE, FALSE, or NA. To store just the non-zero pattern for typical sparse matrix algorithms, the pattern matrices are *binary*, i.e., conceptually just TRUE or FALSE. In **Matrix**, the pattern matrices all have class names starting with "n" (patter**n**).  
+
+## Classes for dense matrices  
+For the sake of brevity, we restrict ourselves to the real (double) classes, but they are paralleled by logical and pattern matrices for all but the positive definite ones.  
+
+- **dgeMatrix** Real matrices in general storage mode.  
+- **dsyMatrix** Symmetric real matrices in non-package storage.  
+- **dspMatrix** Symmetric real matrices in packed storage (one triangle only).  
+- **dtrMatrix** Triangular real matrices in non-packed storage.  
+- **dtpMatrix** Triangular real matrices in packed storage (triangle only).  
+- **dpoMatrix** Positive semi-definite symmetric real matrices in non-packed storage.  
+- **dppMatrix** ditto in packed storage.  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
