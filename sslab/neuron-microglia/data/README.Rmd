@@ -17,4 +17,8 @@ DT-label: 去掉 microglia 后的神经元
 # TO DO:
 1. find genes encode Potassium Channels  
 2. find single-cell data contains PVN neruons
+    - GSE158960
+    - GSE161751
+    - GSE165457 (endothelial)
+    - GSE150687
 3. find single-cell data contains microglia
