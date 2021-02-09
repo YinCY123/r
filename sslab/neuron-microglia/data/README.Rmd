@@ -1,0 +1,20 @@
+---
+title: "README"
+author: "yincy"
+date: "2/8/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Notes about neuron sequencing data  
+unlabel: 其他神经元
+DT-label: 去掉 microglia 后的神经元
+
+
+# TO DO:
+1. find genes encode Potassium Channels  
+2. find single-cell data contains PVN neruons
+3. find single-cell data contains microglia
