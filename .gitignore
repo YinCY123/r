@@ -19,7 +19,6 @@
 # ignore files
 *.pdf
 *.csv
-*.txt
 *.doc
 *.docx
 
