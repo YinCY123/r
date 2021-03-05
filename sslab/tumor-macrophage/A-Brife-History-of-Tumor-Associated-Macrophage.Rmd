@@ -32,10 +32,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 3. Tumor-associated inflammation might caused by abnormal release and local accumulation of "irritating" tumor products[@Mantovani1992].
 
-4. for many neoplasms, specific immunity is not a major determinant of macrophage infiltration and that factors derived from the tumor itself play a pivotal role in the regulation of macrophage levels in poorly immunogenic metasatatic tumors. This consideration led to search for tumor-derived chemotactic factors released by neoplastic lines:  
+4. for many neoplasms, specific immunity is not a major determinant of macrophage infiltration and that factors derived from the tumor itself play a pivotal role in the regulation of macrophage levels in poorly immunogenic metasatatic tumors. This consideration led to search for tumor-derived chemotactic factors released by neoplastic lines[@Mantovani1992]:  
 
 5. 
-
 
 **Cytokine**|**Role**
 --|--|--
@@ -60,9 +59,8 @@ knitr::include_graphics("figure/oncogenes-and-cancer-related-inflammation.PNG")
 4. In a skin model, the overexpression of NF-kB was found to inhibit invasive epidermal neoplasia[@], wherease blocking NF-kB activity inhibited the development of experimental liver and colon cancers[@Dajee2003;@Pikarsky2004].
 5. some patients with cancer who had servere postoperative infections at the tumor site underwent spontaneous and sustained tumor regressions[@Mantovani2008].  
 
----
 
-# Unanswered questions about cancer-related inflammation  
+## Unanswered questions about cancer-related inflammation  
 1. is inflammation sufficient for cancer development?  
     + Several lines of evidence provide hints that is can. In a muse model of bowel inflammation caused by IL-10 deficiency, the frequency of DNA mutations observed in the colon in the absence of exogenous carcinogens was 4-5 fold greater than in IL-10-sufficient mice[@Sato2006].  
     
@@ -75,28 +73,34 @@ knitr::include_graphics("figure/oncogenes-and-cancer-related-inflammation.PNG")
 8. The definition of MDSCs is operational and includes a heterogeneous set of cells in the peripheral blood and spleen. Are these cells a distinct population, or do they belong to a continuum of TAM differentiation?  
 
 
-# Origin of tumor-associated macrophages  
+# Origins of tumor-associated macrophages  
 1. In 1863, Virchow first identified host leukocytes in and/or at the edge of tumor tissue[@Mantovani1992].  
 2. In 1907, Hardley reported that normal cell infiltration in malignant melanoma indicates a "regressive process"[@Mantovani1992]. 
 3. TAM can express peculiar membrane antigens and high levels of MHCII molecules. This class II expression is lost on culture, a loss reversed by gamma-interferon (IFN-g), suggesting reversible induction in the tumor micronenvironment[@Mantovani1992].  
 4. monocyte-macrophage are potent productors of proteinases which might contribute to tissue invasion of tumor cells[@Mantovani1992].  
 5. administration of macrophage specific toxins augments metastasis in various tumor models by affecting early steps of implantation and growth of secondary foci[@Mantovani1992].  
 6. transplantation of tumor cells mixed with macrophages in normal or monocytopenic hosts results in the earlier appearance or faster growth of various murine tumors[@Mantovani1992].  
+7. STAT3 is a key transcription factor induce the polarization of M-MDSCs into mature TAMs[@Kumar2016].  
+8. The polarization mouse inflammatory monocytes (Ly6C^+^/CCR2^+^ cells) into TAMs mediated by a major transcriptional effector of Notch signaling like RBPJ and down regulation of this protein in TAMs reduced the tumor size in mouse breast cancer[@Franklin2014].  
+9. An important player in the recruitment of monocytes to the tumor, is considered CCL2-CCR2 axis that has been proposed as a new therapeutic target[@]. The origin of CCL2, TANs, fibroblasts.  
+10. 
 
 
-# TAM re-education
+# Angiogenesis and Metastasis
+
+
+# TAMs re-education in cancer therapy
+## Characteristics of M1 and M2 macropahge
+1. Classically activated macrophages (M1) and "alternatively" activated macrophages (M2) represent two extremes in the spectrum of the macropahge phenotype[@Gordon2010].  
+2. M2 macrophages produce high amounts of IL-10 but not IL-12, express scavenger receptors, and exhibit anti-inflammatory and tissue repair functions[@Mantovani2004].  
+3. M1 macrophages activated by microbial products or IFN-g, produce large amounts of proinflammatory cytokines, and are potent killers of pathogens and tumor cells[@Gordon2010].  
+
+## TAMs re-education  
 1. macrophages are polarized via interleukin (IL)-1R and MyD88 to an immuno-suppressive "alternative" phenotype that requires IkB kinase b-mediated NK-kB activation [@Hagemann2008].  
 2. When NF-kB signaling is inhibited specifically in TAMs, they become cytotoxic to tumor cells and switch to a "classically" activated phenotype: IL-12^high^, major histocompatibility complex II^high^, but IL-10^low^ and arginase-1^low^[@Hagemann2008].  
 3. Mouse models of colon and liver cancer have defined an important role for NF-kB activation in driving cancer-associated inflammation[@Mantovani2004;@Pikarsky2004].  
 4. malignant epithelial cells drive NF-kB activation in TAMs in a way that maintains their immuno-suppressive phenotype[@Hagemann2008].
 5. Co-culture with macrophage deficient in MyD88 and IL-1R but not Toll-like recepptor (TLR)2 or TLR4 inhibited invasiveness of tumor cell in vitro[@Hagemann2008].  
-
-# Characteristics of M1 and M2 macropahge
-1. Classically activated macrophages (M1) and "alternatively" activated macrophages (M2) represent two extremes in the spectrum of the macropahge phenotype[@Gordon2010].  
-2. M2 macrophages produce high amounts of IL-10 but not IL-12, express scavenger receptors, and exhibit anti-inflammatory and tissue repair functions[@Mantovani2004].  
-3. M1 macrophages activated by microbial products or IFN-g, produce large amounts of proinflammatory cytokines, and are potent killers of pathogens and tumor cells[@Gordon2010].  
-
-
 
 
 # References  
