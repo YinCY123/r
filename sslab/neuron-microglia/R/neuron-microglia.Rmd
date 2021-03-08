@@ -11,7 +11,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 # kv4.3 and Pdgfrb in KEGG pathway  
-
 ```{r, message=FALSE, warning=FALSE}
 library(tidygraph)
 library(ggraph)

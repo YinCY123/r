@@ -62,5 +62,13 @@ potassium_channels_genes_info <- AnnotationDbi::select(org.Mm.eg.db,
                                         keys = potassium_channels_genes, 
                                         keytype = "ENSEMBL", 
                                         columns = c("ENSEMBL", "ENTREZID", "SYMBOL"))
+
+write.csv(x = potassium_channels_genes_info, 
+          file = "../data/potassium_channel_genes.csv", 
+          row.names = F, 
+          quote = F)
 ```
+
+
+
 
