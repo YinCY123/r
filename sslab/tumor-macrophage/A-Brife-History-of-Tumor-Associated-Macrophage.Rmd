@@ -103,5 +103,42 @@ knitr::include_graphics("figure/oncogenes-and-cancer-related-inflammation.PNG")
 5. Co-culture with macrophage deficient in MyD88 and IL-1R but not Toll-like recepptor (TLR)2 or TLR4 inhibited invasiveness of tumor cell in vitro[@Hagemann2008].  
 
 
+# Cells of the Lymphoreticular System
+## Overview  
+The lymphoreticular system consists of the *spleen*, *lymphnodes*, *lymphatic vessels*, *thymus*, and *bone marrow*.  
+
+The lymphoreticular system consists of organs (lymph nodes, spleen, thymus) and ill-defined tissues (mucosa-associated lymphoid tissue) that are concerned with the growth, development and deployment of white blood cells. White blood cells are crucial for immune responses. The lymph nodes lie along the course of the lymphatics, receiving lymph from the tissues and destroying or mounting immune responses to foreign agents before they reach the bloodstream. Both benign and malignant disorders of the lymph nodes often manifest as lymph node enlargement (lymphadenopathy), and lymph node biopsy is sometimes necessary to determine the diagnosis and indicate further management. The spleen receives blood from the arterial system. It functions as a filter by removing obsolescent red blood cells and particulate matter from the blood, and mounts immunological responses against foreign agents. Most benign and malignant disorders of the spleen manifest as splenic enlargement (splenomegaly). Rupture of the spleen is a potentially life-threatening condition that requires prompt management. The thymus is an important component of the lymphoreticular system in fetal life, but probably has no significant role in adults. Failure of normal development of the thymus causes deficient immune responses and, in adults, thymic hyperplasia and thymic tumours may develop.
+
+## Basic principles  
+The cells which circulate in the peripheral blood can be classified simply into those that are non-nucleated (erythrocytes and platelets) and those that are nucleated (leucocytes or white blood cells). White blood cells can be further subclassified into three main cell types:  
+
+- granulocytes  
+- monocytes  
+- lymphocytes  
+
+The main function of these cells is to protect against infection. Lymphocytes and monocytes circulate around the body in blood vessels and lymphatic vessels, but they also accumulate in organised masses called lymphoid tissues. These organised masses together are known as the lymphoreticular system and the main components of this system are the lymph nodes, thymus, spleen, tonsils, adenoids, and the Peyer patches. The latter three tissues are known as mucosa-associated lymphoid tissue (MALT).  
+
+## Lymph nodes  
+Lymph nodes are ovoid, encapsulated structures, which range in size from a few millimetres to a few centimetres. They are situated along the course of lymphatic vessels and tend to occur in groups where these vessels converge (e.g. the axilla, groin, neck and mediastinum). Lymph is essentially interstitial fluid containing proteins that need to return to the bloodstream, but which are prevented from doing so within the tissues because of overwhelming hydrostatic pressure. Lymph is therefore carried away from the tissues in small peripheral lymphatic vessels, which converge to form larger vessels, until eventually a single large lymphatic vessel called the thoracic duct ultimately drains the lymph into the bloodstream at the root of the neck. Before the lymph enters the bloodstream, it must pass through one or more lymph nodes. Within the lymph nodes, foreign agents and unwanted materials, which have gained access to the tissues, are entrapped and an immune response is mounted.  
+
+Each lymph node is divided into three main regions: the cortex, the paracortex and the medulla.  
+```{r}
+knitr::include_graphics("figure/the-structure-of-lymph-node.PNG")
+```
+
+## Lymphadenopathy  
+When there is a pathological process affecting a lymph node, it usually becomes enlarged. Lymphadenopathy is a term used to denote lymph node enlargement. Lymphadenopathy may be localised or widespread. There are two main causes:  
+
+- non-neoplastic (reactive) lymphadenopathy  
+- neoplastic lymphadenopathy  
+
+Neoplasms of the lymph nodes can be divided into primary (lymphoma) or secondary (metastases).
+
+
+## Resources about Lymphoreticular system  
+- https://clinicalgate.com/lymphoreticular-system/  
+- http://www.brainkart.com/article/Cells-of-the-Lymphoreticular-System_17941/  
+
+
 # References  
 
