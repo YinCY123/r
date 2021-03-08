@@ -1,0 +1,38 @@
+---
+title: "potassium genes regulation"
+author: "yincy"
+date: "3/8/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+```
+
+
+# data  
+- neuron and microglia: GSE60361  
+
+# 
+```{r}
+counts_table <- read.table("f:/GSE60361/GSE60361_C1-3005-Expression.txt.gz", 
+                           sep = "\t")
+colnames(counts_table) <- counts_table[1, , drop = T]
+counts_table <- counts_table[-1, ]
+counts_table %>% .[1:5, 1:5]
+counts_table <- counts_table
+```
+
+```{r}
+cef <- read.table("f:/oligos_clustered.cef", skip = 3, sep = "\t")
+cef %>% dim()
+```
+
+```{r}
+
+```
+
