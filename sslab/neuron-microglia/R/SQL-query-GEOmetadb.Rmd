@@ -1,0 +1,115 @@
+---
+title: "SQL-query-GEOmetadb"
+author: "yincy"
+date: "3/11/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+library(DBI)
+library(RSQLite)
+library(magrittr)
+library(tidyverse)
+```
+
+```{r}
+con <- dbConnect(drv = RSQLite::SQLite(), "../../../../Data/GEOmetadb.sqlite")
+```
+
+```{r}
+dbListTables(con)
+```
+
+```{r}
+dbListFields(con, "gse")
+```
+
+```{r}
+dbReadTable(con, "gsm")
+```
+
+filtering fields    
+```{r}
+gse_type <- dbReadTable(con, "gse") %>% 
+    pull(type) %>% 
+    table() %>% 
+    sort(decreasing = T) %>% 
+    names()
+
+gse_pubmed_id <- dbReadTable(con, "gse") %>% 
+    pull(pubmed_id) %>% 
+    unique() %>% 
+    na.omit() %>% 
+    as.character()
+
+gsm_organism_ch1 <- dbReadTable(con, "gsm") %>% 
+    pull(organism_ch1) %>% 
+    table() %>% 
+    sort(decreasing = T) %>% 
+    names()
+
+gsm_source_name_ch1 <- dbReadTable(con, "gsm") %>% 
+    pull(source_name_ch1) %>% 
+    table() %>% 
+    sort(decreasing = T) %>% 
+    names()
+
+gsm_molecule_ch1 <- dbReadTable(con, "gsm") %>% 
+    pull(molecule_ch1) %>% 
+    unique() %>% 
+    na.omit() %>% 
+    as.character()
+
+gpl_technology <- dbReadTable(con, "gpl") %>% 
+    pull(technology) %>% 
+    unique() %>% 
+    na.omit() %>% 
+    as.character()
+
+gpl_organism <- dbReadTable(con, "gpl") %>% 
+    pull(organism) %>% 
+    table() %>% 
+    sort(decreasing = T) %>% 
+    names()
+
+gds_title <- dbReadTable(con, "gds") %>% 
+    pull(title) %>% 
+    unique()
+
+gds_type <- dbReadTable(con, "gds") %>% 
+    pull(type) %>% 
+    unique()
+```
+
+
+Query statements  
+```{r}
+statement <- paste("select gse.gse, gsm.source_name_ch1, gse.type", 
+                   "from gpl", 
+                   "join gds on gpl.gpl=gds.gpl", 
+                   "join gse on gds.gse=gse.gse", 
+                   "join gse_gsm on gse.gse=gse_gsm.gse",
+                   "join gsm on gse_gsm.gsm=gsm.gsm",  
+                   "where gse.type like '%high throughput sequencing%'", 
+                   "and gsm.source_name_ch1 like '%hippocampus%'", 
+                   "and gsm.organism_ch1 = 'Mus musculus'",
+                   sep = " ")
+```
+
+```{r}
+query <- dbGetQuery(conn = con, 
+                    statement = statement)
+
+query %>% 
+    distinct(gse, .keep_all = T)
+```
+
+
+
+
+
