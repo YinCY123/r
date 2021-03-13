@@ -1,0 +1,26 @@
+---
+title: "kcnd3_control"
+author: "yincy"
+date: "3/10/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+paste_seq <- "GGTAGTCACCTTAGTAAATTTAGGGTGAGGTAAGTCTATATTCAGAGGATCTCCATGTTACTTCAGAGGATCTCCATGTTACTTGACAATCGCAGGGAAGATATT"
+
+prob <- paste_seq %>% DNAString() %>% letterFrequency(letters = c("A", "G", "T", "C"), as.prob = T)
+```
+
+```{r}
+set.seed(123)
+control_seq <- sample(c("A", "G", "T", "C"), 19, replace = T, prob = prob) %>% stringr::str_c(collapse = "")
+
+control_seq %>% DNAString() %>% complement() %>% reverse()
+```
+
+
