@@ -58,6 +58,8 @@ knitr::include_graphics("figure/oncogenes-and-cancer-related-inflammation.PNG")
 3. re-educate tumor-promoting macrophage from protumor to antimor phenotype[@Hagemann2008].  
 4. In a skin model, the overexpression of NF-kB was found to inhibit invasive epidermal neoplasia[@], wherease blocking NF-kB activity inhibited the development of experimental liver and colon cancers[@Dajee2003;@Pikarsky2004].
 5. some patients with cancer who had servere postoperative infections at the tumor site underwent spontaneous and sustained tumor regressions[@Mantovani2008].  
+6. Peritoneal exudate from mice treated with C.parvum caused a complete inhibition of tumor cell growth compared to the spleen and peripheral blood leucocytes[@Woodruff1974], but after the peritoneal exudate incubated for 30 mins to remove glass adderent cells, the inhibition was lost.  
+7. 
 
 
 ## Unanswered questions about cancer-related inflammation  
@@ -138,6 +140,12 @@ Neoplasms of the lymph nodes can be divided into primary (lymphoma) or secondary
 ## Resources about Lymphoreticular system  
 - https://clinicalgate.com/lymphoreticular-system/  
 - http://www.brainkart.com/article/Cells-of-the-Lymphoreticular-System_17941/  
+
+# From Tumor-associated macrophage  
+## Macrophage Phenotype in Tumors  
+
+
+
 
 
 # References  
