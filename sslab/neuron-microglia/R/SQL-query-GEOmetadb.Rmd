@@ -95,11 +95,18 @@ statement <- paste("select gse.gse, gsm.source_name_ch1, gse.type",
                    "join gse on gds.gse=gse.gse", 
                    "join gse_gsm on gse.gse=gse_gsm.gse",
                    "join gsm on gse_gsm.gsm=gsm.gsm",  
-                   "where gse.type like '%high throughput sequencing%'", 
+                   "where gpl.technology = 'high-throughput sequencing'", 
                    "and gsm.source_name_ch1 like '%hippocampus%'", 
-                   "and gsm.organism_ch1 = 'Mus musculus'",
+                   "and gsm.organism_ch1 in ('Mus musculus', 'Homo sapiens')",
                    sep = " ")
 ```
+
+```{r}
+gpl_technology 
+gsm_organism_ch1 %>% head()
+gsm_source_name_ch1 %>% head(10)
+```
+
 
 ```{r}
 query <- dbGetQuery(conn = con, 
