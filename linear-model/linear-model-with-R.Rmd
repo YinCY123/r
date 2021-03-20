@@ -1,0 +1,137 @@
+---
+title: "linear model with R"
+author: "yincy"
+date: "3/20/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**Notes for <Linear Models with R>**
+The emphasis of this text is on the practice of regression and analysis of variance.  
+
+The objective is to learn what methods are available and more importantly, when they should be applied.  
+
+# Chapter 1 Introduction  
+## Before You Start  
+Statistics starts with a problem, proceeds with the collection of data, continues with the data analysis and finshes with conclusions.  
+
+**To formulate the problem correctly**  
+
+1. Understand the physical background.  
+2. Understand the objective.  
+3. Make sure you know what the client wants.  
+4. Put the problem into statistical terms.  
+
+
+## Inital Data Analysis
+This is a critical step that should always be performed. It looks simple but it is vital. You should make numerical summaries such as means, standard deviations (SDs), maximum and minimum, correlations and whatever else is appropriate to the specific dataset. Equally important are graphical summaries.  
+
+```{r}
+library(faraway)
+data(pima)
+
+pima
+```
+
+```{r}
+summary(pima)
+```
+
+```{r}
+pima$diastolic[pima$diastolic == 0] <- NA
+pima$glucose[pima$glucose == 0] <- NA
+pima$triceps[pima$triceps == 0] <- NA
+pima$insulin[pima$insulin == 0] <- NA
+pima$bmi[pima$bmi == 0] <- NA
+pima$test <- factor(pima$test, levels = c(0, 1), labels = c("negative", "positive"))
+
+summary(pima)
+```
+
+```{r}
+hist(pima$diastolic)
+```
+
+```{r}
+plot(density(pima$diastolic, na.rm = TRUE))
+```
+
+```{r}
+plot(sort(pima$diastolic), pch = ".")
+```
+
+```{r}
+plot(diabetes ~ diastolic, pima)
+```
+
+```{r}
+plot(diabetes ~ test, pima)
+```
+
+```{r}
+pairs(pima)
+```
+
+## When to Use Regression Analysis  
+Regression analysis is used for explaining or modeling the relationship between a single variable Y, called the response, output or dependent variable; and one or more predictor, input, independent or explanatory variables, X~1~, …, X~p~.  
+
+When p=1, it is called simple regression but when p>1 it is called multiple regression or sometimes multivariate regression.  
+
+When there is more than one Y, then it is called multivariate regression.  
+
+The response must be a continuous variable, but the explanatory variables can be continuous, discrete or categorical, 
+
+A regression with diastolic and bmi as X and diabetes as Y would be a multiple regression involving only quantitative variables.  
+
+A regression with diastolic and test as X and bmi as Y would have one predictor that is quantitative and one that is qualitative.  
+
+A regression with test as X and diastolic as Y involves just qualitative predictors called analysis of variance (ANOVA).  
+
+A regression of test as Y on diastolic and bmi as predictors would involve a qualitative response. A logistic regression could be used.  
+
+
+**Regression analyses have several possible objectives including**:  
+
+1. Prediction of future observations.  
+2. Assessment of the effect of, or relationship between, explanatory variables and the response.  
+3. A general description of data structure.  
+
+
+## History  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
