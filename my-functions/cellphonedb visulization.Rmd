@@ -1,0 +1,79 @@
+---
+title: "cellphonedb visulization"
+author: "yincy"
+date: "3/6/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+
+```{r}
+all_means <- read.csv("/home/yincy/git/Data/kidney-single-cell/GSE107585/kidney-sc-communication/means.csv", check.names = F)
+all_pvalues <- read.csv("/home/yincy/git/Data/kidney-single-cell/GSE107585/kidney-sc-communication/pvalues.csv", check.names = F)
+```
+
+
+```{r}
+definition_cols <- colnames(all_means) %>% head(n = 11) %>% .[-2]
+all_means_df <- all_means %>% 
+    select(-definition_cols) %>% 
+    gather(key = "Cluster", value = "mean", -interacting_pair)
+
+all_pvalues_df <- all_pvalues %>% 
+    select(-definition_cols) %>% 
+    gather(key = "Cluster", value = "pvalue", -interacting_pair)
+
+plot_data <- left_join(x = all_means_df, 
+                       y = all_pvalues_df, 
+                       by = c("interacting_pair" = "interacting_pair", "Cluster" = "Cluster"))
+```
+
+```{r}
+plot_data %>% 
+    mutate(pvalue = ifelse(pvalue == 0, 0.0009, pvalue), 
+           mean = ifelse(mean == 0, 1, mean), 
+           mean = log2(mean)) %>% 
+    ggplot(aes(interacting_pair, Cluster)) +
+    geom_point(aes(size = -log10(pvalue), color = mean)) +
+    theme(axis.text = element_text(size = 1, color = "black"), 
+        axis.text.x = element_text(size = 1, angle = 90, hjust = 1), 
+        axis.text.y = element_text(size = 1, color = "black"), 
+        axis.title = element_blank(), 
+        axis.ticks = element_line(size = 0.01), 
+        axis.ticks.length = unit(0, "cm")
+    )
+
+ggsave("/home/yincy/git/R/sslab/kidney-cc.pdf", 
+       device = cairo_pdf, 
+       limitsize = F, 
+       height = 10, 
+       width = 8)
+```
+
+
+```{r}
+my_palette <- colorRampPalette(c("black", "blue", "yellow", "red"), alpha=TRUE)(n=399)
+plot_data %>% 
+  ggplot(aes(x=Cluster,y=interacting_pair)) +
+  geom_point(aes(size=-log10(pvalue),color=mean)) +
+  scale_color_gradientn('Log2 mean (Molecule 1, Molecule 2)', colors = my_palette) +
+  theme_bw() +
+  theme(panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        axis.text=element_text(size=14, colour = "black"),
+        axis.text.x = element_text(angle = 90, hjust = 1),
+        axis.text.y = element_text(size=12, colour = "black"),
+        axis.title=element_blank(),
+        panel.border = element_rect(size = 0.7, linetype = "solid", colour = "black"))
+
+ggsave("cellphonedb.pdf")
+```
+
