@@ -1,0 +1,176 @@
+---
+title: "neuron microglia"
+author: "yincy"
+date: "1/4/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# kv4.3 and Pdgfrb in KEGG pathway  
+```{r, message=FALSE, warning=FALSE}
+library(tidygraph)
+library(ggraph)
+library(igraph)
+library(org.Mm.eg.db)
+library(tidyverse)
+```
+
+
+Kcnd3 predicted transcription factors PROMO  
+```{r}
+entrez <- c("YY1" = "22632", 
+            "POU2F2" = "18987", 
+            "LyF-1" = "22778", 
+            "Sp1" = "20683", 
+            "RXR-alpha" = "20181", 
+            "POU5F1" = "18999", 
+            "POU3F1" = "18991", 
+            "Pax-5" = "18507", 
+            "POU2F1a" = "18986", 
+            "RelA" = "19697", 
+            "CP2" = "21422", 
+            "NF-kappaB1" = "18033", 
+            "NF-AT1" = "18019", 
+            "TFE3-S" = "209446", 
+            "TCF-1(P)" = "21414", 
+            "HNF-3" = "14461", 
+            "NF-muNR" = "13047", 
+            "COE1" = "13591", 
+            "HNF-6" = "15379", 
+            "Yi" = "67180", 
+            "PU.1" = "20375", 
+            "Nkx2-1" = "21869", 
+            "AhR" = "11622", 
+            "MyoD" = "17927", 
+            "E2F-1" = "13555", 
+            "HNF-3beta" = "15376", 
+            "HES-1" = "15205", 
+            "AP-1.1" = "16476", 
+            "AP-1.2" = "14281", 
+            "USF-1" = "22278", 
+            "GATA-1" = "14460", 
+            "DEC2" = "79362", 
+            "c-Rel" = "19696", 
+            "myogenin" = "17928", 
+            "MTF-1" = "17764", 
+            "STAT1" = "20846", 
+            "GATA-2" = "14461", 
+            "C/EBPalpha" = "12606", 
+            "GR" = "14815", 
+            "JunD" = "16478", 
+            "c-Jun" = "16476", 
+            "NF-1.1" = "18027", 
+            "NF-1.2" = "18028", 
+            "NF-1.3" = "18029", 
+            "NF-1.4" = "18032", 
+            "NF-AT4" = "18021", 
+            "HOXA5" = "15402", 
+            "c-Fos" = "14281", 
+            "C/EBPbeta" = "12608")
+
+entrez <- entrez %>% as.data.frame() %>% 
+    rownames_to_column("PROMO") %>% 
+    magrittr::set_colnames(c("PROMO", "ENTREZ")) %>% 
+    mutate(ENTREZ = as.character(ENTREZ))
+
+tf <- AnnotationDbi::select(org.Mm.eg.db, 
+             keys = entrez[, "ENTREZ", drop = T], 
+             keytype = "ENTREZID", 
+             columns = c("SYMBOL", "ENTREZID"))
+
+tf %>% right_join(y = entrez, by = c("ENTREZID" = "ENTREZ"))
+```
+
+load KEGG pathways  
+```{r}
+pathways <- readRDS(file = "../../P2y12r-and-C1q/data/KEGG/KEGG_pathways_formatted.rds")
+names_to_display <- readRDS(file = "../../P2y12r-and-C1q/data/KEGG/names_to_display.rds")
+```
+
+
+Pdgfrb downstream genes  
+```{r}
+ig <- graph_from_data_frame(d = pathways[, 1:2], directed = T)
+dist_to_pdgfrb <- shortest_paths(graph = ig, 
+                                 from = V(ig)$name == "18596", 
+                                 to = V(ig)$name %in% tf$ENTREZID, 
+                                 mode = "out", 
+                                 output = "epath")$epath
+
+spath_df <- dist_to_pdgfrb %>% 
+  sapply(as_ids) %>% 
+  lapply(as.matrix) %>%
+  unlist() %>% 
+  as.data.frame() %>% 
+  magrittr::set_colnames("from_to") %>% 
+  separate(col = "from_to", into = c("from", "to"), sep = "\\|")
+
+
+spath_df_KEGG <- spath_df %>% 
+  left_join(pathways, by = c("from" = "from", "to" = "to")) %>% 
+  distinct(from, to, .keep_all = TRUE)
+
+N <- tibble(
+  ids = c(spath_df_KEGG$from, spath_df_KEGG$to) %>% unique()
+) %>% 
+  mutate(
+    shape = ifelse(grepl("^cpd:|^gl:|^dr:", ids, ignore.case = F), "22", "21"), 
+    ncol = "grey", 
+    ncol = ifelse(names_to_display[ids] %in% tf$SYMBOL, "gold", ncol)
+  )
+
+E <- spath_df_KEGG %>% 
+  mutate(lty = factor(lty))
+```
+
+```{r}
+g <- tbl_graph(nodes = N, edges = E, directed = T)
+```
+
+```{r, message=FALSE, warning=FALSE}
+set.seed(123)
+g %>% 
+    ggraph(layout = "fr") +
+    geom_edge_link(aes(filter = (.E()$angle == 90), 
+                       label = .E()$edge_label, 
+                       edge_linetype = .E()$lty), 
+                   arrow = arrow(angle = 90, length = unit(0.4, "mm")), 
+                   end_cap = circle(1, "mm"), 
+                   edge_width = 0.1, 
+                   edge_color = "gray", 
+                   show.legend = F, 
+                   label_size = 1) +
+    geom_edge_link(aes(filter = (.E()$angle == 30), 
+                       label = .E()$edge_label, 
+                       edge_linetype = .E()$lty), 
+                   arrow = arrow(angle = 30, length = unit(0.7, "mm")), 
+                   end_cap = circle(1, "mm"), 
+                   edge_width = 0.1, 
+                   edge_color = "gray", 
+                   show.legend = F, 
+                   label_size = 1) +
+    geom_edge_link(aes(filter = (is.na(.E()$angle)), 
+                       label = .E()$edge_label, 
+                       edge_linetype = .E()$lty), 
+                   arrow = arrow(angle = 30, length = unit(0.7, "mm")), 
+                   end_cap = circle(1, "mm"), 
+                   edge_width = 0.1, 
+                   edge_color = "gray", 
+                   show.legend = F, 
+                   label.size = 1) +
+    geom_node_point(aes(color = ncol), size = 2) +
+    geom_node_text(aes(label = names_to_display[.N()$ids]), size = 1) +
+    scale_edge_linetype_manual(name = "", values = c("1" = "solid", "3" = "solid", "5" = "dashed")) +
+    scale_color_manual(values = c("gold" = "gold", "grey" = "grey")) +
+    theme_graph() +
+  guides(color = FALSE)
+
+ggsave("../res/tf_signale-20210314.pdf", device = cairo_pdf)
+```
+
+
+
