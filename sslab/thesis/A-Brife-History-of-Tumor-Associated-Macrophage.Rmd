@@ -1,0 +1,152 @@
+---
+title: "A Brife History of Tumor Associated Macrophage"
+author: "yincy"
+date: "1/25/2021"
+output: html_document
+
+
+bibliography: 
+- "f:/git/Data/mendeley-bib/Tumor-Tumor-Macrophage.bib"
+- "f:/git/Data/mendeley-bib/Tumor-Macrophage.bib"
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Links between inflammation and cancer  
+## the evidence that links cancer and inflammation  
++ inflammatory diseases increase the risk of developing many types of cancer.  
++ non-steroidal anti-inflammatory drugs reduce the risk of developing certain cancers and reduce the mortality caused by these cancers.  
++ Signalling pathways involved in inflammation operate downstream of oncogenic mutations.  
++ Inflammatory cells, chemokines and cytokines are present in the microenivironment of all tumors in experimental animal models and humans from the earliest of development.  
++ The targeting of inflammatory mediators, key transcription factors involved in inflammation or inflammatory cells decreases the incidence and spread of cancer.  
++ Adoptive transfer of inflammatory cells or overexpression of inflammatory cytokines promotes the development of tumors.  
+
+
+## pro-tumor inflammation
+1. This papaer[@Balkwill2001] identified the links between inflammation and cancer, on the basis of observations that tumors often arose at sites of chronic inflammation and that inflammatory cells were present in biopsied samples from tumours.    
+
+2. The activation of RET (protein tyrosine kinase) induces a transcriptional program that is similar to that which occurs during inflammation[@Borrello2005;@DeFalco2007].  
+
+3. Tumor-associated inflammation might caused by abnormal release and local accumulation of "irritating" tumor products[@Mantovani1992].
+
+4. for many neoplasms, specific immunity is not a major determinant of macrophage infiltration and that factors derived from the tumor itself play a pivotal role in the regulation of macrophage levels in poorly immunogenic metasatatic tumors. This consideration led to search for tumor-derived chemotactic factors released by neoplastic lines[@Mantovani1992]:  
+
+5. 
+
+**Cytokine**|**Role**
+--|--|--
+Monocyte chemotactic protein 1(**MCP-1**)|Recruitment via chemotaxis; systemic anti-inflammation
+Monocyte colony-stimulating factor(**M-CSF**)|Promotion of survival,proliferation,chemotaxis,downregulation of oxidative burst
+Granulocyte-macrophage colony-stimulating factor(**GM-CSF**)|Recruitment via interaction with endothelium and chemotaxis;inhibition of cytotoxicity
+Vascular permeability factor(**VPF**)|Recruitment via chemotaxis, angiogenesis, leakiness of tumor vasculature
+Inhibitors|Downregulation of recruitment and activation;and activation;systemic anti-inflammation
+
+---
+
+```{r,echo=FALSE, fig.align='center',fig.cap="oncogenes and cancer related inflammation"}
+knitr::include_graphics("figure/oncogenes-and-cancer-related-inflammation.PNG")
+```
+
+---
+
+## anti-tumor inflammation  
+1. In certain tumors or subsets of tumors the presence of inflammatory cells is associated with better prognosis [@Mantovani1992;@Nickoloff2005].  
+2. Evidence indicates that NF-kB is important in determining this balance between the protumor and antitumor properties of macrophage[@Saccani2006;@Hagemann2008].  
+3. re-educate tumor-promoting macrophage from protumor to antimor phenotype[@Hagemann2008].  
+4. In a skin model, the overexpression of NF-kB was found to inhibit invasive epidermal neoplasia[@], wherease blocking NF-kB activity inhibited the development of experimental liver and colon cancers[@Dajee2003;@Pikarsky2004].
+5. some patients with cancer who had servere postoperative infections at the tumor site underwent spontaneous and sustained tumor regressions[@Mantovani2008].  
+6. Peritoneal exudate from mice treated with C.parvum caused a complete inhibition of tumor cell growth compared to the spleen and peripheral blood leucocytes[@Woodruff1974], but after the peritoneal exudate incubated for 30 mins to remove glass adderent cells, the inhibition was lost.  
+7. 
+
+
+## Unanswered questions about cancer-related inflammation  
+1. is inflammation sufficient for cancer development?  
+    + Several lines of evidence provide hints that is can. In a muse model of bowel inflammation caused by IL-10 deficiency, the frequency of DNA mutations observed in the colon in the absence of exogenous carcinogens was 4-5 fold greater than in IL-10-sufficient mice[@Sato2006].  
+    
+2. despite diversity of tumors and oncogenic pathways, are there aspects of cancer-related inflammation that are common to all malignancies?  
+3. How can the balance between 'bad' inflammation and 'good' inflammation be altered to favor adative immunity instead of tumor development?  
+4. What is the relationship between MDSCs and TAMs?  
+5. What is the clinical relevance of the connections between sex steroid hormones and inflammation?  
+6. What is the best way to target cancer-related inflammation in patients with cancer? This is the most difficult question.  
+7. It will be important to define which cellular and molecular components are common to all cancer-promoting inflammatory responses, and which are specific to particular tissue and tumor types.  
+8. The definition of MDSCs is operational and includes a heterogeneous set of cells in the peripheral blood and spleen. Are these cells a distinct population, or do they belong to a continuum of TAM differentiation?  
+
+
+# Origins of tumor-associated macrophages  
+1. In 1863, Virchow first identified host leukocytes in and/or at the edge of tumor tissue[@Mantovani1992].  
+2. In 1907, Hardley reported that normal cell infiltration in malignant melanoma indicates a "regressive process"[@Mantovani1992]. 
+3. TAM can express peculiar membrane antigens and high levels of MHCII molecules. This class II expression is lost on culture, a loss reversed by gamma-interferon (IFN-g), suggesting reversible induction in the tumor micronenvironment[@Mantovani1992].  
+4. monocyte-macrophage are potent productors of proteinases which might contribute to tissue invasion of tumor cells[@Mantovani1992].  
+5. administration of macrophage specific toxins augments metastasis in various tumor models by affecting early steps of implantation and growth of secondary foci[@Mantovani1992].  
+6. transplantation of tumor cells mixed with macrophages in normal or monocytopenic hosts results in the earlier appearance or faster growth of various murine tumors[@Mantovani1992].  
+7. STAT3 is a key transcription factor induce the polarization of M-MDSCs into mature TAMs[@Kumar2016].  
+8. The polarization mouse inflammatory monocytes (Ly6C^+^/CCR2^+^ cells) into TAMs mediated by a major transcriptional effector of Notch signaling like RBPJ and down regulation of this protein in TAMs reduced the tumor size in mouse breast cancer[@Franklin2014].  
+9. An important player in the recruitment of monocytes to the tumor, is considered CCL2-CCR2 axis that has been proposed as a new therapeutic target[@]. The origin of CCL2, TANs, fibroblasts.  
+10. 
+
+
+# Angiogenesis and Metastasis
+
+
+# TAMs re-education in cancer therapy
+## Characteristics of M1 and M2 macropahge
+1. Classically activated macrophages (M1) and "alternatively" activated macrophages (M2) represent two extremes in the spectrum of the macropahge phenotype[@Gordon2010].  
+2. M2 macrophages produce high amounts of IL-10 but not IL-12, express scavenger receptors, and exhibit anti-inflammatory and tissue repair functions[@Mantovani2004].  
+3. M1 macrophages activated by microbial products or IFN-g, produce large amounts of proinflammatory cytokines, and are potent killers of pathogens and tumor cells[@Gordon2010].  
+
+## TAMs re-education  
+1. macrophages are polarized via interleukin (IL)-1R and MyD88 to an immuno-suppressive "alternative" phenotype that requires IkB kinase b-mediated NK-kB activation [@Hagemann2008].  
+2. When NF-kB signaling is inhibited specifically in TAMs, they become cytotoxic to tumor cells and switch to a "classically" activated phenotype: IL-12^high^, major histocompatibility complex II^high^, but IL-10^low^ and arginase-1^low^[@Hagemann2008].  
+3. Mouse models of colon and liver cancer have defined an important role for NF-kB activation in driving cancer-associated inflammation[@Mantovani2004;@Pikarsky2004].  
+4. malignant epithelial cells drive NF-kB activation in TAMs in a way that maintains their immuno-suppressive phenotype[@Hagemann2008].
+5. Co-culture with macrophage deficient in MyD88 and IL-1R but not Toll-like recepptor (TLR)2 or TLR4 inhibited invasiveness of tumor cell in vitro[@Hagemann2008].  
+
+
+# Cells of the Lymphoreticular System
+## Overview  
+The lymphoreticular system consists of the *spleen*, *lymphnodes*, *lymphatic vessels*, *thymus*, and *bone marrow*.  
+
+The lymphoreticular system consists of organs (lymph nodes, spleen, thymus) and ill-defined tissues (mucosa-associated lymphoid tissue) that are concerned with the growth, development and deployment of white blood cells. White blood cells are crucial for immune responses. The lymph nodes lie along the course of the lymphatics, receiving lymph from the tissues and destroying or mounting immune responses to foreign agents before they reach the bloodstream. Both benign and malignant disorders of the lymph nodes often manifest as lymph node enlargement (lymphadenopathy), and lymph node biopsy is sometimes necessary to determine the diagnosis and indicate further management. The spleen receives blood from the arterial system. It functions as a filter by removing obsolescent red blood cells and particulate matter from the blood, and mounts immunological responses against foreign agents. Most benign and malignant disorders of the spleen manifest as splenic enlargement (splenomegaly). Rupture of the spleen is a potentially life-threatening condition that requires prompt management. The thymus is an important component of the lymphoreticular system in fetal life, but probably has no significant role in adults. Failure of normal development of the thymus causes deficient immune responses and, in adults, thymic hyperplasia and thymic tumours may develop.
+
+## Basic principles  
+The cells which circulate in the peripheral blood can be classified simply into those that are non-nucleated (erythrocytes and platelets) and those that are nucleated (leucocytes or white blood cells). White blood cells can be further subclassified into three main cell types:  
+
+- granulocytes  
+- monocytes  
+- lymphocytes  
+
+The main function of these cells is to protect against infection. Lymphocytes and monocytes circulate around the body in blood vessels and lymphatic vessels, but they also accumulate in organised masses called lymphoid tissues. These organised masses together are known as the lymphoreticular system and the main components of this system are the lymph nodes, thymus, spleen, tonsils, adenoids, and the Peyer patches. The latter three tissues are known as mucosa-associated lymphoid tissue (MALT).  
+
+## Lymph nodes  
+Lymph nodes are ovoid, encapsulated structures, which range in size from a few millimetres to a few centimetres. They are situated along the course of lymphatic vessels and tend to occur in groups where these vessels converge (e.g. the axilla, groin, neck and mediastinum). Lymph is essentially interstitial fluid containing proteins that need to return to the bloodstream, but which are prevented from doing so within the tissues because of overwhelming hydrostatic pressure. Lymph is therefore carried away from the tissues in small peripheral lymphatic vessels, which converge to form larger vessels, until eventually a single large lymphatic vessel called the thoracic duct ultimately drains the lymph into the bloodstream at the root of the neck. Before the lymph enters the bloodstream, it must pass through one or more lymph nodes. Within the lymph nodes, foreign agents and unwanted materials, which have gained access to the tissues, are entrapped and an immune response is mounted.  
+
+Each lymph node is divided into three main regions: the cortex, the paracortex and the medulla.  
+```{r}
+knitr::include_graphics("figure/the-structure-of-lymph-node.PNG")
+```
+
+## Lymphadenopathy  
+When there is a pathological process affecting a lymph node, it usually becomes enlarged. Lymphadenopathy is a term used to denote lymph node enlargement. Lymphadenopathy may be localised or widespread. There are two main causes:  
+
+- non-neoplastic (reactive) lymphadenopathy  
+- neoplastic lymphadenopathy  
+
+Neoplasms of the lymph nodes can be divided into primary (lymphoma) or secondary (metastases).
+
+
+## Resources about Lymphoreticular system  
+- https://clinicalgate.com/lymphoreticular-system/  
+- http://www.brainkart.com/article/Cells-of-the-Lymphoreticular-System_17941/  
+
+# From Tumor-associated macrophage  
+## Macrophage Phenotype in Tumors  
+
+
+
+
+
+# References  
+
