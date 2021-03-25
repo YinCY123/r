@@ -76,7 +76,7 @@ entrez <- entrez %>% as.data.frame() %>%
     rownames_to_column("PROMO") %>% 
     magrittr::set_colnames(c("PROMO", "ENTREZ")) %>% 
     mutate(ENTREZ = as.character(ENTREZ))
-
+   
 tf <- AnnotationDbi::select(org.Mm.eg.db, 
              keys = entrez[, "ENTREZ", drop = T], 
              keytype = "ENTREZID", 
@@ -171,6 +171,34 @@ g %>%
 
 ggsave("../res/tf_signale-20210314.pdf", device = cairo_pdf)
 ```
+
+already got primers
+```{r}
+p <- data.frame(
+  symbol = c("E2f1", "Cebpb", "Jun", "Rela", 
+             "Nfkb1", "Nr3c1", "Rxra", "Jund", 
+             "Fos", "Nfatc2", "Rel")
+)
+
+anti_join(tf, p, by = c("SYMBOL" = "symbol"))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
