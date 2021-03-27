@@ -192,6 +192,8 @@ BS3_entrez <- mapIds(org.Mm.eg.db,
                     keytype = "SYMBOL", 
                     column = "ENTREZID")
 
+
+
 ig <- graph_from_data_frame(d = all_path_df, directed = T)
 
 spath_pvn3 <- shortest_paths(graph = ig, 
@@ -269,8 +271,7 @@ N_pvn3 <- tibble(
          ncol = ifelse(names_to_display[ids] %in% pvn3_common_up_genes, "darkred", ncol), 
          ncol = ifelse(names_to_display[ids] %in% pvn3_common_down_genes, "darkblue", ncol))
 
-E_pvn3 <- spath_df_pvn3_KEGG %>% 
-  pull(lty) %>% unique()
+E_pvn3 <- spath_df_pvn3_KEGG 
 
 
 # BS3
@@ -295,6 +296,26 @@ N_CTX3 <- tibble(
 
 E_CTX3 <- spath_df_CTX3_KEGG
 ```
+
+
+combine the graph  
+```{r}
+df <- rbind(spath_df_pvn3_KEGG, spath_df_BS3_KEGG, spath_df_CTX3_KEGG) 
+
+N <- tibble(
+  ids = c(df$from, df$to) %>% unique()
+) %>% 
+  mutate(
+    shape = ifelse(grepl("^cpd:|^gl:|^dr:", ids, ignore.case = F), "22", "21"), 
+    ncol = "grey", 
+    group = ifelse(names_to_display[ids] %in% c(pvn3_common_down_genes, pvn3_common_up_genes), "PVN", ""), 
+    ncol_pvn = ifelse(names_to_display[ids] %in% pvn3_common_up_genes, "darkred", ncol), 
+    ncol_pvn = ifelse(names_to_display[ids] %in% pvn3_common_down_genes, "darkblue", ncol)
+  )
+
+E <- df
+```
+
 
 ```{r}
 g_pvn3 <- tbl_graph(nodes = N_pvn3, edges = E_pvn3, directed = T)
@@ -397,6 +418,142 @@ g_CTX3 %>%
   guides(edge_linetype = F, shape = F)
 
 ggsave("../res/P2ry12/20210303-CTX3.pdf")
+```
+
+
+combine all pathways
+```{r, message=FALSE, warning=FALSE}
+g <- tbl_graph(nodes = N, edges = E, directed = T)
+```
+
+```{r, message=FALSE, warning=FALSE}
+set.seed(123)
+g %>% 
+  mutate(
+    name = names_to_display[ids], 
+    shape = factor(shape), 
+    ncol = "not significant",
+    ncol = ifelse(name %in% pvn3_common_up_genes, "up", ncol), 
+    ncol = ifelse(name %in% pvn3_common_down_genes, "down", ncol), 
+    ncol = factor(ncol, levels = c("up", "down", "not significant"))
+  ) %>% 
+  activate(edges) %>% 
+  mutate(lty = factor(lty)) %>% 
+  ggraph(layout = "nicely") +
+  geom_edge_link(aes(filter = (angle == 30), 
+                     edge_linetype = lty, 
+                     label = edge_label), 
+                 end_cap = circle(2.5, "mm"), 
+                 start_cap = circle(1, "mm"), 
+                 arrow = arrow(length = unit(1, "mm")), 
+                 edge_width = 0.1) +
+  geom_edge_link(aes(filter = (angle == 90), 
+                     edge_linetype = lty, 
+                     label = edge_label),
+                 end_cap = circle(2.5, "mm"), 
+                 start_cap = circle(1, "mm"), 
+                 arrow = arrow(length = unit(1, "mm")), 
+                 edge_width = 0.1) +
+  geom_edge_link(aes(filter = (is.na(angle)), 
+                     edge_linetype = lty, 
+                     label = edge_label), 
+                 end_cap = circle(2.5, "mm"), 
+                 start_cap = circle(1, "mm"), 
+                 edge_width = 0.1) +
+  geom_node_point(aes(shape = shape, color = ncol), size = 5) +
+  geom_node_text(aes(label = name), size = 1.2) +
+  scale_color_manual(name = NULL, values = c("up" = "darkred", "down" = "darkblue", "not significant" = "grey")) +
+  guides(edge_linetype = F, shape = F) +
+  theme_graph()
+
+ggsave("../res/p2ry12_downstream_signal_pvn3_combined_20210327.pdf", device = cairo_pdf)
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+set.seed(123)
+g %>% 
+  mutate(
+    name = names_to_display[ids], 
+    shape = factor(shape), 
+    ncol = "not significant",
+    ncol = ifelse(name %in% BS3_common_up_genes, "up", ncol), 
+    ncol = ifelse(name %in% BS3_common_down_genes, "down", ncol), 
+    ncol = factor(ncol, levels = c("up", "down", "not significant"))
+  ) %>% 
+  activate(edges) %>% 
+  mutate(lty = factor(lty)) %>% 
+  ggraph(layout = "nicely") +
+  geom_edge_link(aes(filter = (angle == 30), 
+                     edge_linetype = lty, 
+                     label = edge_label), 
+                 end_cap = circle(2.5, "mm"), 
+                 start_cap = circle(1, "mm"), 
+                 arrow = arrow(length = unit(1, "mm")), 
+                 edge_width = 0.1) +
+  geom_edge_link(aes(filter = (angle == 90), 
+                     edge_linetype = lty, 
+                     label = edge_label),
+                 end_cap = circle(2.5, "mm"), 
+                 start_cap = circle(1, "mm"), 
+                 arrow = arrow(length = unit(1, "mm")), 
+                 edge_width = 0.1) +
+  geom_edge_link(aes(filter = (is.na(angle)), 
+                     edge_linetype = lty, 
+                     label = edge_label), 
+                 end_cap = circle(2.5, "mm"), 
+                 start_cap = circle(1, "mm"), 
+                 edge_width = 0.1) +
+  geom_node_point(aes(shape = shape, color = ncol), size = 5) +
+  geom_node_text(aes(label = name), size = 1.2) +
+  scale_color_manual(name = NULL, values = c("up" = "darkred", "down" = "darkblue", "not significant" = "grey")) +
+  guides(edge_linetype = F, shape = F) +
+  theme_graph()
+
+ggsave("../res/p2ry12_downstream_signal_BS3_combined_20210327.pdf", device = cairo_pdf)
+```
+
+```{r, message=FALSE, warning=FALSE}
+set.seed(123)
+g %>% 
+  mutate(
+    name = names_to_display[ids], 
+    shape = factor(shape), 
+    ncol = "not significant",
+    ncol = ifelse(name %in% CTX3_common_up_genes, "up", ncol), 
+    ncol = ifelse(name %in% CTX3_common_down_genes, "down", ncol), 
+    ncol = factor(ncol, levels = c("up", "down", "not significant"))
+  ) %>% 
+  activate(edges) %>% 
+  mutate(lty = factor(lty)) %>% 
+  ggraph(layout = "nicely") +
+  geom_edge_link(aes(filter = (angle == 30), 
+                     edge_linetype = lty, 
+                     label = edge_label), 
+                 end_cap = circle(2.5, "mm"), 
+                 start_cap = circle(1, "mm"), 
+                 arrow = arrow(length = unit(1, "mm")), 
+                 edge_width = 0.1) +
+  geom_edge_link(aes(filter = (angle == 90), 
+                     edge_linetype = lty, 
+                     label = edge_label),
+                 end_cap = circle(2.5, "mm"), 
+                 start_cap = circle(1, "mm"), 
+                 arrow = arrow(length = unit(1, "mm")), 
+                 edge_width = 0.1) +
+  geom_edge_link(aes(filter = (is.na(angle)), 
+                     edge_linetype = lty, 
+                     label = edge_label), 
+                 end_cap = circle(2.5, "mm"), 
+                 start_cap = circle(1, "mm"), 
+                 edge_width = 0.1) +
+  geom_node_point(aes(shape = shape, color = ncol), size = 5) +
+  geom_node_text(aes(label = name), size = 1.2) +
+  scale_color_manual(name = NULL, values = c("up" = "darkred", "down" = "darkblue", "not significant" = "grey")) +
+  guides(edge_linetype = F, shape = F) +
+  theme_graph()
+
+ggsave("../res/p2ry12_downstream_signal_CTX3_combined_20210327.pdf", device = cairo_pdf)
 ```
 
 
