@@ -9,30 +9,75 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
+library(data.table)
+library(nichenetr)
 ```
 
-
-# data  
-- neuron and microglia: GSE60361  
-
-# 
+# load data 
+FISH data from zhuang xiaowei [PMID:30385464]
 ```{r}
-counts_table <- read.table("f:/GSE60361/GSE60361_C1-3005-Expression.txt.gz", 
-                           sep = "\t")
-colnames(counts_table) <- counts_table[1, , drop = T]
-counts_table <- counts_table[-1, ]
-counts_table %>% .[1:5, 1:5]
-counts_table <- counts_table
+fish <- fread("/home/yincy/git/Data/NCBI/GSE113576/data/FISH.csv")
+fish[1:20, 1:15]
 ```
 
 ```{r}
-cef <- read.table("f:/oligos_clustered.cef", skip = 3, sep = "\t")
-cef %>% dim()
+fish %>% pull(Cell_class) %>% table()
+remove_cells <- c("Ambiguous", "Ependymal", "Pericytes", "Endothelial 1", "Endothelial 2", 'Endothelial 3')
+fish <- fish %>% filter(!(Cell_class %in% remove_cells))
+fish %>% pull(Cell_class) %>% table
+fish %>% pull(Neuron_cluster_ID) %>% table()
 ```
+
 
 ```{r}
+neuron_meta_df <- data.frame(
+    Cell = fish$Cell_ID, 
+    cell_type = fish$Cell_class
+)
 
+neuron_meta_df %>% head()
 ```
+
+
+```{r}
+neuron_counts_df <- fish[, -c(2:9)] %>% t() %>% as.data.frame()
+neuron_counts_df[1:10, 1:5]
+
+cellids <- neuron_counts_df[1, , drop = T]
+cellids <- cellids %>% unlist(use.names = F) %>% as.character() 
+
+neuron_counts_df <- neuron_counts_df[-1, ]
+colnames(neuron_counts_df) <- cellids
+neuron_counts_df %>% dim()
+neuron_counts_df[1:10, 6:10]
+
+neuron_counts_df <- neuron_counts_df %>% 
+    rownames_to_column("symbol") 
+
+neuron_counts_df$symbol <- nichenetr::convert_mouse_to_human_symbols(neuron_counts_df$symbol)
+neuron_counts_df %>% dim()
+neuron_counts_df[1:10, 1:5]
+```
+
+
+```{r}
+fwrite(x = neuron_meta_df, 
+          file = "/home/yincy/git/Data/NCBI/GSE113576/neuron_meta_df.tsv", 
+          row.names = F, 
+          quote = F, 
+       sep = "\t", 
+       append = FALSE)
+
+fwrite(x = neuron_counts_df, 
+          file = "/home/yincy/git/Data/NCBI/GSE113576/neuron_counts_df.tsv", 
+          row.names = F, 
+          quote = F, 
+       sep = "\t", 
+       append = FALSE)
+```
+
+
+
 
