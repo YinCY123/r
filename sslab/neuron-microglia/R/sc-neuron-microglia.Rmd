@@ -1,0 +1,52 @@
+---
+title: "neuron microglia data preprocessing"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Using neuron and microglia data described in this paper [PMID:30385464]  
+GEO:GSE113576  
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(readxl)
+```
+
+
+# get cell information  
+```{r}
+# cell_info <- read_xlsx("F:/RNA-seq/zhuang/aau5324_Moffitt_Table-S1.xlsx", 
+#                        skip = 1)
+cell_info <- read.csv("../data/GSE113576_cell_info.csv")
+
+cell_info <- cell_info %>% 
+  rename("Cellid" = `Cell name`, "Replication_number" = `Replicate number`, 
+          "Cell_clusters" = `Cell class (determined from clustering of all cells)`, 
+         "Non_neuron_sub_cluster" = `Non-neuronal cluster (determined from clustering of all cells)`, 
+         "Neuron_sub_cluster" = `Neuronal cluster (determined from clustering of inhibitory or excitatory neurons)`)
+
+cell_info <- cell_info %>% 
+  mutate(Non_neuron_sub_cluster = ifelse(is.na(Non_neuron_sub_cluster), "", Non_neuron_sub_cluster), 
+         Neuron_sub_cluster = ifelse(is.na(Neuron_sub_cluster), "", Neuron_sub_cluster)) %>% 
+  rowwise() %>% 
+  mutate(sub_cluster = paste(Non_neuron_sub_cluster, Neuron_sub_cluster, sep = "")) %>% 
+  select(Cellid, Cell_clusters, sub_cluster) 
+
+write.csv(cell_info, "../data/GSE113576_cell_info.csv", row.names = F, quote = F)
+```
+
+```{r}
+cell_info %>% pull(Cell_clusters) %>% table() %>% sort(decreasing = T)
+```
+
+```{r}
+cell_to_select <- cell_info %>% 
+  filter(Cell_clusters %in% c("Inhibitory", "Excitatory", "Microglia"))
+```
+
+
+
+
