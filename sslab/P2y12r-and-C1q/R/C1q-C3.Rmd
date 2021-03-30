@@ -11,6 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
+library(EnsDb.Mmusculus.v79)
+library(nichenetr)
 ```
 
 
@@ -27,7 +29,7 @@ write.csv(x = c(C1q, "C3") %>% sort(),
 ```
 
 ```{r}
-load(file = "f:/git/nichenetr/data/gr_network.rda")
+load(file = "/home/yincy/git/nichenetr/data/gr_network.rda")
 
 # convert from human to muse symbol
 gr_network$from <- gr_network$from %>% convert_human_to_mouse_symbols()
