@@ -85,6 +85,32 @@ tf <- AnnotationDbi::select(org.Mm.eg.db,
 tf %>% right_join(y = entrez, by = c("ENTREZID" = "ENTREZ"))
 ```
 
+
+```{r, message=FALSE, warning=FALSE}
+library(SingleCellExperiment)
+library(scater)
+library(scran)
+library(magrittr)
+```
+
+```{r}
+sce.zeisel <- readRDS("F:/git/Bioconductor/workflow/Single-Cell/scRNA-seq-online/data/sce.zeisel.rds")
+sce.zeisel %>% colData() %>% .[, "level1class"] %>% table()
+
+sce.zeisel.ca1 <- sce.zeisel[, sce.zeisel$level1class == "pyramidal CA1"]
+
+keep <- assay(sce.zeisel.ca1, "counts") %>% 
+  apply(1, function(x){x > 0}) %>% 
+  t() %>% 
+  apply(1, function(x){(sum(x)/939) > 0.10}) 
+
+genes_expressed_in_ca1 <- sce.zeisel.ca1[keep, ] %>% rownames()
+
+expressed_tf_in_ca1 <- tf %>% 
+  filter(SYMBOL %in% genes_expressed_in_ca1)
+```
+
+
 load KEGG pathways  
 ```{r}
 pathways <- readRDS(file = "../../P2y12r-and-C1q/data/KEGG/KEGG_pathways_formatted.rds")
@@ -97,7 +123,7 @@ Pdgfrb downstream genes
 ig <- graph_from_data_frame(d = pathways[, 1:2], directed = T)
 dist_to_pdgfrb <- shortest_paths(graph = ig, 
                                  from = V(ig)$name == "18596", 
-                                 to = V(ig)$name %in% tf$ENTREZID, 
+                                 to = V(ig)$name %in% expressed_tf_in_ca1$ENTREZID, 
                                  mode = "out", 
                                  output = "epath")$epath
 
@@ -120,7 +146,7 @@ N <- tibble(
   mutate(
     shape = ifelse(grepl("^cpd:|^gl:|^dr:", ids, ignore.case = F), "22", "21"), 
     ncol = "grey", 
-    ncol = ifelse(names_to_display[ids] %in% tf$SYMBOL, "gold", ncol)
+    ncol = ifelse(names_to_display[ids] %in% expressed_tf_in_ca1$SYMBOL, "gold", ncol)
   )
 
 E <- spath_df_KEGG %>% 
@@ -169,18 +195,13 @@ g %>%
     theme_graph() +
   guides(color = FALSE)
 
-ggsave("../res/tf_signale-20210314.pdf", device = cairo_pdf)
+ggsave("../res/tf_signale-20210401.pdf", device = cairo_pdf)
 ```
 
 already got primers
 ```{r}
-p <- data.frame(
-  symbol = c("E2f1", "Cebpb", "Jun", "Rela", 
-             "Nfkb1", "Nr3c1", "Rxra", "Jund", 
-             "Fos", "Nfatc2", "Rel")
-)
-
-anti_join(tf, p, by = c("SYMBOL" = "symbol"))
+expressed_tf_in_ca1[expressed_tf_in_ca1$SYMBOL %in% c("Stat1", "Sp1", "Hes1", 
+                                                      "Tfe3", "Bhlhe41"), ]
 ```
 
 
