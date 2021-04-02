@@ -9,61 +9,68 @@ knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
 ```
 
 ```{r, message=FALSE, warning=FALSE}
-library(tidyverse)
-library(Matrix)
+library(magrittr)
+library(DropletUtils)
+library(data.table)
+library(org.Mm.eg.db)
 ```
 
 ```{r}
-mat <- read.table(file = "/home/yincy/git/Data/kidney-single-cell/GSE107585/GSE107585_Mouse_kidney_single_cell_datamatrix.txt.gz", 
-                  sep = "\t")
-mat <- mat[-1, ] 
-mat <- mat %>% rownames_to_column("Gene")
-mat %>% .[1:5, 1:5]
+GSE107585 <- fread("F:/GSE107585/GSE107585_Mouse_kidney_single_cell_datamatrix.txt.gz", 
+                   sep = "\t")
+GSE107585 %>% dim()
+GSE107585[1:4, 1:4]
 
-cluster <- mat[1, , drop = T] %>% unlist(use.names = T)
-cluster_name <- c("1" = "Endo", 
-                  "2" = "Podo", 
-                  "3" = "PT", 
-                  "4" = "LOH", 
-                  "5" = "DCT", 
-                  "6" = "CD-PC", 
-                  "7" = "CD-IC", 
-                  "8"  = "CD-Trans", 
-                  "9" = "Novel1", 
-                  "10" = "Fib", 
-                  "11" = "Macro", 
-                  "12" = "Neutro", 
-                  "13" = "B lymph", 
-                  "14" = "T lymph", 
-                  "15" = "NK", 
-                  "16" = "Novel2")
 
-cells <- colnames(mat)
+cdata <- data.frame(
+  cellid = colnames(GSE107585) %>% .[-1], 
+  cluster = GSE107585[1, , drop = T] %>% as.character() %>% .[-1] %>% as.integer()
+)
 
-meta_df <- tibble(Cell = cells, 
-                      cluster = cluster[cells]) %>% 
-  mutate(cell_type = cluster_name[cluster]) %>% 
-  select(Cell, cell_type)
+celltype = c("1" = "Endo", 
+             "2" = "Podo", 
+             "3" = "PT", 
+             "4" = "LOH", 
+             "5" = "DCT", 
+             "6" = "CD-PC", 
+             "7" = "CD-IC", 
+             "8" = "CD-Trans", 
+             "9" = "Novel1", 
+             "10" = "Fib", 
+             "11" = "Macro", 
+             "12" = "Neutro", 
+             "13" = "B lymph", 
+             "14" = "T lymph", 
+             "15" = "NK", 
+             "16" = "Novel2")
+cdata$celltype = celltype[cdata$cluster]
 
-meta_df %>% dim()
-meta_df %>% head()
+
+GSE107585 <- GSE107585[-1, ]
+GSE107585 <- GSE107585 %>% rename("V1" = "symbol") 
+
+rdata <- data.frame(
+  symbol = GSE107585$symbol
+)
+
+rdata$ensembl <- mapIds(org.Mm.eg.db, 
+                        keys = rdata$symbol, 
+                        keytype = "SYMBOL", 
+                        column = "ENSEMBL")
+
+GSE107585 <- GSE107585 %>% tibble::column_to_rownames("symbol")
+
+sce.kidney <- SingleCellExperiment(assays = list(counts = GSE107585), 
+                                   rowData = rdata, 
+                                   colData = cdata)
+
+sce.kidney <- readRDS("F:/GSE107585/sce.kidney_GSE107585.rds")
+sce.kidney <- computeSumFactors(sce.kidney, clusters = sce.kidney$cluster)
+sce.kidney <- logNormCounts(x = sce.kidney)
+
+
+saveRDS(sce.kidney, "F:/GSE107585/sce.kidney_GSE107585.rds")
 ```
-
-
-```{r}
-write.table(x = mat, 
-            file = "/home/yincy/git/Data/kidney-single-cell/GSE107585/reads_table.txt", 
-            sep = "\t", 
-            row.names = F, 
-            quote = F)
-
-write.table(x = meta_df, 
-            file = "/home/yincy/git/Data/kidney-single-cell/GSE107585/meta_df.txt", 
-            sep = "\t", 
-            row.names = F, 
-            quote = F)
-```
-
 
 
 
