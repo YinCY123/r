@@ -56,14 +56,13 @@ potassium_channels_genes <- c("ENSMUSG00000063142", "ENSMUSG00000002908",
                               "ENSMUSG00000035580", "ENSMUSG00000037579", 
                               "ENSMUSG00000035355")
 
-length(potassium_channels_genes)
 
-potassium_channels_genes_info <- AnnotationDbi::select(org.Mm.eg.db, 
-                                        keys = potassium_channels_genes, 
-                                        keytype = "ENSEMBL", 
-                                        columns = c("ENSEMBL", "ENTREZID", "SYMBOL"))
+potassium_channels_genes_df <- select(org.Mm.eg.db, 
+                                      keys = potassium_channels_genes, 
+                                      keytype = "ENSEMBL", 
+                                      columns = c("ENSEMBL", "SYMBOL", "ENTREZID"))
 
-write.csv(x = potassium_channels_genes_info, 
+write.csv(x = potassium_channels_genes_df, 
           file = "../data/potassium_channel_genes.csv", 
           row.names = F, 
           quote = F)
