@@ -69,6 +69,7 @@ sce.kidney <- computeSumFactors(sce.kidney, clusters = sce.kidney$cluster)
 sce.kidney <- logNormCounts(x = sce.kidney)
 
 sce.kidney <- readRDS("/home/yincy/git/Data/kidney-single-cell/GSE107585/sce.kidney_GSE107585.rds")
+sce.kidney <- readRDS("F:/GSE107585/sce.kidney_GSE107585.rds")
 
 mexper <- tapply(assay(sce.kidney[rownames(sce.kidney) == "Cx3cl1", ], "logcounts"), sce.kidney$celltype, mean, na.rm = T) %>% 
   sort(decreasing = T)
