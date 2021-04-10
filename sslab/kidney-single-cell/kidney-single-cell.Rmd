@@ -70,7 +70,7 @@ sce.kidney <- logNormCounts(x = sce.kidney)
 
 sce.kidney <- readRDS("/home/yincy/git/Data/kidney-single-cell/GSE107585/sce.kidney_GSE107585.rds")
 
-mexper <- tapply(assay(sce.kidney[rownames(sce.kidney) == "Cx3cl1", ], "logcounts"), sce.kidney$celltype, median, na.rm = T) %>% 
+mexper <- tapply(assay(sce.kidney[rownames(sce.kidney) == "Cx3cl1", ], "logcounts"), sce.kidney$celltype, mean, na.rm = T) %>% 
   sort(decreasing = T)
 
 sce.kidney$celltype <- factor(sce.kidney$celltype, levels = names(mexper))
@@ -80,7 +80,7 @@ plotExpression(sce.kidney,
                x = "celltype", 
                colour_by = "celltype", 
                ncol = 1) +
-    scale_fill_discrete(name = NULL, type = c(brewer.pal(8, "Set1"), brewer.pal(8, "Dark2"))) +
+    scale_fill_discrete(name = NULL, type = c(brewer.pal(9, "Set1"), brewer.pal(7, "Dark2"))) +
     scale_x_discrete(name = NULL) +
     scale_y_continuous(name = "expression") +
     theme(axis.text.x = element_text(angle = -40, hjust = 0), 
