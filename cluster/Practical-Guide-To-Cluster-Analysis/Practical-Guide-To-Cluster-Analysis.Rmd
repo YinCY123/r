@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Chapter 1  
 ## Introduction to R  
 
-## Chapter 2
+## Chapter 2  
 ## Data Preparation  
 To perform a cluster analysis in R, generally, the data should be prepared as follow:  
 1. Rows are observations (individuals) and columns are variables.  
@@ -47,7 +47,7 @@ df %>% head()
 |eclust|Visual enhancement of clustering analysis|
 
 
-- Required R Packages  
+Required R Packages  
 ```{r}
 library(cluster)
 library(factoextra)
@@ -95,9 +95,9 @@ If Euclidean distance is chosen, then observations with high values of features 
 ### Data standardization  
 The value of distance measures is intimately related to the scale on which measurements are made. Therefore, variables are often scaled (i.e. standardized) before measuring the inter-observation dissimilarities. This is particularly recommended when variables are measured in different scales (e.g: kilograms, kilometers, centimeters,...); otherwise, the dissimilarity measures obtained will be severely affected.  
 
-The goal is to make the variables comparable. Generally variables are scaled to have i) standard deviation one and ii) mean zero.  
+**The goal is to make the variables comparable**. Generally variables are scaled to have i) standard deviation one and ii) mean zero.  
 
-The standardization of data is an approach widely used in the context of gene expression data analysis before clustering. We might also want to scale the data when the mean and/or the standard deviation of variables are largely di?erent.  
+The standardization of data is an approach widely used in the context of gene expression data analysis before clustering. We might also want to scale the data when the mean and/or the standard deviation of variables are largely different.  
 
 When scaling variables, the data can be transformed as follow:  
 
@@ -189,7 +189,7 @@ fviz_nbclust(x = df, FUNcluster = kmeans, method = "wss") +
 km.res <- kmeans(df, centers = 4, nstart = 25)
 ```
 
-nstart = 25. This means that R will try 25 di?erent random starting assignments and then select the best results corresponding to the one with the lowest within cluster variation.  
+`nstart = 25`. This means that R will try 25 different random starting assignments and then select the best results corresponding to the one with the lowest within cluster variation.  
 
 ```{r}
 print(km.res)
@@ -225,34 +225,272 @@ fviz_cluster(object = km.res,
 weaknesses:  
 1. It assumes prior knowledge of the data and requires the analyst to choose the appropriate number of cluster (k) in advance.  
 
-2. The final results obtained is sensitive to the initial random selection of cluster centers. Why is this a problem? Because, for every di?erent run of the algorithm on the same data set, you may choose di?erent set of initial centers. This may lead to di?erent clustering results on di?erent runs of the algorithm.  
+2. The final results obtained is sensitive to the initial random selection of cluster centers. Why is this a problem? Because, for every different run of the algorithm on the same data set, you may choose different set of initial centers. This may lead to different clustering results on different runs of the algorithm.  
 
 3. It’s sensitive to outliers.  
 
-4. If you rearrange your data, it’s very possible that you’ll get a di?erent solution every time you change the ordering of your data.  
+4. If you rearrange your data, it’s very possible that you’ll get a different solution every time you change the ordering of your data.  
 
 
 Solutions to these weaknesses:  
-1. Compute k-means for a range of k values, for example by varying k between 2 and 10. Then, choose the best k by comparing the clustering results obtained for the di?erent k values.  
+1. Compute k-means for a range of k values, for example by varying k between 2 and 10. Then, choose the best k by comparing the clustering results obtained for the different k values.  
 
-2. Compute K-means algorithm several times with di?erent initial cluster centers. The run with the lowest total within-cluster sum of square is selected as the final clustering solution.  
+2. Compute K-means algorithm several times with different initial cluster centers. The run with the lowest total within-cluster sum of square is selected as the final clustering solution.  
 
 3. To avoid distortions caused by excessive outliers, it’s possible to use PAM algorithm, which is less sensitive to outliers.  
 
 
 ## Chapter 5  
 ## K-medoids (PAM)  
-
-
 K-medoids clustering or PAM (Partitioning Around Medoids) each cluster is represented by one of the objects in the cluster. PAM is less sensitive to outliers compared to k-means.
 
-- CLARA  
-CLARA algorithm (Clustering Large Applications), which is an extension to PAM adapted for large data sets.  
+1. Select k object to become the medoids, or in case these objects were provided use them as the medoids.  
+2. Calculate the dissimilarity matrix if it was not provided.  
+3. Assign every object to its cloest medoid.  
+4. For each cluster search if any of the object of the cluster decreases the average dissimilarity coefficient, if it does, select the enttity that decreases this coefficient the most as the medoid for this cluster.  
+5. If at least one medoid has changed go to step 3, else end the algorithm.  
+
+
+### Computing PAM in R  
+```{r}
+data("USArrests")
+
+df <- scale(USArrests)
+df %>% head
+```
+
+The function `pam()` in `cluster` package and `pamk()` in `fpc` package can be used to compute PAM.  
+
+### Estimating the optimal number of clusters  
+```{r}
+fviz_nbclust(x = df, FUNcluster = pam, method = "silhouette") +
+    theme_classic()
+```
+
+```{r}
+pam.res <- pam(x = df, k = 2)
+pam.res %>% names()
+
+cbind(USArrests, cluster = pam.res$clustering)
+```
+
+```{r}
+library(RColorBrewer)
+fviz_cluster(object = pam.res, 
+             palette = brewer.pal(n = 3, name = "Set1")[1:2], 
+             ellipse.type = "t", 
+             repel = T, 
+             ggtheme = theme_classic()) +
+    theme(legend.position = "bottom")
+```
+
+> Note that, for large data set, `pam()` may need too much memory or too much computation time. In this case, the function `clara()` is preferable.   
+
+
+## Chapter 6 
+## CLARA - Clustering Large Applications  
+CLARA algorithm (Clustering Large Applications), which is an extension to PAM adapted for large data sets in order to reduce computing time, this is achieved using the sampling approach.  
+
+1. Split randomly the data sets in multiple subsets with fixed size (sampsize).  
+2. Compute PAM algorithm on each subset and choose the corresponding k representative objects (medoids). Assign each observation of the entire data set to the closest medoid.  
+3. Calculate the mean (or the sum) of the dissimilarities of the observations to their closest medoid. This is used as a measure of the goodness of the clustering.  
+4. Retain the sub-data set for which the mean (or sum) is minimal. A furether analysis is carried out on the final partition.  
+
+```{r}
+set.seed(1234)
+df <- rbind(cbind(rnorm(200, 0, 8), rnorm(200, 0, 8)), 
+            cbind(rnorm(300, 50, 8), rnorm(300, 50, 8)))
+
+colnames(df) <- c("x", "y")
+rownames(df) <- paste("S", 1:nrow(df), sep = "")
+df %>% head
+```
+
+The function `clara()` in `cluster` package can be used to compute CLARA.  
+
+### Estimating the optimal number of clusters  
+```{r}
+fviz_nbclust(x = df, 
+             FUNcluster = clara, 
+             method = "silhouette") +
+    theme_classic()
+```
+
+```{r}
+clara.res <- clara(x = df, 
+                   k = 2, 
+                   samples = 50, 
+                   pamLike = T)
+clara.res
+```
+
+```{r}
+clara.res %>% names()
+```
+
+```{r}
+cbind(df, cluster = clara.res$clustering) %>% head
+```
+
+```{r}
+fviz_cluster(object = clara.res, 
+             palette = brewer.pal(n = 3, name = "Set1")[1:2], 
+             ellipse.type = "t", 
+             geom = "point") +
+    theme_classic()
+```
 
 
 # III Hierarchical Clustering  
-- Agglomerative Clustering  
-- Comparing Dendrograms  
+**Hierarchical clustering** [or **hierarchical cluster analysis** (**HCA**)] is an alternative approach to partitioning clustering for grouping objects based on their similarity. In contrast to partitioning clustering, hierarchical clustering does not require to pre-specify the number of clusters to be produced.  
+
+Hierarchical clustering can be subdivided into two types:  
+
+- **Agglomerative clustering** in which, each observation is initially considered as a cluster of its own (leaf). Then, the most similar clusters are successively merged until there is just one single big cluster (root).  
+
+- **Divise clustering**, an inverse of agglomerative clustering, begins with the root, in which all objects are included in one cluster. Then the most heterogeneous clusters are successively divided until all observation are in their own cluster.  
+
+## Chapter 7
+## Agglomerative Clustering  
+The **agglomerative clustering** is the most common type of hierarchical clustering use to group objects in clusters based on their similarity. It’s also known as AGNES (*Agglomerative Nesting*). The algorithm starts by treating each object as a single- ton cluster. Next, pairs of clusters are successively merged until all clusters have been merged into one big cluster containing all objects. The result is a tree-based representation of the objects, named *dendrogram*.  
+
+Agglomerative clustering works in a “bottom-up” manner. That is, each object is initially considered as a single-element cluster (leaf). At each step of the algorithm, the two clusters that are the most similar are combined into a new bigger cluster
+(nodes). This procedure is iterated until all points are member of just one single big cluster (root).  
+
+The inverse of agglomerative clustering is divisive clustering, which is also known as DIANA (Divise Analysis) and it works in a “top-down” manner. It begins with the root, in which all objects are included in a single cluster. At each step of iteration, the most heterogeneous cluster is divided into two. The process is iterated until all objects are in their own cluster.  
+
+```{r, fig.align='center'}
+knitr::include_graphics("figures/AGNES-DIANA.png")
+```
+
+> Note that, agglomerative clustering is good at identifying small clusters. Divisive clustering is good at identifying large clusters.  
+
+```{r}
+data("USArrests")
+df <- scale(USArrests)
+df %>% head
+```
+
+```{r}
+res.dist <- dist(x = df, method = "euclidean")
+res.dist %>% as.matrix() %>% .[1:3, 1:3]
+```
+
+### Linkage  
+The linkage function takes the distance information, returned by the function dist(), and groups pairs of objects into clusters based on their similarity. Next, these newly formed clusters are linked to each other to create bigger clusters. This process is iterated until all the objects in the original data set are linked together in a hierarchical tree.  
+
+```{r}
+res.hc <- hclust(d = res.dist, method = "ward.D2")
+```
+
+- **d**: a dissimilarity structure as produced by the **dist()** function.  
+- **method**: The agglomeration (linkage) method to be used for computing distance between clusters. Allowed values is one of "ward.D", "ward.D2", "single", "complete", "average", "mcquitty", "median" or "centroid".  
+
+The most common likage methods are described below:  
+
+1. *Maximum or complete linkage*: The distance between two clusters is defined as the maximum value of all pairwise distances between the elements in cluster 1 and the elements in clsuter 2. It tends to produce more compact clusters.  
+
+2. *Minimum or single linkage*: The distance between two clsuters is defined as the minimum value of all pairwise distances between the elements in cluster 1 and the elements in cluster 2. It tends to produce long, "loose" clusters.  
+
+3. *Mean or average linkage*: The distance between two clusters is defined as the average distance between the elements in cluster 1 and the elements in cluster 2.  
+
+4. *Centroid linkage*: The distance between two clusters is defined as the distance between the centroid for cluster 1 (a mean vector of length p variables) and the centroid for clsuter 2.  
+
+5. *Ward's minimum variance method*: It minmizes the total within-cluster variance. At each step the pair of clusters with minimum between-cluster distance are merged.  
+
+> Complete linkage and Ward's method are generally prefered.  
+
+```{r}
+fviz_dend(x = res.hc, cex = 0.5)
+```
+
+> Note that, conclusions about the proximity of two objects can be drawn only based on the height where branches containing those two objects first are fused. We cannot use the proximity of two objects along the horizontal axis as a criteria of their similarity.  
+
+### Verify the cluster tree  
+After linking the objects in a data set into a hierarchical cluster tree, you might want to assess that the distances (i.e., heights) in the tree reflect the original distances accurately.  
+
+One way to measure how well the cluster tree generated by the `hclust()` function reflects your data is to compute the correlation between the *cophenetic* distances and the original distance data generated by the `dist()` function. If the clustering is valid, the linking of objects in the cluster tree should have a strong correlation with the distances between objects in the original distance matrix.  
+
+The closer the value of the correlation coeffcient is to 1, the more accurately the
+clustering solution reflects your data. Values above 0.75 are felt to be good. The “average” linkage method appears to produce high values of this statistic. This may be one reason that it is so popular.  
+
+The R base function `cophenetic()` can be used to compute the cophenetic distances for hierarchical clustering.  
+
+```{r}
+res.coph <- cophenetic(res.hc)
+
+# correlation between cophenetic distance and the origional distance  
+cor(res.dist, res.coph)
+```
+
+```{r}
+res.hc2 <- hclust(res.dist, method = "average")
+
+cor(res.dist, cophenetic(res.hc2))
+```
+
+### Cut the dendrogram into different groups  
+You can cut the hierarchical tree at a given height in order to partition your data into clusters. The R base function `cutree()` can be used to cut a tree, generated by the `hclust()` function, into several groups either by specifying the desired number of groups or the cut height. It returns a vector containing the cluster number of each observation.  
+
+```{r}
+# cut the tree into 4 groups
+grp <- cutree(res.hc, k = 4)
+grp %>% head
+table(grp)
+```
+
+```{r}
+rownames(df)[grp == 1]
+```
+
+```{r}
+fviz_dend(x = res.hc, 
+          k = 4, 
+          cex = 0.5, 
+          k_colors = brewer.pal(4, "Set1"), 
+          color_labels_by_k = T, 
+          rect = T)
+```
+
+```{r}
+fviz_cluster(list(data = df, cluster = grp), 
+             palette = brewer.pal(4, "Set1"), 
+             ellipse = T, 
+             repel = T, 
+             show.clust.cent = F) +
+    theme_classic()
+```
+
+### Cluster R package  
+The R package `cluster` makes it easy to perform cluster analysis in R. It provides the function `agnes()` and `diana()` for computing agglomerative and divisive clustering, respectively. These functions perform all the necessary steps for you. You don't need to execute the `scale()`, `dist()` and `hclust()` function separately.  
+
+```{r}
+library(cluster)
+# Agglomerative Nesting (Hierarchical Clustering)
+res.agnes <- agnes(x = USArrests, 
+                   stand = T, 
+                   metric = "euclidean", 
+                   method = "ward")
+
+# Divisive Analysis Clustering
+res.diana <- diana(x = USArrests, 
+                   stand = T, 
+                   metric = "euclidean")
+```
+
+```{r}
+fviz_dend(x = res.agnes, 
+          cex = 0.6, 
+          k = 4, 
+          rect = T, 
+          rect_fill = T)
+```
+
+## Chapter 8
+## Comparing Dendrograms  
+
+
+
 - Visualizing Dendrograms  
 - Heatmap: Static & Interactive  
 
