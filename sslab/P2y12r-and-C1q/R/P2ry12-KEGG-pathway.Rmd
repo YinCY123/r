@@ -314,6 +314,14 @@ N <- tibble(
   )
 
 E <- df
+
+df$from_symbol <- names_to_display[df$from]
+df$to_symbol <- names_to_display[df$to]
+
+df %>% 
+  distinct(from, to, .keep_all = T) %>% 
+  select(from_symbol, to_symbol, everything(), -from, -to) %>% 
+  write.csv(file = "../res/P2ry12/comined_path-20210411.csv", row.names = F, quote = F, na = "")
 ```
 
 
