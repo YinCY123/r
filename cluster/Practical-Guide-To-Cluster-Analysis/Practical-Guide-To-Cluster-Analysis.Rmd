@@ -488,14 +488,533 @@ fviz_dend(x = res.agnes,
 
 ## Chapter 8
 ## Comparing Dendrograms  
+The *dendextend* package provides serveral functions for comparing dendrograms.  
+
+- **tanglegram()** for visual comparison of two dendrograms.  
+- **cor.dendlist()** for computing a correlation matrix between dendrograms.  
+
+```{r}
+data("USArrests")
+df <- scale(USArrests)
+
+df <- df[sample(nrow(USArrests), 10, F), ]
+```
+
+
+### Comparing dendrograms  
+```{r}
+library(dendextend)
+res.dist <- dist(df, method = "euclidean")
+hc1 <- hclust(res.dist, method = "average")
+hc2 <- hclust(res.dist, method = "ward.D2")
+
+dend1 <- as.dendrogram(hc1)
+dend2 <- as.dendrogram(hc2)
+
+dend_list <- dendlist("average" = dend1, "ward.D2" = dend2)
+```
+
+
+#### Visual comparison of two dendrograms  
+To visually compare two dendrograms, we'll use the *tanglegram()* function from `dendextend` package, which plots the two dendrograms side by side, with their labels connected by lines.  
+
+The quality of the alignment of the two trees can be measured using the function `entanglement()`. Entanglement is a measure between 1 (full entanglement) and 0 (no entanglement). A lower entanglement coefficient corresponds to a good alignment.  
+
+```{r}
+tanglegram(dend1, dend2, 
+           sort = T, 
+           highlight_distinct_edges = F, 
+           common_subtrees_color_lines = F, 
+           common_subtrees_color_branches = T, 
+           main = paste("entanglement =", round(entanglement(dend_list), 2)), 
+           margin_inner = 6)
+```
+
+
+#### Correlation matrix between a list of dendrograms  
+The function `cor.dendlist()` is used to compute "Baker" or "Cophenetic" correlation matrix between a list of trees. The value can be range between -1 to 1. With near 0 values meaning that the two trees are not statistically similar.  
+
+```{r}
+# cophenetic correlation matrix
+cor.dendlist(dend_list, method = "cophenetic")
+```
+
+```{r}
+# Baker correlation matrix
+cor.dendlist(dend_list, method = "baker")
+```
+
+The correlation between two trees can be also computed as follow  
+
+```{r}
+# cophenetic correlation coefficient
+cor_cophenetic(dend1, dend2)
+```
+
+```{r}
+# baker correlation coefficient
+cor_bakers_gamma(dend1, dend2)
+```
+
+multiple dendrograms  
+
+```{r}
+dend1 <- df %>% dist %>% hclust("complete")%>% as.dendrogram 
+dend2 <- df %>% dist %>% hclust("single")%>% as.dendrogram 
+dend3 <- df %>% dist %>% hclust("average")%>% as.dendrogram 
+dend4 <- df %>% dist %>% hclust("centroid")%>% as.dendrogram
+
+dend_list <- dendlist("Complete" = dend1, 
+                      "Single" = dend2, 
+                      "Average" = dend3, 
+                      "Centroid" = dend4)
+
+cors <- cor.dendlist(dend_list)
+
+round(cors, 2)
+```
+
+
+```{r}
+library(corrplot)
+corrplot(corr = cors, method = "pie", type = "lower")
+```
+
+
+## Chapter 9  
+## Visualizing Dendrograms  
+```{r, message=FALSE, warning=FALSE}
+library(factoextra)
+library(RColorBrewer)
+library(igraph)
+
+data("USArrests")
+
+dd <- scale(USArrests) %>% dist(method = "euclidean")
+hc <- hclust(dd, method = "ward.D2")
+```
+
+To visualize the dendrogram, we'll use the following R functions and packages  
+
+- `fviz_dend()` to plot the dendrogram.  
+- `dendextend` package to manipulate dendrograms.  
+
+```{r}
+fviz_dend(x = hc, 
+          k = 4, 
+          cex = 0.5, 
+          k_colors = brewer.pal(4, "Set1"), 
+          color_labels_by_k = T, 
+          rect = T, 
+          rect_border = brewer.pal(4, "Set1"), 
+          rect_fill = F, 
+          horiz = F, 
+          type = "phylogenic", 
+          repel = T) +
+    theme(axis.text = element_text(size = 0))
+```
+
+#### Zooming in the dendrogram  
+```{r}
+fviz_dend(x = hc, 
+          xlim = c(1, 20), 
+          ylim = c(1, 8))
+```
+
+#### Plotting a sub-tree of dendrograms  
+```{r}
+dend_plot <- fviz_dend(hc, 
+                       k = 4, 
+                       cex = 0.5, 
+                       k_colors = "jco")
+dend_data <- attr(dend_plot, which = "dendrogram") # extract dendrogram data 
+
+# cut the dendrogram at height h = 10
+dend_cuts <- cut(dend_data, h = 10)
+fviz_dend(dend_cuts$upper)
+```
+
+```{r}
+fviz_dend(dend_cuts$lower[[1]], main = "Subtree 1")
+```
+
+```{r}
+fviz_dend(dend_cuts$lower[[2]], 
+          main = "Subtree 2", 
+          type = "circular") +
+    theme(axis.text = element_text(size = 0))
+```
+
+
+### Manipulating dendrograms using dendextend  
+```{r}
+data("USArrests")
+
+dend <- USArrests %>% 
+    scale %>% 
+    dist() %>% 
+    hclust(method = "ward.D2") %>% 
+    as.dendrogram()
+
+plot(dend)
+```
+
+The function `set()` in `dendextend` package can be used to change the parameters of a dendrogram.  
+
+```
+set(object, what, value)
+```
+
+- **object**: a dendrogram object  
+- **what**: a character indicating what is the property of the tree that should be set/updated.  
+- **value**: a vector with the value to set in the tree (the type of the value depends on the "what").  
+
+Possible values for the argument **what** include:  
+
+|**Value for the argument what**|**Description**|
+|:--|:--|
+|labels|set the labels|
+|labels_colors <br> labels_cex|set the color and the size of labels|
+|leaves_pch <br> leaves_cex <br> leaves_col|set the point type, size and color <br> for leaves|
+|nodes_pch <br> nodes_cex <br> nodes_col|set the point type, size and color for nodes|
+|hang_leaves|hang the leaves|
+|branches_k_color|color the branches|
+|branches_col <br> branches_lwd <br> branches_lty| set the color, line width and the line type of branches|
+|by_labels_branches_col <br> by_labels_branches_lwd <br> by_labels_branches_lty|set the color, the line width and the line type of branches with specific labels|
+|clear_branches <br> clear_leaves|clear branches and leaves|
+
+
+```{r}
+library(dendextend)
+
+mycols <- brewer.pal(4, "Set1")
+
+dend <- as.dendrogram(hc) %>% 
+    set("branches_lwd", 1) %>% 
+    set("branches_k_color", mycols, k = 4) %>% 
+    set("labels_colors", mycols, k = 4) %>% 
+    set("labels_cex", 0.5)
+
+fviz_dend(dend)
+```
+
+
+## Chapter 10
+## Heatmap: Static & Interactive  
+A heatmap (or heat map) is another way to visualize hierarchical clustering. It’s also called a false colored image, where data values are transformed to color scale.  
+
+There are multiple of R packages and functions for drawing heatmaps  
+
+- *heatmap()* in `stats` package draws a simple heatmap  
+- *heatmap.2()* in `gplots` package draws an enhanced heatmap compared to the `stats` package  
+- *pheatmap()* in `pheatmap` package draws pretty heatmaps and provides more control to change the appearance of heatmaps.  
+- *d3heatmap()* in `d3heatmap` package draws an interactive/clickable heatmap  
+- *Heatmap()* in `ComplexHeatmap` R/Bioconductor package draws, annotates and arranges complex heatmaps (very usefull for genomic data analysis).  
+
+### R base heatmap()
+```{r}
+df <- scale(mtcars)
+
+heatmap(df, scale = "none")
+```
+
+```{r}
+col <- colorRampPalette(colors = c("red", "white", "blue"))(256)
+col1 <- colorRampPalette(colors = RColorBrewer::brewer.pal(10, "RdYlBu"))(256)
+```
+
+using the argument `RowSideColors` and `ColSideColors` to annotate rows and columns.  
+
+```{r}
+heatmap(x = df, 
+        scale = "none", 
+        col = col, 
+        RowSideColors = rep(c("blue", "pink"), each = 16), 
+        ColSideColors = c(rep("purple", 5), rep("orange", 6)))
+```
+
+### Enhanced heat maps: heatmap.2()  
+The functions `heatmap.2()` in `gplots` package provides many extentions to the standard R `heatmap()` function.  
+
+```{r}
+library(gplots)
+
+heatmap.2(x = df, 
+          scale = "none", 
+          density.info = "none", 
+          trace = "none", 
+          hclustfun = function(x) hclust(x, method = "ward.D2"), 
+          col = redblue(20))
+```
+
+### Pretty heat maps: pheatmap()  
+```{r}
+library(pheatmap)
+
+pheatmap(df, cutree_rows = 4)
+```
+
+
+### Interactive heat maps: d3heatmap()  
+```{r}
+library(d3heatmap)
+
+d3heatmap(scale(mtcars), 
+          colors = "RdYlBu", 
+          k_row = 4, # number of groups in rows 
+          k_col = 2) # number of groups in columns
+```
+
+### Enhancing heatmaps using dendextend  
+```{r}
+library(dendextend)
+
+# order for rows
+Rowv <- mtcars %>% 
+    scale() %>% 
+    dist() %>% 
+    hclust() %>% 
+    as.dendrogram() %>% 
+    set("branches_k_color", k = 3) %>% 
+    set("branches_lwd", 1.2) %>% 
+    ladderize()
+
+# order for columns: we must transpose the data
+Colv <- mtcars %>% 
+    scale %>% 
+    t() %>% 
+    dist() %>% 
+    hclust %>% 
+    as.dendrogram() %>% 
+    set("branches_k_color", k = 2, value = c("orange", "blue")) %>% 
+    set("branches_lwd", 1.2) %>% 
+    ladderize()
+```
+
+```{r}
+heatmap(scale(mtcars), 
+        Rowv = Rowv, 
+        Colv = Colv, 
+        col = bluered(100), 
+        scale = "none")
+```
+
+```{r}
+heatmap.2(scale(mtcars), 
+          scale = "none", 
+          col = bluered(100), 
+          Rowv = Rowv, 
+          Colv = Colv, 
+          density.info = "none", 
+          trace = "none")
+```
+
+```{r}
+d3heatmap(x = scale(mtcars), 
+          colors = "RdBu", 
+          Rowv = Rowv, 
+          Colv = Colv)
+```
+
+### Complex heatmap  
+**ComplexHeatmap** is an R/bioconductor package, developed by Zuguang Gu, which provides a flexible solution to arrange and annotate multiple heatmaps. It allows also to visualize the association between different data from different sources.  
+
+```{r}
+library(ComplexHeatmap)
+
+Heatmap(df, 
+        name = "mtcars", 
+        column_title = "Variables", 
+        row_title = "Samples", 
+        row_names_gp = gpar(fontsize = 7)) # text size for row names
+```
+
+```{r}
+library(circlize)
+
+mycols <- colorRamp2(breaks = c(-2, 0, 2), 
+                     colors = c("green", "white", "red"))
+
+Heatmap(df, name = "mtcars", col = mycols)
+```
+
+```{r}
+library(RColorBrewer)
+
+Heatmap(df, 
+        name =  "mtcars", 
+        col = colorRamp2(breaks = c(-2, 0, 2), brewer.pal(3, "RdBu")))
+```
+
+
+```{r}
+library(dendextend)
+
+row_dend <- df %>% dist %>% hclust()
+col_dend <- df %>% t() %>% dist() %>% hclust()
+
+Heatmap(df, 
+        name = "mtcars", 
+        row_names_gp = gpar(fontsize = 6.5), 
+        cluster_rows = color_branches(row_dend, k = 4), 
+        cluster_columns = color_branches(col_dend, k = 2))
+```
+
+```{r}
+set.seed(2)
+Heatmap(df, 
+        name = "mtcars", 
+        k = 2)
+```
+
+```{r}
+Heatmap(df, 
+        name = "mtcars", 
+        split = mtcars$cyl, 
+        row_names_gp = gpar(fontsize = 7))
+```
+
+
+```{r}
+Heatmap(df, 
+        name = "mtcars", 
+        split = data.frame(cyl = mtcars$cyl, am = mtcars$am))
+```
+
+
+##### Heatmap annotation  
+The HeatmapAnnotation class is used to define annotation on row or column.  
+
+```
+HeatmapAnnotation(df, name, col, show_legend)
+```
+
+- **df**: a data.frame with column names  
+- **name**: the name of the heatmap annotation  
+- **col**: a list of colors which contains color mapping to columns in df  
+
+```{r}
+df <- df %>% t
+```
+
+
+A vector, containing discrete or continuous values, is used to annotate rows or columns. We'll use the qualitative variables `cyl` and `am`, and the continuous variable `mpg` to annotate columns.  
+
+```{r}
+# annotation data frame
+anno_df <- data.frame(cyl = mtcars$cyl, 
+                      am = mtcars$am, 
+                      mpg = mtcars$mpg)
+
+# define colors for each levels of qualitative variables
+# define gradient color for continuous variable (mpg)
+
+col <- list(cyl = c("4" = "green", "6" = "gray", "8" = "darkred"), 
+            am = c("0" = "yellow", "1" = "orange"), 
+            mpg = circlize::colorRamp2(breaks = c(17, 25), 
+                                       colors = c("lightblue", "purple")))
+
+# create the heatmap annotation
+ha <- HeatmapAnnotation(df = anno_df, col = col, show_legend = F)
+
+# combine the heatmap and the annotation
+Heatmap(df, 
+        name = "mtcars", 
+        top_annotation = ha)
+```
+
+
+# Part IV Cluster Validation  
+The cluster validation consists of measuring the goodness of clustering results. Before applying any clustering algorithm to a data set, the first thing to do is to assess the clustering tendency. That is, whether applying clustering is suitable for the data. If yes, then how many clusters are there. Next, you can perform hierarchical clustering or partitioning clustering (with a pre-specified number of clusters). Finally, you can use a number of measures, described in this part, to evaluate the goodness of the clustering results.  
+
+## Chapter 11
+## Assessing Clustering Tendency  
+Before applying any clustering method on your data, it’s important to evaluate whether the data sets contains meaningful clusters (i.e.: non-random structures) or not. If yes, then how many clusters are there. This process is defined as the assessing of clustering tendency or the feasibility of the clustering analysis.  
+
+A big issue, in cluster analysis, is that clustering methods will return clusters even if the data does not contain any clusters. In other words, if you blindly apply a clustering method on a data set, it will divide the data into clusters because that is what it supposed to do.  
+
+```{r}
+data(iris)
+df <- iris[, -5]
+
+random_df <- apply(df, 2, 
+                   function(x){
+                       runif(length(x), min(x), max(x))
+                   }) %>% 
+    as.data.frame()
+
+df <- iris.scaled <- scale(df)
+random_df <- scale(random_df)
+```
+
+We start by visualizing the data to assess whether they contains any meaningful clusters.
+As the data contain more than two variables, we need to reduce the dimensionality in order to plot a scatter plot. This can be done using principal component analysis
+(PCA) algorithm (R function: `prcomp()`). After performing PCA, we use the function `fviz_pca_ind()` [`factoextra` R package] to visualize the output.  
+
+```{r}
+fviz_pca_ind(prcomp(df),
+             title = "PCA - Iris data", 
+             habillage = iris$Species, 
+             palette = "jco", 
+             geom = "point", 
+             ggtheme = theme_classic(), 
+             legend = "bottom")
+```
+
+
+```{r}
+fviz_pca_ind(prcomp(random_df), 
+             title = "PCA - Random data", 
+             geom = "point", 
+             ggtheme = theme_classic(), 
+             legend = "bottom")
+```
+
+
+### Why assessing clustering tendency?  
+In order to illustrate why it’s important to assess cluster tendency, we start by computing k-means clustering (Chapter 4) and hierarchical clustering (Chapter 7) on the two data sets (the real and the random data). The function fviz_cluster() and fviz_dend() [in factoextra R package] will be used to visualize the results.  
+
+```{r}
+set.seed(123)
+# k-means on iris dataset  
+km.res <- kmeans(df, 3)
+
+fviz_cluster(list(data = df, cluster = km.res$cluster), 
+             ellipse.type = "norm", 
+             geom = "point", 
+             stand = F, 
+             palette = "jco", 
+             ggtheme = theme_classic())
+```
+
+```{r}
+km.res2 <- kmeans(random_df, 3)
+
+fviz_cluster(list(data = random_df, cluster = km.res2$cluster), 
+             ellipse.type = "norm", 
+             geom = "point", 
+             stand = F, 
+             palette = "jco", 
+             ggtheme = theme_classic())
+```
+
+```{r}
+fviz_dend(hclust(dist(random_df)), 
+          k = 3, 
+          k_colors = "jco", 
+          as.ggplot = TRUE, 
+          show_labels = F)
+```
 
 
 
-- Visualizing Dendrograms  
-- Heatmap: Static & Interactive  
 
-# IV Cluster Validation  
-- Clustering Tendency  
+
+
+
+
+
+
 - Optimal Number of Clusters  
 - Validation Statistics  
 - P-value for Hierarchical Clustering  
