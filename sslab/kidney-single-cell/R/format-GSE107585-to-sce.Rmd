@@ -1,0 +1,72 @@
+---
+title: "format-GSE107585-to-sce"
+author: "yincy"
+date: "4/15/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, message=FALSE, warning=FALSE}
+library(SingleCellExperiment)
+library(data.table)
+library(magrittr)
+#library('org.Mm.eg.db')
+library(EnsDb.Mmusculus.v79)
+```
+
+
+```{r}
+GSE107585 <- fread("/home/yincy/git/Data/kidney-single-cell/GSE107585/GSE107585_Mouse_kidney_single_cell_datamatrix.txt.gz", 
+                   sep = "\t")
+GSE107585 %>% dim()
+GSE107585[1:4, 1:4]
+
+
+cdata <- data.frame(
+  cellid = colnames(GSE107585) %>% .[-1], 
+  cluster = GSE107585[1, , drop = T] %>% as.character() %>% .[-1] %>% as.integer()
+)
+
+celltype = c("1" = "Endo", 
+             "2" = "Podo", 
+             "3" = "PT", 
+             "4" = "LOH", 
+             "5" = "DCT", 
+             "6" = "CD-PC", 
+             "7" = "CD-IC", 
+             "8" = "CD-Trans", 
+             "9" = "Novel1", 
+             "10" = "Fib", 
+             "11" = "Macro", 
+             "12" = "Neutro", 
+             "13" = "B lymph", 
+             "14" = "T lymph", 
+             "15" = "NK", 
+             "16" = "Novel2")
+
+cdata$celltype = celltype[cdata$cluster]
+
+GSE107585 <- GSE107585[-1, ]
+GSE107585 <- GSE107585 %>% rename("V1" = "symbol") 
+
+rdata <- data.frame(
+  symbol = GSE107585$symbol
+)
+
+rdata$ensembl <- mapIds(EnsDb.Mmusculus.v79, 
+                        keys = rdata$symbol, 
+                        keytype = "SYMBOL", 
+                        column = "GENEID")
+
+GSE107585 <- GSE107585 %>% tibble::column_to_rownames("symbol")
+
+sce.kidney <- SingleCellExperiment(assays = list(counts = GSE107585 %>% as.matrix()), 
+                                   rowData = rdata, 
+                                   colData = cdata)
+
+saveRDS(object = sce.kidney, file = "/home/yincy/git/Data/kidney-single-cell/GSE107585/sce.kidney.rds")
+```
+
