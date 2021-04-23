@@ -1,0 +1,88 @@
+---
+title: "Color"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# RColorBrewer
+```{r}
+library(RColorBrewer)
+
+# display all color palette information
+brewer.pal.info
+```
+
+```{r}
+# display all color palette
+display.brewer.all()
+
+# display sequential color palette
+display.brewer.all(type = "seq")
+
+# display quality color palette
+display.brewer.all(type = "qual")
+
+# display diverge color palette
+display.brewer.all(type = "div")
+```
+
+```{r}
+# display certain color palette
+display.brewer.pal(n = brewer.pal.info["Set1", "maxcolors"], "Set1")
+```
+
+
+# viridis
+For base plots, use the `viridis()` function to generate a palette.  
+
+```{r}
+library(viridis)
+
+x <- y <- seq(-8*pi, 8*pi, len = 40)
+r <- sqrt(outer(x^2, y^2, "+"))
+
+filled.contour(cos(r^2) * exp(-r/(2*pi)), 
+               axes = FALSE, 
+               color.palette = viridis, 
+               asp = 1)
+```
+
+
+For ggplot, use, `scale_color_viridis()` and `scale_fill_viridis()`  
+
+```{r}
+library(ggplot2)
+
+ggplot(data = data.frame(x = rnorm(10000), y = rnorm(10000)), 
+       aes(x, y)) +
+  geom_hex() +
+  coord_fixed() +
+  scale_fill_viridis() +
+  theme_bw()
+``` 
+
+
+## The Color Scales
+The package contains four color scales: 'Viridis', the primary choice, and three alternatives with similar properties, 'magma', 'plasma', 'inferno', and 'cividis'.  
+
+```{r}
+img <- function(obj, nam){
+  image(1:length(obj), 1, as.matrix(1:length(obj)), col = obj, main = nam, 
+        ylab = "", xaxt = "n", yaxt = "n", bty = "n")
+}
+n_col = 128
+
+par(mfrow = c(5, 1), mar = rep(1.2, 4))
+img(rev(viridis(n_col)), "viridis")
+img(rev(magma(n_col)), "magma")
+img(rev(plasma(n_col)), "plasma")
+img(rev(inferno(n_col)), "inferno")
+img(rev(cividis(n_col)), "cividis")
+```
+
+
+
+
