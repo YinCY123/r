@@ -12,34 +12,51 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r, message=FALSE, warning=FALSE}
 library(data.table)
 library(magrittr)
+library(nichenetr)
 library(scater)
 library(scran)
 ```
 
 
 ```{r}
-# normalized 
-sce.kidney <- readRDS("/home/yincy/git/Data/kidney-single-cell/GSE107585/sce.kidney_GSE107585.rds")
-assayNames(sce.kidney)
+# load data 
+sce.kidney <- readRDS("../../../../Data/kidney-single-cell/GSE107585/sce.kidney.rds")
+
+# cells to remove
+cells_to_remove <- c('Novel1', 'Novel2')
+sce.kidney <- sce.kidney[, !(sce.kidney$celltype %in% cells_to_remove)]
+
+# normalization
+sce.kidney <- computeSumFactors(sce.kidney, clusters = sce.kidney$celltype)
+sce.kidney <- logNormCounts(sce.kidney)
+#saveRDS(sce.kidney, file = "../../../../Data/kidney-single-cell/GSE107585/sce.kidney-normalized.rds")
+
+cell_meta <- colData(sce.kidney)
+cell_meta %>% 
+    as.data.frame() %>% 
+    dplyr::rename("Cell" = "cellid", "cell_type" = "celltype") %>% 
+    dplyr::select(Cell, cell_type) %>% 
+    write.csv(file = "../../../../Data/kidney-single-cell/GSE107585/cell_meta.csv", 
+              row.names = F, 
+              quote = F)
 
 sce.kidney.logcounts <- assay(sce.kidney, "logcounts")
 sce.kidney.logcounts %>% dim()
 sce.kidney.logcounts[1:10, 1:10]
 
+sce.kidney.logcounts <- sce.kidney.logcounts %>% 
+    as.data.frame() %>% 
+    tibble::rownames_to_column("symbol") 
+
+sce.kidney.logcounts$symbol <- sce.kidney.logcounts$symbol %>% 
+    convert_mouse_to_human_symbols()
+sce.kidney.logcounts <- sce.kidney.logcounts[!is.na(sce.kidney.logcounts$symbol), ]
+
 fwrite(x = sce.kidney.logcounts, 
-       file = "data/sce.kidney.logcounts.csv", 
+       file = "../../../../Data/kidney-single-cell/GSE107585/data/sce.kidney.logcounts.csv", 
        quote = F, 
        row.names = F, 
        sep = ",")
-```
-
-```{r}
-meta_df <- colData(sce.kidney) %>% 
-    as.data.frame() %>% 
-    .[, c(1, 3)] %>% 
-    dplyr::rename(Cell = cellid, cell_type = celltype)
-
-write.csv(x = meta_df, file = "data/sce.kidney.meta.csv", row.names = F, quote = F)
 ```
 
 
