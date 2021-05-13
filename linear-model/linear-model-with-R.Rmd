@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-**Notes for <Linear Models with R>**
+**Notes for <Linear Models with R>**  
 The emphasis of this text is on the practice of regression and analysis of variance.  
 
 The objective is to learn what methods are available and more importantly, when they should be applied.  
@@ -64,7 +64,7 @@ plot(sort(pima$diastolic), pch = ".")
 ```
 
 ```{r}
-plot(diabetes ~ diastolic, pima)
+plot(diabetes ~ diastolic, pima, pch = 19, cex = 0.5)
 ```
 
 ```{r}
@@ -80,9 +80,9 @@ Regression analysis is used for explaining or modeling the relationship between 
 
 When p=1, it is called simple regression but when p>1 it is called multiple regression or sometimes multivariate regression.  
 
-When there is more than one Y, then it is called multivariate regression.  
+When there is more than one Y, then it is called multivariate multiple regression.  
 
-The response must be a continuous variable, but the explanatory variables can be continuous, discrete or categorical, 
+The response must be a continuous variable, but the explanatory variables can be continuous, discrete or categorical.  
 
 A regression with diastolic and bmi as X and diabetes as Y would be a multiple regression involving only quantitative variables.  
 
@@ -101,35 +101,199 @@ A regression of test as Y on diastolic and bmi as predictors would involve a qua
 
 
 ## History  
+Legendre developed the method of least squares in 1805. Gauss claimed to heve developed the method a few years earlier and in 1809 showed that **least squares is the optimal solution when the errors are normally distributed**.  
+
+```{r}
+data("stat500")
+
+stat500 <- data.frame(scale(stat500))
+plot(final ~ midterm, stat500)
+abline(0, 1)
+
+g <- lm(final ~ midterm, stat500)
+abline(coef(g), lty = 5)
+```
+
+```{r}
+cor(stat500)
+```
+
+### Exercises  
+1. 
+```{r}
+data("teengamb")
+teengamb$sex <- factor(teengamb$sex, levels = c(0, 1), labels = c('male', 'female'))
+
+summary(teengamb)
+```
+
+```{r}
+plot(income ~ gamble, teengamb, pch = 19, cex = 0.5)
+l <- lm(income ~ gamble, teengamb)
+abline(coef(l))
+```
+
+The expenditure on gambling seems positively correlated with income  
 
 
+```{r}
+plot(gamble ~ sex, teengamb)
+```
+
+male spend more on gambling than female.  
 
 
+2.  
+```{r}
+data("uswages")
+uswages
+```
+
+```{r}
+uswages$race <- factor(uswages$race, levels = c(0, 1), labels = c("White", "Black"))
+uswages$smsa <- factor(uswages$smsa, levels = c(0, 1), labels = c("Metropolitan", "Non Metropolitan"))
+uswages$ne <- factor(uswages$ne, levels = c(0, 1), labels = c("North East", "Non North East"))
+uswages$mw <- factor(uswages$mw, levels = c(0, 1), labels = c("Midwest", "Non Midwest"))
+uswages$we <- factor(uswages$we, levels = c(0, 1), labels = c("West", "Non West"))
+uswages$so <- factor(uswages$so, levels = c(0, 1), labels = c("South", "Non South"))
+uswages$pt <- factor(uswages$pt, levels = c(0, 1), labels = c("part time", "non pt"))
+summary(uswages)
+```
+
+```{r}
+par(mfrow = c(3, 3))
+plot(wage ~ educ + exper + race + smsa + ne + mw + so + we, uswages, pch = 19)
+```
+
+3. 
+```{r}
+data("prostate")
+prostate$svi <- factor(prostate$svi, levels = c(0, 1))
+prostate$gleason <- factor(prostate$gleason, levels = unique(prostate$gleason))
+prostate$pgg45 <- factor(prostate$pgg45, levels = unique(prostate$pgg45))
+
+summary(prostate)
+```
+
+```{r}
+plot(lcavol ~ svi, prostate)
+```
+
+4.  
+```{r}
+data(sat)
+
+sat
+
+summary(sat)
+```
+
+```{r}
+par(mfrow = c(2, 2))
+plot(expend ~ salary, sat)
+l <- lm(expend ~ salary, sat)
+abline(l, lty = 5)
+
+plot(ratio ~ salary, sat)
+
+plot(expend ~ takers, sat)
+
+plot(expend ~ total, sat)
+```
 
 
+5.  
+```{r}
+data(divusa)
+divusa
+```
+
+```{r}
+summary(divusa[, -1])
+```
+
+```{r}
+par(mfrow = c(2, 2))
+plot(divorce ~ unemployed, divusa)
+plot(divorce ~ year, divusa)
+plot(divorce ~ femlab, divusa)
+plot(divorce ~ marriage, divusa)
+```
 
 
+# Chapter 2 Estimation  
+Suppose we want to model the response Y in terms of three predictors, X~1~, X~2~ and X~3~. One very general form for the model would be:  
+
+$$Y = f(X_{1}, X_{2}, X_{3}) + e$$
+
+Where `f` is some unknown function and `e` is the error in this representation. `e` is additive in this instance, but could enter in some more general form. Still, if we assume that `f` is a smooth, continuous function, that still leaves a very wide range of possibilities. Even with just three predictors, we typically will not have enough data try to estimate `f` directly. So we usually have to assume that it has some more restricted form, perhaps linear as in:  
+
+$$Y = b_{0} + b_{1}X_{1} + b_{2}X_{2} + b_{3}X_{3} + e$$
+
+Where b~i~, i=0, 1, 2, 3 are unknown parameters. b~0~ is called the intercept term.  
+
+Thus the problem is reduced to the estimation of four parameters rather than the infinite dimensional `f`.  
 
 
+> Linear models seem rather restrictive, but because the predictors can be transformed and combined in any way, they are actually very flexible.  
 
 
+$$Data = Systematic Structure + Random Variation$$
+
+$$N dimensions = P dimensions + (N - P) dimensions$$
+
+The estimation of `b` can also be considered from a nongeometrical point of view. We might define the best estimate of b as the one which minimizes the sum of the squared errors.  
+
+```{r}
+library(faraway)
+data(gala)
+gala
+```
+ 
+```{r}
+mdl <- lm(Species ~ Area + Elevation + Nearest + Scruz + Adjacent, data = gala)
+
+summary(mdl)
+```
+
+```{r}
+x <- model.matrix( ~ Area + Elevation + Nearest + Scruz + Adjacent, data = gala)
+y <- gala$Species
+
+xtxi <- solve(t(x) %*% x) # get the reverse of (t(x) %*% x)
+
+# we can get `b` directly using (X^T^X)~-1~X~T~y
+
+xtxi %*% t(x) %*% y
+```
+
+a better way to compute `b`
+
+```{r}
+solve(crossprod(x, x), crossprod(x, y))
+```
+
+`crossprod(x, y)` compute x^T^y  
 
 
+```{r}
+names(mdl)
+```
 
+```{r}
+mdls <- summary(mdl)
+names(mdls)
+```
 
+```{r}
+mdls$sigma
 
+mdls$r.squared
+```
 
-
-
-
-
-
-
-
-
-
-
-
+```{r}
+fitted(mdl)
+```
 
 
 

@@ -16,6 +16,23 @@ This tutorial comes from [this site](https://www.tutorialspoint.com/r/index.htm)
 library(magrittr)
 ```
 
+# R Tutorial
+## Data types
+Generally, while doing programming in any programming language, you need to use various variables to store various information. Variables are nothing but reserved memory locations to store values. This means that, when you create a variable you reserve some space in memory.  
+
+You may like to store information of various data types like character, wide character, integer, floating point, double floating point, Boolean etc. Based on the data type of a variable, the operating system allocates memory and decides what can be stored in the reserved memory.  
+
+In contrast to other programming languages like C and java in R, the variables are not declared as some data type. The variables are assigned with R-Objects and the data type of the R-object becomes the data type of the variable. There are many types of R-objects. The frequently used ones are:  
+
+- vector
+- list
+- matrix
+- array
+- factor
+- dataframe
+
+
+
 
 # Statistics Example  
 ## Mean, Median and Mode  
@@ -87,9 +104,7 @@ In Linear Regression these two variables are related through an equation, where 
 
 The general mathematical equation for a linear regression is −  
 
-```
-y = ax + b
-```
+$$y = ax + b$$
 
 - **y** is the response variable.  
 - **x** is the predictor variable.  
@@ -173,7 +188,7 @@ Multiple regression is an extension of linear regression into relationship betwe
 
 The general mathematical equation for multiple regression is -  
 
-y = a + b~1~x + b~2~x + ... + b~n~x~n~
+$$y = a + b_{1}x_{1} + b_{2}x_{2} + ... + b_{n}x_{n}~$$
 
 
 - **y** is the response variable  
@@ -216,7 +231,7 @@ The Logistic Regression is a regression model in which the response variable (de
 
 The general mathematical equation for logistic regression is -  
 
-y = 1/(1 + e^-(a + b~1~x~1~ + b~2~x~2~ + b~3~x~3~ + ...))
+$$y = \frac{1}{(1 + e^-(a + b_{1}x_{1} + b_{2}x_{2} + b_{3}x_{3} + ...)}$$
 
 - **y** is the response variable  
 - **x** is the predictor variable  
@@ -388,9 +403,8 @@ Poisson Regression involves regression models in which the response variable is 
 
 The general mathematical equation for Poisson regression is  
 
-```
-log(y) = a + b~1~x~1~ + b~2~x~2~ + ... + b~n~x~n~
-```
+$$log(y) = a + b_{1}x_{1} + b_{2}x_{2} + ... + b_{}nx_{n}$$
+
 
 - **y** is the response variable.  
 - **a** and **b** are the numeric coefficients.  

@@ -14,7 +14,7 @@ library(tidyselect)
 library(magrittr)
 ```
 
-tidyselect implements a specialised sublanguage of R for selecting variables from data frames and other data structures.  
+`tidyselect` implements a specialised sublanguage of R for selecting variables from data frames and other data structures.  
 
 ## Selections as dots or as named arguments  
 There are two major ways of designing a function that takes selections.  
