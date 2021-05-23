@@ -15,7 +15,6 @@ library(tidyverse)
 ```
 
 ## Loops  
-
 ```{r}
 df <- tibble(
   a = rnorm(10),
@@ -86,9 +85,7 @@ outs
 - `map_dbl()` makes a double vector.  
 - `map_chr()` makes a character vector.  
 
-Each function takes a **vector as input**, applies a function to each piece, and then returns a new vector that's the same length (and has the same names) as the input. The type of the vector is determined by the suffix to the map funcction.  
-
-
+Each function takes a **vector as input**, applies a function to each piece, and then returns a new vector that's the same length (and has the same names) as the input. The type of the vector is determined by the suffix to the map function.  
 
 ```{r}
 map_dfc(c(-10, 0, 10, 100), rnorm, n = 10) # the first argument passed to rnorm 
@@ -97,13 +94,12 @@ map2_dfc(10, c(-10, 0, 10, 100), rnorm) # first two argument passed to rnorm
 
 do.call(what = "rnorm", 
         args = list(n = rep(rep(10, 4), 10), mean = rep(c(-10, 0, 10, 100), each = 10))) %>% 
-  matrix(nrow = 10, ncol = 4, byrow = F) 
+  matrix(nrow = 10, ncol = 4, byrow = F)
 ```
 
 ```{r}
 map_lgl(df, is.factor)
 ```
-
 
 ```{r}
 map(1:5, runif, min = 10, max = 100)
