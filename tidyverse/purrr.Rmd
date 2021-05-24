@@ -126,8 +126,8 @@ map(iris, unique) %>% map_dbl(length)
 map_dfc(c(-10, 0, 10, 100), rnorm, n = 10)
 
 # 2.  
-x <- map_lgl(df, is.factor)
-x
+map_lgl(df, is.factor)
+
 
 # 3. 
 map(1:5, runif)
@@ -138,7 +138,8 @@ map(-2:2, rnorm, n = 5)
 # 5.
 models <- mtcars %>% 
   split(.$cyl) %>% 
-  map(~ lm(mpg ~ wt, data = .))
+  map(~ lm(mpg ~ wt, data = .)) %>% 
+  print
 ```
 
 ### Dealing with Failure  
@@ -184,14 +185,13 @@ data.frame(n = n, mean = mu, sd = sigma) %>%
 pmap(list(n, mu, sigma), rnorm)
 ```
 
-
 ### Invoking Different Functions  
 ```{r, fig.cap = "invoke_map function"}
 knitr::include_graphics("figures/invoke_map.PNG")
 ```
 
 
-```{r}
+```{r,, message=FALSE}
 f <- c("runif", "rnorm", "rpois")
 param <- list(
   list(min = -1, max = 1), 

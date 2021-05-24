@@ -96,31 +96,94 @@ Another, less useful example is:
 ```
 
 # Additional pipe operators
+magrittr also provides three related pipe operators. These are not as common as %>% but they become useful in special cases.  
 
+The “tee” pipe, `%T>%` works like `%>%`, except it returns the left-hand side value, and not the result of the right-hand side operation. This is useful when a step in a pipeline is used for its side-effect (printing, plotting, logging, etc.). As an example (where the actual plot is omitted here):  
 
+```{r}
+rnorm(200) %>% 
+  matrix(ncol = 2) %T>% 
+  plot() %>% 
+  colSums()
+```
 
+The “exposition” pipe, `%$%` exposes the names within the left-hand side object to the right-hand side expression. Essentially, it is a short-hand for using the `with` functions (and the same left-hand side objects are accepted). This operator is handy when functions do not themselves have a data argument, as for example lm and aggregate do. Here are a few examples as illustration:  
 
+```{r}
+iris %>% 
+  subset(Sepal.Length > mean(Sepal.Length)) %$% 
+  cor(Sepal.Length, Sepal.Width)
 
+data.frame(z = rnorm(100)) %$% 
+  ts.plot(z)
+```
 
+Finally, the “assignment” pipe %<>% can be used as the first pipe in a chain. The effect will be that the result of the pipeline is assigned to the left-hand side object, rather than returning the result as usual. It is essentially shorthand notation for expressions like foo <- foo %>% bar %>% baz, which boils down to foo %<>% bar %>% baz. Another example is:  
 
+```{r}
+iris$Sepal.Length %<>% sqrt 
+```
 
+The %<>% can be used whenever `expr <- ...` makes sense, e.g. 
 
+```{r}
+x %<>% foo %>% bar
+x[1:10] %<>% foo %>% bar
+x$baz %<>% foo %>% bar
+```
 
+# Aliases
+In addition to the %>%-operator, magrittr provides some aliases for other operators which make operations such as addition or multiplication fit well into the magrittr-syntax. As an example, consider:  
 
+```{r}
+rnorm(1000) %>% 
+  multiply_by(5) %>% 
+  add(5) %>% 
+  {
+    cat("Mean:", mean(.), 
+        "Variance:", var(.), "\n")
+    head(.)
+  }
+```
 
+which could be written in more compact form as
 
+```{r}
+rnorm(100) %>% `*`(5) %>% `+`(5) %>% {
+  cat("Mean:", mean(.), "\n", 
+      "Variance:", var(.), "\n")
+  head(.)
+}
+```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+|**function**|**aliase**|
+|:--|:--|
+|extract|`[`|
+|extract2|`[[`|
+|inset|`[<-`|
+|inset2|`[[<-`|
+|use_series|`$`|
+|add|`+`|
+|subtract|`-`|
+|multiply_by|`*`|
+|raise_to_power|`^`|
+|multiply_by_matrix|`%*%`|
+|divide_by|`/`|
+|divide_by_int|`%/%`|
+|mod|`%%`|
+|is_in|`%in%`|
+|and|`&`|
+|or|`|`|
+|equals|`==`|
+|is_greater_than|`>`|
+|is_weakly_greater_than|`>=`|
+|is_less_than|`<`|
+|is_weakly_less_than|`<=`|
+|not|`!`|
+|set_colnames|`colnames<-`|
+|set_rownames|`rownames<-`|
+|set_names|`names<-`|
+|set_class|`class<-`|
+|set_attributes|`attributes<-`|
+|set_attr|`attr<-`|
 

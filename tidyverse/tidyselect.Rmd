@@ -31,11 +31,10 @@ mtcars %>% tidyr::pivot_longer(c(mpg, cyl))
 mtcars %>% tidyr::pivot_longer(mpg | cyl)
 ```
 
-
 Our general recommendation is to take dots when the main purpose of the function is to create a new data structure based on a selection. When the selection is accessory to the main purpose of the function, take it as a named argument. In doubt, we recommend using named arguments because it is easier to change a named argument to dots than the other way around.  
 
 ## Do you need tidyselect?  
-The tools described in this vignette are rather low level. Depending on your use case, it may be easier to wrap dplyr::select(). You’ll get a data frame containing the columns selected by your user, which you can then handle in various ways.  
+The tools described in this vignette are rather low level. Depending on your use case, it may be easier to wrap `dplyr::select()`. You’ll get a data frame containing the columns selected by your user, which you can then handle in various ways.  
 
 The following examples illustrate how you could write a function that takes a selection of data and returns the corresponding data frame with capitalised names.  
 ```{r}
@@ -60,11 +59,10 @@ The main advantage of the lower level tidyselect tools is that they offer a bit 
 
 
 ## The selection evaluators  
-tidyselect is implemented with non-standard evaluation (NSE). This unique feature of the R language refers to the ability of functions to **defuse** some or all of their arguments, and resume evaluation later on. Crucially, evaluation can be resumed in a different context or according to different rules, which is often how domain-specific languages are created in R.  
+`tidyselect` is implemented with non-standard evaluation (NSE). This unique feature of the R language refers to the ability of functions to **defuse** some or all of their arguments, and resume evaluation later on. Crucially, evaluation can be resumed in a different context or according to different rules, which is often how domain-specific languages are created in R.  
 
 ### Deufsing and resuming evaluation of R code  
 When a function argument is defused, R halts the evaluation of the code and returns a defused expression instead. This expression contains the code that describes how compute the intended value.  
-
 
 defuse your own R code with `expr()`  
 ```{r}
