@@ -1,0 +1,44 @@
+---
+title: "Pre-Processing"
+author: "yincy"
+date: "6/8/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+- Creating Dummy Variables  
+- Zero-and Near Zero-Variance Predictors  
+- Identifying Correlated Predictors  
+- Linear Dependencies  
+- The `preProcess` Function  
+- Centering and Scaling  
+- Imputation  
+- Transforming Predictors  
+- Putting It All Together  
+- Class Distance Calculations  
+
+
+`caret` includes several functions to pre-process the predictor data. It assumes that all of the data are numeric (i.e. factors have been converted to dummy variables via `model.matrix`, `dummyVars` or other means).  
+
+Note that the later chapter on using `recipes` with `train` shows how that approach can offer a more diverse and customizable interface to pre-processing in the package.  
+
+## Creating Dummy Variables  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
