@@ -9,6 +9,9 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r}
+library(ggplot2)
+```
 
 ```{r}
 d=data.frame(a=c("a","b","c","d","e","f","g","h", "i", "j", "k", "l"))
@@ -30,8 +33,6 @@ ggplot() +
   scale_y_discrete(name="linetype") +
   scale_linetype_identity() +
   geom_segment(data=d, mapping=aes(x=0, xend=1, y=lt, yend=lt, linetype=lt))
-
-ggsave(filename = "f:/git/R-codes/tidyverse/ggplot2-linetype.tiff")
 ```
 
 
@@ -41,8 +42,6 @@ lt=c("blank", "solid", "dashed",
                   "dotted", "dotdash", "longdash", 
                   "twodash", "1F", "F1", 
                   "4C88C488", "12345678")
-
-
 ```
 
 
