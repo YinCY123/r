@@ -1,0 +1,36 @@
+---
+title: "xml2"
+author: "YinCY"
+date: "6/24/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Node Modification
+## Modifying Existing XML
+Modifying existing XML can be done in xml2 by using the replacement functions of the accessors. They all have methods for both individual xml_node objects as well as xml_nodeset objects. If a vector of values is provided it is applied piecewise over the nodeset, otherwise the value is recycled.  
+
+### Text Modification
+Text modification only happens on text nodes. If a given node has more than one text node only the first will be affected. If you want to modify additional text nodes you need to select them explicitly with `/text()`.  
+
+```{r}
+x <- read_xml(x = "<p>This is some <b>text</b>. This is more.</p>")
+xml_text(x)
+
+xml_text(x) <- "This is some other text."
+xml_text(x)
+
+# you can avoid this by explicitly selecting the text node
+x <- read_xml(x = "<p>This is some text. This is <b>bold!</b></p>")
+text_only <- xml_find_all(x = x, xpath = "//text()")
+
+xml_text(text_only) <- c("This is some other text.", "Still bold!")
+xml_text(x)
+
+xml_structure(x)
+```
+
+
