@@ -1,0 +1,114 @@
+---
+title: "01_Introduction"
+author: "yincy"
+date: "6/28/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, message=FALSE, warning=FALSE}
+library(stringr)
+library(XML)
+library(maps)
+library(magrittr)
+```
+
+```{r}
+heritage_parsed <- htmlParse("/home/yincy/git/Book-sources/Wiley-ADCR/ch-1-introduction/worldheritagedanger.htm", encoding = "UTF-8")
+
+heritage_parsed %>% class()
+
+tables <- readHTMLTable(heritage_parsed, stringsAsFactors = F)
+danger_table <- tables[[2]]
+danger_table %>% names
+danger_table <- danger_table[, c(1, 3, 4, 6, 7)]
+colnames(danger_table) <- c("name", "locn", "crit", "yins", "yend")
+
+danger_table$name %>% head
+```
+
+```{r}
+danger_table$crit <- ifelse(str_detect(danger_table$crit, "Natural") == TRUE, "nat", "cult")
+danger_table$crit %>% head
+```
+
+```{r}
+danger_table$yins <- as.numeric(danger_table$yins)
+danger_table$yins %>% head
+```
+
+```{r}
+yend_clean <- unlist(str_extract_all(danger_table$yend, "[[:digit:]]{4}$"))
+danger_table$yend <- as.numeric(yend_clean)
+danger_table$yend %>% head
+```
+
+```{r}
+danger_table$locn %>% head(6)
+```
+
+```{r}
+reg_y <- "[/][ -]*[[:digit:]]*[.]*[[:digit:]]*[;]"
+reg_x <- "[;][ -]*[[:digit:]]*[.][[:digit:]]*"
+
+y_coords <- str_extract(danger_table$locn, reg_y)
+y_coords <- str_sub(y_coords, 3, -2) %>% as.numeric()
+danger_table$y_coords <- y_coords
+
+x_coords <- str_extract(danger_table$locn, reg_x)
+x_coords <- str_sub(x_coords, 3, -2) %>% as.numeric()
+danger_table$x_coords <- x_coords
+
+danger_table$locn <- NULL
+```
+
+
+```{r}
+pch <- ifelse(danger_table$crit == "nat", 19, 2)
+map(database = "world", col = "darkgrey", lwd = 0.5, mar = c(0.1, 0.1, 0.1, 0.1))
+points(danger_table$x_coords, danger_table$y_coords, pch = pch)
+box(which = "figure", lty = 1)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
