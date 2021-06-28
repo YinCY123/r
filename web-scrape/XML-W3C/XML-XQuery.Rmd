@@ -1,0 +1,81 @@
+---
+title: "XML XQuery"
+author: "yincy"
+date: "6/28/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# XQuery Tutorial
+## XQuery Introduction
+### What is XQuery?
+XQuery is to XML what SQL is to databases.
+
+XQuery is designed to query XML data.  
+
+### XQuery Example
+```
+for $x in doc("books.xml")/bookstore/book
+where $x/price>30
+order by $x/title
+return $x/title
+```
+
+- XQuery is **the** language for query XML data  
+- XQuery for XML is like SQL for database  
+- XQuery is built on XPath expressions  
+- XQuery is supported by all major databases  
+- XQuery is a W3C Recommendation  
+
+### XQuery is About Query XML
+XQuery is a language for finding and extracting elements and attributes from XML documents.  
+
+Here is an example of what XQuery could solve:
+
+```
+"Select all CD records with a price less than $10 from the CD collection stored in cd_catalog.xml"
+```
+
+### XQuery and XPath  
+XQuery 1.0 and XPath 2.0 share the same data model and support the same functions and operators. If you have already studied XPath you will have no problems with understanding XQuery.  
+
+### Xquery - Examples of Use
+XQuery can be used to:  
+- Extract information to use in a Web Service  
+- Generate summary reports  
+- Transform XML data to XHTML  
+- Search Web documents for relevant information  
+
+### Xquery is a W3C Recommendation
+XQuery is compatible with several W3C standards, such as XML, Namespaces, XSLT, XPath, and XML Schema.
+
+XQuery 1.0 became a W3C Recommendation in 2007.  
+
+## XQuery Example
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
