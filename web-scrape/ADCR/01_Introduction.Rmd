@@ -16,6 +16,9 @@ library(maps)
 library(magrittr)
 ```
 
+
+# Introduction
+## Case Study
 ```{r}
 heritage_parsed <- htmlParse("/home/yincy/git/Book-sources/Wiley-ADCR/ch-1-introduction/worldheritagedanger.htm", encoding = "UTF-8")
 
@@ -74,40 +77,10 @@ box(which = "figure", lty = 1)
 ```
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+## Technologies for disseminating, extracting, and storing web data
+```{r}
+knitr::include_graphics("figures/01_technologies-important-for-data-collection.PNG")
+```
 
 
 
