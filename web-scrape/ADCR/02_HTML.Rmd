@@ -1,0 +1,57 @@
+---
+title: "02 HTML"
+author: "YinCY"
+date: "6/29/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+**HTML entities** 
+
+## What is parsing?
+The difference between reading and parsing is not just a semantic one. Instead, reading functions differ from parsing functions in that the former do not care to understand the formal grammar that underlies HTML but merely recognize the sequence of symbols included in the HTML file.  
+
+```{r}
+filepath <- "../../../Wiley-ADCR/ch-2-html/fortunes.html"
+fortunes <- readLines(filepath)
+fortunes
+```
+
+```{r}
+library(XML)
+library(magrittr)
+
+parsed_fortunes <- htmlParse(filepath)
+parsed_fortunes
+```
+
+### Discarding nodes while parsing
+```{r}
+h1 <- list("body" = function(x){NULL})
+
+parsed_fortunes <- htmlParse(filepath, handlers = h1, asTree = T)
+parsed_fortunes$children
+```
+
+When using handler functions, one needs to set the asTree argument to TRUE to indicate that the DOM should be returned and not the handler function itself.  
+
+```{r}
+h2 <- list(
+  startElement = function(node, ...){
+    name = xmlName(node)
+    if(name %in% c("div", "title")){NULL}else{node}
+  }, 
+  comment = function(node){NULL}
+)
+
+parsed_fortunes <- htmlParse(filepath, handlers = h2, asTree = T)
+```
+
+
+
+
+
