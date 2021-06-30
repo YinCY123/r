@@ -12,11 +12,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 **HTML entities** 
 
+
+
 ## What is parsing?
 The difference between reading and parsing is not just a semantic one. Instead, reading functions differ from parsing functions in that the former do not care to understand the formal grammar that underlies HTML but merely recognize the sequence of symbols included in the HTML file.  
 
 ```{r}
-filepath <- "../../../Wiley-ADCR/ch-2-html/fortunes.html"
+filepath <- "../../../Book-sources/Wiley-ADCR/ch-2-html/fortunes.html"
 fortunes <- readLines(filepath)
 fortunes
 ```
@@ -31,7 +33,7 @@ parsed_fortunes
 
 ### Discarding nodes while parsing
 ```{r}
-h1 <- list("body" = function(x){NULL})
+h1 <- list("body" = function(x){})
 
 parsed_fortunes <- htmlParse(filepath, handlers = h1, asTree = T)
 parsed_fortunes$children
@@ -52,6 +54,22 @@ parsed_fortunes <- htmlParse(filepath, handlers = h2, asTree = T)
 ```
 
 
+```{r}
+getItalics <- function(){
+  i_container = character()
+  list(i = function(node, ...){
+    i_container <<- c(i_container, xmlValue(node))
+  }, returnI = function()i_container)
+}
+
+h3 <- getItalics()
+
+invisible(htmlTreeParse(filepath, handlers = h3))
+```
+
+```{r}
+h3$returnI()
+```
 
 
 
