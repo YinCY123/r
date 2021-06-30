@@ -1,0 +1,158 @@
+---
+title: "03 XML and JSON"
+author: "YinCY"
+date: "6/30/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(XML)
+library(magrittr)
+```
+
+
+```{r}
+parsed_stocks <- xmlParse("../../../Wiley-ADCR/ch-3-xml/stocks/technology.xml", 
+                          validate = T)
+xmlRoot(parsed_stocks) %>% xmlSize()
+```
+
+```{r}
+bond <- xmlParse("../../../Wiley-ADCR/ch-3-xml/bond.xml")
+bond %>% class()
+```
+
+```{r}
+(root <- xmlRoot(bond))
+root %>% class()
+```
+
+```{r}
+root %>% xmlName() # return the name of the root element
+root %>% xmlSize() # the number of child in the root element
+```
+
+```{r}
+root[[1]]
+```
+
+```{r}
+root[[1]][[1]]
+```
+
+Using double brackets yields the first element in the tree, single brackets return objects of class XMLInternalNodeList.  
+
+```{r}
+root[["movie"]]
+```
+
+```{r}
+root["movie"]
+```
+
+Names and numbers can also be combined.  
+
+```{r}
+root[["movie"]][[1]][[1]]
+```
+
+
+### From XML to data frames or lists
+```{r}
+xmlSApply(root[[1]], xmlValue)
+xmlSApply(root, xmlAttrs)
+xmlSApply(root, xmlGetAttr, "id")
+```
+
+As long as XML documents are flat in the hierarchical sense, that is, the root node’s most
+distant relatives are grandchildren or children, they can usually be transformed easily into a data frame with xmlToDataFrame()  
+
+```{r}
+xmlToDataFrame(root)
+```
+
+```{r}
+xmlToList(bond)
+```
+
+### Event-driven parsing
+Event-driven parsing differs from DOM- style parsing in that it skips the construction of the complete DOM at the C level. Instead, event-driven parsers sequentially traverse over an XML file, and once they find a specified element of interest they prompt an instant, user-defined reaction to this event. This procedure provides a huge advantage over DOM-style parsers because the machine’s memory never has to hold the complete document.  
+
+```{r}
+branchFun <- function(){
+  container_close = numeric()
+  container_date = numeric()
+  
+  "Apple" = function(node, ...){
+    date = xmlValue(xmlChildren(node)[[c("date")]])
+    container_date <<- c(container_date, date)
+    close <- xmlValue(xmlChildren(node)[["close"]])
+    container_close <<- c(container_close, close)
+  }
+  getContainer <- function()data.frame(date = container_date, close = container_close)
+  list(Apple = Apple, getStore = getContainer)
+}
+
+(h5 <- branchFun())
+```
+
+```{r}
+xmlEventParse(file = "../../../Wiley-ADCR/ch-3-xml/stocks/technology.xml", 
+              branches = h5, handlers = list()) %>% invisible()
+
+apple.stock <- h5$getStore()
+apple.stock %>% head
+```
+
+
+```{r}
+library(RJSONIO)
+ls("package:RJSONIO")
+```
+
+```{r}
+isValidJSON("../../../Wiley-ADCR/ch-3-xml/indy.json")
+```
+
+```{r}
+indy <- fromJSON("../../../Wiley-ADCR/ch-3-xml/indy.json")
+indy %>% class()
+```
+
+```{r}
+library(stringr)
+
+indy.vec <- unlist(indy, recursive = T, use.names = T)
+indy.vec %>% head
+
+indy.vec[str_detect(names(indy.vec), "name")]
+```
+
+```{r}
+sapply(indy[[1]], "[[", "year")
+```
+
+```{r}
+library(plyr)
+indy.unlist <- sapply(indy[[1]], unlist)
+indy.df <- do.call("rbind.fill", lapply(lapply(indy.unlist, t), data.frame, stringsAsFactors = F))
+indy.df %>% names
+```
+
+```{r}
+library(jsonlite)
+
+jsonlite::fromJSON("../../../Wiley-ADCR/ch-3-xml/peanuts.json") 
+```
+
+```{r}
+jsonlite::fromJSON("../../../Wiley-ADCR/ch-3-xml/indy.json")[[1]]
+```
+
+
+
