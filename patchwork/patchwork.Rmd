@@ -1,0 +1,100 @@
+---
+title: "patchwork"
+author: "YinCY"
+date: "7/5/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Getting Started
+```{r}
+library(patchwork)
+```
+
+Patchwork is a package designed to make plot composition in R extremely simple and powerful. It is mainly intended for users of ggplot2 and goes to great lengths to make sure ggplots are properly aligned no matter the complexity of your composition.  
+
+In this tutorial we’ll work through the basics of using patchwork. In the end you’ll have a fairly good understanding of the API, and will be ready to dive into some of the more advanced topics covered in the other vignettes.  
+
+## Example plots
+```{r}
+library(ggplot2)
+p1 <- ggplot(mtcars) +
+  geom_point(aes(mpg, disp)) +
+  ggtitle("plot 1")
+
+p2 <- ggplot(mtcars) +
+  geom_boxplot(aes(gear, disp, group = gear)) +
+  ggtitle("plot 2")
+
+p3 <- ggplot(mtcars) +
+  geom_point(aes(hp, wt, color = mpg)) +
+  ggtitle("plot 3")
+
+p4 <- ggplot(mtcars) +
+  geom_bar(aes(gear)) +
+  facet_wrap(~cyl) +
+  ggtitle("plot 4")
+```
+
+## Basic use
+The absolute simplest use is the extension of the `+` operator used in ggplot2, to allow adding plots together:  
+
+```{r}
+p1 + p2
+```
+
+**when adding plots together, the last added plot will be the active one, and will receive any addition of new ggplot2 objects such as geoms, labels**, etc:  
+
+```{r}
+p1 + p2 + labs(subtitle = "This will appear in the last plot")
+```
+
+## Controlling layout
+By default, patchwork will try to keep the grid square, and fill it out in **row order**.    
+
+```{r}
+p1 + p2 + p3 + p4
+```
+
+This can be controlled with the addition of a `plot_layout()`  
+
+```{r}
+p1 + p2 + p3 + p4 + plot_layout(nrow = 3, byrow = F)
+```
+
+`plot_layout()` have all sorts of amazing features for controlling the layout of your composition. See the Layout vignette for a full rundown of all its options.  
+
+## Stacking and packing plots
+Often you want to place plots on top of each other, or beside each other, rather than fill out a grid. While this can be accomplished by adding a one-row or one-column layout, patchwork also provides two operators that does this directly and further provides visual cues to the layout. `|` will place the plots beside each other, while `/` will stack them:  
+
+```{r}
+p1 / p2
+```
+
+as patchworks can be nested, these two operators are often enough to create rather complex layouts:  
+
+```{r}
+p1 | (p2 / p3)
+```
+
+## Annotating the composition
+It is often necessary to add titles, captions, tags, etc. to a composition. This can be achieved by adding a `plot_annotation()` to the patchwork:  
+
+```{r}
+(p1 | (p2 / p3)) +
+  plot_annotation(title = "The suprising story about mtcars")
+```
+
+patchwork also provides auto-tagging capabilities, in order to identify subplots in text:  
+
+```{r}
+p1 + p2 + p3 +
+  plot_annotation(tag_levels = "I")
+```
+
+
+
+
