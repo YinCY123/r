@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-## XPath 
+## XPath
 XPath is a query language that is useful for addressing and extracting parts from HTML/XML documents. XPath is best categorized as a domain-specific language, which indicates that its field of application is a rather narrow one—it is simply a very helpful tool for selecting information from marked up documents such as HTML, XML, or any variant of it such as SVG or RSS  
 
 XPath only works on the DOM representation of a document and cannot be applied on the native code.  
@@ -47,7 +47,7 @@ xpathSApply(doc = parsed_doc,
 
 ```{r}
 xpathSApply(parsed_doc, 
-            path = "//title/..")
+            path = "//title/..") # The parent node of title
 ```
 
 ```{r}
@@ -160,12 +160,6 @@ xpathSApply(doc = parsed_doc,
 ```{r}
 xpathSApply(doc = parsed_doc, 
             path = "//div", 
-            fun = xmlAttrs)
-```
-
-```{r}
-xpathSApply(doc = parsed_doc, 
-            path = "//div", 
             fun = xmlGetAttr, 
             name = "lang")
 ```
@@ -243,55 +237,47 @@ stocks <- xpathSApply(parsed_stocks, expQuery, getClose) %>%
     as.data.frame()
 
 stocks
-
-
 ```
 
 
 ### XML namespaces
+```{r}
+parsed_xml <- xmlParse("../../../Book-sources/Wiley-ADCR/ch-4-xpath/title.xml")
+```
 
+```{r}
+xpathSApply(doc = parsed_xml, 
+            path = "//title", 
+            fun = xmlValue)
+```
 
+The key problem is that neither of the two <title> nodes in the document has been defined under the default namespace on which standard XPath operatoes.  
 
+**One way to bypass the unique namespaces is to make a query directly to the local name of interest**:  
 
+```{r}
+xpathSApply(doc = parsed_xml, 
+            path = "//*[local-name() = 'title']", 
+            fun = xmlValue)
+```
 
+To conduct namespace-aware XPath queries on the document, we can extend the function and use the namespaces argument in the xpathSApply() function to refer to the particular namespace under which the second <title> node has been defined.  
 
+```{r}
+xpathSApply(doc = parsed_xml, 
+            path = "//x:title", 
+            namespaces = c(x = "http://funnybooknames.com/crockford"), 
+            fun = xmlValue)
+```
 
+```{r}
+ns <- xmlNamespaceDefinitions(parsed_xml) %>% 
+    extract2(2) %>% 
+    extract2("uri")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+xpathSApply(doc = parsed_xml, 
+            path = "//x:title", 
+            namespaces = c(x = ns), 
+            fun = xmlValue)
+```
 
