@@ -39,12 +39,132 @@ knitr::include_graphics("figures/arules-class.png")
 Note also that we need to store collections of itemsets with possibly duplicated elements (identical rows), i.e, itemsets containing exactly the same items. This is necessary, since a transaction database can contain different transactions with the same items. Such a database is still a set of transactions since each transaction also contains a unique transaction ID.  
 
 
-# Mining algorithm interfaces
+# Examples  
+## Example 1: Analyzing and preparing a transaction data set
+```{r}
+library(arules)
+library(magrittr)
+data(Epub)
+
+Epub
+```
+
+```{r}
+summary(Epub)
+```
+
+```{r}
+year <- strftime(as.POSIXlt(transactionInfo(Epub)[["TimeStamp"]]), "%Y")
+table(year)
+```
+
+```{r}
+Epub2003 <- Epub[year == "2003"]
+length(Epub2003)
+```
+
+```{r}
+image(Epub2003)
+```
+
+```{r}
+dim(Epub2003)
+size(Epub2003) %>% table
+transactionInfo(Epub2003[size(Epub2003) > 20])
+```
+
+```{r}
+inspect(Epub2003[1:5])
+# inspect(Epub2003[size(Epub2003) > 22])
+```
+
+```{r}
+as(Epub2003[1:5], "list") %>% unlist() %>% paste(names(.), ., sep = "=") %>% table %>% barplot()
+```
+
+```{r}
+EpubTidLists <- as(Epub, "tidLists")
+EpubTidLists
+```
+
+```{r}
+as(EpubTidLists[1:3], "list")
+```
 
 
+## Example 2: Preparing and mining a questionaire data set
+```{r}
+data("AdultUCI")
+AdultUCI %>% dim
+
+AdultUCI[1:3, ]
+```
+
+```{r}
+AdultUCI[["fnlwgt"]] <- NULL
+AdultUCI[["education-num"]] <- NULL
+
+AdultUCI[["age"]] <- ordered(cut(AdultUCI[["age"]], c(15, 25, 45, 65, 100)), 
+                             labels = c("Young", "Middle-aged", "Senior", "Old"))
+
+AdultUCI[["hours-per-week"]] <- ordered(cut(AdultUCI[["hours-per-week"]], 
+                                            c(0, 25, 40, 60, 168)), 
+                                        labels = c("Part-time", "Full-time", "Over-time", "Workholic"))
+
+AdultUCI[["capital-gain"]] <- ordered(cut(AdultUCI[["capital-gain"]], 
+                                          c(-Inf, 0, median(AdultUCI[["capital-gain"]][AdultUCI[["capital-gain"]] > 0]), Inf)), 
+                                      labels = c("None", "Low", "High"))
+
+AdultUCI[["capital-loss"]] <- ordered(cut(AdultUCI[["capital-loss"]], 
+                                          c(-Inf, 0, median(AdultUCI[["capital-loss"]][AdultUCI[["capital-loss"]] > 0]), Inf)), 
+                                      labels = c("none", "low", "high"))
+
+AdultUCI %>% head
+```
 
 
+```{r}
+Adult <- transactions(AdultUCI)
+Adult
 
+summary(Adult)
+```
+
+```{r}
+itemFrequencyPlot(Adult, support = 0.1, cex.names = 0.8)
+```
+
+```{r}
+Adult %>% as(., "list") %>% 
+    unlist() %>% 
+    table %>% 
+    as.data.frame() %>% 
+    magrittr::set_colnames(c("class", "Freq")) %>% 
+    dplyr::filter(Freq > dim(Adult)[[1]] * 0.1) %>% 
+    ggplot(aes(class, Freq)) +
+    geom_bar(stat = "identity") +
+    theme(axis.text.x = element_text(angle = 50, hjust = 1, vjust = 1, size = 8))
+```
+
+```{r}
+rules <- apriori(data = Adult, 
+                 parameter = list(support = 0.01, confidence = 0.6))
+```
+
+
+```{r}
+summary(rules)
+```
+
+```{r}
+rulesIncomeSmall <- subset(rules, subset = rhs %in% "income=small" & lift > 1.2)
+rulesIncomeLarge <- subset(rules, subset = rhs %in% "income=large" & lift > 1.2)
+
+rulesIncomeSmall %>% head(3) %>% inspect()
+rulesIncomeLarge %>% head(3) %>% inspect()
+```
+
+## Example 3: Extending arules with a new interest measure
 
 
 
