@@ -135,6 +135,7 @@ itemFrequencyPlot(Adult, support = 0.1, cex.names = 0.8)
 ```
 
 ```{r}
+library(ggplot2)
 Adult %>% as(., "list") %>% 
     unlist() %>% 
     table %>% 
@@ -165,10 +166,40 @@ rulesIncomeLarge %>% head(3) %>% inspect()
 ```
 
 ## Example 3: Extending arules with a new interest measure
+```{r}
+data("Adult")
 
+fsets <- eclat(data = Adult, 
+               parameter = list(support = 0.05), 
+               control = list(verbose = F))
+```
 
+```{r}
+singleItems <- fsets[size(items(fsets)) == 1]
+# get the col numbers we have support for
+singleSupport <- quality(singleItems)$support
+names(singleSupport) <- unlist(LIST(items(singleItems), decode = FALSE))
+singleSupport %>% head
+```
 
+```{r}
+summary(fsets)
+```
 
+```{r}
+itemsetLIST <- LIST(items(fsets), decode = F)
+allConfidence <- quality(fsets)$support / sapply(itemsetLIST, function(x){max(singleSupport[as.character(x)])})
+quality(fsets) <- cbind(quality(fsets), allConfidence)
+```
+
+```{r}
+summary(fsets)
+```
+
+```{r}
+fsetsEducation <- subset(fsets, subset = items %pin% 'education')
+fsetsEducation[size(fsetsEducation) > 1] %>% sort(by = "allConfidence") %>% .[1:3] %>% inspect() 
+```
 
 
 
