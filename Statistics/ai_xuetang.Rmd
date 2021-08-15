@@ -1,0 +1,118 @@
+---
+title: "ai_xuetang"
+author: "yincy"
+date: "7/24/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 数据类型
+- vector  
+- factor  
+- data.frame  
+- matrix  
+- array  
+- list  
+
+
+# 向量类型
+- logical  
+- integer  
+- numeric  
+- complex  
+- character
+- raw  
+
+
+# association rules
+```{r}
+library(arules)
+library(tidyverse)
+
+load("../../RDataAnalytics/data/cjb.rda")
+cjb
+```
+
+```{r}
+as_five_grade_score <- function(x){
+    cut(x, 
+        breaks = c(0, seq(60, 100, 10)), 
+        include.lowest = T, 
+        right = FALSE, 
+        ordered_result = T, 
+        labels = c("不及格", "及格", "中", "良", "优"))
+}
+
+cjb %<>% 
+    mutate_at(vars(xb, wlfk), factor) %>% 
+    mutate_at(vars(yw:sw), as_five_grade_score) %>% 
+    select(-c(1:2))
+
+cjb_trans <- as(cjb, "transactions")
+```
+
+```{r}
+inspect(head(cjb_trans))
+cjb_trans %>% as("list")
+```
+
+
+```{r}
+library(arulesViz)
+
+irules_args_default <- apriori(data = cjb_trans)
+```
+
+用一句话来形容关联规则的挖掘
+
+所谓关联规则的学习，其实就是观察历史记录
+
+如果：
+B 总是频繁的和A 一起出现 （支持度）  
+当 A 出现时，B 出现的概率很大 （置信度）
+                    甚至是更大 （提升度）
+                    
+那么：
+很自然形成一条关联规则 A --> B
+
+
+# 分类与回归
+根据目前所拥有的信息来建立人们所关心的变量和其他有关变量的关系。
+
+当因变量为数量变量时，叫做回归， 而当因变量为类别变量（也叫名义变量或分类变量）时叫做分类。
+
+分类：构造一个分类器 classifier 来预测类标号。  
+回归：构造一个预测器 predictor 来预测一个数值。  
+
+```{r}
+knitr::include_graphics("images/maps.png")
+```
+
+
+```{r}
+library(caret)
+modelLookup()$model %>% unique() %>% length()
+```
+
+```{r}
+cv_kfold <- function(data, k = 10, seed = 2021){
+    n_row <- nrow(data)
+    n_foldmarkers <- rep(1:k, ceiling(n_row / k))[1:n_row]
+    set.seed(seed)
+    n_foldmarkers <- sample(n_foldmarkers)
+    kfold <- lapply(1:k, function(i){
+        (1:n_row)[n_foldmarkers == i]
+    })
+    return(kfold)
+}
+
+cv_kfold(cjb)
+sapply(cv_kfold(cjb), length)
+```
+
+## 近临法
+ 
+
