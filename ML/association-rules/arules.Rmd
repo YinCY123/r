@@ -61,10 +61,12 @@ table(year)
 ```{r}
 Epub2003 <- Epub[year == "2003"]
 length(Epub2003)
+
+as(Epub2003, "tidLists")[1:10] %>% inspect()
 ```
 
 ```{r}
-image(Epub2003)
+Epub2003 %>% image()
 ```
 
 ```{r}
@@ -78,9 +80,6 @@ inspect(Epub2003[1:5])
 # inspect(Epub2003[size(Epub2003) > 22])
 ```
 
-```{r}
-as(Epub2003[1:5], "list") %>% unlist() %>% paste(names(.), ., sep = "=") %>% table %>% barplot()
-```
 
 ```{r}
 EpubTidLists <- as(Epub, "tidLists")
@@ -135,26 +134,15 @@ itemFrequencyPlot(Adult, support = 0.1, cex.names = 0.8)
 ```
 
 ```{r}
-library(ggplot2)
-Adult %>% as(., "list") %>% 
-    unlist() %>% 
-    table %>% 
-    as.data.frame() %>% 
-    magrittr::set_colnames(c("class", "Freq")) %>% 
-    dplyr::filter(Freq > dim(Adult)[[1]] * 0.1) %>% 
-    ggplot(aes(class, Freq)) +
-    geom_bar(stat = "identity") +
-    theme(axis.text.x = element_text(angle = 50, hjust = 1, vjust = 1, size = 8))
-```
-
-```{r}
 rules <- apriori(data = Adult, 
                  parameter = list(support = 0.01, confidence = 0.6))
 ```
 
 
 ```{r}
+library(arulesViz)
 summary(rules)
+plot(rules, engine = "ggplot2")
 ```
 
 ```{r}
