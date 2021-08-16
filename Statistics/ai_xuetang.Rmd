@@ -114,5 +114,15 @@ sapply(cv_kfold(cjb), length)
 ```
 
 ## 近临法
- 
+```{r}
+knitr::include_graphics("images/jilinfa.png")
+```
+
+
+```{r}
+library(kknn)
+
+help(package = "kknn")
+```
+
 
