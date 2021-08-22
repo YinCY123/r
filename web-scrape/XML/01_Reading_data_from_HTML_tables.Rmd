@@ -1,0 +1,22 @@
+---
+title: "01_Reading_data_from_HTML_tables"
+author: "yincy"
+date: "7/9/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(XML)
+library(tidyverse)
+
+u <- "/home/yincy/git/Data/R/XML/List of countries and dependencies by population - Wikipedia.html"
+tabls <- readHTMLTable(u)
+
+tabls %>% lapply(nrow)
+pop <- readHTMLTable(u, which = 1)
+```
+
