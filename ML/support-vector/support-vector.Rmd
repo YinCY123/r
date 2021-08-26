@@ -1,0 +1,77 @@
+---
+title: "support-vector"
+author: "yincy"
+date: "8/24/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# BiocManager::install("kernlab")
+library(kernlab)
+library(magrittr)
+
+cn <- c("Sample_ID", "Clump_Thickness", 
+        "Cell_Size", "Cell_Shape", 
+        "Marginal_Adhesion", "Epithelial_Cell_Size", 
+        "Bare_Nuclei", "Bland_Chromatin", 
+        "Normal Nucleoli", "Mitoses", 
+        "Class")
+cc <- rep("factor", length(cn))
+brca <- read.table("/home/yincy/git/Data/ML/breat-cancer/breast-cancer-wisconsin.data", 
+                   sep = ",", 
+                   header = F, 
+                   na.strings = "?", 
+                   col.names = cn, 
+                   colClasses = cc)
+
+brca <- na.omit(brca)
+brca <- brca[, -1]
+brca %>% str
+```
+
+
+**Tips on practical use of SVMs**:  
+1. SVMs may be very sensible to the proper choice of parameters, so allways checks a range of parameter combinations, at least on a resonable subset of your data.  
+2. For classification tasks, you will most likely use C-classification with the RBF kernel (default), because of its good general performance and the few number of parameters (only two: C and $\gamma$). The authors of libsvm suggest to try small and large values for C - like 1 to 1000 - first, then to decide which are better for the data by cross validation, and finally to try several $\gamma$'s for the better C's.  
+
+
+```{r}
+train_index <- sample(dim(brca)[1], 2/3 * dim(brca)[1], replace = F)
+
+model <- ksvm(Class ~., 
+              data = brca[train_index, ])
+
+predicted_train <- predict(model, 
+                           newdata = brca[train_index, ], 
+                           type = "response")
+Metrics::ce(brca[train_index, "Class"], predicted_train)
+
+predicted_test <- predict(model, 
+                          newdata = brca[-train_index, ], 
+                          type = "response")
+Metrics::ce(brca[-train_index, "Class"], predicted_test)
+```
+
+```{r}
+library(caret)
+svm_grid <- expand.grid(sigma = 2^(-10:4), 
+                        C = -5:20)
+
+set.seed(2012)
+svm_model <- train(Class ~., 
+                   data = brca[train_index, ], 
+                   method = "svmRadial", 
+                   preProc = c("center", "scale"), 
+                   tuneGrid = svm_grid)
+
+svm_model$bestTune
+```
+
+
+
+
+

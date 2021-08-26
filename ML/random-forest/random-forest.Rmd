@@ -1,0 +1,112 @@
+---
+title: "random-forest"
+author: "yincy"
+date: "8/22/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(randomForest)
+library(magrittr)
+
+cn <- c("Sample_ID", "Clump_Thickness", 
+        "Cell_Size", "Cell_Shape", 
+        "Marginal_Adhesion", "Epithelial_Cell_Size", 
+        "Bare_Nuclei", "Bland_Chromatin", 
+        "Normal Nucleoli", "Mitoses", 
+        "Class")
+cc <- rep("factor", length(cn))
+brca <- read.table("/home/yincy/git/Data/ML/breat-cancer/breast-cancer-wisconsin.data", 
+                   sep = ",", 
+                   header = F, 
+                   na.strings = "?", 
+                   col.names = cn, 
+                   colClasses = cc)
+
+brca <- na.omit(brca)
+brca <- brca[, -1]
+brca %>% str
+```
+
+```{r}
+train_set <- sample(dim(brca)[1], 2/3 * dim(brca)[1], replace = F)
+
+brca_rf <- randomForest(Class ~., 
+                        ntree = 300, 
+                        data = brca[train_set, ])
+
+brca_rf
+```
+
+```{r}
+predicted_train <- predict(brca_rf, 
+                           newdata = brca[train_set, ], 
+                           type = "response")
+
+Metrics::ce(brca[train_set, "Class"], predicted_train)
+```
+
+```{r}
+predicted_test <- predict(brca_rf, 
+                          newdata = brca[-train_set, ], 
+                          type = "response")
+
+Metrics::ce(brca[-train_set, "Class"], predicted_test)
+```
+
+# k-flod cross validation
+```{r}
+rindex <- sample(dim(brca)[1])
+f <- rep(1:20, length.out = dim(brca)[1])
+kflods <- split(rindex, f)
+ce_train <- vector(mode = "numeric")
+ce_test <- vector(mode = "numeric")
+
+for(i in 1:length(kflods)){
+    curr_fold <- kflods[[i]]
+    train_set <- brca[-curr_fold, ]
+    test_set <- brca[curr_fold, ]
+    
+    rf <- randomForest(formula = Class ~., 
+                       ntree = 500, 
+                       data = train_set)
+    
+    predicted_train <- predict(rf, 
+                               newdata = train_set, 
+                               type = "response")
+    ce_train[[i]] <- Metrics::ce(train_set[, "Class"], 
+                                 predicted_train)
+    
+    predicted_test <- predict(rf, 
+                              newdata = test_set, 
+                              type = "response")
+    ce_test[[i]] <- Metrics::ce(test_set[, "Class"], 
+                                predicted_test)
+}
+```
+
+```{r}
+df <- data.frame(ce_train = ce_train, 
+                 ce_test = ce_test, 
+                 k = 1:20)
+
+library(ggplot2)
+df %>% 
+    tidyr::gather(key = "type", value = "ce", -k) %>% 
+    ggplot(aes(k, ce)) +
+    geom_line(aes(color = type)) +
+    geom_point(aes(color = type))
+```
+
+
+
+
+
+
+
+
+
