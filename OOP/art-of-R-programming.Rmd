@@ -1,0 +1,46 @@
+---
+title: "art of R programming"
+author: "yincy"
+date: "8/22/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+oddcount <- function(x){
+    k <- 0
+    for(n in x){
+        if(n %% 2 == 1){
+            k <- k + 1
+        }
+    }
+    return(k)
+}
+```
+
+```{r}
+oddcount(c(1, 3, 5))
+oddcount(c(1, 2, 3, 4, 5, 7, 10))
+
+z <- c(2, 6, 7)
+oddcount(z)
+```
+
+
+```{r}
+data(women)
+lma <- lm(women$weight ~ women$height)
+```
+
+```{r}
+attributes(lma)
+```
+
+```{r}
+summary(lma)
+```
+
+
