@@ -1,0 +1,132 @@
+---
+title: "patchwork-assembly"
+author: "YinCY"
+date: "7/5/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(patchwork)
+library(ggplot2)
+```
+
+```{r}
+p1 <- ggplot(mtcars) + 
+  geom_point(aes(mpg, disp)) + 
+  ggtitle('Plot 1')
+
+p2 <- ggplot(mtcars) + 
+  geom_boxplot(aes(gear, disp, group = gear)) + 
+  ggtitle('Plot 2')
+
+p3 <- ggplot(mtcars) + 
+  geom_point(aes(hp, wt, colour = mpg)) + 
+  ggtitle('Plot 3')
+
+p4 <- ggplot(mtcars) + 
+  geom_bar(aes(gear)) + 
+  facet_wrap(~cyl) + 
+  ggtitle('Plot 4')
+```
+
+
+## Adding plots to the patchwork
+```{r}
+p1 + p2
+```
+
+```{r}
+patch <- p1 + p2
+p3 + patch
+```
+
+## Adding non-ggplot content
+```{r}
+p1 + grid::textGrob(label = "Some really important text")
+```
+
+```{r}
+p1 + gridExtra::tableGrob(d = mtcars[1:10, c("mpg", "disp")])
+```
+
+```{r}
+p1 + ~plot(mtcars$mpg, mtcars$disp, main = "Plot 2")
+```
+
+```{r}
+old_par <- par(mar = c(0, 0, 0, 0), bg = NA, mgp = c(1, 0.25, 0), cex.axis = 0.75, las = 1, tcl = -0.25)
+p1 + wrap_elements(panel = ~plot(mtcars$mpg, mtcars$disp), clip = F) +
+  ggtitle("Plot 2") +
+  theme(plot.margin = margin(5.5, 5.5, 5.5, 35))
+par(old_par)
+```
+
+```{r}
+wrap_elements(grid::textGrob('Text on left side')) + p1
+```
+
+## Stacking and packing
+```{r}
+p1 / p2
+```
+
+```{r}
+p1 | p2
+```
+
+```{r}
+p1 / (p2 | p3)
+```
+
+## Functional assembly
+```{r}
+wrap_plots(p1, p2, p3, p4)
+```
+
+## Nesting the left-hand side
+```{r}
+patch <- p1 + p2
+p3 + patch
+```
+
+```{r}
+patch + p3
+```
+
+```{r}
+patch - p3
+```
+
+```{r}
+wrap_plots(patch, p3)
+```
+
+## Modifying patches
+```{r}
+p1 + p2 + geom_jitter(aes(gear, disp))
+```
+
+```{r}
+patchwork <- p1 + p2
+patchwork[[1]] <- patchwork[[1]] + theme_minimal()
+patchwork
+```
+
+## Modifying everything
+Often, especially when it comes to theming, you want to modify everything at once. patchwork provides two additional operators that facilitates this. `&` will add the element to all subplots in the patchwork, and `*` will add the element to all the subplots in the current nesting level. As with `|` and `/`, be aware that operator precedence must be kept in mind.  
+
+```{r}
+patchwork <- p3 / (p1 | p2)
+patchwork & theme_minimal()
+```
+
+```{r}
+patchwork * theme_minimal()
+```
+
+
+
