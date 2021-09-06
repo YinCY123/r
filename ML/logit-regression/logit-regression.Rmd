@@ -1,0 +1,78 @@
+---
+title: "logit-regression"
+author: "yincy"
+date: "8/23/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(magrittr)
+
+cn <- c("Sample_ID", "Clump_Thickness", 
+        "Cell_Size", "Cell_Shape", 
+        "Marginal_Adhesion", "Epithelial_Cell_Size", 
+        "Bare_Nuclei", "Bland_Chromatin", 
+        "Normal Nucleoli", "Mitoses", 
+        "Class")
+cc <- rep("factor", length(cn))
+brca <- read.table("/home/yincy/git/Data/ML/breat-cancer/breast-cancer-wisconsin.data", 
+                   sep = ",", 
+                   header = F, 
+                   na.strings = "?", 
+                   col.names = cn, 
+                   colClasses = cc)
+
+brca <- na.omit(brca)
+brca <- brca[, -1]
+brca %>% str
+```
+
+```{r}
+train_index <- sample(dim(brca)[1], 2/3 * dim(brca)[1], replace = F)
+train_set <- brca[-train_index, ]
+test_set <- brca[train_index, ]
+
+model <- glm(formula = Class ~., 
+             data = train_set, 
+             family = binomial(link = "logit"))
+
+predicted_logit <- predict(model, 
+                           newdata = train_set, 
+                           type = "response")
+
+predicted_train <- rep(levels(brca$Class)[1], length.out = dim(train_set)[1])
+predicted_train[predicted_logit > 0.5] <- levels(brca$Class)[2]
+
+Metrics::ce(train_set$Class, predicted_train)
+```
+
+```{r}
+predicted_logit <- predict(model, 
+                          newdata = test_set, 
+                          type = "response")
+
+predicted_test <- rep(levels(test_set$Class)[1], length.out = dim(test_set)[1])
+predicted_logit %>% head
+test_set$Class %>% head
+predicted_test[predicted_logit > 0.7] <- levels(test_set$Class)[2]
+
+Metrics::ce(test_set$Class, predicted_test)
+```
+
+```{r}
+plot(x = seq_along(predicted_logit), predicted_logit, pch = 19, cex = 0.2)
+abline(h = c(0.2, 0.8), lty = 2)
+```
+
+```{r}
+test_set[which(predicted_logit > 0.001 & predicted_logit < 0.2), ]
+predicted_logit[which(predicted_logit > 0.001 & predicted_logit < 0.2)]
+```
+
+
+
+

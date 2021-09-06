@@ -1,0 +1,163 @@
+---
+title: "decision-tree"
+author: "yincy"
+date: "8/20/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# train a model
+```{r}
+library(rpart)
+library(rpart.plot)
+library(magrittr)
+
+cn <- c("Sample_ID", "Clump_Thickness", 
+        "Cell_Size", "Cell_Shape", 
+        "Marginal_Adhesion", "Epithelial_Cell_Size", 
+        "Bare_Nuclei", "Bland_Chromatin", 
+        "Normal Nucleoli", "Mitoses", 
+        "Class")
+cc <- rep("factor", length(cn))
+brca <- read.table("/home/yincy/git/Data/ML/breat-cancer/breast-cancer-wisconsin.data", 
+                   sep = ",", 
+                   header = F, 
+                   na.strings = "?", 
+                   col.names = cn, 
+                   colClasses = cc)
+
+brca <- na.omit(brca)
+brca <- brca[, -1]
+brca %>% str
+```
+
+```{r}
+set.seed(111)
+len <- dim(brca)[1]
+train_id <- sample(len, size = 2/3 * len, replace = F)
+
+brca_dt <- rpart(formula = Class ~., 
+                 data = brca[train_id, ])
+brca_dt
+```
+
+# model evaluation
+```{r}
+predicted_train <- predict(brca_dt, 
+                           newdata = brca[train_id, ], 
+                           type = "class")
+
+# classification error
+Metrics::ce(actual = brca[train_id, "Class"], 
+            predicted = predicted_train)
+
+table(prediction = predicted_train, 
+      real = brca[train_id, "Class"])
+```
+
+```{r}
+predicted_test <- predict(brca_dt, 
+                          newdata = brca[-train_id, ], 
+                          type = "class")
+
+# classification error
+Metrics::ce(actual = brca[-train_id, "Class"], 
+            predicted = predicted_test)
+
+table(predition = predicted_test, 
+      real = brca[-train_id, "Class"])
+```
+
+# pruning tree
+```{r}
+printcp(brca_dt, digits = 2) 
+```
+
+> xerror: 交叉验证错误， xstd: 交叉验证标准误  
+
+```{r}
+plotcp(brca_dt)
+```
+
+```{r}
+brca_dt$cptable
+```
+
+```{r}
+opt <- which.min(brca_dt$cptable[, "xerror"])
+cp <- brca_dt$cptable[opt, "CP"]
+
+brca_dt_pruned <- prune(brca_dt, cp = cp)
+```
+
+```{r}
+rpart.plot(x = brca_dt_pruned, 
+           type = 1, 
+           fallen = F, 
+           branch = 0.5, 
+           round = 0, 
+           leaf.round = 2, 
+           clip.right.labs = T, 
+           cex = 0.85, 
+           under.cex = 0.75, 
+           box.palette = "GnYlRd", 
+           branch.lwd = 2, 
+           extra = 108, 
+           under = T, 
+           split.cex = 0.8)
+```
+
+```{r}
+library(rattle)
+rules <- asRules(brca_dt_pruned, compact = TRUE) 
+```
+
+# cross validation
+```{r}
+sp <- Sys.time()
+library(rpart)
+rindex <- rep(1:10, length.out = dim(brca)[1])
+kfolds <- sample(dim(brca)[1]) %>% split(f = rindex)
+ce_train <- c()
+ce_test <- c()
+
+for(i in 1:length(kfolds)){
+  curr_fold <- kfolds[[i]]
+  train_set <- brca[curr_fold, ]
+  test_set <- brca[-curr_fold, ]
+  model_kfold <- rpart(Class ~., data = brca)
+  op <- which.min(model_kfold$cptable[, "xerror"])
+  p <- model_kfold$cptable[op, "CP"]
+  model_kfold <- prune(model_kfold, cp = p)
+  
+  predicted_train <- predict(model_kfold, 
+                             newdata = train_set, 
+                             type = "class")
+  ce_train <- append(ce_train, Metrics::ce(brca[curr_fold, "Class"], predicted_train))
+  
+  predicted_test <- predict(object = model_kfold, 
+                          newdata = test_set, 
+                          type = "class")
+  ce_test <- append(ce_test, Metrics::ce(brca[-curr_fold, "Class"], predicted_test))
+}
+
+ep <- Sys.time()
+cat("Time Ellapsed:\t", difftime(ep, sp, units = "secs"))
+```
+
+```{r}
+df <- data.frame(ce_train = ce_train, ce_test = ce_test)
+
+library(ggplot2)
+df %>% 
+  ggplot(aes(ce_train, ce_test)) +
+  geom_line() +
+  geom_point()
+```
+
+
+
+

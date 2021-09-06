@@ -1,0 +1,121 @@
+---
+title: "neuron-network"
+author: "yincy"
+date: "8/24/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(nnet)
+library(magrittr)
+
+cn <- c("Sample_ID", "Clump_Thickness", 
+        "Cell_Size", "Cell_Shape", 
+        "Marginal_Adhesion", "Epithelial_Cell_Size", 
+        "Bare_Nuclei", "Bland_Chromatin", 
+        "Normal Nucleoli", "Mitoses", 
+        "Class")
+cc <- rep("factor", length(cn))
+brca <- read.table("/home/yincy/git/Data/ML/breat-cancer/breast-cancer-wisconsin.data", 
+                   sep = ",", 
+                   header = F, 
+                   na.strings = "?", 
+                   col.names = cn, 
+                   colClasses = cc)
+
+brca <- na.omit(brca)
+brca <- brca[, -1]
+brca %>% str
+```
+
+```{r}
+train_index <- sample(dim(brca)[1], 2/3 * dim(brca)[1], replace = F)
+
+brca_nnet <- nnet(Class ~., 
+                   data = brca[train_index, ], 
+                  size = 7)
+
+brca_nnet %>% names
+```
+
+```{r}
+library(sloop)
+otype(brca_nnet)
+typeof(brca_nnet)
+```
+
+```{r}
+brca_nnet$n
+```
+
+```{r}
+predicted_train <- predict(brca_nnet, 
+                           newdata = brca[train_index, ], 
+                           type = "class")
+Metrics::ce(brca[train_index, "Class"], predicted_train)
+
+
+predicted_test <- predict(brca_nnet, 
+                          newdata = brca[-train_index, ], 
+                          type = "class")
+Metrics::ce(brca[-train_index, "Class"], predicted_test)
+```
+
+```{r}
+library(caret)
+
+nn_grid <- expand.grid(size = 1:9, 
+            decay = c(0.03, 0.1, 0.3, 0.6, 0.9))
+
+nn_model <- train(Class ~., 
+                  data = brca, 
+                  method = "nnet", 
+                  maxit =  2000, 
+                  tuneGrid = nn_grid)
+
+nn_model$bestTune
+```
+
+```{r}
+plot(nn_model)
+```
+
+
+```{r}
+brca_nnet <- nnet(Class ~., 
+                  data = brca[train_index, ], 
+                  size = nn_model$bestTune$size, 
+                  decay = nn_model$bestTune$decay)
+```
+
+```{r}
+predicted_train <- predict(brca_nnet, 
+                           newdata = brca[train_index, ], 
+                           type = "class")
+Metrics::ce(brca[train_index, "Class"], predicted_train)
+
+predicted_test <- predict(brca_nnet, 
+                          newdata = brca[-train_index, ], 
+                          type = "class")
+Metrics::ce(brca[-train_index, "Class"], predicted_test)
+```
+
+```{r}
+# BiocManager::install("NeuralNetTools")
+library(NeuralNetTools)
+
+plotnet(brca_nnet, 
+        cex_val = 0.5, 
+        circle_cex = 1.5, 
+        rel_rsc = c(0.1, 5))
+```
+
+
+
+
+
+

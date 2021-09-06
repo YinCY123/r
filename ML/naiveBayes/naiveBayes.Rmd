@@ -1,0 +1,103 @@
+---
+title: "naiveBayes"
+author: "yincy"
+date: "8/23/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(e1071)
+library(magrittr)
+
+cn <- c("Sample_ID", "Clump_Thickness", 
+        "Cell_Size", "Cell_Shape", 
+        "Marginal_Adhesion", "Epithelial_Cell_Size", 
+        "Bare_Nuclei", "Bland_Chromatin", 
+        "Normal Nucleoli", "Mitoses", 
+        "Class")
+cc <- rep("factor", length(cn))
+brca <- read.table("/home/yincy/git/Data/ML/breat-cancer/breast-cancer-wisconsin.data", 
+                   sep = ",", 
+                   header = F, 
+                   na.strings = "?", 
+                   col.names = cn, 
+                   colClasses = cc)
+
+brca <- na.omit(brca)
+brca <- brca[, -1]
+brca %>% str
+```
+
+```{r}
+train_index <- sample(dim(brca)[1], 
+                      size = 2/3 * dim(brca)[1], 
+                      replace = F)
+
+brca_nb <- naiveBayes(Class ~., 
+                      data = brca[train_index, ])
+predicted_train <- predict(brca_nb, 
+                           newdata = brca[train_index, ], 
+                           type = "class")
+
+Metrics::ce(brca[train_index, "Class"], predicted_train)
+```
+
+```{r}
+predicted_test <- predict(brca_nb, 
+                          newdata = brca[-train_index, ], 
+                          type = "class")
+Metrics::ce(brca[-train_index, "Class"], predicted_test)
+```
+
+```{r}
+rindex <- sample(dim(brca)[1])
+f <- rep(1:10, length.out = dim(brca)[1])
+kflods <- split(x = rindex, f = f)
+ce_train <- vector(mode = "numeric")
+ce_test <- vector(mode = "numeric")
+
+for(i in seq_along(kflods)){
+    curr_flod <- kflods[[i]]
+    train_set <- brca[-curr_flod, ]
+    test_set <- brca[curr_flod, ]
+    
+    nb <- naiveBayes(formula = Class ~., 
+                     data = train_set)
+    
+    predicted_train <- predict(nb, 
+                               newdata = train_set, 
+                               type = "class")
+    ce_train[[i]] <- Metrics::ce(train_set[, "Class"], predicted_train)
+    
+    predicted_test <- predict(nb, 
+                              newdata = test_set, 
+                              type = "class")
+    ce_test[[i]] <- Metrics::ce(test_set[, "Class"], predicted_test)
+}
+```
+
+```{r}
+df <- data.frame(k = 1:10, 
+                 ce_train = ce_train, 
+                 ce_test = ce_test)
+
+library(ggplot2)
+df %>% 
+    tidyr::gather(key = "type", value = "ce", -k) %>% 
+    ggplot(aes(k, ce)) +
+    geom_line(aes(color = type)) +
+    geom_point(aes(color = type)) +
+    scale_y_continuous(limits = c(-0.1, 0.1))
+```
+
+
+
+
+
+
+
+
