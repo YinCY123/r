@@ -157,6 +157,11 @@ presidential <- subset(presidential, subset = start > economics$date[1])
 ```
 
 ```{r}
+economics
+```
+
+
+```{r}
 ggplot(presidential) +
   geom_rect(aes(xmin = start, xmax = end, ymin = -Inf, ymax = Inf, fill = party)) +
   geom_line(data = economics, aes(date, unemploy)) +

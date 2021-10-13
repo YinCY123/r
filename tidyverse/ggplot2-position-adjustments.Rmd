@@ -1,0 +1,24 @@
+---
+title: "ggplot2-position-adjustments"
+author: "yincy"
+date: "9/5/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Three adjustments apply primarily to bars  
+
+- `position_stack()`: stack overlapping bars (or areas) on top of each other.  
+- `position_fill()`: stack overlapping bars, scaling so the top is always at 1.  
+- `position_dodge()`: place overlapping bars (or boxplots) side-by-side.  
+
+
+Three position adjustments that are primarily useful for points  
+
+- `position_undge()`: move points by a fixed offset.  
+- `position_jitter()`: add a little random noise to every position.  
+- `position_jitterdodge()`: dodge points within groups, then add a little random noise.  
+
