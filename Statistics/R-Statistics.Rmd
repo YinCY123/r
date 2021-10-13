@@ -18,20 +18,18 @@ library(magrittr)
 
 # R Tutorial
 ## Data types
-Generally, while doing programming in any programming language, you need to use various variables to store various information. Variables are nothing but reserved memory locations to store values. This means that, when you create a variable you reserve some space in memory.  
+Generally, while doing programming in any programming language, you need to use various variables to store various information. **Variables are nothing but reserved memory locations to store values**. This means that, when you create a variable you reserve some space in memory.  
 
 You may like to store information of various data types like character, wide character, integer, floating point, double floating point, Boolean etc. Based on the data type of a variable, the operating system allocates memory and decides what can be stored in the reserved memory.  
 
 In contrast to other programming languages like C and java in R, the variables are not declared as some data type. The variables are assigned with R-Objects and the data type of the R-object becomes the data type of the variable. There are many types of R-objects. The frequently used ones are:  
 
-- vector
-- list
-- matrix
-- array
-- factor
-- dataframe
-
-
+- vector  
+- list  
+- matrix  
+- array  
+- factor  
+- dataframe  
 
 
 # Statistics Example  
@@ -39,14 +37,13 @@ In contrast to other programming languages like C and java in R, the variables a
 ### Mean  
 ```{r}
 x <- c(12, 7, 3, 4.2, 18, 2, 54, -21, 8, -5)
-?mean
-mean(x)
+mean(x, trim = 0.1, na.rm = T)
 ```
 
 **Applying Trim Option**  
 When trim parameter is supplied, the values in the vector get sorted and then the required numbers of observations are dropped from calculating the mean.  
 
-When trim = 0.3 (30% of each end), 3 values from each end will be dropped from the calculations to find mean.  
+When trim = 0.3 (**30% of each end**), 3 values from each end will be dropped from the calculations to find mean.  
 
 In this case the sorted vector is (−21, −5, 2, 3, 4.2, 7, 8, 12, 18, 54) and the values removed from the vector for calculating mean are (−21,−5,2) from left and (12,18,54) from right.  
 
@@ -79,14 +76,16 @@ median(x)
 
 
 ### Mode  
-The mode is the value that has highest number of occurrences in a set of data. Unike mean and median, mode can have both numeric and character data.  
+The mode is the value that has highest number of occurrences in a set of data. Unlike `mean` and `median`, `mode` can have both numeric and character data.  
 
 R does not have a standard in-built function to calculate mode. So we create a user function to calculate mode of a data set in R. This function takes the vector as input and gives the mode value as output.  
 
 ```{r}
 getmode <- function(v){
+    suppressMessages(require(magrittr))
     uniqv <- unique(v)
-    uniqv[which.max(tabulate(match(v, uniqv)))]
+    # uniqv[which.max(tabulate(match(v, uniqv)))]
+    match(v, uniqv) %>% tabulate() %>% which.max() %>% uniqv[.]
 }
 
 v <- c(2,1,2,3,1,2,3,4,1,5,5,3,2,3)
@@ -179,7 +178,7 @@ predict(relation, a)
 
 ```{r}
 plot(weight, height, pch = 19, col = "blue")
-abline(relation, col = "grey", lty = 2)
+abline(coef = coef(relation), col = "grey", lty = 2)
 ```
 
 
@@ -195,7 +194,7 @@ $$y = a + b_{1}x_{1} + b_{2}x_{2} + ... + b_{n}x_{n}~$$
 - **a**, **b**, ..., **b~n~** are the coefficents  
 - **x1**, **x2**, ..., **x~n~** are the predictor variables  
 
-We create the regression model using the lm() function in R. The model determines the value of the coefficients using the input data. Next we can predict the value of the response variable for a given set of predictor variables using these coefficients.  
+We create the regression model using the `lm()` function in R. The model determines the value of the coefficients using the input data. Next we can predict the value of the response variable for a given set of predictor variables using these coefficients.  
 
 **lm() function**
 ```
@@ -266,14 +265,14 @@ df <- data.frame(cyl = sample(c(4, 6, 8), 10, replace = T),
                  wt = runif(n = 10, min = 2.3, max = 3.5))
 
 
-predict(am.data, newdata = df)
+predict(am.data, newdata = df) %>% 
+    as.matrix()
 ```
 
 
 ```{r}
 summary(am.data)
 ```
-
 
 **conclusion**  
 In the summary as the p-value in the last column is more than 0.05 for the variables "cyl" and "hp", we consider them to be insignificant in contributing to the value of the variable "am". Only weight (wt) impacts the "am" value in this regression model.   
@@ -314,21 +313,26 @@ This function gives the probability of a normally distributed random number to b
 x <- seq(-10, 10, 0.2)
 y <- pnorm(x, mean = 2.5, sd = 2)
 
-plot(x, y, pch = 19)
+f <- function(x, mean = 2.5, sd = 2){
+    dnorm(x = x, mean = mean, sd = sd)
+}
+
+plot(x, y, pch = 19, type = "l")
+curve(f, from = -10, to = 10, add = T)
 ```
 
 ### qnorm  
-This function takes the probability value and gives a number whose cumulative value matches the probability value.  
+This function **takes the probability value and gives a number whose cumulative value matches the probability value**.  
 
 ```{r}
 x <- seq(0, 1, by = 0.02)
 y <- qnorm(x, mean = 2, sd = 1)
 
-plot(x, y, pch = 19)
+plot(x, y, pch = 19, cex = 0.5)
 ```
 
 ### rnorm  
-This function is used to generate random numbers whose distribution is normal. It takes the sample size as input and generates that many random numbers.  
+This function is **used to generate random numbers whose distribution is normal**. It takes the sample size as input and generates that many random numbers.  
 
 ```{r}
 y <- rnorm(n = 1000)
@@ -361,7 +365,7 @@ This function gives the probability density distribution at each point.
 x <- seq(0, 50, 1)
 y <- dbinom(x, size = 50, prob = 0.5)
 
-plot(x, y, pch = 19)
+plot(x, y, pch = 19, type = "b")
 abline(v = 25)
 ```
 
@@ -373,6 +377,7 @@ This function gives the cumulative probability of an event. It is a single value
 q <-  seq(1, 51, 1)
 x <- pbinom(q, size = 51, prob = 0.5)
 plot(q, x, pch = 19)
+# abline(v = 50)
 ```
 
 ### qbinom  
@@ -399,7 +404,7 @@ x
 
 
 ## Poisson Regression  
-Poisson Regression involves regression models in which the response variable is in the form of counts and not fractional numbers. For example, the count of number of births or number of wins in a football match series. Also the values of the response variables follow a Poisson distribution.  
+**Poisson Regression involves regression models in which the response variable is in the form of counts and not fractional numbers**. For example, the count of number of births or number of wins in a football match series. Also the values of the response variables follow a Poisson distribution.  
 
 The general mathematical equation for Poisson regression is  
 
@@ -439,7 +444,7 @@ output <- glm(formula = breaks ~ wool + tension,
 ```
 
 ```{r}
-df <- data.frame(wool = sample(c("A", "B"), size = 10, replace = T), 
+df <- data.frame(wool = sample(c("A", "B"), 10, replace = T), 
                  tension = sample(c("L", "M", "H"), 10, replace = T))
 
 predict.glm(output, df)
@@ -502,7 +507,7 @@ result2 <- aov(mpg ~ hp + am, data = input)
 anova(result1, result2)
 ```
 
-As the p-value is greater than 0.05 we conclude that the interaction between horse power and transmission type is not significant. So the mileage per gallon will depend in a similar manner on the horse power of the car in both auto and manual transmission mode.  
+As the p-value is greater than 0.05 we conclude that the interaction between horse power and transmission type is not significant. So the mile age per gallon will depend in a similar manner on the horse power of the car in both auto and manual transmission mode.  
 
 
 ## Time Series Analysis  
