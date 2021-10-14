@@ -1,0 +1,123 @@
+---
+title: "data.tree"
+author: "yincy"
+date: "10/14/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+## Trees
+Trees are ubiquitous in mathematics, computer science, data sciences, finance, and in many other attributes. Trees are especially useful when we are facing hierarchical data. For example, trees are used:  
+
+- in decision theory (cf. decision trees)  
+- in machine learning (e.g. classification trees)  
+- in finance, e.g. to classify finacial instruments into asset classes  
+- in routing algorithms  
+- in computer science and programming (e.g. binary search trees, XML)  
+- e.g. for family trees  
+
+For more details, see the applications vignette by typing `vignette("applications", package = "data.tree")`  
+
+## Trees in R
+Tree-like structures are already used in R. For example, environments can be seen as nodes in a tree. And CRAN provides numerous packages that deal with tree-like structures, especially in the area of decision theory. Yet, there is no general purpose hierarchical data structure that could be used as conveniently and generically as, say, `data.frame`.  
+
+As a result, people often try to resolve hierarchical problems in a tabular fashion, for instance with `data.frame`. But often, hierarchies don't marry with tables, and various workarounds are usually required.  
+
+## Trees in `data.tree`  
+This package offers an alternative. The `data.tree` package lets you create hierarchies, called data.tree structures. The building block of theses structures are `Node` objects. The package provides basic traversal, search, and sort operations, and an infrastructure for recursive tree programming. You can decorate Nodes with your own attributes and methods, so as to extend the package to your needs.  
+
+The package also provides convenience methods for neatly printing and plotting trees. It supports conversion from and to  `data.frames`, `lists`, and other tree structures such as `dendrogram`, `phylo` objects from the `ape` package, `igraph`, and other packages.  
+
+Technically, `data.tree` structures are bi-directional, ordered trees. Bi-directional means that you can navigate from parent to children and vice versa. Ordered means that the sort order of the children of a parent node is well-defined.  
+
+# `data.tree` basics
+## Definitions
+- **`data.tree` structure**: a *tree*, consisting of multiple `Node` objects. Often, the entry point to a `data.tree` structure is the *root Node*.  
+- `*Node*`: both a class and the basic building block of `data.tree` structures.  
+- **`attribute`**: an active, a field, or a method. Don't to be confused with standard R attributes, c.f.`?attr`, which have a different meaning. Many methods and functions have an `attribute` arg, which can refer to a active, a field or a method. For example, see `?Get`.  
+- **`active`**(sometimes called property): a field on a `Node` that can be called like an attibute, but behaves like a function without arguments. For example: `node$position`.  
+- **`field`**: a named value on a `Node`, e.g. `node$cost <- 2500`.  
+- **`method`**: a function acting on an object (on a `Node` in this contex). Many methods are available in OO style (e.g. `node$Revert()`) or in traditional style (`Revert(node)`).  
+- **`inheritance`**: in this contex, inheritance refers to a situation in which a child `Node` inherits e.g. an attribute from one of its ancestors. For example, see `?Get`, `?SetNodeStyle`.  
+
+## Tree creation
+There are different ways to create a `data.tree` structure. For example, you can create a tree **programmatically**, by **conversion** from other R objects, or from a **file**.  
+
+### Create a tree programmatically
+Let’s start by creating a tree programmatically. We do this by creating Node objects, and linking them together so as to define the parent-child relationships.  
+
+In this example, we are looking at a company, Acme Inc., and the tree reflects its organisational structure. The root (level 1) is the company. On level 2, the nodes represent departments, and the leaves of the tree represent projects that the company is considering for next year:  
+
+```{r}
+library(data.tree)
+
+acme <- Node$new("Acme Inc.")
+    accounting <- acme$AddChild("Accounting")
+        software <- accounting$AddChild(name = "New Software")
+        standards <- accounting$AddChild(name = "New Accounting Standards")
+    research <- acme$AddChild(name = "Research")
+        newProductLine <- research$AddChild(name = "New Product Line")
+        newLabs <- research$AddChild(name = "New Labs")
+    it <- acme$AddChild(name = "IT")
+        outsource <- it$AddChild(name = "Outsource")
+        goToR <- it$AddChild(name = "Switch to R")
+        agile <- it$AddChild(name = "Go agile")
+
+print(acme)
+```
+
+As you can see from the previous example, each `Node` is identified by its name, i.e. the argument you pass into the `Node$new(name)` constructor. The name needs to be unique among siblings, such that paths to `Nodes` are unambiguous.  
+
+`Node` inherits from `R6` reference class. This has the following implications:  
+
+1. You can call methods on a `Node` in OO style, e.g. `acme$Get('name')`.  
+2. `Node` exhibits *reference semantics*. Thus, multiple variables in R can point to the same `Node`, and modifying a `Node` will modify it for all referencing variables. In the above code example, both `acme$IT` and `it` reference the same object. This is deferent from the *value semantics*, which is much more widely used in R.  
+
+### Create a tree from a `data.frame`
+Creating a tree programmatically is useful especially in the context of algorithms. However, most times you will create a tree by conversion. This could be by conversion from a nested list-of-lists, by conversion from another R tree-structure (e.g. an ape `phylo`), or by conversion from a `data.frame`. For more details on all the options, type `?as.Node` and refer to the *See Also* section.
+
+One of the most common conversions is the one from a `data.frame` in table format. The following code illustrates this. We load the GNI2014 data from the `treemap` package. This `data.frame` is in table format, meaning that each row will represent a leaf in the `data.tree` structure:  
+
+```{r}
+library(treemap)
+
+data(GNI2014)
+GNI2014 %>% head
+```
+
+Let’s convert that into a `data.tree` structure! We start by defining a *pathString*. The pathString describes the hierarchy by defining a path from the root to each leaf. In this example, the hierarchy comes very naturally:  
+
+```{r}
+GNI2014$pathString <- paste("world", 
+                            GNI2014$continent, 
+                            GNI2014$country, 
+                            sep = "/")
+```
+
+Once our pathString is defined, conversion to Node is very easy:  
+
+```{r}
+population <- as.Node(GNI2014)
+print(population, "iso3", "population", "GNI", limit = 20)
+```
+
+This is a simple example, and more options are available. Type ?FromDataFrameTable for all the details.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
