@@ -1,0 +1,105 @@
+---
+title: "S4"
+author: "YinCY"
+date: "11/28/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# define a S4 class
+```
+setClass(Class, # class name
+         slots, # the name and classes for the slots in the new class
+         contains, # a vector specifying existing classes from which this class should inherit
+         prototype, # the default data for each slot
+         where, # the environment in which to store the definition
+         validity, 
+         sealed, # seal a class name in the namespace
+         package)
+```
+
+
+```{r}
+setClass(Class = "Person", 
+         slots = list(name = "character", age = "numeric"))
+
+# inheritance
+setClass(Class = "Student", 
+         slots = list(ID = "character", school = "character"), 
+         contains = "Person")
+```
+
+```{r}
+person1 <- new(Class = "Person", name = "json", age = 10)
+student1 <- new(Class = "Student", name = "ma", age = 11, 
+                ID = "20211128", school = "xuejun")
+```
+
+
+# generic function
+```{r}
+setGeneric(name = "work", 
+           def = function(object){standardGeneric(f = "work")})
+
+setMethod(f = "work", 
+          signature = "Person", 
+          definition = function(object){
+            print("work method for person class")
+          })
+
+setMethod(f = "work", 
+          signature = "Student", 
+          definition = function(object){
+            print("work method for student class")
+          })
+
+work(person1)
+work(student1)
+```
+
+```{r}
+setGeneric(name = "ff", 
+           def = function(object){standardGeneric(f = "ff")})
+
+setMethod(f = "ff", 
+          signature = "Person", 
+          definition = function(object){
+            print("the Person type")
+          })
+```
+
+
+```{r}
+showMethods(work)
+
+getMethod(f = "work", signature = "Person")
+getMethod(f = "work", signature = "P")
+
+selectMethod(f = "work", signature = "Person")
+selectMethod(f = "work", signature = "P")
+
+existsMethod(f = "work", signature = "Person")
+existsMethod(f = "work", signature = "P")
+
+hasMethod(f = "work", signature = "Person")
+hasMethod(f = "work", signature = "P")
+
+findMethod(f = "work", signature = "Person", where = .GlobalEnv)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
