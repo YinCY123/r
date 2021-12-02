@@ -1,0 +1,130 @@
+---
+title: "S3"
+author: "YinCY"
+date: "11/27/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# create S3 
+```{r}
+# class definition
+DNAseq <- function(seq = "ATGCATGCATGCGGCA"){
+  x = list(seq = seq, 
+           length = nchar(seq))
+  
+  class(x) = append(class(x), "DNAseq")
+  
+  return(x)
+}
+
+# inheritance
+Primer <- function(seq = "GAATCCATGG"){
+  pr = strtrim(seq, 20)
+  me = DNAseq(pr)
+  class(me) = append(class(me), "Primer")
+  return(me)
+}
+```
+
+
+# generic methods
+```{r}
+reverseComplement <- function(object){
+  UseMethod(generic = "reverseComplement", object = object)
+}
+
+reverseComplement.default = function(object){
+  print("The class of this object can not be found.")
+}
+
+reverseComplement.Primer <- function(object){
+  print("Runing reverseComplement of Primer class")
+}
+
+reverseComplement.DNAseq <- function(object){
+  print("Calling the reverseComplement function of DNAseq class")
+  NextMethod(generic = "reverseComplement", object = object)
+  Sys.sleep(1)
+  
+  to_base = c("A", "T", "G", "C")
+  names(to_base) = c("T", "A", "C", "G")
+  
+  trans_seq_vec <- to_base[unlist(strsplit(object$seq, ""))]
+  trans_seq_vec <- trans_seq_vec[length(trans_seq_vec):1]
+  newseq <- paste(trans_seq_vec, collapse = "")
+  return(newseq)
+}
+```
+
+
+```{r}
+primer1 <- Primer()
+reverseComplement(primer1)
+```
+
+
+```{r}
+me <- list(name = "DoubleHelix", age = 10, gender = "M")
+me
+me[["major"]] <- "bioinformatics"
+me
+class(me) <- append(class(me), "Person")
+
+Person <- function(name, age, gender, major){
+  name = name
+  age = age
+  gender = gender
+  major = major
+  aPerson = list(name, age, gender, major)
+  class(aPerson) <- append(class(aPerson), "Person")
+  return(aPerson)
+}
+
+person1 <- Person(name = "Jhon", age = 10, gender = "M", major = "biology")
+```
+
+
+```{r}
+# inheritance
+Student <- function(name, age, gender, major, ID){
+  student = Person(name, age, gender, major)
+  student$ID = ID
+  class(student) <- append(class(student), "student")
+  return(student)
+}
+
+person2 <- Student("handley", 29, "M", "math", "20211128")
+```
+
+
+# generic function
+```{r}
+speak <- function(object){
+  UseMethod(generic = "speak", object = object)
+}
+
+speak.default <- function(object){
+  print("the default speak model")
+}
+
+speak.student <- function(object){
+  print("student speak model")
+}
+
+speak.Person <- function(object){
+  print("the person speak model")
+}
+
+speak(object = person2)
+speak(object = person1)
+```
+
+
+
+
+
