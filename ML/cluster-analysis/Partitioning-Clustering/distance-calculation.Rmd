@@ -1,0 +1,89 @@
+---
+title: "distance-calculation"
+author: "yincy"
+date: "10/17/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Clustering Distance Measures  
+The classification of observations into groups requires some methods for computing the **distance** or the (dis)**similarity** between each pair of observations. The result of this computation is known as a dissimilarity or **distance matrix**.  
+
+### Methods for measuring distances  
+1. **Euclidean distance**  
+The distance between two points.  
+$$
+d_{euc}(x,y) = \sqrt{\sum_{i=1}^{n}(x_{i} - y_{i})^2}
+$$
+2. **Manhattan distance**  
+$$
+d_{man}(x, y) = \sum_{i=1}^{n}|(x_{i} - y_{i})|
+$$
+> $x$ and $y$ are two vectors of length n.  
+
+
+> below is correlation base distance, which is widely used for gene expression data analysis. Correlation-based distance is defined by subtracting the correlation coefficient from 1.  
+
+3. **Pearson correlation distance**  
+Pearson correlation measures the degree of a **linear relationship** between two profiles.  
+
+$$
+d_{cor}(x,y) = 1 - \frac{\sum_{i=1}^{n}(x_{i} - \overline{x})(y_{i} - \overline{y})}{\sqrt{\sum_{i=1}^{n}(x_{i}-\overline{x})^{2}\sum_{i=1}^{n}(y_{i}-\overline{y})^{2}}}
+$$
+
+4. **Eisen cosine correlation distance**  
+It's a special case of Pearson's correlation distance with $\overline{x}$ and $\overline{y}$ both replaced by zero.  
+
+$$
+d_{eisen}(x,y) = 1 - \frac{|\sum_{i=1}^{n}x_{i} \cdot y_{i}|}{\sqrt{\sum_{i=1}^{2}x_{i}^{2} \cdot \sum_{i=1}^{n}y_{i}^{2}}}
+$$
+
+5. **Spearman correlation distance**  
+The spearman correlation method computes the correlation between the rank of x and the rank of y variables.  
+
+$$
+d_{spear}(x, y) = 1 - \frac{\sum_{i=1}^{n}(x'_{i} - \overline{x'})(y'_{i} - \overline{y'})}{\sqrt{\sum_{i=1}^{n}(x'_{i} - \overline{x'})^{2} \cdot \sum_{i=1}^{n}(y'_{i} - \overline{y'})^{2}}}
+$$
+
+Where $x'_{i} = rank(x_{i})$ and $y'_{i} = rank(y)$.  
+
+6. **Kendall correlation distance**  
+Kendall correlation method measures the correspondence between the ranking of x and y variables. The total number of possible pairings of x with y observations is $\frac{n\cdot(n-1)}{2}$, where n is the size of x and y. Begin by ordering the pairs by the x values. If x and y are correlated, then they would have the same relative rank orders. Now, for each $y_{i}$, count the number of $y_{j} > y_{i}$ (concordant pairs (c)) and the number of $y_{j} < y_{i}$ (discordant pairs (d)).  
+
+$$
+d_{kend}(x,y) = 1 - \frac{n_{c} - n_{d}}{\frac{1}{2} \cdot n \cdot (n - 1)}
+$$
+
+- $n_{c}$: total number of concordant pairs  
+- $n_{d}$: total number of discordant pairs  
+- $n$: size of x and y  
+
+
+> 1. pearson correlation analysis is the most commonly used method. It is also known as a parametric correlation which depends on the distribution of the data.  
+2. Kendall and Spearman correlations are non-parametric and they are used to perform rank-based correlation analysis.  
+
+### What type of distance measures should we choose?  
+The choice of distance measures is very important, as it has a strong influence on the clustering results. For most common clustering software, the default distance measure is the Euclidean distance.  
+
+Correlation-based distance considers two objects to be similar if their features are highly correlated, even though the observed values may be far apart in terms of Euclidean distance.  
+
+The distance between two objects is 0 when they are perfectly correlated. Pearson’s correlation is quite sensitive to outliers. This does not matter when clustering samples, because the correlation is over thousands of genes. When clustering genes, it is important to be aware of the possible impact of outliers. This can be mitigated by using Spearman’s correlation instead of Pearson’s correlation.  
+
+If Euclidean distance is chosen, then observations with high values of features will be clustered together. The same holds true for observations with low values of features.  
+
+### Data standardization  
+The value of distance measures is intimately related to the scale on which measurements are made. Therefore, variables are often scaled (i.e. standardized) before measuring the inter-observation dissimilarities. This is particularly recommended when variables are measured in different scales (e.g: kilograms, kilometers, centimeters,...); otherwise, the dissimilarity measures obtained will be severely affected.  
+
+**The goal is to make the variables comparable**. Generally variables are scaled to have i) standard deviation one and ii) mean zero.  
+
+The standardization of data is an approach widely used in the context of gene expression data analysis before clustering. We might also want to scale the data when the mean and/or the standard deviation of variables are largely different.  
+
+When scaling variables, the data can be transformed as follow:  
+
+$$\frac{x_{i} - center(x)}{scale(x)}$$
+
+Where `center(x)` can be the mean or the median of x values, and `scale(x)` can be the standard deviation(SD), the interquartile range, or the MAD (median absolute deviation).  

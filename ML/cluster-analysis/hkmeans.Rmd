@@ -1,0 +1,38 @@
+---
+title: "hkmeans"
+author: "yincy"
+date: "10/18/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Algorithm
+1. Compute hierarchical clustering and cut the tree into k-clusters  
+2. Compute the center (i.e the mean) of each cluster  
+3. Compute k-means by using the set of cluster centers (defined in step 2) as the initial cluster centers.  
+
+# example
+```{r}
+library(factoextra)
+
+df <- scale(USArrests)
+res.hk <- hkmeans(df, 4)
+
+fviz_dend(res.hk, 
+          cex = 0.6, 
+          palette = "jco", 
+          rect = T, 
+          rect_border = "jco", 
+          rect_fill = TRUE)
+```
+
+```{r}
+fviz_cluster(res.hk, 
+             palette = "jco", 
+             repel = T, 
+             ggtheme = theme_classic())
+```
+

@@ -1,0 +1,61 @@
+---
+title: "PAM"
+author: "yincy"
+date: "10/17/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(cluster)
+library(factoextra)
+```
+
+
+The **k-medoids algorithm** is a clustering approach related to k-means clustering for partitioning a data set into k groups or clusters. In k-medoids clustering, each cluster is represented by one of the data point in the cluster. These points are named cluster medoids.  
+
+The term medoid refers to an object within a cluster for which average dissimilarity between it and all the other the members of the cluster is minimal. It corresponds to the most centrally located point in the cluster.  
+
+K-medoid is a robust alternative to k-means clustering. This means that, the algorithm is less sensitive to noise and outliers, compared to k-means, because it uses medoids as cluster centers instead of means (used in k-means).  
+
+
+**PAM algorithm**:  
+
+1. Select k object to become the medoids, or in case these objects were provided use them as the medoids.  
+
+2. Calculate the dissimilarity matrix if it was not provided.  
+
+3. Assign every object to its cloest medoid.  
+
+4. For each cluster search if any of the object of the cluster decreases the average dissimilarity coefficient, if it does, select the enttity that decreases this coefficient the most as the medoid for this cluster.  
+
+5. If at least one medoid has changed go to step 3, else end the algorithm.  
+
+### example
+```{r}
+data("USArrests")
+df <- scale(USArrests)
+df %>% head
+
+# estimate the optimal number of clusters
+fviz_nbclust(df, FUNcluster = cluster::pam, method = "silhouette") +
+    theme_classic()
+
+pam.res <- pam(x = df, k = 2)
+pam.res
+```
+
+```{r}
+fviz_cluster(object = pam.res, 
+             palette = c("#00AFBB", "#FC4E07"), 
+             ellipse.type = "t", 
+             repel = TRUE, 
+             ggtheme = theme_classic())
+```
+
+
+
+

@@ -1,0 +1,56 @@
+---
+title: "Fuzzy_Clustering"
+author: "yincy"
+date: "10/18/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The **fuzzy clustering** is considered as soft clustering, in which each element has a probability of belonging to each cluster. In other words, each element has a set of membership coe?cients corresponding to the degree of being in a given cluster.  
+
+This is di?erent from k-means and k-medoid clustering, where each object is a?ected exactly to one cluster. K-means and k-medoids clustering are known as hard or non-fuzzy clustering.  
+
+In fuzzy clustering, points close to the center of a cluster, may be in the cluster to a higher degree than points in the edge of a cluster. The degree, to which an element belongs to a given cluster, is a numerical value varying from 0 to 1.  
+
+The **fuzzy c-means** (FCM) algorithm is one of the most widely used fuzzy clustering algorithms. The centroid of a cluster is calculated as the mean of all points, weighted by their degree of belonging to the cluster.  
+
+# example
+```{r}
+library(cluster)
+library(factoextra)
+library(magrittr)
+
+df <- scale(USArrests)
+res.fanny <- fanny(x = df, k = 2)
+res.fanny$membership %>% head
+
+fviz_cluster(res.fanny, 
+             ellipse.type = "norm", 
+             repel = T, 
+             palette = "jco", 
+             ggtheme = theme_classic(), 
+             legend = "right")
+```
+
+```{r}
+fviz_silhouette(res.fanny, 
+                palette = "jco", 
+                ggtheme = theme_classic())
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+

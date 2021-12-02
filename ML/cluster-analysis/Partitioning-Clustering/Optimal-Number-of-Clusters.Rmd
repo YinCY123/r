@@ -1,0 +1,104 @@
+---
+title: "Optimal-Number-of-Clusters"
+author: "yincy"
+date: "10/17/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Determining the Optimal Number of Clusters
+Determining the optimal number of clusters in a data set is a fundamental issue in partitioning clustering, such as k-means clustering, which requires the user to specify the number of clusters k to be generated.  
+
+Unfortunately, there is no definitive answer to this question. The optimal number of clusters is somehow subjective and depends on the method used for measuring similarities and the parameters used for partitioning.  
+
+## Elbow method
+The Elbow method looks at the total WSS as a function of the number of clusters: One should choose a number of clusters so that adding another cluster doesn't improve mush better the total WSS.  
+
+**Calculate the optimal number of clusters**:  
+
+1. Compute clustering algorithm (e.g., k-means clustering) for different values of k. For instance, by varying from 1 to 10 clusters.  
+
+2. For each k, calculate the total within-cluster sum of square (wss).  
+
+3. Plot the curve of wss according to the number of clusters k.  
+
+4. The location of a bend (knee) in the plot is generally considered as an indicator of the appropriate number of clusters.  
+
+
+## Average silhouette method
+Average silhouette method computes the average silhouette of observations for different values of k. The optimal number of clusters k is the one that maximize the average silhouette over a range of possible values for k.  
+
+**Calculate average silhouette value**:  
+
+1. Compute clustering algorithm (e.g., k-means clustering) for different values of k. For instance, by varying k from 1 to 10 clusters.  
+
+2. For each k, calculate the average silhouette of observation (*avg.sil*).  
+
+3. Plot the curve of *avg.sil* according to the number of clusters k.  
+
+4. The location of the maximum is considered as the appropriate number of clusters.  
+
+
+## Gap statistic method
+The gap statistic compares the total within intra-cluster variation for di?erent values of k with their expected values under null reference distribution of the data. The estimate of the optimal clusters will be value that maximize the gap statistic (i.e, that yields the largest gap statistic). This means that the clustering structure is far away from the random uniform distribution of points.  
+
+**calculate gap statistic values**:  
+1. Cluster the observed data, varying the number of clusters from $k = 1, ..., k_{max}$, and compute the corresponding total within intra-clsuter variation $W_{k}$.  
+
+2. Generate B reference data sets with a random uniform distribution. Cluster each of these reference data sets with varying number of clsuters $k = 1, ..., k_{max}$, and compute the corresponding total within intra-clsuter variation $W_{kb}$.  
+
+3. Compute the estimated gap statistic as the deviation of the observed $W_{k}$ value from its expected value $W_{kb}$ under the null hypothesis: $Gap(k) = \frac{1}{B} \sum_{b=1}^{B}log(W_{kb}^{*}) - log(W_{k})$. Compute also the standard deviation of the statistics.  
+
+4. Choose the number of clusters as the smallest value of k such that the gap statistic is within one standard deviation of the gap at $k + 1: Gap(k) \geq Gap(k + 1) - s_{k+1}$
+
+
+## Computing the number of clusters in R
+1. `fviz_nbclust()` in `factoextra`: it can used to compute three (elbow, silhouette, gap statistic) different methods for any partitioning clustering methods (k-means, k-medoids, CLARA, HCUT). 
+
+2. `NbClust()` in `NbClust` package. It provides 30 indices for determining the relevant number of clusters and proposes to users the best clustering scheme from the different results obtained by varying all combinations of number of clusters, distance measures, and clustering methods. It can simultaneously computes all the indices and determine the number of clusters in a single function call.  
+
+```{r}
+df <- scale(USArrests)
+df %>% head
+```
+
+```{r}
+# elbow method
+fviz_nbclust(df, FUNcluster = kmeans, method = "wss") +
+    geom_vline(xintercept = 4, linetype = 2) +
+    labs(subtitle = "Elbow method")
+
+# Silhouette method
+fviz_nbclust(df, kmeans, method = "silhouette") +
+    labs(subtitle = "Silhouette method")
+
+
+# gap statistic
+set.seed(123)
+fviz_nbclust(df, kmeans, nstart = 25, method = "gap_stat", nboot = 50) +
+    labs(subtitle = "Gap statistic method")
+```
+
+```{r}
+library(NbClust)
+
+nb <- NbClust(df, 
+              distance = "euclidean", 
+              min.nc = 2, 
+              max.nc = 10, 
+              method = "kmeans")
+
+fviz_nbclust(nb)
+```
+
+
+
+
+
+
+
+
+

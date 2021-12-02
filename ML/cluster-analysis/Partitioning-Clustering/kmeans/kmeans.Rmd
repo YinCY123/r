@@ -1,0 +1,114 @@
+---
+title: "kmeans"
+author: "yincy"
+date: "10/17/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+In k-means clustering, each cluster is represented by its center (i.e, centroid) which corresponds to the mean of points assigned to the cluster. **The K-means method is sensitive to anomalous data points and outliers**.  
+
+The basic idea behind k-means clustering consists of defining clusters so that the total intra-cluster variation (known as total within-cluster variation) is minimized.  
+
+**intra-cluster distance**  
+
+$$
+W(C_{K}) = \sum_{x_{i} \in C_{k}}(x_{i} - u_{k})^{2}
+$$
+
+- $x_{i}$ design a data point belonging to the cluster $C_{k}$.  
+- $u_{k}$ is the mean value of the points assigned to the cluster $C_{k}$.  
+
+Each observation ($x_{i}$) is assigned to a given cluster such that the sum of squares (SS) distance of the observation to their assigned clsuter centers $u_{k}$ is minimum.  
+
+
+**total intra-cluster distance**  
+
+$$
+tot.withinss = \sum_{k=1}^{k}W(C_{k}) = \sum_{k=1}^{k}\sum_{x_{i} \in C_{k}}(x_{i} - u_{k})^{2}
+$$
+
+**K-means algorithm can be summarized as follow**  
+
+1. Specify the number of clusters (K) to be created (by the analyst).  
+
+2. Select randomly k objects from the data set as the initial cluster centers or means.  
+
+3. Assigns each observation to their closest centroid, based on the Euclidean distance between the object and the centroid.  
+
+4. For each of the k clusters update the *cluster centroid* by calculating the new mean values of all the data points in the cluster. The centroid of a $K_{th}$ cluster is a vector of length p containing the means of all variables for the observations in the $k_{th}$ cluster; p is the number of variables.  
+
+5. Iteratively minimize the total within sum of square. That is, iterate steps 3 and 4 until the cluster assignments stop changing or maximum number of iterations is reached.  
+
+
+### example
+```{r}
+data("USArrests")
+df <- scale(USArrests)
+df %>% head
+
+# estimate the optimal number of clusters
+library(factoextra)
+fviz_nbclust(x = df, FUNcluster = kmeans, method = "wss") +
+    geom_vline(xintercept = 4, linetype = 2)
+
+km.res <- kmeans(df, centers = 4, nstart = 25)
+```
+
+`nstart = 25`. This means that R will try 25 different random starting assignments and then select the best results corresponding to the one with the lowest within cluster variation.  
+
+```{r}
+km.res
+```
+
+```{r}
+aggregate(USArrests, by = list(cluster = km.res$cluster), FUN = mean)
+```
+
+```{r}
+apply(USArrests, 2, FUN = function(x){
+    tapply(x, INDEX = km.res$cluster, FUN = mean)
+})
+```
+
+```{r}
+dd <- cbind(USArrests, cluster = km.res$cluster)
+dd %>% head()
+```
+
+
+```{r}
+fviz_cluster(object = km.res, 
+             data = df, 
+             palette = c("#2E9FDF", "#00AFBB", "#E7B800", "#FC4E07"), 
+             ellipse.type = "euclid", 
+             star.plot = F, 
+             repel = T, 
+             ggtheme = theme_minimal(), 
+             show.clust.cent = F)
+```
+
+**K-means clustering advantages and disadvantages**  
+
+weaknesses:  
+1. It assumes prior knowledge of the data and requires the analyst to choose the appropriate number of cluster (k) in advance.  
+
+2. The final results obtained is sensitive to the initial random selection of cluster centers. Why is this a problem? Because, for every different run of the algorithm on the same data set, you may choose different set of initial centers. This may lead to different clustering results on different runs of the algorithm.  
+
+3. It’s sensitive to outliers.  
+
+4. If you rearrange your data, it’s very possible that you’ll get a different solution every time you change the ordering of your data.  
+
+
+Solutions to these weaknesses:  
+1. Compute k-means for a range of k values, for example by varying k between 2 and 10. Then, choose the best k by comparing the clustering results obtained for the different k values.  
+
+2. Compute K-means algorithm several times with different initial cluster centers. The run with the lowest total within-cluster sum of square is selected as the final clustering solution.  
+
+3. To avoid distortions caused by excessive outliers, it’s possible to use PAM algorithm, which is less sensitive to outliers.  
+
+
+

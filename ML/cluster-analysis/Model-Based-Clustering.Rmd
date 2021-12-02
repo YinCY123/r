@@ -1,0 +1,81 @@
+---
+title: "Model-Based-Clustering"
+author: "yincy"
+date: "10/18/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**model-based clustering**, consider the data as coming from a distribution that is mixture of two or more clusters. Unlike k-means, the model-based clustering uses a soft assignment, where each data point has a probability of belonging to each cluster.  
+
+
+# Concept of model-based clustering
+In model-based clustering, the data is considered as coming from a mixture of density. Each component k is modeled by the normal or Gaussian distribution which is characterized by the parameters:  
+
+- $u_{k}$: mean vector.  
+
+- $\sum_{k}$: covariance matrix.  
+
+- An associated probability in the mixture. Each point has a probability of belonging to each cluster.  
+
+```{r}
+library(MASS)
+data("geyser")
+library(ggpubr)
+library(ggplot2)
+
+ggplot(geyser, aes(duration, waiting)) +
+    geom_point(size = 2) +
+    geom_density_2d() +
+    theme_classic2() +
+    theme(aspect.ratio = 1)
+```
+
+# example
+```{r}
+library(mclust)
+data("diabetes")
+diabetes %>% head
+
+df <- scale(diabetes[, -1])
+mc <- Mclust(df)
+summary(mc)
+mc$modelName # optimal selected model
+mc$G # optimal number of cluster
+mc$z %>% head # probality to belong to a given cluster
+mc$classification %>% head # cluster assignment of each observation
+```
+
+```{r}
+library(factoextra)
+fviz_mclust(mc, 
+            what = "BIC", 
+            palette = "jco")
+```
+
+The first identifier refers to volume, the second to shape and the third to orientation.  
+
+- `E` stands for 'equal'  
+- `V` stands for 'variable'  
+- `I` stands for 'coordinate axes'  
+
+
+```{r}
+fviz_mclust(mc, 
+            what = "classification", 
+            geom = "point", 
+            pointsize = 1.5, 
+            palette = "jco")
+```
+
+```{r, message=FALSE, warning=FALSE}
+fviz_mclust(mc, 
+            what = "uncertainty", 
+            palette = "jco")
+```
+
+
+

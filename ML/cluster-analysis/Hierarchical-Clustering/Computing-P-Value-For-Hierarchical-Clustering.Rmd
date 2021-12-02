@@ -1,0 +1,61 @@
+---
+title: "Computing-P-Value-For-Hierarchical-Clustering"
+author: "yincy"
+date: "10/17/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Clusters can be found in a data set by chance due to clustering noise or sampleing error. The R package **pvclust** which uses bootstrap resampling techniques to **compute p-value** for each **hierarchical clusters**.  
+
+
+## Algorithm
+1. Generate thousands of bootstrap samples by randomly sampling elements of the data.  
+2. Compute hierarchical clustering on each bootstrap copy.  
+3. For each cluster:  
+    - compute the *bootstrap probability* (BP) value which corresponds to the frequency that the cluster is identified in bootstrap copies.  
+    - Compute the *approximately unbiased* (AU) probability values (p-values) by multiscale bootstrap resampling.  
+    
+
+> Clusters with AU >= 95% are considered to be strongly supported by data.  
+
+```{r}
+library(pvclust)
+data("lung")
+lung %>% dim
+lung[, 1:4] %>% head
+
+ss <- sample(ncol(lung), 30, replace = F)
+df <- lung[, ss]
+
+set.seed(123)
+res.pv <- pvclust(df, method.dist = "cor", 
+                  method.hclust = "average", 
+                  nboot = 1000)
+
+# plot
+plot(res.pv, hang = -1, cex = 0.5)
+pvrect(res.pv)
+```
+
+extract the objects from the significant clusters, use the function `pvpick()`.  
+
+```{r}
+clusters <- pvpick(res.pv)
+clusters
+```
+
+parallel computation  
+
+```{r}
+library(parallel)
+
+cl <- makeCluster(spec = 2, type = "PSOCK")
+res.pv <- parPvclust(cl = cl, data = df, nboot = 1000)
+stopCluster(cl)
+```
+
