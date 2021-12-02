@@ -12,10 +12,8 @@ knitr::opts_chunk$set(echo = TRUE)
 **The goal of clustering is to identify pattern or groups of similar objects within a data set of interest**.  
 
 # I Basics  
-## Chapter 1  
 ## Introduction to R  
 
-## Chapter 2  
 ## Data Preparation  
 To perform a cluster analysis in R, generally, the data should be prepared as follow:  
 1. Rows are observations (individuals) and columns are variables.  
@@ -24,7 +22,6 @@ To perform a cluster analysis in R, generally, the data should be prepared as fo
 
 ```{r}
 library(magrittr)
-
 data("USArrests")
 
 df <- USArrests
@@ -35,16 +32,16 @@ df %>% head()
 
 |**Functions**|**Description**|  
 |:--|:--|
-|dist(fviz_dist, get_dist)| Distance Matrix Computation and Visualization|
-|get_clust_tendency|Assessing Clustering Tendency|
-|fviz_nbclust(fviz_gap_stat)|Determining the Optimal Number of Clusters|
-|fviz_dend|Enhanced Visualization of Dendrogram|
-|fviz_cluster|Visualize Clustering Results|
-|fviz_mclust|Visualize Model-based Clustering Results|
-|fviz_silhouette|Visualize Silhouette Information from Clustering|
-|hcut|Computes Hierarchical Clustering and Cut the Tree|
-|hkmeans|Hierarchical k-means clustering|
-|eclust|Visual enhancement of clustering analysis|
+|`dist(fviz_dist, get_dist)`| Distance Matrix Computation and Visualization|
+|`get_clust_tendency`|Assessing Clustering Tendency|
+|`fviz_nbclust(fviz_gap_stat)`|Determining the Optimal Number of Clusters|
+|`fviz_dend`|Enhanced Visualization of Dendrogram|
+|`fviz_cluster`|Visualize Clustering Results|
+|`fviz_mclust`|Visualize Model-based Clustering Results|
+|`fviz_silhouette`|Visualize Silhouette Information from Clustering|
+|`hcut`|Computes Hierarchical Clustering and Cut the Tree|
+|`hkmeans`|Hierarchical k-means clustering|
+|`eclust`|Visual enhancement of clustering analysis|
 
 
 Required R Packages  
@@ -54,34 +51,62 @@ library(factoextra)
 ```
 
 
-## Chapter 3  
 ## Clustering Distance Measures  
 The classification of observations into groups requires some methods for computing the **distance** or the (dis)**similarity** between each pair of observations. The result of this computation is known as a dissimilarity or **distance matrix**.  
 
 ### Methods for measuring distances  
-1. Euclidean distance  
+1. **Euclidean distance**  
 The distance between two points.  
-$$d_{euc}(x,y) = \sqrt{(\sum_{i=1}^{n}(x_{i} - y_{i})^2}$$
-2. Manhattan distance  
-$$d_{man}(x, y) = \sum_{i=1}^{n}|(x_{i} - y_{i})|$$
-> below is correlation base distance, which is widely used for gene expression data analysis  
+$$
+d_{euc}(x,y) = \sqrt{\sum_{i=1}^{n}(x_{i} - y_{i})^2}
+$$
+2. **Manhattan distance**  
+$$
+d_{man}(x, y) = \sum_{i=1}^{n}|(x_{i} - y_{i})|
+$$
+> $x$ and $y$ are two vectors of length n.  
 
-3. Pearson correlation distance  
-Pearson correlation measures the degree of a linear relationship between two profiles.  
 
-4. Eisen cosine correlation distance  
-It's a special case of Pearson's correlation distance with ${\tilde{x}}$ and ${\tilde{y}}$ both replaced by zero.  
+> below is correlation base distance, which is widely used for gene expression data analysis. Correlation-based distance is defined by subtracting the correlation coefficient from 1.  
 
-5. Spearman correlation distance  
+3. **Pearson correlation distance**  
+Pearson correlation measures the degree of a **linear relationship** between two profiles.  
+
+$$
+d_{cor}(x,y) = 1 - \frac{\sum_{i=1}^{n}(x_{i} - \overline{x})(y_{i} - \overline{y})}{\sqrt{\sum_{i=1}^{n}(x_{i}-\overline{x})^{2}\sum_{i=1}^{n}(y_{i}-\overline{y})^{2}}}
+$$
+
+4. **Eisen cosine correlation distance**  
+It's a special case of Pearson's correlation distance with $\overline{x}$ and $\overline{y}$ both replaced by zero.  
+
+$$
+d_{eisen}(x,y) = 1 - \frac{|\sum_{i=1}^{n}x_{i} \cdot y_{i}|}{\sqrt{\sum_{i=1}^{2}x_{i}^{2} \cdot \sum_{i=1}^{n}y_{i}^{2}}}
+$$
+
+5. **Spearman correlation distance**  
 The spearman correlation method computes the correlation between the rank of x and the rank of y variables.  
 
-6. Kendall correlation distance  
-Kendall correlation method measures the correspondence between the ranking of x and y variables.  
+$$
+d_{spear}(x, y) = 1 - \frac{\sum_{i=1}^{n}(x'_{i} - \overline{x'})(y'_{i} - \overline{y'})}{\sqrt{\sum_{i=1}^{n}(x'_{i} - \overline{x'})^{2} \cdot \sum_{i=1}^{n}(y'_{i} - \overline{y'})^{2}}}
+$$
+
+Where $x'_{i} = rank(x_{i})$ and $y'_{i} = rank(y)$.  
+
+6. **Kendall correlation distance**  
+Kendall correlation method measures the correspondence between the ranking of x and y variables. The total number of possible pairings of x with y observations is $\frac{n\cdot(n-1)}{2}$, where n is the size of x and y. Begin by ordering the pairs by the x values. If x and y are correlated, then they would have the same relative rank orders. Now, for each $y_{i}$, count the number of $y_{j} > y_{i}$ (concordant pairs (c)) and the number of $y_{j} < y_{i}$ (discordant pairs (d)).  
+
+$$
+d_{kend}(x,y) = 1 - \frac{n_{c} - n_{d}}{\frac{1}{2} \cdot n \cdot (n - 1)}
+$$
+
+- $n_{c}$: total number of concordant pairs  
+- $n_{d}$: total number of discordant pairs  
+- $n$: size of x and y  
 
 
-**Note**  
-1. pearson correlation analysis is the most commonly used method. It is also known as a parametric correlation which depends on the distribution of the data.  
+> 1. pearson correlation analysis is the most commonly used method. It is also known as a parametric correlation which depends on the distribution of the data.  
 2. Kendall and Spearman correlations are non-parametric and they are used to perform rank-based correlation analysis.  
+
 
 ### What type of distance measures should we choose?  
 The choice of distance measures is very important, as it has a strong influence on the clustering results. For most common clustering software, the default distance measure is the Euclidean distance.  
@@ -105,13 +130,6 @@ $$\frac{x_{i} - center(x)}{scale(x)}$$
 
 Where `center(x)` can be the mean or the median of x values, and `scale(x)` can be the standard deviation(SD), the interquartile range, or the MAD (median absolute deviation).  
 
-The R base function `scale()` can be used to standardize the data. It takes a numeric matrix as an input and performs the scaling on the columns.  
-
-> Standardization makes the four distance measure methods - Euclidean, Manhattan, Correlation and Eisen - more similar than they would be with non-transformed data. 
-Note that, when the data are standardized, there is a functional relation- ship between the Pearson correlation coe?cient r(x, y) and the Euclidean distance.  
-With some maths, the relationship can be defined as follow:
-
-$$d_{euc}(x,y) = \sqrt{2m[1-r(x,y)]}$$
 
 ### Distance matrix computation  
 ```{r}
@@ -152,7 +170,7 @@ str(flower)
 ```
 
 ```{r}
-dd <- daisy(x = flower)
+dd <- daisy(x = flower, metric = "gower")
 
 round(as.matrix(dd)[1:3, 1:3], 1)
 ```
@@ -169,30 +187,60 @@ fviz_dist(dist.eucl)
 # II Partitioning Clustering  
 Partitioning clustering are clustering methods used to classify observations, within a data set, into multiple groups based on their similarity. The algorithms require the analyst to specify the number of clusters to be generated.  
 
-## Chapter 4
 ## K-means 
-In k-means clustering, each cluster is represented by its center (i.e, centroid) which corresponds to the mean of points assigned to the cluster. The K-means method is sensitive to anomalous data points and outliers.  
+In k-means clustering, each cluster is represented by its center (i.e, centroid) which corresponds to the mean of points assigned to the cluster. **The K-means method is sensitive to anomalous data points and outliers**.  
 
 The basic idea behind k-means clustering consists of defining clusters so that the total intra-cluster variation (known as total within-cluster variation) is minimized.  
 
+**intra-cluster distance**  
+
+$$
+W(C_{K}) = \sum_{x_{i} \in C_{k}}(x_{i} - u_{k})^{2}
+$$
+
+- $x_{i}$ design a data point belonging to the cluster $C_{k}$.  
+- $u_{k}$ is the mean value of the points assigned to the cluster $C_{k}$.  
+
+Each observation ($x_{i}$) is assigned to a given cluster such that the sum of squares (SS) distance of the observation to their assigned clsuter centers $u_{k}$ is minimum.  
+
+
+**total intra-cluster distance**  
+
+$$
+tot.withinss = \sum_{k=1}^{k}W(C_{k}) = \sum_{k=1}^{k}\sum_{x_{i} \in C_{k}}(x_{i} - u_{k})^{2}
+$$
+
+**K-means algorithm can be summarized as follow**  
+
+1. Specify the number of clusters (K) to be created (by the analyst).  
+
+2. Select randomly k objects from the data set as the initial cluster centers or means.  
+
+3. Assigns each observation to their closest centroid, based on the Euclidean distance between the object and the centroid.  
+
+4. For each of the k clusters update the *cluster centroid* by calculating the new mean values of all the data points in the cluster. The centroid of a $K_{th}$ cluster is a vector of length p containing the means of all variables for the observations in the $k_{th}$ cluster; p is the number of variables.  
+
+5. Iteratively minimize the total within sum of square. That is, iterate steps 3 and 4 until the cluster assignments stop changing or maximum number of iterations is reached.  
+
+
+### example
 ```{r}
 data("USArrests")
 df <- scale(USArrests)
-df %>% head()
+df %>% head
 
-# estimating the optima number of clusters  
+# estimate the optimal number of clusters
+library(factoextra)
 fviz_nbclust(x = df, FUNcluster = kmeans, method = "wss") +
     geom_vline(xintercept = 4, linetype = 2)
-```
 
-```{r}
 km.res <- kmeans(df, centers = 4, nstart = 25)
 ```
 
 `nstart = 25`. This means that R will try 25 different random starting assignments and then select the best results corresponding to the one with the lowest within cluster variation.  
 
 ```{r}
-print(km.res)
+km.res
 ```
 
 ```{r}
@@ -200,14 +248,16 @@ aggregate(USArrests, by = list(cluster = km.res$cluster), FUN = mean)
 ```
 
 ```{r}
+apply(USArrests, 2, FUN = function(x){
+    tapply(x, INDEX = km.res$cluster, FUN = mean)
+})
+```
+
+```{r}
 dd <- cbind(USArrests, cluster = km.res$cluster)
 dd %>% head()
 ```
 
-components returned by `kmeans` cluster  
-```{r}
-km.res %>% names
-```
 
 ```{r}
 fviz_cluster(object = km.res, 
@@ -240,7 +290,6 @@ Solutions to these weaknesses:
 3. To avoid distortions caused by excessive outliers, it’s possible to use PAM algorithm, which is less sensitive to outliers.  
 
 
-## Chapter 5  
 ## K-medoids (PAM)  
 K-medoids clustering or PAM (Partitioning Around Medoids) each cluster is represented by one of the objects in the cluster. PAM is less sensitive to outliers compared to k-means.
 
@@ -287,7 +336,6 @@ fviz_cluster(object = pam.res,
 > Note that, for large data set, `pam()` may need too much memory or too much computation time. In this case, the function `clara()` is preferable.   
 
 
-## Chapter 6 
 ## CLARA - Clustering Large Applications  
 CLARA algorithm (Clustering Large Applications), which is an extension to PAM adapted for large data sets in order to reduce computing time, this is achieved using the sampling approach.  
 
