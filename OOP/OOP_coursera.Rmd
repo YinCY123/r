@@ -75,8 +75,9 @@ mean(c(as.Date("2016-09-01"), as.Date("2016-09-03")))
 
 The creation of every generic method uses the `UseMethod()` function in the following way with only slight variations.  
 
+```
 [name_of_method] <- function(x) UseMethod("[name_of_method]")
-
+```
 
 ```{r}
 is_square <- function(x)UseMethod("is_square")

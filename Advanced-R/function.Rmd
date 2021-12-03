@@ -1,0 +1,135 @@
+---
+title: "function"
+author: "YinCY"
+date: "12/3/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Function components
+All R functions have three parts:  
+
+- the **body**, the code inside the function  
+- the **formals**, the list of arguments which controls how you can call the function.  
+- the **environment**, the 'map' of the location of the function's variables.  
+
+When you print a function in R, it shows you these three important components. If the environment isn't displayed, it means that the function was created in the global environment.  
+
+```{r}
+f <- function(x) x^2
+f
+```
+
+```{r}
+formals(f)
+```
+
+```{r}
+body(f)
+```
+
+```{r}
+environment(f)
+```
+
+
+# Lexical scoping
+Scoping is the set of rules that govern how R looks up the value of a symbol. In the example below, scoping is the set of rules that R applies to go from the symbol x to its value 10:  
+
+```{r}
+x <- 10
+x
+```
+
+Understanding scoping allows you to:  
+
+- build tools composing functions  
+- overrule the usual evaluation rules and do non-standard evaluation  
+
+R has two types of scoping:  
+
+- **lexical scoping**, implemented automatically at the language level.  
+- **dynamic scoping**, used in select functions to save typing during interactive analysis.  
+
+
+```{r}
+f <- function(){
+  x <- 1
+  y <- 2
+  c(x, y)
+}
+
+f()
+```
+
+**If a name isn't defined inside a function, R will look one level up**.  
+
+The same rules apply if a function is defined inside another function: look inside the current function, then where that function was defined, and so on, all the way up to the global environment, and then on to other loaded packages.  
+
+The same rules apply to **closures**, functions created by other functions.  
+
+```{r}
+x <- 1
+f <- function(){
+  y <- 2
+  c(x, y)
+}
+
+f()
+```
+
+```{r}
+j <- function(x){
+  y <- 2
+  function(){
+    c(x, y)
+  }
+}
+
+k <- j(1)
+k()
+rm(j, k)
+```
+
+
+# Dynamic lookup
+Lexical scoping determines where to look for values, not when to look for them. R looks for values when the function is run, not when it’s created. This means that the output of a function can be different depending on objects outside its environment.  
+
+```{r}
+f <- function() x + 1
+x <- 15
+f()
+
+f <- function() x + 1
+x <- 20
+f()
+```
+
+```{r}
+# find all the external dependence of a function
+codetools::findGlobals(f)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
