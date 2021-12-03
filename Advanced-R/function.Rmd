@@ -114,21 +114,42 @@ codetools::findGlobals(f)
 ```
 
 
+# `...` (dot-dot-dot)  
+Functions can have a special argument `...`. With it, a function can take any number of additional arguments. In other programming languages, this type of argument is often called *varargs* (short for variable arguments), and a function that uses it is said to be variadic.  
 
+1. You can use `...` to pass those additional arguments on to another function.  
 
+```{r}
+i01 <- function(y, z){
+    list(y = y, z = z)
+}
 
+i02 <- function(x, ...){
+    i01(...)
+}
 
+i02(x = 1, y = 2, z = 3) %>% str
+```
 
+2. Using a special form, `..N`, it's possible (but rarely useful) to refer to elements of `...` by position.  
 
+```{r}
+i03 <- function(...){
+    list(first = ..1, third = ..3)
+}
 
+i03(1, 2, 3) %>% str
+```
 
+3. More useful is `list(...)`, which evaluates the arguments and stores them in a list.  
 
+```{r}
+i04 <- function(...){
+    list(...)
+}
 
-
-
-
-
-
+i04(a = 1, b = 2) %>% str
+```
 
 
 
