@@ -71,7 +71,7 @@ We do not need to assign the result of the three push calls back to stack, and w
 
 
 # Object Initialization
-If we want ot set attributes of objects when constructing them, we need to do a little more work than in S4. We cannot just use named arguments in the constructor; this call would give us an error.  
+If we want to set attributes of objects when constructing them, we need to do a little more work than in S4. We cannot just use named arguments in the constructor; this call would give us an error.  
 
 ```
 stack <- VectorStack$new(elements = 1:4)
@@ -139,8 +139,7 @@ In the R6 system, private attributes can be accessed only by methods you define 
 # Active Bindings
 There is a way of getting the syntax of accessing data attributes without actually doing so. If you have code that already uses a public attribute and you want to change that into a function to hide or modify implementation details, you can use this. You can also use it if you just like the syntax for data better than method calls.  
 
-This is achieved through the active argument to R6Class. Here you can
-provide a list of attributes, as for private and public, but these attributes should be functions, and they will define a value-like syntax for calling the functions.  
+This is achieved through the active argument to `R6Class`. Here you can provide a list of attributes, as for private and public, but these attributes should be functions, and they will define a value-like syntax for calling the functions.  
 
 ```{r}
 VectorStack <- R6Class(classname = "VectorStack", 
