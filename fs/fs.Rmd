@@ -16,7 +16,7 @@ Most of the functionality is `fs` can be approximated with functions in base R o
 
 - Vectorization. All `fs` functions are vectorized, accepting multiple path as input. Base functions are inconsistently vectorized.  
 
-- Predictable return values that convey a path. All `fs` functions return a character vector of paths, a named integer or a logical vector, where the names give the paths. Base return values are more varied: they are often logical or contain error codes which requir downstream processing.   
+- Predictable return values that convey a path. All `fs` functions return a character vector of paths, a named integer or a logical vector, where the names give the paths. Base return values are more varied: they are often logical or contain error codes which require downstream processing.   
 
 - Explicit failure. If `fs` operations fail, they throw an error. Base functions tend to generate a warning and a system dependent error code. This makes it easy to miss a failure.  
 
@@ -50,7 +50,7 @@ Most of the functionality is `fs` can be approximated with functions in base R o
 |`file_chmod("path", "user_id", "group_id")`|*No direct equivalent*|chmod options path|
 |`file_copy("path", "new-path")`|`file.copy("path", "new-path")`|cp path new-path|
 |`file_create("new-path")`|`file.create("new-path")`|touch new-path|
-|`file-delete("path")`|`unlink("path")`|rm path|
+|`file_delete("path")`|`unlink("path")`|rm path|
 |`file_exists("path")`|`file.exists("path")`|if [-f 'path']; then ...; fi|
 |`file_info("path")`|`file.info("path")`|ls -al path|
 |`file_move("path", "new-path")`|`file.rename("path", "new-path")`|mv path new-path|
