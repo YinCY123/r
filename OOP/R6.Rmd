@@ -1,0 +1,247 @@
+---
+title: "R6"
+author: "yincy"
+date: "12/2/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+Data is usually immutable in R, and anything resembling object modification is really implemented by copying data and constructing new objects. The only things you can modify in R are environment; you cannot modify data. 
+
+The R6 system, however, uses environments to gives us objects we can modify data. It's unusual in R, but the semantics are then similar to how object-orientation is implemented in most other languages, where methods modify objects rather than create new objects. 
+
+
+# Defining Classes
+Classes are defined using the `R6Class` function from the package `R6`. Similar to `setClass` from `S4`, we need to give the class a name, and we have a number of optional arguments for defining how objects of the class should look and behave. Unlike S4, we need to capture the result from the call to `R6Class` in order to create objects of the class. In S4 this is a convention, but we can create objects as long as we known the name of a class. In R6, the name is mainly used to set the class attribute so the objects can interact with S3 polymorphism. It is the return value of `R6Class` we use to create objects.  
+
+```{r}
+library(R6)
+
+VectorStack <- R6Class(classname = "VectorStack", 
+                       private = list(elements = NULL), 
+                       public = list(
+                           top = function(){
+                               private$elements[1]
+                           }, 
+                           pop = function(){
+                               private$elements <- private$elements[-1]
+                               invisible(self)
+                           }, 
+                           push = function(e){
+                               private$elements <- c(e, private$elements)
+                               invisible(self)
+                           }, 
+                           is_empty = function(){
+                               length(private$elements) == 0
+                           }, 
+                           print = function(){
+                               cat("Stack elements:\n")
+                               print(private$elements)
+                           }
+                       ))
+```
+ 
+
+```
+private: define the values stored in the objects
+public: define the methods we can call on the objects
+```
+
+The difference between the two argument is that attributes in the **public** list can be accessed anywhere while attributes in the **private** list can only be accessed in methods you define for the class. In methods, you can access elements in the **public** list using the variable **self**, and you can access attributes in the **private** list using the variable **private**.  
+
+In side the methods we access the elements as **private$elements**, and in **push** and **top** we return the object itself using the variable **self**.  
+
+```{r}
+(stack <- VectorStack$new())
+```
+
+```{r}
+stack$push(1)$push(2)$push(3)
+stack
+
+while(!stack$is_empty()) stack$pop()
+stack
+```
+
+We do not need to assign the result of the three push calls back to stack, and we do not need to assign the calls to pop back to stack either. Returning the object itself in these functions allows us to chain method calls, but that is all this does.  
+
+
+# Object Initialization
+If we want ot set attributes of objects when constructing them, we need to do a little more work than in S4. We cannot just use named arguments in the constructor; this call would give us an error.  
+
+```
+stack <- VectorStack$new(elements = 1:4)
+```
+
+To be able to initialize this way, we need to explicitly write a function for it. This function must be a **public** method called **initialize**. If you want the constructor to make arguments, you must specify the arguments in this function. You cannot make this function **private**; it is an error to put a function named **initialize** in the **private** list.  
+
+```{r}
+VectorStack <- R6Class(classname = "VectorStack", 
+                       private = list(elements = NULL), 
+                       public = list(
+                           top = function(){
+                               private$elements[1]
+                           }, 
+                           pop = function(){
+                               private$elements <- private$elements[-1]
+                               invisible(self)
+                           }, 
+                           push = function(e){
+                               private$elements <- c(e, private$elements)
+                               invisible(self)
+                           }, 
+                           is_empty = function(){
+                               length(private$elements) == 0
+                           }, 
+                           print = function(){
+                               cat("Stack elements:\n")
+                               print(private$elements)
+                           }, 
+                           initialize = function(elements = NULL){
+                               private$elements <- elements
+                           }
+                       ))
+```
+
+```{r}
+stack <- VectorStack$new(elements = 1:4)
+stack
+```
+
+# Private and Public Attributes
+```{r}
+A <- R6Class(classname = "A", 
+             public = list(x = 5), 
+             private = list(y = 13))
+a <- A$new()
+a$x
+a$x <- 7
+a$x
+```
+
+```{r}
+a$y
+a$y <- 12
+a$y
+```
+
+In general, you cannot create new attributes to R6 objects just by assigning to $ indexed values, as you can in S3. Attributes must be defined in the class definition. 
+
+In general, it is considered good practice to keep data private and methods that are part of a class interface public.  
+
+In the R6 system, private attributes can be accessed only by methods you define for the class or in methods defined in sub-classes.  
+
+
+# Active Bindings
+There is a way of getting the syntax of accessing data attributes without actually doing so. If you have code that already uses a public attribute and you want to change that into a function to hide or modify implementation details, you can use this. You can also use it if you just like the syntax for data better than method calls.  
+
+This is achieved through the active argument to R6Class. Here you can
+provide a list of attributes, as for private and public, but these attributes should be functions, and they will define a value-like syntax for calling the functions.  
+
+```{r}
+VectorStack <- R6Class(classname = "VectorStack", 
+                       private = list(elements_ = NULL), 
+                       public = list(
+                           top = function(){
+                               private$elements_[1]
+                           }, 
+                           pop = function(){
+                               private$elements_ <- private$elements_[-1]
+                               invisible(self)
+                           }, 
+                           push = function(e){
+                               private$elements_ <- c(e, private$elements_)
+                               invisible(self)
+                           }, 
+                           is_empty = function(){
+                               length(private$elements_) == 0
+                           }, 
+                           print = function(){
+                               cat("Stack elements:\n")
+                               print(private$elements_)
+                           }, 
+                           initialize = function(elements_ = NULL){
+                               private$elements_ <- elements_
+                           }
+                       ), 
+                       active = list(
+                           elements = function(value){
+                               if(!missing(value)){
+                                   stop("elements are read-only")
+                               }
+                               private$elements_
+                           }
+                       ))
+```
+
+```{r}
+stack <- VectorStack$new(elements_ = 1:4)
+stack$elements
+```
+
+```{r}
+stack$elements <- rev(1:3)
+```
+
+You can use these active functions to modify values you assign, whether to ensure object consistency, or to fake an attribute that isn't directly stored but exists implicitly by being computable from other data.  
+
+
+# Inheritance
+To specify that one class inherits from another, we use the **inherit** argument to **R6Class**, and to write a more specialized version of a method, we simply add the method to the **public** or **private** lists.  
+
+```{r}
+A <- R6Class(classname = "A", 
+             public = list(f = function() print("A::f"),
+                           g = function() print("A::g"), 
+                           h = function() print("A::h")))
+
+B <- R6Class(classname = "B", 
+             inherit = A, 
+             public = list(
+                 g = function() print("B::g"), 
+                 h = function() print("B::h")
+             ))
+
+C <- R6Class(classname = "C", 
+             inherit = B, 
+             public = list(
+                 h = function() print("C::h")
+             ))
+```
+
+
+```{r}
+x <- A$new()
+y <- B$new()
+z <- C$new()
+```
+
+```{r}
+x$f()
+y$f()
+z$f()
+```
+
+```{r}
+x$g()
+y$g()
+z$g()
+```
+
+```{r}
+x$h()
+y$h()
+z$h()
+```
+
+
+
+
+
+
+ 
+ 
