@@ -37,7 +37,13 @@ A statistical transformation, transforms the data, typically by summarising it i
 
 There are two ways to use these functions. You can either add a `stat_()` function and override the default geom, or add a `geom_()` function and override the default stat.  
 
-Internally, a stat takes a data frame as input and returns a data frame as output, and so a stat can add new variables to the original dataset. It is possible to map aesthetics to these new variables.  
+Internally, a stat takes a data frame as input and returns a data frame as output, and so a stat can add new variables to the original dataset. It is possible to map aesthetics to these new variables. For example, `stat_bin`, the statistic used to make histograms, produces the following variables:  
+
+- `count`, the number of observations in each bin.  
+- `density`, the density of observations in each bin (percentage of total/bar width)  
+- `x`, the center of the bin  
+
+
 
 
 
