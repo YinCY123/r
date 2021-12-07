@@ -38,6 +38,7 @@ scales in ggplot2 can be roughly divided into four categories:
 - scale_color_distiller(): apply `ColorBrewer` color scales to continuous data    
 - scale_fill_gradient()  
 
+
 ### discrete  
 - scale_color_hue(): picks evenly spaced hues around the HCL color wheel.    
 - scale_color_brewer(): uses handpicked `ColorBrewer` colors.  
