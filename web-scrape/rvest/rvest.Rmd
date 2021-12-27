@@ -9,104 +9,224 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r}
+library(rvest)
+```
 
-## Extracting HTML elements with CSS  
+
+```{r}
+url <- "http://jhudatascience.org/stable_website/webscrape.html"
+html <- read_html(url)
+html %>% 
+    html_nodes(".even~ .even strong , .odd strong") %>% 
+    html_text()
+```
+
+```{r}
+library(dplyr)
+
+url <- "/home/yincy/Downloads/Opinion _ President Trump’s Lies, the Definitive List - The New York Times.html"
+html <- read_html(url)
+results <- html %>% html_nodes(".short-desc")
+records <- list()
+for(i in seq_along(results)){
+    date = results[[i]] %>% html_nodes("strong") %>% html_text(trim = T) %>% str_c(" 2017")
+    lie = xml_contents(results[[i]])[2] %>% html_text(trim = T)
+    expanation = results[[i]] %>% html_nodes(".short-truth") %>% html_text(trim = T)
+    url = results[[i]] %>% html_nodes("a") %>% html_attr("href") 
+    records[[i]] = data.frame(date = date, 
+                              lie = lie, 
+                              expanation = expanation, 
+                              url = url)
+}
+
+df <- bind_rows(records)
+glimpse(df)
+```
+
+
+```{r}
+library(lubridate)
+
+df$date <- mdy(df$date)
+glimpse(df)
+```
+
+# reading HTML with rvest
 ```{r}
 library(rvest)
 
-lego_url <- "http://www.imdb.com/title/tt1490017/"
-html <- read_html(x = lego_url)
-
-characters <- html_nodes(x = html, css = ".cast_list .character")
-characters %>% length()
-
-characters[1:2]
+html <- read_html("http://rvest.tidyverse.org/")
+html %>% class()
 ```
+
+# create an `html_document` from literal HTML
+```{r}
+html <- minimal_html(html = "
+                     <p>This is a paragraph</p>
+                     <ul>
+                        <li>This is a bulleted list</li>
+                     </ul>")
+html
+```
+
+Regardless of how you get the HTML, you'll need some way to identify the elements that contain the data you care about. `rvest` provides two options: CSS selectors and XPath expressions.  
+
+
+# CSS seelctors
+CSS is short for cascading style sheets, and is a tool for defining the visual styling of HTML documents. CSS includes a miniature language for selecting elements on a page called **CSS selectors**. CSS selectors define patterns for locating HTML elements, and are useful for scraping because they provide a concise way of describing which elements you want to extract.  
+
+CSS selector can be quite complex, but fortunately you only need the simplest for `rvest`, because you can also write R code for more complicated situations. The four most important selector are.  
+
+- `p`: selects all `<p>` elements  
+- `.title`: selects all elements with `class` 'title'.  
+- `p.special`: selects all `<p>` elements with `class` 'special'.  
+- `#title`: selects the element with the `id` attribute that equals 'title'. Id attributes must be unique within a document, so this will only ever select a single element.  
+
 
 ```{r}
-html_text(x = characters, trim = T)
+html <- minimal_html("
+                     <h1>This is a heading</h1>
+                     <p id='first'>This is a paragraph</p>
+                     <p class='important'>This is an important paragraph</p>
+                     ")
 ```
 
-`rvest` contains a few handy functions for accessing different attributes of the currently selected nodes. Foe example, we can access names of the selected tags with `html_names()`  
+In `rvest` you can extract a single element with `html_element()` or all matching elements with `html_elements()`. Both functions take a document and a css selector.  
 
 ```{r}
-html_nodes(x = html, css = ".cast_list") %>% 
-    html_name()
+html %>% html_element(css = "h1") 
+html %>% html_elements(css = 'p')
+html %>% html_elements(css = ".important")
+html %>% html_elements(css = "#first")
 ```
 
+Selectors can also be combined in various ways using **combinators**. For example, the most important combinator is "", the **descendant** combination, because `p a` selects all `<a>` elements that are a child of a `<p>` element.  
 
-Most of the time we want to use `html_nodes()` (returning `xml nodeset`) to make sure we capture all matches, but in those cases when we know that there is only single match or when we only care about the first match, we can use `html_node()`, which returns single `xml node`.  
+# Extracting data
+## text
+Use `html_text2()` to extract the plain text contents of an HTML element.  
 
 ```{r}
-html_node(x = html, css = ".cast_list")
+html <- minimal_html("
+                     <ol>
+                        <li>apple &amp; pear</li>
+                        <li>banana</li>
+                        <li>pineapple</li>
+                     </ol>
+                     ")
+
+html %>% html_elements(css = "li") %>% html_text2()
 ```
 
-If the name of the current tag is `table` (both as single `xml node`, but also as `xml nodeset` of tables) it can usually be parsed into a data.frame automatically (either as a single data.frame or as a list of data.frame, for `xml node` and `xml nodeset`, respectively).  
+The main difference between `html_text()` and `html_text2()` is how they handle white space. In HTML, white space is largely ignored, and it's the structure of the elements that defines how text laid out. `html_text2()` does its best to follow the same rules, giving you something similar to what you'd see in the browser.  
 
 ```{r}
-html_node(x = html, css = ".cast_list") %>% 
-    html_table() %>% 
-    head()
+html <- minimal_html("
+                     <p>
+                     This is
+                     a
+                     paragraph.</p><p>This is another paragraph.
+                     
+                     It has two sentences.</p>
+                     ")
+html %>% html_elements("p") %>% html_text2()
+html %>% html_elements("p") %>% html_text()
 ```
 
-The most basic content in HTML is text. It can be located between the opening and the closing tag of the "tag bracket" (sometimes along with other 'descendant' tags). The text (from current and all 'children' tags) can be extracted with `html_text()`. Lets extract text out of the first character node.  
+## attributes
+Attributes are used to record the destination of links (the `href` attribute of `<a>` elements) and the source of images (the `src` attribute of the `<img>` element).  
 
 ```{r}
-html_node(x = html, css = ".cast_list .character") %>% 
-    html_text()
+html <- minimal_html("
+                     <p><a href='https://en.wikipedia.org/wiki/Cat'>cats</a></p>
+                     <img src='https://cataas.com/cat' width='100' height='200'>
+                     ")
 ```
 
-Finally attributes of HTML tags can be extracted using `html_attrs()` (or `html_attr()` for extracting a single attribute from a node/nodeset, given its name). Let's fetch of the actors' pages.  
+The value of an attribute can be retrived with `html_attr()`.  
 
 ```{r}
-html_nodes(x = html, css = ".cast_list .character") %>% 
-    html_children() %>% 
-    html_attr("href")
+html %>% html_elements("a") %>% html_attr(name = "href")
+html %>% html_elements("img") %>% html_attr(name = "src")
 ```
 
+Note that `html_attr()` always returns a string.  
 
-## Extracting HTML elements with xpath  
-Alternative way of extracting HTML elements is using `xpath` argument in `html_node()` or `html_nodes()`, which allows specifying expressions to extract individual nodes or nodesets. `XPath` (XML Path Language) is a query language for selecting nodes from an XML document. It is much more powerful than CSS selectors, but its syntax is also more terse.  
-
-The following `rvest` code will separate "children" text from "parent" text and return only text from the "child" node(s).  
+## tables
+HTML tables are composed four main elements:  
+- `<table>`  
+- `<tr>`, table row  
+- `<th>`, table heading  
+- `<td>`, table data  
 
 ```{r}
-html_node(x = html, css = ".cast_list .character") %>% 
-    html_children() %>% 
-    html_text()
+html <- minimal_html("
+                     <table>
+                        <tr>
+                            <th>x</th>
+                            <th>y</th>
+                        </tr>
+                        <tr>
+                            <td>1.5</td>
+                            <td>2.7</td>
+                        </tr>
+                        <tr>
+                            <td>4.9</td>
+                            <td>1.3</td>
+                        </tr>
+                        <tr>
+                            <td>7.2</td>
+                            <td>8.1</td>
+                        </tr>
+                     </table>
+                     ")
+
+html %>% html_node("table") %>% html_table()
 ```
 
 
-However, there's no suitable "CSS selector" to exclude child nodes and extract only text from the "parent" node. This is the situation where `xpath` selector can be more powerful. In addtion to traversing the html/xml tree, `xpath` also has its "extractor" functions, similar to those of `rvest`. In particular, here will use `text()` applied to "current node only" (this is the meaning of `./` in the following code). We also use `normalize-space()` function, which drops empty strings.  
-
-Note that the `xpath` internal function `text()` has simplified the content, but `html_nodes()` is unaware of it and still returns `xml_nodeset()`.  
+# elements vs elements
+When using `rvest`, your eventual goal is usually to build up a data frame, and you want each row to correspond some repeated unit on the HTML page. In this case, you should generally start by using `html_elements()` to select the elements that contain each observation then use `html_element()` to extract the variables from each observation. This guarantees that you’ll get the same number of values for each variable because `html_element()` always returns the same number of outputs as inputs.  
 
 ```{r}
-html_node(x = html, css = ".cast_list .character") %>% 
-    html_nodes(xpath = "./text()[normalize-space()]") %>% 
-    html_text(trim = T)
+html <- minimal_html("
+  <ul>
+    <li><b>C-3PO</b> is a <i>droid</i> that weighs <span class='weight'>167 kg</span></li>
+    <li><b>R2-D2</b> is a <i>droid</i> that weighs <span class='weight'>96 kg</span></li>
+    <li><b>Yoda</b> weighs <span class='weight'>66 kg</span></li>
+    <li><b>R4-P17</b> is a <i>droid</i></li>
+  </ul>
+  ")
 ```
+
+If you try to extract name, species, and weight directly, you end up with one vector of length four and two vectors of length three, and no way to align them:  
 
 ```{r}
-ls("package:rvest")
+html %>% html_elements("b") %>% html_text2()
+html %>% html_elements("i") %>% html_text2()
+html %>% html_elements('.weight') %>% html_text2()
 ```
 
+Instead, use `html_elements()` to find a element that corresponds to each character, then use `html_element()` to extract each variable for all observations:  
 
+```{r}
+character <- html %>% html_elements("li")
 
+character %>% html_element("b") %>% html_text2()
+character %>% html_element("i") %>% html_text2()
+character %>% html_element(".weight") %>% html_text2()
+```
 
+`html_element()` automatically fills in NA when no elements match, keeping all of the variables aligned and making it easy to create a data frame:  
 
-
-
-
-
-
-
-
-
-
-
-
-
+```{r}
+data.frame(
+    name = character %>% html_element("b") %>% html_text2(), 
+    species = character %>% html_element("i") %>% html_text2(), 
+    weight = character %>% html_element(".weight") %>% html_text2()
+)
+```
 
 
 

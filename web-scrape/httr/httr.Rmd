@@ -10,3 +10,196 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Best practices for API package  
+
+
+# Getting started with httr
+## httr quickstart guide
+There are two important parts to http: the **request**, the data sent to the server, and the **response**, the data sent back from the server. In the first section, you'll learn about the basics of constructing a request and accessing the response. In the second and third sections, you'll dive into more details of each.  
+
+### httr basics
+To make a request, first load httr, then call `GET()` with a url.  
+
+```{r}
+library(httr)
+
+r <- GET("http://httpbin.org/get")
+```
+
+This gives you a response object. Printing a response object gives you some useful information: the actual url used (after any redirects), the http status, the file (content) type, the size, and if it’s a text file, the first few lines of output.  
+
+```{r}
+r
+```
+
+You can pull out important parts of the response with various helper methods, or dig directly into the object.  
+
+```{r}
+status_code(r)
+headers(r)
+```
+
+```{r}
+content(r) %>% str
+```
+
+I’ll use httpbin.org throughout this introduction. It accepts many types of http request and returns json that describes the data that it received. This makes it easy to see what httr is doing.  
+
+As well as `GET()`, you can also use the `HEAD()`, `POST()`, `PATCH()`, `PUT()` and `DELETE()` verbs. You're probably most familiar with `GET()` and `POST()`: `GET()` is used by your browser when requesting page, and `POST()` is (usually) used when submitting a form to a server. `PUT()`, `PATCH()` and `DELETE()` are used most often by web APIs.  
+
+### The response 
+#### The status code
+The data sent back from the server consists of three parts: the status line, the headers and the body. The most important part of the status is the http status code. It tells you whether or not the request was successful.  
+
+```{r}
+r <- GET(url = "http://httpbin.org/get")
+
+http_status(r)
+
+r$status_code
+```
+
+A successful request always returns a status of 200. Common errors are 404 (file not found) and 403 (permission denied). If you’re talking to web APIs you might also see 500, which is a generic failure code (and thus not very helpful).  
+
+You can automatically throw a warning or raise an error if a request did not succeed.  
+
+```{r}
+warn_for_status(r)
+stop_for_status(r)
+```
+
+I highly recommend using one of these functions whenever you’re using httr inside a function (i.e. not interactively) to make sure you find out about errors as soon as possible.  
+
+#### The body
+There are three ways to access the body of the request, all using `content()`.  
+- `content(r, "text)` accesss the body as a character vector.  
+
+```{r}
+r <- GET("http://httpbin.org/get")
+content(r, as = "text")
+```
+
+httr will automatically decode content from the server using the encoding supplied in the content-type HTTP header. Unfortunately you can’t always trust what the server tells you, so you can override encoding if needed.  
+
+If you're having problems figuring out what the correct encoding should be, try `stringi::stri_enc_detect(content(r, "raw"))`.  
+
+
+- For non-text requests, you can access the body of the request as a raw vector.  
+```{r}
+content(r, as = "raw")
+```
+
+This is exactly the sequence of bytes that the web server sent, so this is the highest fidelity way of saving files to disk.  
+
+- httr provides a number of default parsers for common file types.  
+
+```{r}
+content(r, "parsed") %>% str
+```
+
+These are convenient for interactive usage, but if you’re writing an API wrapper, it’s best to parse the text or raw content yourself and check it is as you expect.  
+
+#### The headers
+Access response headers with `headers()`  
+
+```{r}
+headers(r)
+```
+
+http headers are case insensitive.  
+
+```{r}
+headers(r)$date
+headers(r)$DATE
+```
+
+#### Cookies
+You can access cookies in a similar way.  
+```{r}
+r <- GET(url = "http://httpbin.org/cookies/set", query = list(a = 1))
+cookies(r)
+```
+
+Cookies are automatically persisted between requests to the same domain.  
+
+```{r}
+r <- GET(url = "http://httpbin.org/cookies/set", query = list(b = 1))
+cookies(r)
+```
+
+#### The request
+Like the response, the request consists of three pieces: a status line, headers and body. The status line defines the http method (GET, POST, DELETE, etc) and the url. You can send additional data to the server in the url (with the query string), in the headers (including cookies) and in the body of `POST()`, `PUT()` and `PATCH()` requests.  
+
+##### The ur query string
+A common way of sending simple key-value pairs to the server is the query string.  e.g. `http://httpbin.org/get?key=val`. httr allows you to provide these arguments as a named list with the `query` argument. For example, if you wanted to pass `key1=value1` and `key2=value2` to `http://httpbin.org/get` you could do.  
+
+```{r}
+r <- GET("http://httpbin.org/get", 
+         query = list(key1 = "value1", key2 = "values"))
+content(r)$args
+```
+
+Any `NULL` elements are automatically dropped from the list, and both keys and values are escaped automatically.  
+
+```{r}
+r <- GET(url = "http://httpbin.org/get", 
+         query = list(key1 = "value1", key2 = "value2", key = NULL))
+content(r)$args
+```
+
+##### Custom headers
+You can add custom headers to a request with `add_headers()`.  
+
+```{r}
+r <- GET("http://httpbin.org/get", add_headers(Name = "hadley"))
+content(r)$header %>% str
+```
+
+Note that `content(r)$header` retrives the headers that httpbin received. `headers(r)` gives the headers that it sent back in its response.  
+
+#### Cookies
+Cookies are simple key-value pairs like the query string, but they persist across multiple requests in a session (because they're sent back and forth every time). To send your own cookies to the server, use `set_cookies()`.  
+
+```{r}
+r <- GET("http://httpbin.org/cookies", set_cookies("MeWant" = "cookies"))
+content(r)$cookies
+```
+
+Note that this response includes the `a` and `b` cookies that were added by the server earlier.  
+
+
+#### Request body
+When `POST()`ing, you can include data in the `body` of the request. httr allows you to supply this in a number of different ways. The most common way is named list.  
+
+```{r}
+r <- POST("http://httpbin.org/post", body = list(a = 1, b = 2, c = 3))
+```
+
+You can use the `encode` argument to determine how this data is sent to the server.  
+
+```{r}
+url <- "http://httpbin.org/post"
+body <- list(a = 1, b = 2, c = 3)
+
+r <- POST(url, body = body, encode = "form", verbose = T)
+r <- POST(url, body = body, encode = "multipart")
+r <- POST(url, body = body, encode = "json")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
