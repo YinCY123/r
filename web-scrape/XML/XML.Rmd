@@ -1,0 +1,92 @@
+---
+title: "XML"
+author: "yincy"
+date: "12/27/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Chapter 1 Introduction
+```{r}
+- `readHTMLTable()`  
+- `xmlToList()`  
+- `xmlToDataFrame()`  
+- `getHTMLLinks()`  
+- `xmlParse()`  
+- `htmlParse()`  
+- `xmlRoot()`  
+- `xmlChildren()`  
+- `xmlAttrs()`  
+- `xmlGetAttr()`  
+
+html <- "/home/yincy/Downloads/XML/List of countries and dependencies by population - Wikipedia.html"
+pop <- readHTMLTable(doc = html)
+sapply(pop, nrow)
+pop <- readHTMLTable(doc = html, which = 1)
+
+xml <- "/home/yincy/git/Data/KEGG/pathways/mouse/mmu00010.xml"
+mmu00010 <- xmlParse(file = xml)
+mmu00010 %>% xmlRoot() %>% class()
+```
+
+```{r}
+doc <- xmlParse(file = "exampleData/kiva_lender.xml")
+doc %>% class()
+doc %>% docName()
+
+
+lendersNode <- xmlRoot(doc)[["lenders"]]
+lendersNode %>% class()
+xmlName(lendersNode)
+xmlAttrs(lendersNode)
+xmlChildren(lendersNode)
+xmlValue(lendersNode)
+xmlSize(lendersNode)
+xmlChildren(lendersNode) %>% length()
+lendersNode %>% length()
+
+sapply(xmlChildren(lendersNode), 
+       FUN = function(node){xmlValue(node[["occupation"]])})
+```
+
+```{r}
+lenders <- lendersNode["lender"]
+lenders %>% class()
+lenders %>% sapply(FUN = function(node){xmlChildren(node) %>% xmlSize}) %>% table
+```
+
+```{r}
+lender1 <- lenders[[1]]
+lender1 %>% names() # the names of the children nodes
+lender1 %>% xmlName() # the root node name
+```
+
+```{r}
+doc <- xmlParse(file = "exampleData/kiva_lender.xml")
+lendersNode <- xmlRoot(doc)[["lenders"]]
+lendersNode %>% class()
+lendersNode %>% xmlSize()
+lendersNode[[1]]
+```
+
+```{r}
+template_id <- sapply(xmlChildren(lendersNode), 
+                      FUN = function(node){
+                          xmlValue(node[["image"]][["template_id"]])
+                      })
+
+template_id %>% table(useNA = "ifany")
+```
+
+
+
+
+
+
+
+
+
+
