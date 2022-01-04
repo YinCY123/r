@@ -4,7 +4,6 @@
 
 # ignore generated html file
 *.html
-*.xml
 
 # ignore .zip .gz .tar file
 *.zip

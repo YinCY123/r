@@ -73,13 +73,94 @@ lendersNode %>% xmlSize()
 lendersNode[[1]]
 ```
 
-```{r}
-template_id <- sapply(xmlChildren(lendersNode), 
-                      FUN = function(node){
-                          xmlValue(node[["image"]][["template_id"]])
-                      })
 
-template_id %>% table(useNA = "ifany")
+# Predicate
+The syntax of the predicate  
+```
+[logical-condition]
+```
+
+These conditions can be unary or binary operations.  
+
+```
+# unary
+Cube[@currency] # Cube contain a currency attribute
+Cube[not(@currency)]
+
+
+# binary
+Cube[@urrency = "USD"] 
+Cube[@rate > 25]
+```
+In the case of comparing the rate, XPath coerces the value of the attribute from a string to a number for us. There are `number()` functions in XPath to do this explicitly.  
+
+## Boolean operation in the predicate
+- `and`  
+- `or`  
+- `not()`  
+- `true()`  
+- `false()`  
+
+
+## number functions in predicate
+- `number()`  
+- `floor()`  
+- `ceiling()`  
+- `round()`  
+
+
+## XPath Functions
+
+|**Function**|**Input**|**Return Value**|
+|:--|:--|:--|
+|`last()`|node|Number of elements in the context node-set.|
+|`position()`|node|Position of the context node within the node-set.|
+|`count()`|node|Number of elements in the node-set.|
+|`id()`|node|Element with id matching the input string.|
+|`name()`|node|Name of the first node in the node-set.|
+|`namespace-uri()`|node|Namespace of the context node or the first node in the node-set.|
+|`concat()`|string|One string that concatenates the strings provided as input arguments.|
+|`starts-with()`|string|true if the first string passed to the function begins with the second string. For example, starts-with(@fileref, ’Images/’)|
+|`contains()`|string|true if the first string contains the second.|
+|`substring()`|string|Portion of the string starting at the first value for a length of the second value|
+|`substring-after()`|string|Portion of the first string that appears after the second string.|
+|`substring-before()`|string|Portion of the first string that appears before the second string.|
+|`string-length()`|string|Number of characters in the string.|
+|`normalize-space()`|string|String with leading and trailing whitespace stripped and reduced if the second string starts with the first string.|
+|`translate()`|string|Original string with the portion of the string starting at the first value for a length of the second value. For example, to change a,c,g and t to A,C,G and T respectively, we use `translate('acgt', 'ACGT', string(.))`.|  
+
+
+## XPath arithmetic operators
+- `+`  
+- `-`  
+- `*`  
+- `/`  
+- `mod(%)`  
+
+
+
+# Using predicate to filtering nodes
+```{r}
+doc <- xmlParse("exampleData/kiva_lender.xml")
+
+getNodeSet(doc = doc, 
+           path = "//lender[number(./loan_count/text()) > 0 and occupation = 'lawyer']") 
+
+getNodeSet(doc = doc, 
+           path = "//lender[./loan_count/text() > 0 and occupation = 'lawyer']")
+
+getNodeSet(doc = doc, 
+           path = "//lender[./loan_count/text() > 0 and occupation = 'lawyer'][1]")
+
+getNodeSet(doc = doc, 
+           path = "//lender[./loan_count/text() > 0 and occupation = 'lawyer']")
+
+# combine multiple query
+query <- "//lender[./loan_count/text() > 0 and occupation = 'lawyer'] | //lender[./loan_count > 200 and occupation = 'Programmer']"
+
+getNodeSet(doc = doc, 
+           path = query)
+# the nodes will be returned in the document order
 ```
 
 ```{r}
@@ -265,7 +346,70 @@ xpathSApply(doc = mmu00010, path = "//entry", fun = xmlGetAttr, name = "name")
 
 
 
+```{r}
+root <- xmlParse("exampleData/eurofxref-hist.xml") %>% xmlRoot()
+getNodeSet(root, 
+           path = "//ns:Cube[@rate > 25 and position() = 2]", 
+           namespaces = c(ns = "http://www.ecb.int/vocabulary/2002-08-01/eurofxref")) %>% 
+  xmlSize()
 
+getNodeSet(doc = root, 
+           path = "//ns:Cube[@currency = 'JPY']", 
+           namespaces = c(ns = "http://www.ecb.int/vocabulary/2002-08-01/eurofxref")) %>% 
+  sapply(X = ., 
+         FUN = xmlGetAttr, 
+         name = "rate") 
+
+currencies <- c("USD", "JPY", "SGD")
+q <- sprintf(fmt = "//ns:Cube[@currency = '%s']/@rate", 
+                      currencies)
+ns = getDefaultNamespace(root)[[1]]$uri
+
+exRates <- lapply(q, 
+                  FUN = function(q){as.numeric(getNodeSet(root, path = q, namespaces = c(ns = ns)))})
+
+structure(exRates, name = currencies) %>% as.data.frame(col.names = currencies)
+```
+
+
+```{r}
+getNodeSet(kiva, "//lender[./uid = 'myron']")
+```
+
+
+XPath ignores white space (blank spaces and new lines) within a location step and between steps which allows us to format the expressions freely.  
+
+
+# XPath axis
+- `child`  
+- `attribute`  
+- `parent` or `..`  
+- `self` or `.`  
+- `descendant`  
+- `descendant-or-self`  
+- `ancestor`  
+- `ancestor-or-self`  
+- `following-sibling`  
+- `preceding-sibling`  
+- `namespace`  
+- `following`: matches all nodes after the current node in terms of the document order.  
+- `preceding`: matches all nodes before the current node in terms of the document order.  
+
+
+# XPath node functions
+- `node()` or `*`: matches any regular node, but not text, comments, attributes, and processing instructions.  
+- `text()`: match text nodes.  
+- `comment()`: match comments node.  
+- `processing-instruction()`: match any processing instruction ndoes.  
+
+
+# XPath boolean operators
+- `=`  
+- `!=`  
+- `>`  
+- `>=`  
+- `<`  
+- `<=`  
 
 
 
