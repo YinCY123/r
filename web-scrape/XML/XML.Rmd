@@ -66,6 +66,7 @@ lender1 %>% xmlName() # the root node name
 
 ```{r}
 doc <- xmlParse(file = "exampleData/kiva_lender.xml")
+
 lendersNode <- xmlRoot(doc)[["lenders"]]
 lendersNode %>% class()
 lendersNode %>% xmlSize()
@@ -161,6 +162,188 @@ getNodeSet(doc = doc,
            path = query)
 # the nodes will be returned in the document order
 ```
+
+```{r}
+template_id <- getNodeSet(xmlRoot(doc), 
+           path = "//lender/image/template_id") %>% 
+    xmlValue() 
+template_id %>% table(useNA = "ifany")
+```
+
+```{r}
+doc %>% 
+    xmlRoot() %>% 
+    getSibling(node = xmlRoot(doc)[["lenders"]][[1]], after = T)
+```
+
+The `xmlAncestors()` function walks the chain of parents to the top of the document and returns a list of those ancestor nodes. The first will be the root node.  
+
+```{r}
+node1 <- doc %>% xmlRoot() %>% .[[2]] %>% .[[1]]
+node1 %>% xmlAncestors() %>% .[[1]] %>% xmlName()
+```
+
+```{r}
+getSibling(node = node1, after = T)
+```
+
+The `xmlParse()` function in R by default returns a tree structure which can be treated conceptually as a list of lists, each node in the tree can be treated as a list of its children. Each node also has a name and attributes.  
+
+```{r}
+doc <- xmlParse("exampleData/simple.xml")
+root <- xmlRoot(doc)
+node1_1 <- root[[1]][[1]]
+node1_1 <- root[["b"]][["c"]]
+node1_1 %>% xmlParent()
+node1_1 %>% getSibling(after = T)
+```
+
+The `xmlValue()` function is generic so it works on different types of nodes. For nodes that are mixtures of text content and other nodes, `xmlValue()` returns a character string that concatenates the text content of all the node's descendants.  
+
+
+```{r}
+htmlParse("<ol><li>First<li>Second<li>Third</ol>")
+```
+
+```{r}
+doc %>% class()
+otype(doc)
+s3_methods_class("XMLInternalDocument")
+```
+
+
+# XPath
+```{r}
+doc = htmlParse("http://www.omegahat.net/")
+doc %>% class()
+listOfNodes <- getNodeSet(doc = doc, 
+                          path = "//a[@href]")
+urls <- sapply(listOfNodes, 
+               FUN = xmlGetAttr, 
+               name = "href")
+
+urls %>% head(10)
+```
+
+```{r}
+xpathSApply(doc = doc, 
+            path = "//a[@href]", 
+            fun = xmlGetAttr, 
+            name = "href") %>% 
+    head
+```
+
+```{r}
+mmu00010 <- xmlParse("/home/yincy/git/Data/KEGG/pathways/mouse/mmu00010.xml")
+
+mmu00010 %>% xmlRoot()
+entries <- getNodeSet(doc = xmlRoot(mmu00010), 
+                       path = "/pathway/entry")
+
+relations <- getNodeSet(doc = xmlRoot(mmu00010), 
+                         path = "/pathway/relation")
+
+reactions <- getNodeSet(doc = xmlRoot(mmu00010), 
+                        path = "/pathway/reaction")
+
+
+entries_df <- sapply(entries[1:2], FUN = function(node){
+    id = xmlGetAttr(node, name = "id") 
+    name = xmlGetAttr(node, name = "name")
+    type = xmlGetAttr(node, name = "type")
+    reaction = xmlGetAttr(node, name = "reaction", default = "")
+})
+
+entry_parse <- function(nodes, ...){
+    id = sapply(nodes, FUN = xmlGetAttr, name = "id")
+    name = sapply(nodes, FUN = xmlGetAttr, name = "name")
+    type = sapply(nodes, FUN = xmlGetAttr, name = "type")
+    reaction = sapply(nodes, FUN = xmlGetAttr, name = "reaction", default = NA)
+    
+    df <- data.frame(entry_id = id, 
+                     name = name, 
+                     type = type, 
+                     reaction = reaction)
+    
+    return(df)
+}
+
+entries_df <- entry_parse(nodes = entries)
+
+
+relation_parse <- function(nodes, ...){
+    entry1 = sapply(nodes, FUN = xmlGetAttr, name = "entry1")
+    entry2 = sapply(nodes, FUN = xmlGetAttr, name = "entry2")
+    type = sapply(nodes, FUN = xmlGetAttr, name = "type")
+    subtype = sapply(nodes, FUN = function(node){
+        xmlGetAttr(xmlChildren(node)[[1]], name = "name")
+        })
+    
+    subtype_value = sapply(nodes, FUN = function(node){
+        xmlGetAttr(xmlChildren(node)[[1]], name = "value")
+    })
+    
+    df <- tibble(entry1 = entry1, 
+                     entry2 = entry2, 
+                     type = type, 
+                     subtype = subtype, 
+                     subtype_value = subtype_value)
+    return(df)
+}
+
+relations_df <- relation_parse(nodes = relations)
+```
+
+```{r}
+nm <- xmlParse("exampleData/eurofxref-hist.xml.gz")
+nm %>% xmlRoot() %>% .[[3]] %>% .[[1]]
+```
+
+```{r}
+nm %>% class()
+
+xpathSApply(doc = nm, 
+            path = "//Cube[@currency = 'USD']", 
+            fun = xmlGetAttr, 
+            name = "rate", 
+            default = NA)
+
+getNodeSet(doc = nm, path = "//Cube[@currency = 'USD']") %>% 
+    sapply(FUN = xmlGetAttr, name = "rate")
+
+xpathSApply(doc = mmu00010, path = "//entry", fun = xmlGetAttr, name = "name")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ```{r}
