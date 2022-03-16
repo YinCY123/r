@@ -1,0 +1,179 @@
+---
+title: "08 regression"
+author: "yincy"
+date: "3/13/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+|**Type of regression**|**Typical use**|
+|:--|:--|
+|Simple linear|Predicting a quantitative response variable from a quantitative explanatory variable.|
+|Polynomial|Predicting a quantitative response variable from a quantitative explanatory variable, where the relationship is modeled as an nth order polynomial.|
+|Multiple linear|Predicting a quantitative response variable from two or more explanatory variables.|
+|Multilevel|Predicting a response variable from data that have a hierarchical structure (for example, students within classrooms within schools). Also called hierarchical, nested, or mixed models.
+Predicting|
+|Multivariate|Predicting more than one response variable from one or more explanatory variables.|
+|Logistic|Predicting a categorical response variable from one or more explanatory variables.|
+|Poisson|Predicting a response variable representing counts from one or more explanatory variables.|
+|Cox proportional hazards|Predicting time to an event (death, failure, relapse) from one or more explanatory variables.|
+|Time-series|Modeling time-series data with correlated errors.|
+|Nonlinear|Predicting a quantitative response variable from one or more explanatory variables, where the form of the model is nonlinear.|
+|Nonparametric|Predicting a quantitative response variable from one or more explanatory variables, where the form of the model is derived from the data and not specified a priori.|
+|Robust|Predicting a quantitative response variable from one or more explanatory variables using an approach that’s resistant to the effect of influential observations.|
+
+
+**To properly interpret the coefficients of the OLS (ordinary least squares) model, you must satisfy a number of statistical assumptions**  
+
+1. **Normality**—For fixed values of the independent variables, the dependent variable is normally distributed.  
+2. **Independence**—The Yi values are independent of each other.  
+3. **Linearity**—The dependent variable is linearly related to the independent variables.  
+4. **Homoscedasticity**—The variance of the dependent variable doesn’t vary with the levels of the independent variables.  
+
+
+**Symbols commonly used in R formulas**  
+
+|**Symbol**|**Usage**|
+|:--|:--|
+|~|Separates response variables on the left from the explanatory variables on the right. For example, a prediction of y from x, z, and w would be coded y ~ x + z + w.|
+|+|Separates predictor variables.|
+|:|Denotes an interaction between predictor variables. A prediction of y from x, z and the interaction between x and z could be coded y ~ x + z + x:z|
+|*|A shortcut for denoting all possible interactions. The code y ~ x* z * w expands to y ~ x + z + w + x:z + x:w + z:w + x:z:w|
+|^|Denotes interactions up to a specified degree. The code y ~ (x + z + w)^2 expands to y ~ x + z + w + x:z + x:w + z:w|
+|.|A placeholder for all other variables in the data frame except the dependent variable. For example, if a data frame contained the variables x, y, z, and w, then the code y ~ . could expand to y ~ x + z + w|
+|-| A minus sign removes a variable from the equation. For example, y ~ (x + z + w)^2 - x:w expands to y ~x + z + w + x:z + z:w|
+|-1|Suppresses the intercept. For example, the formular y ~ x -1 fits a regression of y on x, and forces the line through the origin at x = 0|
+|I()|Elements within the parentheses are interpreted arithmetically. For example, y ~ x + (z + w)^2 would expand to y ~ x + z + w + z:w. In contrast, the code y ~ x + I((z + w)^2) would expand to y ~ x + h, where h is a new variable created by squaring the sum of z and w.|
+|function|Mathematical functions can be used in formulas. For example, log(y) ~ x + z + w would predict log(y) for x, z, and w.|
+
+
+
+**Other functions that are useful when fitting linear models**  
+
+|**Function**|**Action**|
+|:--|:--|
+|summary()|Displays detailed results for the fitted model|
+|coefficients()|Lists the model parameters (intercept and slopes) for the model|
+|confint()|Provides confidence intervals for the model parameters (95% by default)|
+|fitted()|Lists the predicted values in a fitted model|
+|residuls()|Lists the residul values in a fitted model|
+|anova()|Generates ANOVA table for a fitted model, or an ANOVA table comparing two or more fitted models|
+|vcov()|Lists the covariance matrix for model parameters|
+|AIC()|Prints Akaik's Information Criterion|
+|plot()|Generates diagnostic plots for evaluating the fit of a model|
+|predict()|Uses a fitted model to predict response values for a new dataset|
+
+
+When the regression model contains one dependent variable and one independent variable, the approach is called simple linear regression.  
+
+When there’s one predictor variable but powers of the variable are included (for example, X, X2, X3), it’s called polynomial regression.  
+
+When there’s more than one predictor variable, it’s called multiple linear regression.   
+
+### Simple linear regression
+```{r}
+fit <- lm(weight ~ height, data = women)
+summary(fit)
+```
+
+```{r}
+options(digits = 3)
+women$weight
+fitted(fit)
+residuals(fit)
+```
+
+```{r}
+plot(women$height, women$weight)
+abline(fit)
+```
+
+
+### Polynomial regression
+```{r}
+fit2 <- lm(weight ~ height + I(height^2), data = women)
+summary(fit2)
+```
+
+```{r}
+plot(women$height, women$weight)
+lines(women$height, fitted(fit2))
+```
+
+
+### Multiple linear regression
+```{r}
+states <- as.data.frame(state.x77[, c("Murder", "Population", "Illiteracy", "Income", "Frost")])
+cor(states)
+```
+
+```{r}
+library(car)
+car::scatterplotMatrix(states, smooth = F, main = "Scater Plot Matrix")
+```
+
+```{r}
+states <- as.data.frame(state.x77[, c("Murder", "Population", "Illiteracy", "Income", "Frost")])
+fit <- lm(Murder ~ Population + Illiteracy + Income + Frost, data = states)
+summary(fit)
+```
+
+
+### Multiple linear regression with interactions
+```{r}
+fit <- lm(mpg ~ hp + wt + hp:wt, data  = mtcars)
+summary(fit)
+```
+
+A significant interaction between two predictor variables tells you that the relationship between one predictor and the response variable depends on the level of the other predictor.  
+
+You can visualize interactions using the effect() function in the effects package.  
+```
+plot(effect(term, mod, ,xlevels), multiline = TRUE)
+```
+
+```{r}
+library(effects)
+library(magrittr)
+
+effect("hp:wt", fit, xlevel = list(wt = c(2.2, 3.2, 4.2))) %>% plot(line = c(1, 2, 3), multiline = T)
+```
+
+
+## Regression diagnostics
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
