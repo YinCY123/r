@@ -57,6 +57,9 @@ setMethod(f = "work",
             print("work method for student class")
           })
 
+person1 %>% class()
+student1 %>% class()
+
 work(person1)
 work(student1)
 ```
@@ -90,13 +93,6 @@ hasMethod(f = "work", signature = "P")
 
 findMethod(f = "work", signature = "Person", where = .GlobalEnv)
 ```
-
-
-
-
-
-
-
 
 
 
