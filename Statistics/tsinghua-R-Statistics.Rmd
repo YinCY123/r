@@ -1,0 +1,65 @@
+---
+title: "tsinghua-R-Statistics"
+author: "yincy"
+date: "3/13/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# 参数与统计量
+参数：参数是对总体特征的数量概括。  
+统计量：统计量是对某一样本的特征的数量概括。
+
+
+# 离散型变量的概率分布
+1. 离散型变量概率分布的均值：$\mu = \sum_{i=1}^{n}(x_{i}) \centerdot P(x_{i})$  
+
+2. 离散型变量概率分布的标准差: $\sigma = \sqrt{\sum_{i=1}^{n}(x_{i} - \mu)^2 \centerdot P(x_{i})}$, 它代表了 X 的每个观测值与均值的平均距离。  
+
+
+# 连续型变量的概率分布
+
+
+
+# 正态分布
+```{r}
+library(ggplot2)
+x1 <- seq(-5, 5, 0.01)
+x2 <- seq(1, 2, 0.01)
+p1 <- dnorm(x1)
+p2 <- dnorm(x2)
+df1 <- data.frame(x = x1, p = p1)
+df2 <- data.frame(x = x2, p = p2)
+ggplot() +
+    geom_line(data = df1, aes(x, p1)) +
+    geom_linerange(aes(x = x, ymin = 0, ymax = p), data = df2, col = "grey40")+
+    scale_x_continuous(name = NULL, breaks = seq(-5, 5, 1), labels = seq(-5, 5, 1)) +
+    scale_y_continuous(name = NULL)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

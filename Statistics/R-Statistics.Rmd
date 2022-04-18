@@ -68,8 +68,6 @@ mean(x, na.rm = T)
 The middle most value in a data series is called the median.  
 
 ```{r}
-?median
-
 x <- c(12,7,3,4.2,18,2,54,-21,8,-5)
 median(x)
 ```
@@ -85,7 +83,7 @@ getmode <- function(v){
     suppressMessages(require(magrittr))
     uniqv <- unique(v)
     # uniqv[which.max(tabulate(match(v, uniqv)))]
-    match(v, uniqv) %>% tabulate() %>% which.max() %>% uniqv[.]
+    match(v, uniqv) %>% table() %>% which.max() %>% uniqv[.]
 }
 
 v <- c(2,1,2,3,1,2,3,4,1,5,5,3,2,3)
@@ -143,9 +141,11 @@ relation
 ```
 
 ```{r}
+library(sloop)
 relation %>% class()
 
 methods(class = "lm")
+s3_methods_class("lm")
 ```
 
 
@@ -160,6 +160,8 @@ coef(relation)
 
 ```{r}
 residuals(relation)
+plot(relation)
+?plot.lm
 ```
 
 **predict() function**  
@@ -191,7 +193,7 @@ $$y = a + b_{1}x_{1} + b_{2}x_{2} + ... + b_{n}x_{n}~$$
 
 
 - **y** is the response variable  
-- **a**, **b**, ..., **b~n~** are the coefficents  
+- **a**, **b**, ..., **b~n~** are the coefficients  
 - **x1**, **x2**, ..., **x~n~** are the predictor variables  
 
 We create the regression model using the `lm()` function in R. The model determines the value of the coefficients using the input data. Next we can predict the value of the response variable for a given set of predictor variables using these coefficients.  
@@ -210,7 +212,7 @@ input %>% head()
 ```{r}
 model <- lm(mpg ~ disp + hp + wt, data = input)
 
-model
+model %>% summary
 ```
 
 ```{r}
@@ -253,9 +255,9 @@ input %>% head()
 ```
 
 ```{r}
-am.data <- glm(formula = am ~ cyl + hp + wt, data = input, family = "binomial")
+am.data <- glm(formula = am ~ cyl + hp + wt, data = input, family = binomial())
 
-am.data
+am.data %>% summary()
 ```
 
 ```{r}
@@ -269,10 +271,6 @@ predict(am.data, newdata = df) %>%
     as.matrix()
 ```
 
-
-```{r}
-summary(am.data)
-```
 
 **conclusion**  
 In the summary as the p-value in the last column is more than 0.05 for the variables "cyl" and "hp", we consider them to be insignificant in contributing to the value of the variable "am". Only weight (wt) impacts the "am" value in this regression model.   
@@ -300,10 +298,11 @@ rnorm(n, mean, sd)
 This function gives height of the probability distribution at each point for a given mean and standard deviation.  
 
 ```{r}
-x <- seq(-10, 10, by = 0.1)
-y <- dnorm(x, mean = 2.5, sd = 0.5)
+x <- seq(-5, 5, by = 0.1)
+y <- dnorm(x, mean = 0, sd = 1)
 
 plot(x, y, type = "b", cex = 0.7, pch = 19)
+curve(dnorm, from = -5, to = 5, add = T)
 ```
 
 ### pnorm  
@@ -325,8 +324,8 @@ curve(f, from = -10, to = 10, add = T)
 This function **takes the probability value and gives a number whose cumulative value matches the probability value**.  
 
 ```{r}
-x <- seq(0, 1, by = 0.02)
-y <- qnorm(x, mean = 2, sd = 1)
+x <- seq(0, 1, by = 0.01)
+y <- qnorm(x, mean = 0, sd = 1)
 
 plot(x, y, pch = 19, cex = 0.5)
 ```
