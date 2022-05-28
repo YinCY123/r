@@ -1,0 +1,110 @@
+---
+title: "janitor"
+author: "yincy"
+date: "4/30/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Major functions
+## clean
+### clean data.frame names with `clean_names()`
+It works in a `%>%` pipeline, and handles problematic variable names, especially those that are so well-preserved by `readxl::read_excel()` and `readr::read_csv()`.
+
+- Parses letter cases and separators to a consistent format.  
+    + Default is to snake_case, but other cases like camelCase are available  
+    
+- Handles special characters and spaces  
+- Appends numbers to duplicated names  
+- Converts "%" to "percent" and "#" to "number" to retain meaning  
+- Spacing (or lack thereof) around numbers is preserved  
+
+```{r}
+test_df <- as.data.frame(matrix(ncol = 6))
+names(test_df) <- c("firstName", 
+                    "abc@!*", 
+                    "% successful (2009)", 
+                    "REPEAT VALUE", 
+                    "REPEAT VALUE", 
+                    "")
+```
+
+Clean the variable names, returning a data.frame:  
+
+```{r}
+library(janitor)
+
+test_df %>% 
+    clean_names
+```
+
+Compare to what base R produces
+
+```{r}
+make.names(names(test_df))
+```
+
+This function is powered by the underlying exported function `make_clean_names()`, which accepts and returns a character vector of names (see below). This allows for cleaning the names of any object, not just a data.frame. clean_names() is retained for its convenience in piped workflows, and can be called on an `sf` simple features object or a `tbl_graph` `tidygraph` object in addition to a data.frame.  
+
+
+# Do those data.frames actually contain the same columns?
+## Check with `compare_df_cols()`
+For cases when you are given a set of data files that should be identical, and you wish to read and combine them for analysis. But then `dplyr::bind_rows()` or `rbind()` fails, because of different columns or because the column classes don’t match across `data.frames`.  
+
+`compare_df_cols()` takes unquoted names of `data.frames / tibbles`, or a list of `data.frames`, and returns a summary of how they compare. See what the column types are, which are missing or present in the different inputs, and how column types differ.
+
+```{r}
+df1 <- data.frame(a = 1:2, 
+                  b = c("big", "small"))
+df2 <- data.frame(a = 10:12, 
+                  b = c("medium", "small", "big"), 
+                  c = 0, 
+                  stringsAsFactors = T)
+df3 <- df1 %>% 
+    dplyr::mutate(b = as.character(b))
+compare_df_cols(df1, df2, df3)
+```
+
+```{r}
+compare_df_cols(df1, df2, df3, return = "mismatch")
+```
+
+```{r}
+compare_df_cols(df1, df2, df3, return = "mismatch", bind_method = "rbind")
+```
+
+`compare_df_cols_same()` returns `TRUE` or `FALSE` indicating if the `data.frames` can be successfully row-bound with the given binding method:
+
+```{r}
+compare_df_cols_same(df1, df3)
+compare_df_cols_same(df2, df3)
+```
+
+
+# Exploring
+## `tabyl()` - a better version of `table()`
+`tabyl()` is a tidyverse-oriented replacement for `table()`. It counts combinations of one, two, or three variables, and then can be formatted with a suite of `adorn_*` functions to look just how you want. For instance:
+
+```{r}
+mtcars %>% 
+    tabyl(gear, cyl) %>% 
+    adorn_totals("col") %>% 
+    adorn_percentages(denominator = "row") %>% 
+    adorn_pct_formatting(digits = 2) %>% 
+    adorn_ns() %>% 
+    adorn_title()
+```
+
+
+
+
+
+
+
+
+
+

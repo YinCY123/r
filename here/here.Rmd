@@ -1,0 +1,42 @@
+---
+title: "here"
+author: "yincy"
+date: "4/24/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# declare the location of the current script
+```{r}
+here::i_am("here.Rmd")
+library(here)
+here()
+```
+
+# Use project-relative paths
+```{r}
+readr::read_csv(file = here("data", "penguins.csv"), 
+                col_types = list(.default = readr::col_guess()), 
+                n_max = 3)
+```
+
+```{r}
+readr::read_csv(file = here("data/penguins.csv"), 
+                col_types = list(.default = readr::col_guess()), 
+                n_max = 3)
+```
+
+```{r}
+dr_here()
+```
+
+
+
+
+
+
+
+
