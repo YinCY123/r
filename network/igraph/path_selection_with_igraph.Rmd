@@ -35,6 +35,7 @@ net
 ```
 
 ```{r}
+set.seed(111)
 plot(net, 
      edge.width = E(net)$x / 4)
 ```

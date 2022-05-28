@@ -181,7 +181,7 @@ simplify graph to remove loops and multiple edges between the same nodes
 `edge.attr.comb` possible options: sum, mean, prod, min, max, first, last and ignore.  
 `ignore`: the attributes be disregarded and dropped  
 ```{r}
-g4s <- simplify(graph = g4, 
+g4s <- igraph::simplify(graph = g4, 
                 remove.loops = TRUE,
                 remove.multiple = TRUE,
                 edge.attr.comb = c(type = "ignore", weight = "sum"))
@@ -397,17 +397,19 @@ V(net)
 
 ```{r}
 E(net)$type
+print(replicate(50, "-") %>% str_c(collapse = ""))
 V(net)$media
 ```
 
 ```{r}
 edge_attr(net)
-print("-------------------------")
+print(replicate(50, "-") %>% str_c(collapse = ""))
 vertex_attr(net)
 ```
 
 
 ```{r}
+library(RColorBrewer)
 par(mar = c(0, 0 , 0, 0))
 plot(net,
      edge.arrow.size = 0.4,
@@ -423,7 +425,7 @@ plot(net,
 ```
 
 ```{r}
-net <- simplify(graph = net, 
+net <- igraph::simplify(graph = net, 
                 remove.loops = TRUE, 
                 remove.multiple = F,
                 edge.attr.comb = list(weight = "sum", type = "first"))
@@ -452,11 +454,18 @@ To transform a one-mode network matrix into an igraph object, use instead `graph
 
 ```{r}
 colors <- c("gray50", "tomato", "gold")
+V(net) %>% length()
+E(net) %>% length()
 V(net)$color <- colors[V(net)$media.type]
 edge.start <- ends(net, es = E(net), names = F)[,1]
+edge.start %>% unique() %>% length()
 edge.col <- V(net)$color[edge.start]
 
-plot(net, edge.color = edge.col, edge.curved = 0.1, vertex.label = NA)
+plot(net, 
+     edge.color = edge.col, 
+     edge.curved = 0.1, 
+     vertex.label = NA, 
+     edge.arrow.size = 0.4)
 ```
 
 By default, the coordinates of the plots are rescaled to the [-1,1] interval for both x and y. You can change that with the parameter `rescale=FALSE` and rescale your plot manually by multiplying the coordinates by a scalar.  
@@ -502,7 +511,6 @@ for(layout in layouts){
 ```
 
 
-
 ```{r}
 net.m <- net - E(net)[E(net)$type == "hyperlink"]
 net.h <- net - E(net)[E(net)$type == "mention"]
@@ -521,10 +529,9 @@ plot(net.m, vertex.color = "orange", main = "Tie:mention", vertex.label = NA, re
 ### density  
 ```{r}
 edge_density(net, loops = F)
-```
 
-```{r}
-ecount(net) / (vcount(net)*(vcount(net) - 1))
+ecount(net) / (vcount(net)*(vcount(net) - 1)) # for a directed network
+ecount(net) / (vcount(net) * (vcount(net)))/vcount(net) # for undirected
 ```
 
 ### Reciprocity: the proportion of reciprocated ties (for a directed network)  
@@ -551,7 +558,7 @@ transitivity(net, type = "local")
 triad.census(net) # for directed networks  
 ```
 
-### Diameter   
+### Diameter  
 A network diameter is the longest geodesic distance (length of the shortest path between two nodes) in the network.     
 
 In igraph, `diameter()` returns the distance, while `get_diameter()` returns the nodes along the first found path of that distance.  
@@ -588,15 +595,18 @@ plot(net,
      edge.arrow.mode = 0, 
      vertex.size = V(net)$audience.size, 
      layout = layout_with_lgl,
-     rescale = T)
+     rescale = T, 
+     vertex.label = NA)
 ```
 
 
 ### Node degrees  
 ```{r}
 deg <- degree(net, mode = "all")
-plot(net, vertex.size = deg*3,
-     vertex.label = NA)
+plot(net, 
+     vertex.size = deg*3,
+     vertex.label = NA, 
+     edge.arrow.size = 0.4)
 ```
 
 ```{r}
@@ -607,7 +617,13 @@ hist(deg, breaks = 1:vcount(net)-1, main = "Histogram of node degree")
 ```{r}
 deg.dist <- degree_distribution(graph = net, cumulative = TRUE, mode = "all")
 
-plot(x = 0:max(deg), y = 1-deg.dist, pch = 19, cex = 1.2, col = "orange", xlab = "Degree")
+plot(x = 0:max(deg), 
+     y = 1-deg.dist, 
+     pch = 19, 
+     cex = 1.2, 
+     col = "orange", 
+     xlab = "Degree", 
+     type = "b")
 ```
 
 
@@ -618,7 +634,7 @@ The centralization functions return `res` - vertex centrality, centralization, a
 
 The centrality function can run on a subset of nodes (set with the vids parameter).  
 
-degree: number of ties  
+**degree**: number of ties  
 ```{r}
 degree(net, mode = "in")
 ```
@@ -628,22 +644,28 @@ centr_degree(net, mode = "in", normalized = TRUE)
 ```
 
 
-Closeness:(centrality based on distance to others in the graph)  
+**Closeness**:(centrality based on distance to others in the graph)  
 ```{r}
 closeness(net, mode = "all", weights = NA)
 centr_clo(net, mode = "all", normalized = T)
 ```
 
+```{r}
+plot(net, 
+     vertex.label = NA, 
+     vertex.size = centr_clo(net, mode = "all")$res * 30, 
+     edge.arrow.size = 0.4)
+```
 
-Eigenvector: centrality proportional to the sum of connection centralities  
+
+**Eigenvector**: centrality proportional to the sum of connection centralities  
 ```{r}
 eigen_centrality(net, directed = T, weights = NA)
 centr_eigen(net, directed = T, normalized = T)
 ```
 
 
-
-Betweenness: centrality based on a broker position connecting others  
+**Betweenness**: centrality based on a broker position connecting others  
 ```{r}
 betweenness(net, directed = T, weights = NA)
 edge_betweenness(net, directed = T, weights = NA)
@@ -666,14 +688,16 @@ plot(net,
      main = "Hubs",
      vertex.label = V(net)$name,
      edge.arrow.size = 0.5, 
-     vertex.label.dist = 1.8)
+     vertex.label.dist = 0, 
+     vertex.frame.color = "white")
 
 plot(net, 
      vertex.size = as*20, 
      main = "Authorities",
      vertex.label = V(net)$name,
      edge.arrow.size = 0.5, 
-     vertex.label.dist = 1.8)
+     vertex.label.dist = 0, 
+     vertex.frame.color = "white")
 ```
 
 
@@ -723,17 +747,19 @@ news.path <- shortest_paths(graph = net,
 
 ```{r}
 ecol <- rep("gray80", ecount(net))
-ecol[unlist(news.path$epath)] <- "orange"
-
+# ecol[unlist(news.path$epath)] <- "orange"
+ecol[news.path$epath[[1]]] <- "orange"
 ew <- rep(2, ecount(net))
 ew[unlist(news.path$epath)] <- 4
 
 
 vcol <- rep("gray70", vcount(net))
-vcol[unlist(news.path$vpath)] <- "gold"
+# vcol[unlist(news.path$vpath)] <- "gold"
+vcol[news.path$vpath[[1]]] <- "gold"
 
 vlab <- V(net)$media
-vlab[setdiff(x = 1:vcount(net), y = unlist(news.path$vpath))] <- NA
+# vlab[setdiff(x = 1:vcount(net), y = unlist(news.path$vpath))] <- NA
+vlab[setdiff(V(net), news.path$vpath[[1]])] <- NA
 # not selected vertices do not display label
 
 par(mar = c(0, 0, 0, 0))
@@ -751,17 +777,20 @@ plot(net,
 Identify the edges going into or out of a vertex, for instance the WSJ. For a single node, use `incident()`, for multiple nodes use `incident_edges()`.  
 
 ```{r}
-inc.edges <- incident(graph = net, 
-                      v = V(net)[media == "Wall Street Journal"], 
+inc.edges <- incident_edges(graph = net, 
+                      v = V(net)[media %in% c("Wall Street Journal", "NY Times")], 
                       mode = "out")
 
 ecol <- rep("gray80", ecount(net))
-ecol[unlist(inc.edges)] <- "orange"
+ecol[c(inc.edges[[1]], inc.edges[[2]])] <- "orange"
+ecol %>% table()
+vertex_attr(net)
 ```
 
 ```{r}
 vcol <- rep("gray40", vcount(net))
-vcol[V(net)$media == "Wall Street Journal"] <- "gold"
+vcol[V(net)$media %in% c("Wall Street Journal", "NY Times")] <- "tomato"
+vcol %>% table()
 
 par(mar = c(0, 0, 0, 0))
 plot(net, 
@@ -781,8 +810,8 @@ vcol <- rep("gray40", vcount(net))
 vcol[neigh.nodes] <- "tomato"
 vcol[V(net)$media  == "Wall Street Journal"] <- "orange"
 vlab <- V(net)$media
-vlab[setdiff(x = 1:vcount(net), y = unlist(neigh.nodes))] <- NA
-
+# vlab[setdiff(x = 1:vcount(net), y = unlist(neigh.nodes))] <- NA
+vlab[setdiff(V(net), neigh.nodes)] <- NA
 plot(net, 
      vertex.color = vcol,
      vertex.label = vlab,
@@ -821,22 +850,17 @@ net.sym <- as.undirected(graph = net,
 ```{r}
 sub_graph <- cliques(net.sym) # list of cliques  
 sub_graph %>% length()
-```
-
-
-```{r}
-sapply(cliques(net.sym), length) #cliques size
-```
-
-```{r}
-largest.cliques(net.sym) # cliques with max number of nodes
+sapply(sub_graph, length) %>% table()
+largest.cliques(net.sym)
 ```
 
 
 ```{r}
 vcol <- rep("gray80", vcount(net.sym))
-vcol[unlist(largest_cliques(net.sym))] <- "gold"
-plot(as.undirected(net.sym), vertex.label = V(net.sym)$name, vertex.color = vcol)
+vcol[largest_cliques(net.sym)[[1]]] <- "gold"
+plot(as.undirected(net.sym), 
+     vertex.label = V(net.sym)$name, 
+     vertex.color = vcol)
 ```
 
 
@@ -847,6 +871,16 @@ A number of algorithms aim to detect groups that consist of densely connectedd n
 High-betweenness edges are removed sequentially (recalculating at each step) and the best partitioning of the network is selected.  
 ```{r}
 ceb <- cluster_edge_betweenness(net)
+ceb %>% class()
+ceb %>% length()
+sizes(ceb)
+membership(ceb)
+modularity(ceb)
+igraph::crossing(ceb, net)
+merges(ceb)
+algorithm(ceb)
+
+
 dendPlot(ceb, mode = "hclust")
 ```
 
@@ -860,15 +894,6 @@ plot(x = ceb, y = net,
 ```
 
 
-
-```{r}
-class(ceb)
-length(ceb) # number of communities
-membership(ceb) # community membership for each node
-modularity(ceb) # how modular the graph partitioning is
-crossing(ceb, net) # boolean vector: TRUE for edges across communities
-```
-
 High modularity for a partitioning reflects dense connections within communities and sparse connections across communities.  
 
 
@@ -876,6 +901,12 @@ High modularity for a partitioning reflects dense connections within communities
 Assigns node labels, randomizes, than replaces each vertex’s label with the label that appears most frequently among neighbors. Those steps are repeated until each vertex has the most common label of its neighbors.  
 ```{r}
 clp <- cluster_label_prop(graph = net, weights = E(net)$weight)
+clp %>% class()
+clp %>% sizes
+clp %>% modularity()
+igraph::crossing(clp, net)
+membership(clp)
+
 ```
 
 ```{r}
@@ -892,7 +923,12 @@ plot(x = clp,
 **Community detection based on greedy optimization of modularity**  
 ```{r}
 # fast greedy only works for undirected net
-cfg <- cluster_fast_greedy(as.undirected(net), weights = E(net)$weight)
+cfg <- cluster_fast_greedy(as.undirected(net))
+cfg %>% str
+cfg %>% sizes
+cfg %>% modularity()
+cfg %>% membership()
+igraph::crossing(cfg, net)
 ```
 
 ```{r}
@@ -907,16 +943,62 @@ plot(cfg, as.undirected(net, edge.attr.comb = c(weight = "sum", "ignore")),
 
 
 ```{r}
-V(net)$community <- cfg$membership
-colors <- adjustcolor(col = c("gray50", "tomato", "gold", "yellowgreen"), alpha = 0.6)
-plot(net,
-     vertex.color = colors[V(net)$community],
-     edge.arrow.size = 0.3,
-     vertex.label = NA)
+cwt <- cluster_walktrap(graph = as.undirected(net))
+cwt %>% str
+cwt %>% sizes()
+cwt %>% modularity()
+membership(cwt)
 ```
 
 ```{r}
-net
+par(mar = c(0, 0, 0, 0))
+plot(cwt, as.undirected(net, edge.attr.comb = c(weight = "sum", "ignore")), 
+     edge.width = (E(net)$weight %>% scale(center = -2) %>% as.numeric())*5, 
+     EDGE.ARROW.SIZE = 0.2, 
+     edge.color = "grey", 
+     edge.curved = 0.2)
 ```
+
+# K-core decomposition
+```{r}
+kc <- coreness(net, mode = "all")
+kc %>% class()
+cols <- adjustcolor(col = c("gray50", "tomato", "gold", "yellowgreen"), alpha.f = 0.7)
+plot(net, 
+     vertex.size = kc * 6, 
+     vertex.label = kc, 
+     vertex.color = cols[kc], 
+     edge.arrow.size = 0.4)
+```
+
+# Assortativity and Homophily
+Homophily: the tendency of nodes to connect to others who are similar on some variable.  
+
+- `assortativity_nominal()`: is for categorical variables (labels)  
+- `assortativity()` is for ordinal and above variables  
+- `assortativity_degree()` checks assortativity in node degrees  
+
+```{r}
+assortativity_nominal(net, V(net)$media.type, directed = F)
+
+assortativity(net, V(net)$audience.size, directed = F)
+
+assortativity_degree(net, directed = F)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
