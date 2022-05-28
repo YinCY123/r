@@ -52,7 +52,7 @@ class(special_num_2)
 S3 constructor  
 ```{r}
 shape_S3 <- function(side_lengths){
-    structure(list(side_lengths = side_lengths), class = "shape_S3")
+    structure(.Data = list(side_lengths = side_lengths), class = "shape_S3")
 }
 ```
 
