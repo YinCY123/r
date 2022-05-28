@@ -153,11 +153,11 @@ safely_log <- safely(log)
 
 safely_log(10) %>% str
 
-map(c(8:10, "a"), .f = safely(runif)) %>% 
-  map_dbl(.f = function(x) x[[1]] %>% mean)
+map(c(8:10, "a"), .f = safely(runif, otherwise = -1)) %>% 
+  map_dbl(.f = function(x) mean(x[[1]]))
 
 map(c(4:5, "a"), possibly(runif, "NA")) %>% 
-  map_dbl(function(x) x %>% mean)
+  map_dbl(function(x) mean(x))
 
 map(c(4:5, -1), quietly(log)) %>% str
 ```

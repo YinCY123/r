@@ -39,3 +39,49 @@ gg <- ggplot() +
 directlabels::direct.label(gg, method = "top.polygons")
 ```
 
+```{r}
+density.df$mean.lab <- paste0("mean=", density.df$mean)
+gg <- ggplot() +
+  geom_line(aes(observation, density, color = param.fac), data = density.df) +
+  directlabels::geom_dl(aes(observation, density, color = param.fac, label.group = param.fac, label = mean.lab), 
+                        method = "top.polygons", 
+                        data = density.df)
+gg
+```
+
+
+```{r}
+gg <- ggplot() +
+  geom_line(aes(observation, density, color = mean.lab, group = param.fac), 
+            data = density.df) 
+directlabels::direct.label(gg, method = "top.polygons")
+```
+
+
+```{r}
+data(BodyWeight, package = "nlme")
+gg <- ggplot() +
+  geom_line(aes(Time, weight, color = Rat), 
+            data = BodyWeight) +
+  facet_grid(. ~ Diet)
+
+gg
+```
+
+```{r}
+directlabels::direct.label(gg, method = "right.polygons")
+```
+
+```{r}
+gg.wider <- gg + xlim(-10, 70)
+directlabels::direct.label(gg.wider, method = "right.polygons")
+```
+
+```{r}
+directlabels::direct.label(gg.wider, method = "left.polygons")
+```
+
+
+
+
+
