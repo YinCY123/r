@@ -315,37 +315,6 @@ xpathSApply(doc = mmu00010, path = "//entry", fun = xmlGetAttr, name = "name")
 ```
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ```{r}
 root <- xmlParse("exampleData/eurofxref-hist.xml") %>% xmlRoot()
 getNodeSet(root, 
@@ -353,7 +322,7 @@ getNodeSet(root,
            namespaces = c(ns = "http://www.ecb.int/vocabulary/2002-08-01/eurofxref")) %>% 
   xmlSize()
 
-getNodeSet(doc = root, 
+rates <- getNodeSet(doc = root, 
            path = "//ns:Cube[@currency = 'JPY']", 
            namespaces = c(ns = "http://www.ecb.int/vocabulary/2002-08-01/eurofxref")) %>% 
   sapply(X = ., 
@@ -368,7 +337,7 @@ ns = getDefaultNamespace(root)[[1]]$uri
 exRates <- lapply(q, 
                   FUN = function(q){as.numeric(getNodeSet(root, path = q, namespaces = c(ns = ns)))})
 
-structure(exRates, name = currencies) %>% as.data.frame(col.names = currencies)
+exRates %>% as.data.frame(col.names = currencies)
 ```
 
 
@@ -410,6 +379,14 @@ XPath ignores white space (blank spaces and new lines) within a location step an
 - `>=`  
 - `<`  
 - `<=`  
+
+
+```{r}
+doc <- htmlParse("/home/yincy/Downloads/XML/History of the United States public debt - Wikipedia.html")
+
+readHTMLTable(doc = doc, which =  3)
+```
+
 
 
 
