@@ -1,0 +1,180 @@
+---
+title: "12_Resampling-statistics-and-bootstrapping"
+author: "yincy"
+date: "3/23/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Permutation
+
+```{r}
+library(coin)
+
+score <- c(40, 57, 45, 55, 58, 57, 64, 55, 62, 65)
+treatment <- factor(c(rep("A", 5), rep("B", 5)))
+mydata <- data.frame(treatment, score)
+t.test(score  ~ treatment, data = mydata, var.equal = T)
+```
+
+```{r}
+oneway_test(score ~ treatment, data = mydata, distribution = "exact")
+```
+
+```{r}
+library(MASS)
+UScrime$So <- factor(UScrime$So)
+
+wilcox_test(Prob ~ So, data = UScrime, distribution = "exact")
+```
+
+```{r}
+library(multcomp)
+library(magrittr)
+set.seed(1234)
+
+oneway_test(response ~ trt, data = cholesterol, 
+            distribution = approximate(nresample = 9999))
+print("-----------")
+
+aov(response ~ trt, data = cholesterol) %>% summary
+```
+
+```{r}
+library(coin)
+library(vcd)
+
+Arthritis <- transform(Arthritis, Improved = as.factor(as.numeric(Improved)))
+set.seed(1234)
+chisq_test(Treatment ~ Improved, data = Arthritis, 
+           distribution = approximate(nresample = 9999))
+```
+
+```{r}
+states <- as.data.frame(state.x77)
+set.seed(1234)
+spearman_test(Illiteracy ~ Murder, data = states, 
+              distribution = approximate(nresample = 9999))
+```
+
+
+```{r}
+library(lmPerm)
+set.seed(1234)
+fit <- lmp(weight ~ height, data = women, perm = "Prob")
+fit %>% summary()
+```
+
+```{r}
+library(lmPerm)
+set.seed(1234)
+fit <- lmp(weight ~ height + I(height^2), data = women, perm = "Prob")
+fit %>% summary()
+```
+
+```{r}
+library(lmPerm)
+set.seed(1234)
+
+states <- as.data.frame(state.x77)
+fit <- lmp(Murder ~ Population + Illiteracy + Income + Frost, 
+           data = states, perm = "Prob")
+fit %>% summary()
+```
+
+```{r}
+library(lmPerm)
+library(multcomp)
+set.seed(1234)
+fit <- aovp(response ~ trt, data = cholesterol, perm = "Prob")
+fit %>% anova
+```
+
+```{r}
+library(lmPerm)
+set.seed(1234)
+fit <- aovp(weight ~ gesttime + dose, data = litter, perm = "Prob")
+fit %>% anova
+```
+
+
+```{r}
+library(lmPerm)
+set.seed(1234)
+fit <- aovp(len ~ supp*dose, data = ToothGrowth, perm = "Prob")
+fit %>% anova
+```
+
+
+# Bootstrapping
+Bootstrapping generates an empirical distribution of a test statistic or set of test statistics by repeated random sampling with replacement from the original sample. It allows you to generate confidence intervals and test statistical hypotheses without having to assume a specific underlying theoretical distribution.  
+
+If the underlying distributions are unknown, if outliers are a problem,
+if sample sizes are small, or if parametric approaches don’t exist,
+bootstrapping can often provide a useful method of generating confidence intervals and testing hypotheses.  
+
+
+```{r}
+library(boot)
+
+rsq <- function(formula, data, indices){
+    d <- data[indices, ]
+    fit <- lm(formula, data = d)
+    return(summary(fit)$r.square)
+}
+
+library(boot)
+set.seed(1234)
+results <- boot(data = mtcars, 
+                statistic = rsq, 
+                R = 1000, 
+                formula = mpg ~ wt + disp)
+
+results %>% print()
+```
+
+```{r}
+plot(results)
+```
+
+
+```{r}
+boot.ci(results, type = c("perc", "bca"))
+```
+
+```{r}
+bs <- function(formula, data, indices){
+    d <- data[indices, ]
+    fit <- lm(formula, data = d)
+    return(coef(fit))
+}
+
+library(boot)
+set.seed(1234)
+results <- boot(data = mtcars, statistic = bs, 
+                R = 1000, formula = mpg ~ wt + disp)
+print(results)
+```
+
+```{r}
+plot(results, index = 2)
+```
+
+
+```{r}
+boot.ci(results, type = "bca", index = 2)
+```
+
+```{r}
+boot.ci(results, type = "bca", index = 3)
+```
+
+
+
+
+
+
+
