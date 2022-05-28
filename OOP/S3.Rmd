@@ -29,6 +29,8 @@ Primer <- function(seq = "GAATCCATGG"){
   class(me) = append(class(me), "Primer")
   return(me)
 }
+
+class(Primer())
 ```
 
 
@@ -64,6 +66,8 @@ reverseComplement.DNAseq <- function(object){
 
 ```{r}
 primer1 <- Primer()
+primer1 %>% class()
+# dispatch from left to right of method on class
 reverseComplement(primer1)
 ```
 
@@ -120,8 +124,11 @@ speak.Person <- function(object){
   print("the person speak model")
 }
 
-speak(object = person2)
+person1 %>% class()
+person2 %>% class()
+
 speak(object = person1)
+speak(object = person2)
 ```
 
 
