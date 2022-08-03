@@ -65,7 +65,7 @@ Most of the functionality is `fs` can be approximated with functions in base R o
 
 |**fs**|**base**|**shell**|
 |:--|:--|:--|
-|`path("top_dir", "nested_dir", "file", ext = 'ext')`|`file.path("top_dir", "nested_dir", "file.ext")`|top_dir/nested_dir/file.ext|
+|`path("top_dir", "nested_dir", "file", ext = 'ext')`|`file.path("top_dir", "nested_dir","file.ext")`|top_dir/nested_dir/file.ext|
 |`path_expand("~/path")`|`path.expand()`|realpath -m -s ~/path|
 |`path_dir("path")`|`dirname("path")`|dirname path|
 |`path_file("path")`|`basename("path")`|basename path|

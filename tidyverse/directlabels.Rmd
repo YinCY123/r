@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Polygon methods
+
 ```{r}
 param.df <- data.frame(
     mean = c(0, 0, 2), 
@@ -49,14 +50,12 @@ gg <- ggplot() +
 gg
 ```
 
-
 ```{r}
 gg <- ggplot() +
   geom_line(aes(observation, density, color = mean.lab, group = param.fac), 
             data = density.df) 
 directlabels::direct.label(gg, method = "top.polygons")
 ```
-
 
 ```{r}
 data(BodyWeight, package = "nlme")
@@ -80,8 +79,3 @@ directlabels::direct.label(gg.wider, method = "right.polygons")
 ```{r}
 directlabels::direct.label(gg.wider, method = "left.polygons")
 ```
-
-
-
-
-
