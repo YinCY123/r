@@ -1,0 +1,282 @@
+---
+title: "01 geographic data models"
+author: "YinCY"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# vector data model
+
+The **vector data model** represents the world using points, lines and polygons. These have discrete, well-defined borders, meaning that vector datasets usually have a high level of precision.
+
+Take care when using the word 'vector' as it can have two meanings in this book: geographic vector data and the `vector` class in R. The former is a data model, the latter is an R class just like `data.frame` and `matrix`. Still, there is a link between the two: the spatial coordinates which are at the heart of the geographic vector data model can be represented in R using `vector` objects.
+
+The geographic vector data model is based on points located within a coordinate reference system (CRS). Points can represent self-standing features or they can be linked together to form more complex geometries such as lines and polygons. Most point geometries contain only two dimensions (3-dimensional CRSs contain an additional z value, typically representing height above sea level).
+
+## Simple Features (sf)
+Simple Features is a hierarchical data model that represents a wide ranges of geometry types. Of 17 geometry types supported by the specification, only 7 used in the vast majority of geographic research; these core geometry types are fully supported by the R package **sf**.
+
+**sf** can represent all common vector geometry types (raster data classes are not supported by **sf**): points, lines, polygons and their respective 'multi' versions (which group together features of the same type into a single feature). **sf** also supports geometry collections, which can contain multiple geometry types in a single object. **sf** largely supersedes the **sp** ecosystem, which comprises **sp**, **rgdal** for data read/write and **rgeos** for spatial operations. 
+
+```{r}
+library(sf)
+library(spData)
+library(magrittr)
+
+data("world")
+world %>% class()
+world %>% names()
+
+plot(world)
+```
+
+```{r}
+world[, "lifeExp"] %>% summary
+```
+
+```{r}
+world[1:2, 1:3]
+```
+
+**Advantages of **sf** over **sp**:  
+
+- **sf** objects can be treated as data frames in most operations.  
+- **sf** functions can be combined using %>% operator and works well with the tidyverse collection of R packages.  
+- **sf** function names are relatively consistent and intuitive, all begin with `st_`.  
+
+```{r}
+world_asia <- world[world$continent == "Asia", ]
+asia <- st_union(world_asia)
+
+plot(world["pop"], reset = F)
+plot(asia, add = T, col = "red")
+```
+
+```{r}
+plot(world["continent"], reset  =F)
+cex <- sqrt(world$pop) / 10000
+world_cents <- st_centroid(world, of_largest_polygon = T)
+plot(st_geometry(world_cents), add = T, cex = cex)
+```
+
+```{r}
+india <- world[world$name_long == "India", ]
+plot(st_geometry(india), expandBB = c(0, 0.2, 0.6, 1), col = "gray", lwd = 3)
+plot(world_asia[0], add = T)
+```
+
+The use of `world_asia[0]` to keep only the geometry column.  
+
+### Geometry types
+Geometries are the basic building blocks of simple features. Simple features in R can take on one of the 17 geometry types supported by the **sf** package. In this vignette we only focus on the seven most commonly used types: POINT, LINESTRING, POLYGON, MULTIPOINT, MULTILINESTRING, MULTIPOLYGON and GEOMETRYCOLLECTION. Find the whole list of possible feature types in the PostGIS manual.  
+
+### Simple feature geometries (sfg)
+The `sfg` class represents the different simpel feature geometry types in R: point, linestring, polygon (and their 'multi' equivalents, such as multipoints) or geometry collection.  
+
+
+#### Functions to create simple feature geometry objects (sfg) from scratch
+The names of these functions are simple and consistent, as they all start with the `st_` prefix and end with the name of the geometry type in lowercase letters.  
+
+- A point: `st_point()`  
+- A linestring: `st_linestring()`  
+- A polygon: `st_polygon()`  
+- A multipoint: `st_multipoint()`  
+- A multilinestring: `st_multilinestring()`  
+- A multipolygon: `st_multipolygon()`  
+- A geometry collection: `st_geometrycollection()`  
+
+`sfg` objects can be created from three base R data types:  
+
+1. A numeric vector: a single point  
+2. A matrix: a set of points, where each row represents a point, a multipoint or linestring  
+3. A list: a collection of objects such as matrice, multilinestrings or geometry collections  
+
+```{r}
+# Point
+st_point(c(5,2))
+st_point(c(5, 2, 3))
+st_point(c(5,2,1), dim = "XYM")
+st_point(c(5, 2, 3, 1))
+
+multipoint_matrix <- rbind(c(5, 2), c(1, 3), c(3, 4), c(3, 2))
+st_multipoint(multipoint_matrix)
+```
+
+```{r}
+# linestring
+linestring_matrix <- rbind(c(1, 5), c(4, 4), c(4, 1), c(2, 2), c(3, 2))
+st_linestring(linestring_matrix)
+
+# polygon
+polygon_list <- list(rbind(c(1, 5), c(2, 2), c(4, 1), c(4, 4), c(1, 5)))
+st_polygon(polygon_list)
+
+# Polygon with a hole
+polygon_border <- rbind(c(1, 5), c(2, 2), c(4, 1), c(4, 4), c(1, 5))
+polygon_hole <- rbind(c(2, 4), c(3, 4), c(3, 3), c(2, 3), c(2, 4))
+polygon_with_hole_list <- list(polygon_border, polygon_hole)
+
+st_polygon(polygon_with_hole_list) 
+
+# Multilinestring
+multilinestring_list <- list(rbind(c(1, 5), c(4, 4), c(4, 1), c(2, 2), c(3, 2)), 
+                             rbind(c(1, 2), c(2, 4)))
+st_multilinestring(multilinestring_list)
+
+# multipolygon
+multipolygon_list <- list(list(rbind(c(1, 5), c(2, 2), c(4, 1), c(4, 4), c(1, 5))), 
+                          list(rbind(c(0, 2), c(1, 2), c(1, 3), c(0, 3), c(0, 2))))
+st_multipolygon(multipolygon_list) 
+
+# geometrycollection
+geometrycollection_list <- list(st_multipoint(multipoint_matrix), 
+                                st_linestring(linestring_matrix))
+
+st_geometrycollection(geometrycollection_list) 
+```
+
+In most cases, an `sfc` object contains objects of the same geometry type. Therefore, when we convert `sfg` objects of type polygon into a simple feature geometry column, we would also end up with an `sfc` object of type polygon, which can be verified with `st_geometry_type()`.  
+
+It is also possible to create an sfc object from sfg objects with different geometry types.  
+
+```{r}
+point1 = st_point(c(5, 2))
+
+multilinestring_list1 = list(rbind(c(1, 5), c(4, 4), c(4, 1), c(2, 2), c(3, 2)), 
+                             rbind(c(1, 2), c(2, 4)))
+multistring1 <- st_multilinestring(multilinestring_list1)
+
+st_sfc(point1, multistring1) %>% st_geometry_type()
+```
+
+```{r}
+st_crs(point1)
+```
+
+All geometries in an `sfc` object must have the same CRS. 
+
+```{r}
+points_sfc_wgs <- st_sfc(point1, crs = 4326)
+st_crs(points_sfc_wgs)
+```
+
+```{r}
+st_sfc(point1, crs = "+proj=longlat +datum=WGS84 +no_defs")
+```
+
+### The sf class
+```{r}
+lnd_point <- st_point(c(0.1, 51.5))
+lnd_geometry <- st_sfc(lnd_point, crs = 4326)
+lnd_attrib <- data.frame(
+  name = "London", 
+  temperature = 25, 
+  date = as.Date("2017-06-21")
+)
+
+lnd_sf <- st_sf(lnd_attrib, geometry = lnd_geometry)
+lnd_sf %>% class()
+```
+
+
+# raster data model
+
+The **raste data model** divides the surface up into cells of constant size. Raster datasets are the basis of background images used in web-mapping and have been a vital source of geographic data since the origins of aerial photography and satellite-based remote sensing devices. Rasters aggregate spatially specific features to a given resolution, meaning that they are consistent over space and scalable (many worldwide raster datasets are available).
+
+```{r}
+library(spDataLarge)
+library(raster)
+library(magrittr)
+
+raster_filepath <- system.file("raster/srtm.tif", package = "spDataLarge")
+new_raster <- raster(x = raster_filepath)
+```
+
+Dedicated functions for `RasterLayer` class
+
+```{r}
+new_raster %>% dim
+new_raster %>% ncell()
+new_raster %>% extent()
+new_raster %>% crs()
+new_raster %>% inMemory() # do not stored in memory
+```
+
+```{r}
+new_raster %>% plot
+```
+
+### Raster classes
+The `RasterLayer` class represents the simplest form of a raster object, and consists of only one layer.
+
+```{r}
+new_raster2 <- raster(nrows = 6, 
+                      ncols = 6, 
+                      res = 0.5, 
+                      xmn = -1.5, 
+                      xmx = 1.5, 
+                      ymn = -1.5, 
+                      ymx = 1.5, 
+                      vals = 1:36)
+
+# ?raster for more methods to create raster object
+```
+
+
+Aside from `RasterLayer`, there are two additional classes: `RasterBrick` and `RasterStack`. Both can handle multiple layers, but differ regarding the number of supported file formats, type of internal representation and processing speed.
+
+A `RasterBrick` consists of multiple layers, which typically correspond to a single multispectral satellite file or a single multilayer object in memory. The `brick()` function creates a `RasterBrick` object. Usually, you provide it with a filename to a multilayer raster file but might also use another raster object and other spatial objects.  
+
+```{r}
+multi_raster_file <- system.file("raster/landsat.tif", 
+                                 package = "spDataLarge")
+
+r_brick <- brick(multi_raster_file)
+```
+
+```{r}
+r_brick %>% nlayers()
+```
+
+A `RasterStack` is similar to a `RasterBrick` in the sense that it consists also of multiple layers. However, in contrast to `RasterBrick`, `RasterStack` allows you to connect several raster objects stored in different files or multiply objects in memory. More specifically, a `RasterStack` is a list of `RasterLayer` objects with the same extent and resolution. Hence, one way to create it is with the help of spatial objects already existing in R’s global environment.
+
+```{r}
+raster_on_disk <- raster(r_brick, layer = 1)
+raster_in_memory <- raster(xmn = 301905, 
+                           xmx = 335745, 
+                           ymn = 4111245, 
+                           ymx = 4154085, 
+                           res = 30)
+values(raster_in_memory) <- sample(seq_len(ncell(raster_in_memory)))
+crs(raster_in_memory) <- crs(raster_on_disk)
+
+r_stack <- stack(raster_in_memory, raster_on_disk)
+r_stack
+```
+
+Another difference is that the processing time for `RasterBrick` objects is usually shorter than for `RasterStack` objects.
+
+Decision on which `Raster*` class should be used depends mostly on a character of input data. Processing of a single mulitilayer file or object is the most effective with `RasterBrick`, while `RasterStack` allows calculations based on many files, many `Raster*` objects, or both.
+
+Operations on `RasterBrick` and `RasterStack` objects will typically return a `RasterBrick`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
