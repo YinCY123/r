@@ -25,7 +25,7 @@ cn <- c("Sample_ID", "Clump_Thickness",
         "Normal Nucleoli", "Mitoses", 
         "Class")
 cc <- rep("factor", length(cn))
-brca <- read.table("/home/yincy/git/Data/ML/breat-cancer/breast-cancer-wisconsin.data", 
+brca <- read.table("/home/yincy/git/data/ML/breast-cancer-wisconsin.data", 
                    sep = ",", 
                    header = F, 
                    na.strings = "?", 
@@ -107,8 +107,8 @@ ce_kk %>%
   ggplot(aes(K, ce)) +
   geom_line(aes(color = kernel)) +
   geom_point(aes(color = kernel), size = 1) +
-  geom_vline(xintercept = best_k, linetype = "dashed", size = 0.3) +
-  geom_hline(yintercept = min_ce, linetype = "dashed", size = 0.3)
+  geom_vline(xintercept = best_k, linetype = "dashed", linewidth = 0.3) +
+  geom_hline(yintercept = min_ce, linetype = "dashed", linewidth = 0.3)
 ```
 
 ## kfold cross validation
