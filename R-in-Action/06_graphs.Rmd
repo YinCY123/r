@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Bar charts
 ```{r}
+library(vcd)
 data(Arthritis, package = "vcd")
 library(ggplot2)
 
@@ -76,15 +77,18 @@ ggplot(plotdata, aes(reorder(state.region, mean), mean)) +
 ```{r}
 library(ggpie)
 
-ggpie(mpg, class)
+ggpie(data = mpg, 
+      group_key = "class", 
+      count_type = "full")
 
-ggpie(mpg, class, legend = F, offset = 1.3, 
-      title = "Automobile by Car class")
-
-ggpie(mpg, class, year, 
-      legend = F, 
-      offset = 1.3, 
-      title = "Car Class by Year")
+ggpie(data = mpg, 
+      group_key = "class", 
+      count_type = "full", 
+      label_info = "all", 
+      label_pos = "in", 
+      label_type = "circle", 
+      label_size = 3, 
+      border_color = "gold")
 ```
 
 
@@ -94,7 +98,8 @@ library(treemapify)
 
 plotdata <- mpg %>% count(manufacturer)
 
-ggplot(plotdata, aes(fill = manufacturer, area = n, label = manufacturer)) +
+ggplot(plotdata, aes(fill = manufacturer, 
+                     area = n, label = manufacturer)) +
     geom_treemap() +
     geom_treemap_text() +
     theme(legend.position = "none")
@@ -106,7 +111,8 @@ plotdata <- mpg %>% count(manufacturer, drv)
 plotdata$drv <- factor(plotdata$drv, levels = c("4", "f", "r"), 
                        labels = c("4-wheel", "front-whell", "rear"))
 
-ggplot(plotdata, aes(fill = manufacturer, area = n, label = manufacturer, subgroup = drv)) +
+ggplot(plotdata, aes(fill = manufacturer, area = n, 
+                     label = manufacturer, subgroup = drv)) +
     geom_treemap() +
     geom_treemap_subgroup_border() +
     geom_treemap_subgroup_text(place = "middle", color = "black", alpha = 0.5, grow = F) +
@@ -139,7 +145,7 @@ ggplot(cars2008, aes(hwy, y = ..density..)) +
 
 ggplot(cars2008, aes(hwy, y = ..density..)) +
     geom_histogram(bins = 20, color = "white", fill = "steelblue") +
-    geom_density(color = "red", size = 1) +
+    geom_density(color = "red", linewidth = 1) +
     scale_y_continuous(labels = scales::percent) +
     labs(title = "Colored histogram with 20 bins", 
          x = "City Miles Per Gallon", 
@@ -172,11 +178,13 @@ cars$cyl <- factor(cars$cyl)
 cars$year <- factor(cars$year)
 
 ggplot(cars, aes(cyl, cty, fill = year)) +
-    geom_boxplot() +
+    geom_boxplot(notch = T) +
     labs(x = "Number of Cylinders", 
          y = "Miles Per Gallon", 
          title = "Car Mileage Data")
+# if two boxes' notches don't overlap, there's strong evidence that their medians differ.
 ```
+
 
 
 ```{r}
@@ -186,8 +194,8 @@ cars$cyl <- factor(cars$cyl)
 cars %>% 
     mutate(year = factor(year)) %>% 
 ggplot(aes(cyl, cty)) +
-    # geom_boxplot(aes(fill = year), width = 0.2) +
-    geom_violin(aes(fill = year), width = 0.4) +
+    geom_violin(width = 0.4) +
+    geom_boxplot(width = 0.2) +
     labs(x = "Number of cylinder", 
          y = "City Miles Per Gallon", 
          title = "Violin Plots of Miles Per Gallon")

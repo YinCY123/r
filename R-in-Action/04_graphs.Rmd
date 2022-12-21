@@ -1,0 +1,39 @@
+---
+title: "04_graphs"
+author: "YinCY"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(mosaicData)
+library(ggplot2)
+library(scales)
+
+theme_set(theme_bw())
+data("CPS85", package = "mosaicData")
+CPS85 <- CPS85[CPS85$wage < 40, ]
+
+ggplot(data = CPS85, aes(x = exper, y = wage, 
+                         color = sex, 
+                         shape = sex, 
+                         linetype = sex)) +
+    scale_y_continuous(breaks = seq(0, 30, 5), 
+                       labels = dollar) +
+    geom_point(alpha = 0.7, size = 1.5) +
+    geom_smooth(method = "lm", se = F) +
+    facet_wrap(~ sector) +
+    labs(title = "Relationship between wages and experience", 
+         subtitle = "Current Population Survey", 
+         caption = "source: http://mosaic-web.org/",
+         x = "Years of experience", 
+         y = "Hourly wage", 
+         color = "Gender", shape = "Gender", linetype = "Gender") +
+    theme_minimal()
+```
+
+

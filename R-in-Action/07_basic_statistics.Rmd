@@ -1,5 +1,5 @@
 ---
-title: "07 statistics"
+title: "07 Basic statistics"
 author: "yincy"
 date: "3/11/2022"
 output: html_document
@@ -88,7 +88,7 @@ Salaries %>%
 ```{r, warning=FALSE}
 Salaries %>% 
     group_by(rank, sex) %>% 
-    summarise(n = length(salary), 
+    summarise(n = n(), 
               med = median(salary), 
               min = min(salary), 
               max = max(salary))
@@ -155,7 +155,8 @@ mytable %>% prop.table() %>% addmargins(margin = 2)
 ```{r}
 library(gmodels)
 
-with(Arthritis, CrossTable(Treatment, Improved, prop.chisq = T))
+with(Arthritis, CrossTable(Treatment, Improved, prop.chisq = T), 
+     fromat = "SAS")
 ```
 
 
@@ -172,7 +173,6 @@ mytable %>% margin.table(2)
 mytable %>% margin.table(3)
 
 mytable %>% ftable()
-mytable %>% ftable()
 
 mytable %>% prop.table() %>% addmargins() %>% ftable() * 100
 ```
@@ -180,8 +180,8 @@ mytable %>% prop.table() %>% addmargins() %>% ftable() * 100
 
 ### Tests of independence
 Test the independence of categorical variables.  
-- chi-square test  
-- Fisher exact test  
+- `chisq.test`: chi-square test  
+- ``: Fisher exact test  
 - Cochran-Mantel-Haenszel test  
 
 **chi-square test**
@@ -208,6 +208,9 @@ In contrast to many statistical packages, the fisher.test() function can be appl
 ```{r}
 mytable <- xtabs(~ Treatment + Improved, data = Arthritis)
 mytable %>% fisher.test()
+
+mytable <- xtabs(~ Sex + Improved, data = Arthritis)
+fisher.test(mytable, alternative = "two.side")
 ```
 
 **Cochran-Mantel-Haenszel test**

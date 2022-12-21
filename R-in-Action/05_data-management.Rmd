@@ -9,59 +9,55 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
 # Probability functions
-In R, probability functions take the form  
-```
-[dpqr]distribution_abbrevation()
-```
-d - density  
-p - distribution function  
-q - quantile function  
-r - random generation  
 
+In R, probability functions take the form
 
-|**distribution**|**abbrevation**|
-|:--|:--|
-|Beta|beta|
-|Binomial|biom|
-|Cauchy|cauchy|
-|Chi-squared(noncentral)|chisq|
-|Logistic|logis|
-|Multinomial|multinom|
-|Negative binomial|nbinom|
-|Normal|norm|
-|Exponential|exp|
-|F|f|
-|Gamma|gamma|
-|Geometric|geom|
-|Hypergeometric|hyper|
-|Lognormal|lnorm|
-|Poisson|pois|
-|Wilcoxon signed rank|signrank|
-|T|t|
-|Uniform|unif|
-|Weibull|weibull|
-|Wilcoxon rank sum|wilcox|
+    [dpqr]distribution_abbrevation()
 
+d - density\
+p - distribution function\
+q - quantile function\
+r - random generation
 
----
+| **distribution**        | **abbrevation** |
+|:------------------------|:----------------|
+| Beta                    | beta            |
+| Binomial                | biom            |
+| Cauchy                  | cauchy          |
+| Chi-squared(noncentral) | chisq           |
+| Logistic                | logis           |
+| Multinomial             | multinom        |
+| Negative binomial       | nbinom          |
+| Normal                  | norm            |
+| Exponential             | exp             |
+| F                       | f               |
+| Gamma                   | gamma           |
+| Geometric               | geom            |
+| Hypergeometric          | hyper           |
+| Lognormal               | lnorm           |
+| Poisson                 | pois            |
+| Wilcoxon signed rank    | signrank        |
+| T                       | t               |
+| Uniform                 | unif            |
+| Weibull                 | weibull         |
+| Wilcoxon rank sum       | wilcox          |
 
+------------------------------------------------------------------------
 
 # character functions
-- nchar(x)  
-- substr(x, start, stop)  
-- grep(pattern, x, ignore.case = FALSE)  
-- sub(pattern, replacement, x, ignore.case = FALSE)  
-- strsplit(x, split, fixed = FALSE)  
-    + if fixed = FALSE, then pattern is a *regular expression*. if fixed = TRUE, then pattern is a text string.  
-- paste()  
-- toupper(x)  
-- tolower(x)  
 
+-   nchar(x)\
+-   substr(x, start, stop)\
+-   grep(pattern, x, ignore.case = FALSE)\
+-   sub(pattern, replacement, x, ignore.case = FALSE)\
+-   strsplit(x, split, fixed = FALSE)
+    -   if fixed = FALSE, then pattern is a *regular expression*. if fixed = TRUE, then pattern is a text string.\
+-   paste()\
+-   toupper(x)\
+-   tolower(x)
 
----
-
+------------------------------------------------------------------------
 
 ```{r}
 options(digits = 2)
@@ -93,12 +89,11 @@ roster <- cbind(firstname, lastname, roster[, -1])
 roster <- roster[order(lastname, firstname), ]
 ```
 
-
 ## switch
-`switch` chooses statements based on the value of an expression.  
-```
-switch(expr, ...)
-```
+
+`switch` chooses statements based on the value of an expression.
+
+    switch(expr, ...)
 
 ```{r}
 feelings <- c("sad", "afraid")
@@ -126,10 +121,10 @@ mydate(type = "short")
 mydate(type = "median")
 ```
 
-The `t()` function always returns a matrix.  
-
+The `t()` function always returns a matrix.
 
 ## Aggregating data
+
 ```{r}
 options(digits = 3)
 
@@ -147,18 +142,3 @@ mtcars %>%
     group_by(cyl, gear) %>% 
     summarise_all(.funs = list(mean), na.rm = TRUE)
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
