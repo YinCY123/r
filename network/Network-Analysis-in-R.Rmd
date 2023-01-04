@@ -1,0 +1,237 @@
+---
+title: "Network-Analysis-in-R"
+author: "yincy"
+date: "2023-01-03"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(igraph)
+```
+
+# Input formats
+- adjacency matrix  
+- incidence matrix  
+- edge list  
+
+## Adjacency matrix
+An adjacency matrix is a square matrix where the number of rows and columns are the same, so does the column names and the row names. `igraph` can read an adjacency matrix using the `graph_from_adjacency_matrix()`.  
+
+```{r}
+mat <- matrix(sample(c(0, 1, 2), 25, T, prob = c(0.7, 0.2, 0.1)), 5, 5)
+colnames(mat) <- letters[1:5]
+rownames(mat) <- letters[1:5]
+
+
+g <- graph_from_adjacency_matrix(adjmatrix = mat, mode = "directed", weighted = T)
+
+plot(g, 
+     edge.width = E(g)$weight)
+```
+
+## sparse matrix
+The function `graph_from_adjacency_matrix()` also accepts a sparse matrix which is sometimes preferred to minimize file size and conserve system resources on large datasets.  
+
+```{r}
+library(Matrix)
+mat <- matrix(sample(c(0, 1, 2), 25, replace = T, prob = c(0.7, 0.2, 0.1)), 
+              nrow = 5) %>% 
+    as(Class = "CsparseMatrix")
+mat
+```
+
+```{r}
+g <- graph_from_adjacency_matrix(adjmatrix = mat, 
+                                 mode = "directed", 
+                                 weighted = TRUE)
+plot(g)
+```
+
+## Incidence matrix
+The rows and columns of an incidence matrix do not have to be equal. Its shape can be rectangular in addtion to square. So, the column names and row names does not to be same or has intersect. `igraph` can read an incidence matrix using the `graph_from_incidence_matrix()`.  
+
+```{r}
+mat <- matrix(sample(c(0, 1, 2), 30, T, prob = c(0.8, 0.1, 0.1)), 
+              nrow = 6)
+colnames(mat) <- letters[1:5]
+rownames(mat) <- LETTERS[1:6]
+mat
+```
+
+```{r}
+g <- graph_from_incidence_matrix(incidence = mat, 
+                                 weighted = TRUE)
+plot(g, 
+     vertex.size = 30, 
+     edge.width = E(g)$weight)
+```
+
+
+## Edge list
+An edge list has 2 columns, each observation represents a connection between two things. The two column names are alternatively named (1) an origin and a destination or (2) a source and target, depending on the package used.  The correct column names are often the key to successful importation of the data in many applications. `igrph` imports an edge list with `graph_from_edgelist()` function.  
+
+```{r}
+df <- data.frame(
+    origin = sample(LETTERS[1:4], 10, replace = TRUE), 
+    destination = sample(LETTERS[1:4], 10, replace = TRUE)
+) %>% as.matrix()
+
+g <- graph_from_edgelist(el = df, directed = TRUE)
+```
+
+```{r}
+plot(g)
+```
+
+
+# example data
+The `igraphdata` package contains a number of datasets that illustrate the use of network analysis.  
+
+```{r}
+data(package = "igraphdata")
+```
+
+
+
+# `igraph` has three different plotting mechanisms.  
+
+- `plot.igraph`: for two dimensional plots.  
+- `tkplot`: for interactive 2-dimensional plotting.  
+- `rglplot`: which is fr 3-dimensional plotting.  
+
+
+# layout of nodes
+Nodes may be laid out in a variety of ways and many algorithms are available, depending on the data and the analyst's preference. It is important to realize that the information in graph layout is contained in the pattern of which nodes are connected to which others. The location are chosen based on essentially aesthetic criteria.  
+
+
+Many of the `igraph` layouts are generated through an algorithm and the coordinates change each time it is plotted. Part of the iterative process in visualization is to change different graphing parameters to reach the most visually pleasing chart. Thus, drafers may want to keep the layout the same as colors, size, etc. To keep the layout the same, the `set.seed()` function must be set.  
+
+```{r}
+set.seed(1234)
+make_graph("house") %>% plot(main = "set.seed(1234")
+```
+
+
+A second method to retain consistecy in plotting is to retain the coordinates in a separate variable.  
+
+```{r}
+data("karate", package = "igraphdata")
+
+coords <- layout_with_fr(karate, niter = 1000)
+
+par(mfrow = c(1, 2))
+par(oma = c(0, 0, 2, 0))
+plot(karate, 
+     layout = coords, 
+     main = "layout = coords #1", 
+     vertex.label = NA, 
+     vertex.color = "blue")
+
+plot(karate, 
+     layout = coords, 
+     main = "layout = coords #2", 
+     vertex.label = NA, 
+     vertex.color = "red")
+```
+
+```{r}
+grep("^layout_", ls("package:igraph"), value = TRUE)
+```
+
+For very large graph, some of cluster nodes may be overlaped. One solution is to use `qgraph` package to resolve this problems.  
+
+```{r}
+library(qgraph)
+
+g <- barabasi.game(n = 355, directed = F)
+
+
+par(mfrow = c(1, 3))
+plot(g, 
+     layout = layout_with_fr, 
+     vertex.size = 4, 
+     vertex.label = NA)
+
+e <- get.edgelist(g, names = FALSE)
+l <- qgraph.layout.fruchtermanreingold(e, vcount = vcount(g))
+plot(g, 
+     layout = l, 
+     vertex.size = 4, 
+     vertex.label = NA)
+
+l <- qgraph.layout.fruchtermanreingold(e, vcount = vcount(g), 
+                                       area = 8 *(vcount(g)^2), 
+                                       repulse.rad = (vcount(g)^3.1))
+plot(g, 
+     layout = l, 
+     vertex.size = 4, 
+     vertex.label = NA)
+```
+
+
+## node layout via tkplot
+Using the `tkplot` to manually tweak the plot, then get the modified coordinates.  
+
+```{r}
+data("karate", package = "igraphdata")
+
+plot(karate, 
+     vertex.size = 10, 
+     layout = layout_nicely, 
+     asp = 0.66, 
+     main = "coords via layout  nicely", 
+     rescale = TRUE)
+
+canvas.width = 600
+canvas.height = 400
+x <- tkplot(karate,
+            vertex.size = 10, 
+            canvas.height = canvas.height, 
+            canvas.width = canvas.width)
+
+coords01 <- tkplot.getcoords(x)
+# close the tkplot
+
+
+plot(karate, 
+     layout = coords01, 
+     vertex.label = NA)
+```
+
+
+# graph attributes
+Type the name in the console will print the graph level, vertex level and edge level attributes.  
+
+The second methods to get attributes is the built-in functions in `igraph`  
+- `list.graph.attributes(), graph.attributes(), graph_attr()`: get the graph level attributes  
+- `list.vertex.attributes(), vertex.attributes(), vertex_attr()`: get the vertex attributes  
+- `list.edge.attributes(), edge.attributes(), edge_attr()`: get the edge attributes  
+
+
+
+# top network related packages
+- igraph  
+- ggraph  
+- graphlayouts  
+- visNetwork  
+- sna  
+- DiagrammeR  
+- influenceR  
+- threejs  
+- networkD3  
+- d3Network  
+
+
+
+
+
+
+
+
+
+
+
