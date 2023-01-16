@@ -216,9 +216,11 @@ fisher.test(mytable, alternative = "two.side")
 **Cochran-Mantel-Haenszel test**
 The `mantelhaen.test()` function provides a Cochran–Mantel–Haenszel chi-square test of the null hypothesis that two nominal variables are conditionally independent in each stratum of a third variable.  
 ```{r}
-mytable <- xtabs(~ Treatment + Sex + Improved, data = Arthritis)
+mytable <- xtabs(~ Treatment + Improved + Sex, data = Arthritis)
 mantelhaen.test(mytable)
 ```
+
+The results suggest that the treatment received and the improvement reported aren't independent within each level of Sex (that is, treated individuals improved more than those receiving placebos when controlling for sex).  
 
 ### Measures of association
 ```{r}
@@ -248,7 +250,7 @@ The `cor()` function produce all three correlation coefficients, where the `cov(
 |Method|Specifies the type of correlation. The options are `pearson`,`spearman` and `kendall`.|
 
 
-- partial: is a correlation between two quantitative variables, controlling for one or more other quantitative variables. `ggm` provides `pcor()` function to calculate partial correlation coefficients.  
+- partial correlations: is a correlation between two quantitative variables, controlling for one or more other quantitative variables. `ggm` provides `pcor()` function to calculate partial correlation coefficients.  
 
 ```
 pcor(u, s)
@@ -291,7 +293,7 @@ The `corr.test()` function provided in the `psych` package allows you to produce
 options(digits = 5)
 library(psych)
 
-corr.test(states, use = "complete")
+corr.test(states, use = "complete") 
 ```
 
 The `pcor.test()` function in the `psych` package can be used to test the conditional independence of two variables controlling for one or more additional variables, assuming multivariate normality.  
@@ -311,7 +313,7 @@ The groups compared are continuous and assumed to be distributed normally.
 
 ## independent t-test
 assumptions:  
-1. continuous  
+1. independent  
 2. normally distributed  
 
 ```{r}
@@ -363,16 +365,15 @@ sapply(UScrime[, c("U1", "U2")], median)
 with(UScrime, wilcox.test(U1, U2, paired = T))
 ```
 
+> When the assumptions for the t-tests are reasonable, the parametric tests are more powerful (more likely to find a difference if it exists). The nonparametric tests are more appropriate when the assumptions are grossly unreasonable.  
+
 
 ### Comparing more than two groups
 If the groups are independent, a Kruskal–Wallis test provides a useful approach. If the groups are dependent (for example, repeated measures or randomized block design), the Friedman test is more appropriate.  
 
 ```{r}
 states <- data.frame(state.region, state.x77)
-```
 
-
-```{r}
 kruskal.test(Illiteracy ~ state.region, data = states)
 ```
 
