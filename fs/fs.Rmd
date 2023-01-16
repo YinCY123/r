@@ -79,4 +79,3 @@ Most of the functionality is `fs` can be approximated with functions in base R o
 |`path_ext_set("path", "new_ext")`|`sub("\\.[a-zA-Z0-9]*$", "new_ext", "path")`|*No direct equivalent*|
 |`path_sanitize("path")`|*No direct equivalent*|*No direct equivalent*|
 
-
