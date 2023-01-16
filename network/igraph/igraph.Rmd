@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r load package, message=FALSE}
 library(igraph)
-library(tidyverse)
+library(magrittr)
 ```
 
 **all igraph's parameter is here!!**  
@@ -19,7 +19,7 @@ library(tidyverse)
 ?igraph.plotting
 ```
 
-The discription of an `igraph` object starts with up to four letters  
+The description of an `igraph` object starts with up to four letters  
 ```
 - D or U for a directed or undirected graph  
 - N for a named graph (where nodes have a name attribute)  
@@ -202,7 +202,8 @@ g4s
 empty graph  
 ```{r}
 eg <- make_empty_graph(40)
-plot(eg, vertex.size = 10,
+plot(eg, 
+     vertex.size = 10,
      vertex.label = NA)
 ```
 
@@ -232,6 +233,7 @@ tr <- make_tree(n = 100,
                 mode = "undirected")
 
 l <- layout_with_fr(tr) 
+l %>% matrixStats::colRanges()
 ```
 
 ```{r}
@@ -241,8 +243,8 @@ plot(tr,
      vertex.label = NA, 
      layout = l, 
      rescale = F, 
-     xlim = c(-5, 5), 
-     ylim = c(-20,22), 
+     xlim = c(-3, 3), 
+     ylim = c(-20,20), 
      vertex.color = "orange", 
      vertex.frame.color = "grey")
 ```
@@ -301,7 +303,7 @@ plot(zach,
 ```
 
 Rewiring a graph  
-`each_edge()` is a rewiring method that changes the edge endpoints uniformaly randomly with a probability **prob**  
+`each_edge()` is a rewiring method that changes the edge endpoints uniformly randomly with a probability **prob**  
 ```{r}
 rn.rewiring <- rewire(rn, each_edge(prob = 0.1))
 
@@ -324,7 +326,9 @@ plot(tr, vertex.size = 10, vertex.label = NA)
 ```
 
 ```{r}
-plot(rn %du% tr, vertex.size = 10, vertex.label = NA)
+plot(rn %du% tr, 
+     vertex.size = 10, 
+     vertex.label = NA)
 ```
 
 
@@ -349,9 +353,8 @@ nrow(nodes); unique(links[, c("from", "to")]) %>% nrow()
 links %>% dplyr::distinct(from, to) %>% nrow()
 ```
 
- Summary Statistics of Data Subset  
+Summary Statistics of Data Subset  
 ```{r}
-?aggregate
 links <- aggregate(x = links[, 3], by = links[, -3], FUN = sum)
 links <- links[order(links$from, links$to), ]
 # reorder links according to from and to 
@@ -367,6 +370,7 @@ rownames(links) <- NULL
 ```{r}
 nodes2 <- read.csv(file = "Dataset2-Media-User-Example-NODES.csv", header = TRUE, as.is = TRUE)
 links2 <- read.csv(file = "Dataset2-Media-User-Example-EDGES.csv", header = TRUE, as.is = TRUE)
+# incidence matrix
 ```
 
 
@@ -396,6 +400,7 @@ V(net)
 
 
 ```{r}
+library(stringr)
 E(net)$type
 print(replicate(50, "-") %>% str_c(collapse = ""))
 V(net)$media
@@ -457,7 +462,7 @@ colors <- c("gray50", "tomato", "gold")
 V(net) %>% length()
 E(net) %>% length()
 V(net)$color <- colors[V(net)$media.type]
-edge.start <- ends(net, es = E(net), names = F)[,1]
+edge.start <- ends(net, es = E(net), names = F)[, 1]
 edge.start %>% unique() %>% length()
 edge.col <- V(net)$color[edge.start]
 
@@ -527,6 +532,8 @@ plot(net.m, vertex.color = "orange", main = "Tie:mention", vertex.label = NA, re
 
 # Network and node descriptives  
 ### density  
+The proportion of present edges from all possible edges in the network.  
+
 ```{r}
 edge_density(net, loops = F)
 
@@ -534,17 +541,21 @@ ecount(net) / (vcount(net)*(vcount(net) - 1)) # for a directed network
 ecount(net) / (vcount(net) * (vcount(net)))/vcount(net) # for undirected
 ```
 
-### Reciprocity: the proportion of reciprocated ties (for a directed network)  
+### Reciprocity
+The proportion of reciprocated ties (for a directed network)  
+
 ```{r}
 reciprocity(net)
 
-dyad_census(net) # mutal, asymmetric and null node pairs
+dyad_census(net) # mutual, asymmetric and null node pairs
 
 2*dyad.census(net)$mut / ecount(net) # for a directed network 
 ```
 
 ```{r}
-plot(net,edge.arrow.width = 0.5)
+par(mar = c(0, 0, 0, 0))
+plot(net,
+     edge.arrow.width = 0.5)
 ```
 
 
@@ -561,8 +572,9 @@ triad.census(net) # for directed networks
 ### Diameter  
 A network diameter is the longest geodesic distance (length of the shortest path between two nodes) in the network.     
 
-In igraph, `diameter()` returns the distance, while `get_diameter()` returns the nodes along the first found path of that distance.  
-Note that edge weights are used by defualt, unless set to NA  
+In igraph, `diameter()` returns the distance, while `get_diameter()` returns the nodes along the **first** found path of that distance.  
+Note that edge weights are used by default, unless set to NA  
+
 ```{r}
 diameter(net, directed = F, weights = NA)
 ```
@@ -578,6 +590,7 @@ diam <- get_diameter(net, directed = F) # get the nodes
 Note though that when asked to behaved as a vector, a vertex sequence will produce the numeric indexes of the nodes in it. The same applies for edge sequences.  
 
 ```{r}
+diam %>% class()
 as.vector(diam)
 ```
 
@@ -593,7 +606,7 @@ plot(net,
      vertex.color = vcol,
      edge.color = ecol,
      edge.arrow.mode = 0, 
-     vertex.size = V(net)$audience.size, 
+     vertex.size = V(net)$audience.size/1.2, 
      layout = layout_with_lgl,
      rescale = T, 
      vertex.label = NA)
@@ -603,6 +616,7 @@ plot(net,
 ### Node degrees  
 ```{r}
 deg <- degree(net, mode = "all")
+par(mar = rep(0, 4))
 plot(net, 
      vertex.size = deg*3,
      vertex.label = NA, 
@@ -653,7 +667,7 @@ centr_clo(net, mode = "all", normalized = T)
 ```{r}
 plot(net, 
      vertex.label = NA, 
-     vertex.size = centr_clo(net, mode = "all")$res * 30, 
+     vertex.size = centr_clo(net, mode = "all")$res * 50, 
      edge.arrow.size = 0.4)
 ```
 
@@ -666,6 +680,7 @@ centr_eigen(net, directed = T, normalized = T)
 
 
 **Betweenness**: centrality based on a broker position connecting others  
+
 ```{r}
 betweenness(net, directed = T, weights = NA)
 edge_betweenness(net, directed = T, weights = NA)
@@ -729,6 +744,7 @@ col <- col[dist.from.NYT + 1]
 ```
 
 ```{r}
+par(mar = rep(0,4))
 plot(net,
      vertex.color = col,
      vertex.label = dist.from.NYT,
@@ -839,11 +855,19 @@ E(net)[V(net)[type.label == "Newspaper"] %->% V(net)[type.label == "Online"]]
 ```
 
 
+**Co-citation**: for a couple of nodes, how many shred nominations they have.  
+
+```{r}
+cocitation(net)
+```
+
+
 ### Subgroups and communities  
 ```{r}
 net.sym <- as.undirected(graph = net,
                          mode = "collapse",
-                         edge.attr.comb = list(weight = "sum", "ignore"))
+                         edge.attr.comb = list(weight = "sum", "ignore")) 
+# all other attributes will be ignored
 ```
 
 
@@ -865,9 +889,9 @@ plot(as.undirected(net.sym),
 
 
 ### community detection  
-A number of algorithms aim to detect groups that consist of densely connectedd nodes with fewer connections across groups.  
+A number of algorithms aim to detect groups that consist of densely connected nodes with fewer connections across groups.  
 
-**Community detection based on edge betweenness (Newman-Girvan)**  
+#### **Community detection based on edge betweenness (Newman-Girvan)**  
 High-betweenness edges are removed sequentially (recalculating at each step) and the best partitioning of the network is selected.  
 ```{r}
 ceb <- cluster_edge_betweenness(net)
@@ -897,8 +921,9 @@ plot(x = ceb, y = net,
 High modularity for a partitioning reflects dense connections within communities and sparse connections across communities.  
 
 
-**Community detection based on propagating labels**  
+#### **Community detection based on propagating labels**  
 Assigns node labels, randomizes, than replaces each vertex’s label with the label that appears most frequently among neighbors. Those steps are repeated until each vertex has the most common label of its neighbors.  
+
 ```{r}
 clp <- cluster_label_prop(graph = net, weights = E(net)$weight)
 clp %>% class()
@@ -906,7 +931,6 @@ clp %>% sizes
 clp %>% modularity()
 igraph::crossing(clp, net)
 membership(clp)
-
 ```
 
 ```{r}
@@ -916,11 +940,11 @@ plot(x = clp,
      edge.arrow.size = 0.4, 
      edge.color = "grey", 
      edge.curved = 0.2, 
-     edge.width = (E(net)$weight %>% scale(center = -2) %>% as.numeric())*5)
+     edge.width = (E(net)$weight %>% scale(center = -2) %>% as.numeric)*5)
 ```
 
 
-**Community detection based on greedy optimization of modularity**  
+#### **Community detection based on greedy optimization of modularity**  
 ```{r}
 # fast greedy only works for undirected net
 cfg <- cluster_fast_greedy(as.undirected(net))
@@ -970,6 +994,12 @@ plot(net,
      vertex.color = cols[kc], 
      edge.arrow.size = 0.4)
 ```
+
+#### Other cluster alogrithms
+```{r}
+grep("^cluster_", ls("package:igraph"), value = T)
+```
+
 
 # Assortativity and Homophily
 Homophily: the tendency of nodes to connect to others who are similar on some variable.  
