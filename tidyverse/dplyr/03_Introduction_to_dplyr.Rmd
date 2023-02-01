@@ -1,0 +1,181 @@
+---
+title: "03 Introduction to dplyr"
+author: "yincy"
+date: "2023-01-31"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+When working with data you must:  
+
+- Figure out what you want to do.
+- Describe those tasks in the form of a computer program.
+- Execute the program.
+
+
+The dplyr package makes these steps fast and easy:
+
+- By constraining your options, it helps you think about your data manipulation challenges.
+- It provides simple “verbs”, functions that correspond to the most common data manipulation tasks, to help you translate your thoughts into code.
+- It uses efficient backends, so you spend less time waiting for the computer.
+
+This document introduces you to dplyr’s basic set of tools, and shows you how to apply them to data frames. dplyr also supports databases via the dbplyr package, once you’ve installed, read vignette("dbplyr") to learn more.
+
+
+# Data: starwars
+To explore the basic data manipulation verbs of dplyr, we’ll use the dataset starwars. This dataset contains 87 characters and comes from the Star Wars API, and is documented in ?starwars
+
+```{r}
+starwars %>% dim
+
+starwars
+```
+
+
+# Single table verbs
+dplyr aims to provide a function for each basic verb of data manipulation. These verbs can be organised into three categories based on the component of the dataset that they work with.  
+
+- rows
+    - `filter()`
+    - `slice()`
+    - `arrange()`
+    
+- columns
+    - `select()`
+    - `rename()`
+    - `mutate()`
+    - `relocate()`
+    
+- groups of rows
+    - `summarise()`, collapses a group into a single row.  
+    
+
+# The pipe
+All of the dplyr functions take a data frame (or tibble) as the first argument. Rather than forcing the user to either save intermediate objects or nest functions, dplyr provides the `%>%` operator from magrittr. `x %>% f(y)` turns into `f(x, y)` so the result from one step is then “piped” into the next step. You can use the pipe to rewrite multiple operations that you can read left-to-right, top-to-bottom (reading the pipe operator as “then”).
+
+
+# Filter rows with `filter()`
+```{r}
+starwars %>% 
+    filter(skin_color == "light", eye_color == "brown")
+```
+
+# Arrange rows with `arrange()`
+accepts multiple variables for arrange.  
+
+```{r}
+starwars %>% arrange(height, mass)
+starwars %>% arrange(desc(height))
+```
+
+
+# Choose rows using their position with `slice()`
+- `slice()`
+- `slice_head()`
+- `slice_tail()`
+- `slice_sample()`
+- `slice_min()`
+- `slice_max()`
+
+```{r}
+starwars %>% slice(5:10)
+starwars %>% slice_head(n = 3)
+starwars %>% slice_tail(n = 3)
+starwars %>% slice_sample(n = 5)
+starwars %>% filter(!is.na(height)) %>% slice_min(height, n = 3)
+starwars %>% filter(!is.na(height)) %>% slice_max(height, n = 3)
+```
+
+
+# Select columns with `select()`
+```{r}
+starwars %>% select(hair_color, skin_color, eye_color)
+starwars %>% select(hair_color:eye_color)
+starwars %>% select(!c(hair_color:eye_color))
+starwars %>% select(ends_with("color"))
+```
+
+
+rename while selection
+```{r}
+starwars %>% select(home_world = homeworld)
+```
+
+
+# Add new columns with `mutate()`
+```{r}
+starwars %>% 
+    mutate(height_m = height / 100) %>% 
+    relocate(height_m, .after = height)
+```
+
+
+`mutate()` like `transform()` but is allows you to refer to the variables that you have just created.  
+
+```{r}
+starwars %>% 
+    mutate(
+        height_m = height / 100, 
+        BMI = mass / height_m^2
+    ) %>% 
+    relocate(height_m, BMI, .after = height)
+```
+
+
+`transmutate()` only keeps the newly created variables.  
+```{r}
+starwars %>% 
+    transmute(
+        height_m = height / 100, 
+        BMI = mass / height_m^2
+    )
+```
+
+
+# Change column order with `relocate()`
+Use a similer syntax as `select()` to move blocks of columns at once.  
+
+```{r}
+starwars %>% relocate(sex:homeworld, .before = height)
+```
+
+# Summarise values with `summarise()`
+`summarise()` collaspses a data frame to a single row.
+
+```{r}
+starwars %>% summarise(height = mean(height, na.rm = TRUE))
+```
+
+
+# Commonalities
+You may have noticed that the syntax and function of all these verbs are very similar:
+
+- The first argument is a data frame.
+- The subsequent arguments describe what to do with the data frame. You can refer to columns in the data frame directly without using $.
+- The result is a new data frame. 
+
+
+Together these properties make it easy to chain together multiple simple steps to achieve a complex result.
+
+These five functions provide the basis of a language of data manipulation. At the most basic level, you can only alter a tidy data frame in five useful ways: you can reorder the rows (`arrange()`), pick observations and variables of interest (`filter()` and `select()`), add new variables that are functions of existing variables (`mutate()`), or collapse many values to a summary (`summarise()`).
+
+
+# Combining functions with `%>%`
+```{r}
+starwars %>% 
+    group_by(species, sex) %>% 
+    summarise(
+        heigt = mean(height, na.rm = TRUE), 
+        mass = mean(mass, na.rm = TRUE)
+    )
+```
+
+
+
+
+
+
+
