@@ -12,18 +12,18 @@ knitr::opts_chunk$set(echo = TRUE)
 
 |**Type of regression**|**Typical use**|
 |:--|:--|
-|Simple linear|Predicting a quantitative response variable from a quantitative explanatory variable.|
-|Polynomial|Predicting a quantitative response variable from a quantitative explanatory variable, where the relationship is modeled as an nth order polynomial.|
-|Multiple linear|Predicting a quantitative response variable from two or more explanatory variables.|
-|Multilevel|Predicting a response variable from data that have a hierarchical structure (for example, students within classrooms within schools). Also called hierarchical, nested, or mixed models.|
-|Multivariate|Predicting more than one response variable from one or more explanatory variables.|
-|Logistic|Predicting a categorical response variable from one or more explanatory variables.|
-|Poisson|Predicting a response variable representing counts from one or more explanatory variables.|
+|**Simple linear**|Predicting a quantitative response variable from a quantitative explanatory variable.|
+|**Polynomial**|Predicting a quantitative response variable from a quantitative explanatory variable, where the relationship is modeled as an nth order polynomial.|
+|**Multiple linear**|Predicting a quantitative response variable from two or more explanatory variables.|
+|**Multilevel**|Predicting a response variable from data that have a hierarchical structure (for example, students within classrooms within schools). Also called hierarchical, nested, or mixed models.|
+|**Multivariate**|Predicting more than one response variable from one or more explanatory variables.|
+|**Logistic**|Predicting a categorical response variable from one or more explanatory variables.|
+|**Poisson**|Predicting a response variable representing counts from one or more explanatory variables.|
 |Cox proportional hazards|Predicting time to an event (death, failure, relapse) from one or more explanatory variables.|
-|Time-series|Modeling time-series data with correlated errors.|
-|Nonlinear|Predicting a quantitative response variable from one or more explanatory variables, where the form of the model is nonlinear.|
-|Nonparametric|Predicting a quantitative response variable from one or more explanatory variables, where the form of the model is derived from the data and not specified a priori.|
-|Robust|Predicting a quantitative response variable from one or more explanatory variables using an approach that’s resistant to the effect of influential observations.|
+|**Time-series**|Modeling time-series data with correlated errors.|
+|**Nonlinear**|Predicting a quantitative response variable from one or more explanatory variables, where the form of the model is nonlinear.|
+|**Nonparametric**|Predicting a quantitative response variable from one or more explanatory variables, where the form of the model is derived from the data and not specified a priori.|
+|**Robust**|Predicting a quantitative response variable from one or more explanatory variables using an approach that’s resistant to the effect of influential observations.|
 
 
 **To properly interpret the coefficients of the OLS (ordinary least squares) model, you must satisfy a number of statistical assumptions**  
@@ -123,12 +123,15 @@ summary(fit)
 
 
 ### Multiple linear regression with interactions
+Some of the most interesting research findings are those involving interactions among predictor variables.  
+
+
 ```{r}
 fit <- lm(mpg ~ hp + wt + hp:wt, data  = mtcars)
 summary(fit)
 ```
 
-A significant interaction between two predictor variables tells you that the relationship between one predictor and the response variable depends on the level of the other predictor.  
+**A significant interaction between two predictor variables tells you that the relationship between one predictor and the response variable depends on the level of the other predictor**.  
 
 You can visualize interactions using the effect() function in the effects package.  
 ```
@@ -139,7 +142,8 @@ plot(effect(term, mod, ,xlevels), multiline = TRUE)
 library(effects)
 library(magrittr)
 
-effect("hp:wt", fit, xlevel = list(wt = c(2.2, 3.2, 4.2))) %>% plot(line = c(1, 2, 3), multiline = T)
+effect("hp:wt", fit, xlevel = list(wt = c(2.2, 3.2, 4.2))) %>% 
+    plot(line = c(1, 2, 3), multiline = T)
 ```
 
 
@@ -213,6 +217,8 @@ library(car)
 ```
 
 ### Normality
+- `qqPlot()`  
+
 ```{r}
 states <- as.data.frame(state.x77[, c("Murder", "Population", "Illiteracy", "Income", "Frost")])
 fit <- lm(Murder ~ Income + Illiteracy + Population + Frost, data = states)
@@ -225,6 +231,8 @@ qqPlot(fit,
 
 
 ### Independence of errors
+- `durbinWatsonTest()`  
+
 the best way to assess whether the dependent variable values (and thus the residuals) are independent is from your knowledge of how the data were collected.  
 
 For example, time series data often display autocorrelation—observations collected closer in time are more correlated with each other than with observations distant in time. The car package provides a function for the Durbin–Watson test to detect such serially correlated errors.  
@@ -233,7 +241,10 @@ For example, time series data often display autocorrelation—observations colle
 durbinWatsonTest(fit)
 ```
 
+
 ### Linearity
+- `crPlots`  
+
 ```{r}
 crPlots(fit)
 ```

@@ -1,0 +1,185 @@
+---
+title: "matrixStats: Summary of functions"
+author: "YinCY"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Location and scale estimators
+- Weighted sample mean
+    + `weightedMean()`  
+    + `colWeightedMeans()`  
+    + `rowWeightedMeans()`  
+
+- Mean  
+    + `mean2()`  
+    + `colMeans2()`  
+    + `rowMeans2()`  
+
+- Median  
+    + `median()`  
+    + `colMedians()`  
+    + `rowMedians()`  
+
+- Weighted median  
+    + `weightedMedian()`  
+    + `colWeightedmedians()`  
+    + `rowWeightedMedians()`  
+
+- Sample variance  
+    + `var()`  
+    + `colVars()`  
+    + `rowVars()`  
+
+- Weighted sample variance  
+    + `weightedVar()`   
+    + `colWeightedVars()`  
+    + `rowWeightedVars()`  
+
+- Sample variance by n-order differences  
+    + `varDiff()`  
+    + `colVarDiffs()`  
+    + `rowVarDiffs()`  
+
+- Sample standard deviation  
+    + `sd()`  
+    + `colSds()`  
+    + `rowSds()`  
+
+- Weighted sample deviation  
+    + `weightedSd()`  
+    + `colWeightedSds()`  
+    + `rowWeightedSds()`  
+
+- Sample standard deviation by n-order differences  
+    + `sdDiff()`  
+    + `colSdDiffs()`  
+    + `rowSdDiffs()`  
+    
+- Median absolute deviation (MAD)  
+    + `mad()`  
+    + `colMads()`  
+    + `rowMads()`  
+
+- Weighted median absolute deviation (MAD)  
+    + `weightedMad()`  
+    + `colWeightedMads()`  
+    + `rowWeightedMads()`  
+
+- Median absolute deviation (MAD) by n-order difference  
+    + `madDiff()`  
+    + `colMadDiffs()`  
+    + `rowMadDiffs()`  
+    
+- Quantile  
+    + `quantile()`  
+    + `colQuantiles()`  
+    + `rowQuantiles()`  
+    
+- Interquartile range (IQR)  
+    + `iqr()`  
+    + `colIQRs()`  
+    + `rowIQRs()`  
+
+- Interquartile range (IQR) by n-order difference  
+    + `iqrDiff()`  
+    + `colIQRDiffs()`  
+    + `rowIQRDiffs()`  
+    
+- Range  
+    + `range()`  
+    + `colRanges()`  
+    + `rowRanges()`  
+
+- Minimum   
+    + `min()`  
+    + `colMins()`  
+    + `rowMins()`  
+
+- Maximum  
+    + `max()`  
+    + `colMaxs()`  
+    + `rowMaxs()`  
+
+
+## Testing for and counting values
+- Are there any missing values?  
+    + `anyMissing()`  
+    + `colAnyMissings()`  
+    + `rowAnyMissings()`  
+
+- Does TRUE exists?  
+    + `any()`  
+    + `colAnys()`  
+    + `rowAnys()`  
+    
+- Are all values TRUE?  
+    + `all()`  
+    + `colAlls()`  
+    + `rowAlls()`  
+    
+- Does value exists?  
+    + `anyValue()`  
+    + `colAnys()`  
+    + `rowAnys()`  
+    
+- Do all elements have a given value?  
+    - `allValue()`  
+    - `colAlls()`  
+    - `rowAlls()`  
+
+- Number of occurrences of a value?  
+    + `count()`  
+    + `colCounts()`  
+    + `rowCounts()`  
+
+
+## Cummulative functions
+- Cumulative sum  
+    + `cumsum()`  
+    + `colCumsums()`  
+    + `rowCumsums()`  
+
+- Cumulative product  
+    + `cumprod()`  
+    + `colCumprods()`  
+    + `rowCumprods()`  
+    
+- Cumulative minimum  
+    + `cummin()`  
+    + `colCummins()`  
+    + `rowCummins()`  
+    
+- Cumulative maximum  
+    + `cummax()`  
+    + `colCummaxs()`  
+    + `rowCummaxs()`  
+
+
+## Binning  
+- Counts in disjoint bins  
+    + `binCounts()`  
+
+- Sample means (and counts) in disjoint bins  
+    + `binMeans()`  
+
+
+## Miscellaneous  
+- Sum  
+    + `sum2()`  
+    + `colSums2()`  
+    + `rowSums2()`  
+
+- Lagged differences  
+    + `diff2()`  
+    + `colDiffs()`  
+    + `rowDiffs()`  
+    
+
+
+

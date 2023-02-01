@@ -1,0 +1,35 @@
+---
+title: "uuid"
+author: "YinCY"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+ls("package:uuid")
+```
+
+
+```{r}
+ids <- UUIDgenerate(use.time = TRUE, 
+                    n = 100, 
+                    output = "raw")
+ids %>% str
+ids %>% as.UUID
+
+ids <- UUIDgenerate(use.time = TRUE, 
+                    n = 100, 
+                    output = "string")
+ids %>% as.UUID
+
+ids <- UUIDgenerate(use.time = TRUE, 
+                    n = 100, 
+                    output = "uuid")
+ids %>% str
+```
+
+
