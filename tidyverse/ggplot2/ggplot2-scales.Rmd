@@ -1,0 +1,53 @@
+---
+title: "ggplot2-scales"
+author: "yincy"
+date: "9/6/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+scales in ggplot2 can be roughly divided into four categories:  
+
+- continuous position scales  
+- color scales  
+- manual scales  
+- identity scales  
+
+> a scale is required for every aesthetic used on the plot.  
+
+
+## guide functions
+- `guide_colorbar()`: only work for continuous color scales.  
+- `guide_legend()`  
+- `guides()`  
+- `guide_bins()`  
+- `guide_coloursteps()`  
+
+
+## color scales
+### continuous
+- scale_color_gradient()  
+- scale_fill_gradient()  
+- scale_color_gradient2()  
+- scale_fill_gradient2()  
+- scale_color_gradientn()  
+- scale_fill_gradientn()  
+- scale_color_distiller(): apply `ColorBrewer` color scales to continuous data    
+- scale_fill_gradient()  
+
+
+### discrete  
+- scale_color_hue(): picks evenly spaced hues around the HCL color wheel.    
+- scale_color_brewer(): uses handpicked `ColorBrewer` colors.  
+- scale_color_grey()  
+- scale_color_manual()  
+
+
+
+
+
+
+
