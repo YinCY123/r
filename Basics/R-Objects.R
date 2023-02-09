@@ -1,4 +1,5 @@
 # R has five basic or 'atomic' classes of objects:
+# storage mode
 
 1. character
 2. numeric (real numbers)

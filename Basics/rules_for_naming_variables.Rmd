@@ -1,0 +1,20 @@
+---
+title: "rules_for_naming_variables"
+author: "yincy"
+date: "2023-02-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. 数字，字母，.，_都可以包含在名字里面。
+2. 如果以.开头，后面必须接字母
+3. 区分大小写
+4. 没有长度限制
+
+1. can be any thing of alphabeta, numeric, period (.), and _
+2. if started with period (.), the next must be alphabeta
+3. case sensitive
+4. no length limitation
