@@ -1,0 +1,74 @@
+---
+title: "00_Basic_Design"
+format: html
+editor: visual
+---
+
+Since most of the figures are composed of points, lines and polygons, we just need to implement functions for drawing points, lines and polygons, then the plots will not be restricted in any specific types.
+
+
+Current there are following low-level graphic functions:
+
+- `circos.points()`  
+- `circos.line()`
+- `circos.segments()`
+- `circos.rect()`
+- `circos.polygon()`
+- `circos.text()`
+- `circos.axis()`
+- `circos.raster()`
+- `circos.arrow()`
+- `circos.barplot()`
+- `circos.link()`: This maybe the unique feature for circos layout to represent relationships between elements.  
+
+
+For drawing points, lines and text through the whole track (among several sectors), the following functions are available:
+
+- `circos.trackPoints()`
+- `circos.trackLines()`
+- `circos.trackText()`
+
+
+Draw circular heatmaps:
+
+- `circos.heatmap()`
+
+
+Functions to arrange the circular layout:
+
+- `circos.track()`
+- `circos.update()`
+- `circos.nested()`
+- `circos.par()`
+- `circos.info()`
+- `circos.clear()`
+
+
+For specific use in Genomics, we also implement functions which add graphics in genome scale.
+
+Functions to initialize circular plot with genomic coordinates:
+
+- `circos.initializeWithIdeogram()`
+- `circos.genomicInitialize()`
+
+
+Functions to arrange genomic circular layout:
+
+- `circos.genomicTrack()`
+
+
+Functions to add basic graphic in genomic scale:
+
+- `circos.genomicPoints()` 
+- `circos.genomicLines()`
+- `circos.genomicText()`
+- `circos.genomicLabels()`
+- `circos.genomicDensity()`
+- `circos.genomicRainfall()`
+
+Finally, function that draws Chord diagram:
+
+- `chordDiagram()`
+
+
+
