@@ -1,0 +1,448 @@
+---
+title: "08 regression"
+author: "yincy"
+date: "3/13/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+|**Type of regression**|**Typical use**|
+|:--|:--|
+|**Simple linear**|Predicting a quantitative response variable from a quantitative explanatory variable.|
+|**Polynomial**|Predicting a quantitative response variable from a quantitative explanatory variable, where the relationship is modeled as an nth order polynomial.|
+|**Multiple linear**|Predicting a quantitative response variable from two or more explanatory variables.|
+|**Multilevel**|Predicting a response variable from data that have a hierarchical structure (for example, students within classrooms within schools). Also called hierarchical, nested, or mixed models.|
+|**Multivariate**|Predicting more than one response variable from one or more explanatory variables.|
+|**Logistic**|Predicting a categorical response variable from one or more explanatory variables.|
+|**Poisson**|Predicting a response variable representing counts from one or more explanatory variables.|
+|Cox proportional hazards|Predicting time to an event (death, failure, relapse) from one or more explanatory variables.|
+|**Time-series**|Modeling time-series data with correlated errors.|
+|**Nonlinear**|Predicting a quantitative response variable from one or more explanatory variables, where the form of the model is nonlinear.|
+|**Nonparametric**|Predicting a quantitative response variable from one or more explanatory variables, where the form of the model is derived from the data and not specified a priori.|
+|**Robust**|Predicting a quantitative response variable from one or more explanatory variables using an approach that’s resistant to the effect of influential observations.|
+
+
+**To properly interpret the coefficients of the OLS (ordinary least squares) model, you must satisfy a number of statistical assumptions**  
+
+1. **Normality**—For fixed values of the independent variables, the dependent variable is normally distributed.  
+2. **Independence**—The $Y_{i}$ values are independent of each other.  
+3. **Linearity**—The dependent variable is linearly related to the independent variables.  
+4. **Homoscedasticity**—The variance of the dependent variable doesn't vary with the levels of the independent variables.  
+
+
+**Symbols commonly used in R formulas**  
+
+|**Symbol**|**Usage**|
+|:--|:--|
+|`~`|Separates response variables on the left from the explanatory variables on the right. For example, a prediction of y from x, z, and w would be coded y ~ x + z + w.|
+|`+`|Separates predictor variables.|
+|`:`|Denotes an interaction between predictor variables. A prediction of y from x, z and the interaction between x and z could be coded y ~ x + z + x:z|
+|`*`|A shortcut for denoting all possible interactions. The code y ~ x* z * w expands to y ~ x + z + w + x:z + x:w + z:w + x:z:w|
+|`^`|Denotes interactions up to a specified degree. The code y ~ (x + z + w)^2 expands to y ~ x + z + w + x:z + x:w + z:w|
+|`.`|A placeholder for all other variables in the data frame except the dependent variable. For example, if a data frame contained the variables x, y, z, and w, then the code y ~ . could expand to y ~ x + z + w|
+|`-`| A minus sign removes a variable from the equation. For example, y ~ (x + z + w)^2 - x:w expands to y ~x + z + w + x:z + z:w|
+|`-1`|Suppresses the intercept. For example, the formular y ~ x -1 fits a regression of y on x, and forces the line through the origin at x = 0|
+|`I()`|Elements within the parentheses are interpreted arithmetically. For example, y ~ x + (z + w)^2 would expand to y ~ x + z + w + z:w. In contrast, the code y ~ x + I((z + w)^2) would expand to y ~ x + h, where h is a new variable created by squaring the sum of z and w.|
+|`function`|Mathematical functions can be used in formulas. For example, log(y) ~ x + z + w would predict log(y) for x, z, and w.|
+
+
+
+**Other functions that are useful when fitting linear models**  
+
+|**Function**|**Action**|
+|:--|:--|
+|`summary()`|Displays detailed results for the fitted model|
+|`coefficients()`|Lists the model parameters (intercept and slopes) for the model|
+|`confint()`|Provides confidence intervals for the model parameters (95% by default)|
+|`fitted()`|Lists the predicted values in a fitted model|
+|`residuls()`|Lists the residul values in a fitted model|
+|`anova()`|Generates ANOVA table for a fitted model, or an ANOVA table comparing two or more fitted models|
+|`vcov()`|Lists the covariance matrix for model parameters|
+|`AIC()`|Prints Akaik's Information Criterion|
+|`plot()`|Generates diagnostic plots for evaluating the fit of a model|
+|`predict()`|Uses a fitted model to predict response values for a new dataset|
+
+
+When the regression model contains one dependent variable and one independent variable, the approach is called simple linear regression.  
+
+When there’s one predictor variable but powers of the variable are included (for example, X, X2, X3), it’s called polynomial regression.  
+
+When there’s more than one predictor variable, it’s called multiple linear regression.   
+
+### Simple linear regression
+```{r}
+fit <- lm(weight ~ height, data = women)
+summary(fit)
+```
+
+```{r}
+options(digits = 3)
+women$weight
+fitted(fit)
+residuals(fit)
+```
+
+```{r}
+plot(women$height, women$weight)
+abline(fit)
+```
+
+
+### Polynomial regression
+```{r}
+fit2 <- lm(weight ~ height + I(height^2), data = women)
+summary(fit2)
+```
+
+```{r}
+plot(women$height, women$weight)
+lines(women$height, fitted(fit2))
+```
+
+
+### Multiple linear regression
+```{r}
+states <- as.data.frame(state.x77[, c("Murder", "Population", "Illiteracy", "Income", "Frost")])
+cor(states)
+```
+
+```{r}
+library(car)
+car::scatterplotMatrix(states, smooth = F, main = "Scater Plot Matrix")
+```
+
+```{r}
+states <- as.data.frame(state.x77[, c("Murder", "Population", "Illiteracy", "Income", "Frost")])
+fit <- lm(Murder ~ Population + Illiteracy + Income + Frost, data = states)
+summary(fit)
+```
+
+
+### Multiple linear regression with interactions
+Some of the most interesting research findings are those involving interactions among predictor variables.  
+
+
+```{r}
+fit <- lm(mpg ~ hp + wt + hp:wt, data  = mtcars)
+summary(fit)
+```
+
+**A significant interaction between two predictor variables tells you that the relationship between one predictor and the response variable depends on the level of the other predictor**.  
+
+You can visualize interactions using the effect() function in the effects package.  
+```
+plot(effect(term, mod, ,xlevels), multiline = TRUE)
+```
+
+```{r}
+library(effects)
+library(magrittr)
+
+effect("hp:wt", fit, xlevel = list(wt = c(2.2, 3.2, 4.2))) %>% 
+    plot(line = c(1, 2, 3), multiline = T)
+```
+
+
+## Regression diagnostics
+Why regression diagnostics?
+
+1. Irregularities in the data or misspecifications of the relationships between the predictors and the response variable can lead you to settle on a model that’s wildly inaccurate.  
+
+2. On the one hand, you may conclude that a predictor and a response variable are unrelated when, in fact, they are.  
+
+3. On the other hand, you may conclude that a predictor and a response variable are related when, in fact, they aren’t! You may also end up with a model that makes poor predictions when applied in real-world settings, with significant and unnecessary error.  
+
+
+```{r}
+states <- as.data.frame(state.x77[, c("Murder", "Population", "Illiteracy", "Income", "Frost")])
+fit <- lm(Murder ~ Population + Illiteracy + Income + Frost, data = states)
+confint(fit)
+```
+
+```{r}
+fit <- lm(weight ~ height, data = women)
+par(mfrow = c(2, 2))
+plot(fit)
+par(mfrow = c(1, 1))
+```
+
+
+**The assumptions of OLS regression**  
+
+1. `Normality`: If the dependent variable is normally distributed for a fixed set of predictor values, then the residual values should be normally distributed with a mean of 0. The Normal Q-Q plot (upper right) is a probability plot of the standardized residuals against the values that would be expected under normality. If you've met the normality assumption, the points on this graph should fall on the straight 45-degreee line.  
+
+2. `Independence`: You can't tell if the dependent variable values are independent from these plots. You have to use your understanding of how the data was collected. There's no a priori reason to believe that one woman's weight influences another woman's weight. If you found out that the data were sampled from families, you might have to adjust your assumption of independence.  
+
+3. `Linearity`: If the dependent variable is linearly related to the independent variables, there should be no systematic relationship between the residuals and the predicted values. In other words, the model should capture all the systematic variance presented in the data, leaving nothing but random noise. In the Residuals v.s. Fitted graph (upper left), you see clear evidence of a curved relationship, which suggests that you may want to add a quardratic term to the regression.  
+
+4. `Homoscedasticity`: If you've met the constant variance assumption, the points in the Scale-Location graph should be a random band around a horizontal line.  
+
+
+5. The Residuals v.s. Leverage graph provides information about individual observations that you may wish to attend to. The graph identifies outliers, high-leverage points, and influential observations.  
+
+- An outlier is an observation that isn’t predicted well by the fitted regression model (that is, has a large positive or negative residual).  
+
+- An observation with a high leverage value has an unusual combination of predictor values. That is, it’s an outlier in the predictor space. The dependent variable value isn’t used to calculate an observation’s leverage.  
+
+- An influential observation is an observation that has a disproportionate impact on the determination of the model parameters. Influential observations are identified using a statistic called Cook’s distance, or Cook’s D.  
+
+
+
+The `car` package provides a number of functions that significantly enhance your ability to fit and evaluate regression models.  
+
+
+**Useful functions for regression diagnostics (car package)**  
+
+|**Function**|**Purpose**|
+|:--|:--|
+|`qqPlot()`|Quantile comparisons plot|
+|`durbinWatsonTest()`|Durbin-Watson test for autocorrelated errors|
+|`crPlots()`|Component plus residual plots|
+|`ncvTest()`|Score test for nonconstant error variance|
+|`spreadLevelPlot()`|Spread-level plots|
+|`outlierTest()`|Bonferroni outlier test|
+|`avPlots()`|Added variable plots|
+|`influencePlot()`|Regression influence plots|
+|`scatterplot()`|Enhanced scatter plots|
+|`scaterplotMatrix()`|Enhanced scatter plot matrixes|
+|`vif()`|Variance inflation factors|
+
+
+```{r}
+library(car)
+```
+
+### Normality
+- `qqPlot()`  
+
+```{r}
+states <- as.data.frame(state.x77[, c("Murder", "Population", "Illiteracy", "Income", "Frost")])
+fit <- lm(Murder ~ Income + Illiteracy + Population + Frost, data = states)
+qqPlot(fit, 
+       labels = rownames(states), 
+       id = list(method = 'identity'), 
+       simulate = T, 
+       main = "Q-Q Plot")
+```
+
+
+### Independence of errors
+- `durbinWatsonTest()`  
+
+the best way to assess whether the dependent variable values (and thus the residuals) are independent is from your knowledge of how the data were collected.  
+
+For example, time series data often display autocorrelation—observations collected closer in time are more correlated with each other than with observations distant in time. The car package provides a function for the Durbin–Watson test to detect such serially correlated errors.  
+
+```{r}
+durbinWatsonTest(fit)
+```
+
+
+### Linearity
+- `crPlots`  
+
+```{r}
+crPlots(fit)
+```
+
+
+### Homoscedasticity
+- `ncvTest()` function produces a score that test of the hypothesis of constant error variance against the alternative that the error variance changes with the level of the fitted values. A significant result suggests heteroscedasticity (nonconstant error variance).  
+
+- `spreadLevelPlot()` function creates a scatter plot of the absolute standardized residuals versus the fitted values and superimposes a line of best fit.  
+
+```{r}
+ncvTest(fit)
+
+# constant variance
+```
+
+```{r}
+spreadLevelPlot(fit)
+```
+
+If the plot showed a nonhorizontal trend and the suggested power transformation was 0.5, then using $\sqrt{Y}$ rather than Y in the regression equation might lead to a model that satisfied homoscedasticity. If the suggested power was 0, you'd use a log transformation.  
+
+
+### Multicollinearity
+```{r}
+vif(fit)
+vif(fit) > 10
+```
+
+vif > 10 indicates a multicollinearity problem.  
+
+A regression coefficient measures the impact of one predictor variable on the response variable, holding all other predictor variable constant.  
+
+
+### Outliers
+Outliers are observations that aren't predicted well by the model. They have unusually large positive or negative residuals.   
+
+A rough rule of thumb is that standardized residuals that are larger than 2 or less than -2 are worth attention.  
+
+```{r}
+outlierTest(fit)
+```
+
+
+### high-leverage observations
+Observations that have high leverage are outliers with regard to the other predictors. In other words, they have an unusual combination of predictor values. The response value isn't involved in determining leverage.  
+
+Observations with high leverage are identified through the *hat statistic*.  
+
+For a given dataset, the average hat value is p/n, where p is the number of parameters estimated in the model (including the intercept) and n is the sample size.  Roughly speaking, an observation with a hat value greater than 2 or 3 times the avarage hat value should be examined.  
+
+```{r}
+hat.plot <- function(fit){
+    p <- length(coef(fit))
+    n <- length(fitted(fit))
+    plot(hatvalues(fit), main = "Index Plot of Hat Values")
+    abline(h = c(2, 3) * p/n, col = "red", lty = 2)
+    identify(1:n, hatvalues(fit), names(hatvalues(fit)))
+}
+
+hat.plot(fit)
+```
+
+High-leverage observations may or may not be influential observations. That will depend on whether they're also outliers.  
+
+
+
+### influential observations
+Influential observations have a disproportionate impact on the values of the model parameters. Imagine finding that your model changes dramatically with the removal of a single observation. It’s this concern that leads you to examine your data for influential points.  
+
+There are two methods for identifying influential observations: Cook’s distance (or D statistic) and added variable plots. Roughly speaking, Cook’s D values greater than -4/(n – k – 1), where n is the sample size and k is the number of predictor variables, indicate influential observations.  
+
+```{r}
+cutoff <- 4/(nrow(states) - length(fit$coefficients) - 2)
+plot(fit, which = 4, cook.levels = cutoff)
+abline(h = cutoff, lty = 2, col = "red")
+```
+
+
+```{r}
+avPlots(fit, ask = F, id.method = "identity")
+```
+
+For each predictor Xk, plot the residuals from regressing the response variable on the other k – 1 predictors versus the residuals from regressing Xk on the other k – 1 predictors.  
+
+
+combine the information from outlier, leverage, and influence plots into one highly informative plot using the `influencePlot()` function from the car package.  
+
+```{r}
+influencePlot(fit, id = "noteworthy", 
+              main = "Influence Plot", 
+              sub = "Circle size proportional to Cook's distance")
+```
+
+
+## Corrective meaures
+What do you do if you identify problems?  
+
+- Deleting observations  
+- Transforming variables  
+- Adding or deleting variables  
+- Using another regression approach  
+
+```{r}
+library(car)
+library(magrittr)
+states <- as.data.frame(state.x77[, c("Murder", "Population", "Illiteracy", "Income", "Frost")])
+
+powerTransform(states$Murder) %>% summary
+```
+
+
+The `boxTidwell()` function in the car package can be used to generate maximum- likelihood estimates of predictor powers that can improve linearity.
+
+```{r}
+library(car)
+
+boxTidwell(Murder ~ Population + Illiteracy, data = states)
+```
+
+The results suggest trying the transformations Population.87 and Population1.36 to achieve greater linearity. But the score tests for Population (p = .75) and Illiteracy (p = .54) suggest that neither variable needs to be transformed.  
+
+
+### Stepwise regression
+In stepwise selection, variables are added to or deleted from a model one at a time, until some stopping criterion is reached. For example, in forward stepwise regression, you add predictor variables to the model one at a time, stopping when the addition of variables would no longer improve the model. In backward stepwise regression, you start with a model that includes all predictor variables, and then you delete them one at a time until removing variables would degrade the quality of the model.  
+
+In stepwise regression (usually called stepwise to avoid sounding silly), you combine the forward and backward stepwise approaches. Variables are entered one at a time, but at each step, the variables in the model are reevaluated, and those that don’t contribute to the model are deleted. A predictor variable may be added to, and deleted from, a model several times before a final solution is reached.  
+
+
+```{r}
+states <- as.data.frame(state.x77[, c("Murder", "Population", "Illiteracy", "Income", "Frost")])
+fit <- lm(Murder ~ Population + Illiteracy + Income + Frost, data = states)
+step(fit, direction = "backward")
+```
+
+Stepwise regression is controversial. Although it may find a good model, there’s no guarantee that it will find the “best” model. This is because not every possible model is evaluated.  
+
+
+### All subsets regression
+```{r}
+library(leaps)
+
+leaps <- regsubsets(Murder ~ Population + Illiteracy + Income + Frost, data = states, nbest = 3)
+leaps %>% summary
+```
+
+```{r}
+shrinkage <- function(fit, k = 10, seed = 1){
+    require(bootstrap)
+    theta.fit <- function(x, y){lsfit(x, y)}
+    theta.predict <- function(fit, x){cbind(1, x) %*% fit$coef}
+    
+    x <- fit$model[, 2:ncol(fit$model)]
+    y <- fit$model[, 1]
+    
+    set.seed(seed)
+    
+    results <- crossval(x, y, theta.fit, theta.predict, ngroup = k)
+    r2 <- cor(y, fit$fitted.values)^2
+    r2cv <- cor(y, results$cv.fit)^2
+    cat("Original R-square=", r2, "\n")
+    cat(k, "Fold Cross-Validated R-square=", r2cv, "\n")
+}
+
+fit <- lm(Murder ~ Population + Income + Illiteracy + Frost, data = states)
+shrinkage(fit)
+```
+
+```{r}
+states <- as.data.frame(state.x77[, c("Murder", "Population", "Illiteracy", "Income", "Frost")])
+zstates <- scale(states) %>% as.data.frame()
+zfit <- lm(Murder ~ Population + Income + Illiteracy + Frost, data = zstates)
+coef(zfit)
+```
+
+Illiteracy is the most important predictor for the Murder rate.  
+
+```{r}
+cor(zstates)
+library(corrplot)
+corrplot(corr = cor(zstates))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

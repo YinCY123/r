@@ -1,0 +1,68 @@
+---
+title: "11_Intermediated-graphs"
+author: "yincy"
+date: "3/22/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Scatter plot
+### Scatter plot matrix
+```{r}
+library(GGally)
+mtcars[, c("mpg", "disp", "drat", "wt")] %>% ggpairs()
+```
+
+
+```{r}
+diagplots <- function(data, mapping){
+    ggplot(data = data, mapping = mapping) +
+        geom_histogram(fill = "lightblue", color = "black")
+}
+
+lowerplots <- function(data, mapping){
+    ggplot(data = data, mapping = mapping) +
+        geom_point(color = "darkgrey") +
+        geom_smooth(method = "lm", color = "steelblue", se = F) +
+        geom_smooth(method = "loess", color = "red", se = F, linetype = 2)
+}
+
+upperplots <- function(data, mapping){
+    ggally_cor(data = data, mapping = mapping, display_grid = F, size = 3.5, color = "black")
+}
+
+mytheme <- theme(strip.background = element_blank(), 
+                 panel.grid = element_blank(), 
+                 panel.background = element_blank(), 
+                 panel.border = element_rect(color = "grey20", fill = NULL))
+
+ggpairs(mtcars, 
+        columns = c("mpg", "disp", "drat", "wt"), 
+        columnLabels = c("MPG", "Displacement", "R Axel Ratio", "Weight"), 
+        title = "Scatterplot Matrix with linear and Loess fits", 
+        lower = list(continuous = lowerplots), 
+        diag = list(continuous = diagplots), 
+        upper = list(continuous = upperplots)) +
+    mytheme
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

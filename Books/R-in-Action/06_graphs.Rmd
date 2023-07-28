@@ -1,0 +1,219 @@
+---
+title: "06 graphs"
+author: "yincy"
+date: "3/11/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Bar charts
+```{r}
+library(vcd)
+data(Arthritis, package = "vcd")
+library(ggplot2)
+
+ggplot(Arthritis, aes(Improved)) + 
+    geom_bar() +
+    coord_flip()
+```
+
+```{r}
+library(patchwork)
+p1 <- ggplot(Arthritis, aes(Treatment, fill = Improved)) +
+    geom_bar(position = "stack") +
+    labs(title = "Stacked Bar chart", 
+         x = "Treatment", 
+         y = "Frequency")
+
+p2 <- ggplot(Arthritis, aes(Treatment, fill = Improved)) +
+    geom_bar(position = "dodge") +
+    labs(title = "Grouped Bar chart", 
+         x = "Treatment", 
+         y = "Frequency")
+
+p3 <- ggplot(Arthritis, aes(Treatment, fill = Improved)) +
+    geom_bar(position = "fill") +
+    labs(title = "Filled Bar chart", 
+         x = "Treatment", 
+         y = "Frequency")
+
+p1 + p2 / p3
+```
+
+
+```{r}
+data(state)
+state.x77 %>% as_tibble()
+```
+
+```{r}
+states <- data.frame(state.region, state.x77)
+plotdata <- states %>% 
+    group_by(state.region) %>% 
+    summarise(n = n(), 
+              mean = mean(Illiteracy), 
+              se = sd(Illiteracy)/sqrt(n))
+
+plotdata
+```
+
+```{r}
+ggplot(plotdata, aes(reorder(state.region, mean), mean)) +
+    geom_bar(stat = "identity", fill = "skyblue") +
+    geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2) +
+    labs(x = "region", 
+         y = "Mean Illiteracy Rate", 
+         title = "Mean Illiteracy Rate", 
+         subtitle = "with standard error bars")
+```
+
+
+
+## Pie charts
+```{r}
+library(ggpie)
+
+ggpie(data = mpg, 
+      group_key = "class", 
+      count_type = "full")
+
+ggpie(data = mpg, 
+      group_key = "class", 
+      count_type = "full", 
+      label_info = "all", 
+      label_pos = "in", 
+      label_type = "circle", 
+      label_size = 3, 
+      border_color = "gold")
+```
+
+
+## Tree maps
+```{r}
+library(treemapify)
+
+plotdata <- mpg %>% count(manufacturer)
+
+ggplot(plotdata, aes(fill = manufacturer, 
+                     area = n, label = manufacturer)) +
+    geom_treemap() +
+    geom_treemap_text() +
+    theme(legend.position = "none")
+```
+
+
+```{r}
+plotdata <- mpg %>% count(manufacturer, drv)
+plotdata$drv <- factor(plotdata$drv, levels = c("4", "f", "r"), 
+                       labels = c("4-wheel", "front-whell", "rear"))
+
+ggplot(plotdata, aes(fill = manufacturer, area = n, 
+                     label = manufacturer, subgroup = drv)) +
+    geom_treemap() +
+    geom_treemap_subgroup_border() +
+    geom_treemap_subgroup_text(place = "middle", color = "black", alpha = 0.5, grow = F) +
+    geom_treemap_text(color = "white", place = "center", grow = F) +
+    theme(legend.position = "none")
+```
+
+
+## Histograms
+```{r}
+library(scales)
+data(mpg)
+cars2008 <- mpg[mpg$year == 2008, ]
+
+ggplot(cars2008, aes(hwy)) +
+    geom_histogram() +
+    labs(title = "Default histogram")
+
+ggplot(cars2008, aes(hwy)) +
+    geom_histogram(bins = 20, color = "white", fill = "steelblue") +
+    labs(title = "Colored histogram with 20 bins", 
+         x = "City Miles Per Gallon", 
+         y = "Frequency")
+
+ggplot(cars2008, aes(hwy, y = ..density..)) +
+    geom_histogram(bins = 20, color = "white", fill = "steelblue") +
+    labs(title = "Colored histogram with 20 bins", 
+         x = "City Miles Per Gallon", 
+         y = "Percent")
+
+ggplot(cars2008, aes(hwy, y = ..density..)) +
+    geom_histogram(bins = 20, color = "white", fill = "steelblue") +
+    geom_density(color = "red", linewidth = 1) +
+    scale_y_continuous(labels = scales::percent) +
+    labs(title = "Colored histogram with 20 bins", 
+         x = "City Miles Per Gallon", 
+         y = "Percent")
+```
+
+
+## Kernel density plots
+```{r}
+ggplot(cars2008, aes(cty)) +
+    geom_density(fill = "red")
+
+ggplot(cars2008, aes(cty)) +
+    geom_density(fill = "red", bw = 0.5)
+```
+
+```{r}
+cars2008 %>% 
+    mutate(cyl = factor(cyl, levels = c(4, 6, 8))) %>% 
+    filter(!is.na(cyl)) %>% 
+ggplot(aes(cty, fill = cyl)) +
+    geom_density(alpha = 0.4, linetype = 2)
+```
+
+
+## Box plots
+```{r}
+cars <- mpg[mpg$cyl != 5, ]
+cars$cyl <- factor(cars$cyl)
+cars$year <- factor(cars$year)
+
+ggplot(cars, aes(cyl, cty, fill = year)) +
+    geom_boxplot(notch = T) +
+    labs(x = "Number of Cylinders", 
+         y = "Miles Per Gallon", 
+         title = "Car Mileage Data")
+# if two boxes' notches don't overlap, there's strong evidence that their medians differ.
+```
+
+
+
+```{r}
+cars <- mpg[mpg$cyl != 5, ]
+cars$cyl <- factor(cars$cyl)
+
+cars %>% 
+    mutate(year = factor(year)) %>% 
+ggplot(aes(cyl, cty)) +
+    geom_violin(width = 0.4) +
+    geom_boxplot(width = 0.2) +
+    labs(x = "Number of cylinder", 
+         y = "City Miles Per Gallon", 
+         title = "Violin Plots of Miles Per Gallon")
+```
+
+
+## Dot plots
+```{r}
+cars %>% 
+    ggplot(aes(manufacturer, model)) +
+    geom_count()
+```
+
+
+
+
+
+
+
+
+

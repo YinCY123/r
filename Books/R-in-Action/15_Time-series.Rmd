@@ -1,0 +1,142 @@
+---
+author: "yincy"
+date: "3/28/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Studies of time-series data involve two fundamental questions: what happened (description), and what will happen next (forcasting)?  
+
+Base R comes with `ts` for holding a single time series with regularly spaced time intervals, and `mts` for multiple time series with regularly spaced intervals. The `zoo` package offers a class which can hold time series with irregularly spaced intervals, and the `xts` package offers a superset of the `zoo` class, with more supporting functions. Other popular formats include `tsibble`, `timeSeries`, `irts`, and `tis`. Luckily, the `tsbox` package provides functions to convert a data frame into any of these formats and can also convert one time series format into another.  
+
+
+## Creating time-series object in R
+```{r}
+library(xts)
+sales <- c(18, 33, 41, 7, 34, 
+           35, 24, 25, 24, 21, 
+           25, 20, 22, 31, 40, 
+           29, 25, 21, 22, 54, 
+           31, 25, 26, 35)
+date <- seq(from = as.Date("2018/1/1"), 
+            to = as.Date("2019/12/1"), 
+            by = "month")
+
+sales.xts <- xts(sales, date)
+sales.xts["2018"]
+sales.xts["2018-3/2019-5"]
+```
+
+```{r}
+apply.quarterly(x = sales.xts, FUN = mean)
+apply.yearly(x = sales.xts, FUN = sum)
+```
+
+
+```{r}
+library(forecast)
+library(ggplot2)
+autoplot(sales.xts) +
+    geom_line(color = "blue") +
+    scale_x_date(date_breaks = "1 month", date_labels = "%b %y") +
+    theme_bw() +
+    theme(axis.text.x = element_text(angle = -40, hjust = 0)) +
+    labs(x = NULL, 
+         y = "Sale", 
+         title = "Monthly sales data")
+```
+
+
+### Smoothing with simple moving averages
+```{r}
+library(forecast)
+library(ggplot2)
+
+theme_set(theme_bw())
+ylim <- c(min(Nile), max(Nile))
+
+p1 <- autoplot(Nile) +
+    ggtitle(label = "Raw time Series") +
+    scale_y_continuous(limits = ylim)
+
+p2 <- autoplot(ma(Nile, 3)) +
+    ggtitle(label = "Simple Moving Averages (k = 3)") +
+    scale_y_continuous(limits = ylim)
+
+p3 <- autoplot(ma(Nile, 7)) +
+    ggtitle(label = "Simple Moving Averages (k = 7)") +
+    scale_y_continuous(limits = ylim)
+
+p4 <- autoplot(ma(Nile, 15)) +
+    ggtitle(label = "Simple Moving Averages (k = 15)") +
+    scale_y_continuous(limits = ylim)
+
+library(patchwork)
+(p1 + p2) / (p3 + p4)
+```
+
+
+### Seasonal decomposition
+Time-series data that have a seasonal aspect (such as monthly or quarterly data) can be decomposed into a trend component, a seasonal component, and an irregular component. The trend component captures changes in level over time. The seasonal component captures cyclical effects due to the time of year. The irregular (or error) component captures those influences not described by the trend and seasonal effects.  
+
+The decomposition can be additive or multiplicative. In an additive model, the components sum to give the values of the time series.  
+
+$$Y_{t} = Tread_{t} + Seasonal_{t} + Irregular_{t}$$
+
+Where the observation at time t is the sum of the contributions of the trend at time t, the seasonal effect at time t, and an irregular effect at time t.  
+
+In a multiplicative model  
+
+$$Y_{t} = Trend_{t} \cdot Seasonal_{t} \cdot Irregular_{t}$$
+
+The trend, seasonal, and irregular influences are multiplied.  
+
+
+```{r}
+data("AirPassengers")
+AirPassengers %>% class()
+
+library(forecast)
+library(ggplot2)
+
+autoplot(AirPassengers)
+logAirPassengers <- log(AirPassengers)
+autoplot(logAirPassengers, ylab = "log(AirPassengers)")
+
+fit <- stl(logAirPassengers, s.window = "period")
+autoplot(fit)
+```
+
+```{r}
+fit$time.series
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
