@@ -43,7 +43,6 @@ knitr::include_graphics("figures/2.2.jpg")
 
 As mentioned above, there are three ways to add graphics on a track.
 
-
 1.  Create plotting regions for the whole track first and then add graphics by specifying `sector.index`. In the following pseudo code, x1, y1 are data points in a given cell, which means you need to do data subsetting manually.
 
 In following code, `circos.points()` and `circos.lines()` are used separatedly from circos.track(), thus, the index for the sector needs to be explicitly specified by `sector.index` argument. There is also a track.index argument for both functions, however, the default value is the "current" track index and as the two functions are used just after `circos.track()`, the "current" track index is what the two functions expect and it can be ommited when calling the two functions.

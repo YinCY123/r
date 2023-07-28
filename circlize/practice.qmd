@@ -1,0 +1,67 @@
+---
+title: "Untitled"
+format: html
+editor: visual
+---
+
+```{r}
+#| message: false
+#| warning: false
+library(circlize)
+df <- data.frame(sector = sample(letters[1:8], 200, T), 
+                 x = rnorm(200), 
+                 y = rnorm(200))
+circos.initialize(sectors = df$sector, x = df$x)
+circos.track(sectors = df$sector, x = df$x, y = df$y, 
+             panel.fun = function(x, y){
+               circos.text(x = CELL_META$xcenter, 
+                           y = CELL_META$ylim[2] + mm_y(7), 
+                           labels = CELL_META$sector.index)
+               
+               col = rep(c("#FF0000", "#00FF00"), 4)
+               names(col) <- letters[1:8]
+               circos.points(x, y, col = col[CELL_META$sector.index], pch = 19, cex = 0.5)
+               circos.axis(h = "top", labels.cex = 0.5, labels.facing = "inside")
+             })
+circos.text(0, 0, labels = "text", sector.index = "a", track.index = 1)
+
+
+circos.track(sectors = df$sector, x = df$x, y = df$y, bg.border = NA,
+             panel.fun = function(x, y){
+               breaks <- sample(5, length(unique(df$sector)), T)
+               names(breaks) <- letters[1:8]
+               xlim <- get.cell.meta.data(name = "xlim")
+               xrange <- get.cell.meta.data(name = "xrange")
+               ylim <- get.cell.meta.data(name = "ylim")
+               yrange <- get.cell.meta.data(name = "yrange")
+               sector.index <- get.cell.meta.data("sector.index")
+               seqs <- seq(xlim[1], xlim[2], xrange/breaks[sector.index])
+               circos.rect(xleft = seqs[-length(seqs)], 
+                           xright = seqs[-1], 
+                           ybottom = ylim[1], ytop = ylim[2], 
+                           border = "black", col = rand_color(1))
+             })
+circos.clear()
+```
+
+
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
