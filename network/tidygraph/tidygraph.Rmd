@@ -45,6 +45,12 @@ iris_tree
 
 Lastly, `tidygraph` also wraps the multitude of graph constructors available in `igraph` and exports them under the `create_*()` family of functions for **deterministic constructors**(e.g. the call to `create_ring(10)` above) and the `play_*()` family for constructors that **incorporate sampling** (e.g. `play_erdos_renyi()` for creating graphs with a fixed edge probability). All of these functions provide a consistent argument naming scheme to take them easier to use and understand.  
 
+```{r}
+grep("^create_", ls("package:tidygraph"), value = TRUE)
+grep("^play_", ls("package:tidygraph"), value = TRUE)
+```
+
+
 # Meet a new verb...
 There are many ways a multitable setup could fit into the tidyverse. There could be an added qualifier to the verbs such as `mutate_nodes()` and `filter_edges()` or each verb could take an additional argument specifying what is targeted e.g. `arrange(..., target = 'nodes')`. Both of these approachable are viable but would require a huge amount of typing as well as being taxing to support down the line.  
 
@@ -75,7 +81,7 @@ iris_tree <- iris_tree %>%
 iris_tree
 ```
 
-In the above the **`.N()` function is used to gain access to the node data while manipulating the edge data**. Similarly `.E()` will give you the edge data and `.G()` will give you the tbl_graph object itself.
+In the above the **`.N()` function is used to gain access to the node data while manipulating the edge data**. Similarly `.E()` will give you the edge data and `.G()` will give you the `tbl_graph` object itself.
 
 Some verbs have effects outside of the currently active data. `filter()`/`slice()` on node data will remove the edges terminating at the removed nodes and `arrange()` on nodes will change the indexes of the `to` and `from` column in the edge data.  
 
@@ -190,7 +196,7 @@ play_smallworld(n_dim = 1, dim_size = 100, order = 3, p_rewire = 0.05) %>%
     mutate(centrality = centrality_authority()) %>% 
     ggraph(layout = "kk") +
     geom_edge_link() +
-    geom_node_point(aes(size = centrality), color = "grey50") +
+    geom_node_point(aes(size = centrality), color = "grey70") +
     theme_graph() +
     scale_size_area(max_size = 6)
 ```
@@ -236,7 +242,7 @@ Often we find ourselves interested in the local neighborhood of a node for vario
 
 ```{r}
 play_smallworld(n_dim = 1, dim_size = 100, order = 3, p_rewire = 0.05) %>% 
-    mutate(weighted_degree = centrality_degree() / local_ave_degree())
+    mutate(weighted_degree = centrality_degree() / local_ave_degree()) 
 ```
 
 ## All the rest  
