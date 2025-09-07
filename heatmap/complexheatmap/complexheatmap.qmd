@@ -1,0 +1,194 @@
+---
+title: "complexheatmap"
+author: "YinCY"
+format: html
+editor: source
+---
+
+# A Single Heatmap
+
+```{r}
+library(ComplexHeatmap)
+
+set.seed(123)
+nr1 = 4; nr2 = 8; nr3 = 6; nr = nr1 + nr2 + nr3
+nc1 = 6; nc2 = 8; nc3 = 10; nc = nc1 + nc2 + nc3
+mat = cbind(rbind(matrix(rnorm(nr1*nc1, mean = 1,   sd = 0.5), nr = nr1),
+          matrix(rnorm(nr2*nc1, mean = 0,   sd = 0.5), nr = nr2),
+          matrix(rnorm(nr3*nc1, mean = 0,   sd = 0.5), nr = nr3)),
+    rbind(matrix(rnorm(nr1*nc2, mean = 0,   sd = 0.5), nr = nr1),
+          matrix(rnorm(nr2*nc2, mean = 1,   sd = 0.5), nr = nr2),
+          matrix(rnorm(nr3*nc2, mean = 0,   sd = 0.5), nr = nr3)),
+    rbind(matrix(rnorm(nr1*nc3, mean = 0.5, sd = 0.5), nr = nr1),
+          matrix(rnorm(nr2*nc3, mean = 0.5, sd = 0.5), nr = nr2),
+          matrix(rnorm(nr3*nc3, mean = 1,   sd = 0.5), nr = nr3))
+   )
+
+mat = mat[sample(nr, nr), sample(nc, nc)] # random shuffle rows and columns
+rownames(mat) = paste0("row", seq_len(nr))
+colnames(mat) = paste0("column", seq_len(nc))
+```
+
+
+```{r}
+Heatmap(mat)
+```
+
+
+```{r}
+library(circlize)
+col_fun <- colorRamp2(breaks = c(-2, 0, 2), c("green", "white", "red"))
+
+col_fun(seq(-3, 3))
+
+Heatmap(mat, name = "mat", col = col_fun)
+```
+
+More importantly, `colorRamp2()` makes colors in multiple heatmaps comparible if they are set with a same color mapping function. In following three heatmaps, a same color always corresponds to a same value.
+
+```{r}
+par(mfrow = c(2,2))
+
+Heatmap(mat, name = "mat", col = col_fun, column_title = "mat")
+Heatmap(mat/4, name = "mat", col = col_fun, column_title = "mat/4")
+Heatmap(abs(mat), name = "mat", col = col_fun, column_title = "abs(mat)")
+```
+
+If the matrix is continuous, you can also simply provide a vector of colors and colors will be linearly interpolated. But remember this method is not robust to outliers because the mapping starts from the minimal value in the matrix and ends with the maximal value.
+
+```{r}
+Heatmap(mat, 
+        name = "mat", 
+        col = rev(rainbow(10)), 
+        column_title = "set a color vector for a continuous matrix")
+```
+
+If the matrix contains discrete values (either numeric or character), colors should be specified as a named vector to make it possible for the mapping from discrete values to colors. If there is no name for the color vector, the order of colors corresponds to the order of unique(mat).
+
+
+```{r}
+discrete_mat = matrix(sample(1:4, 100, replace = TRUE), 10, 10)
+colors = structure(1:4, names = c("1", "2", "3", "4")) # black, red, green, blue
+Heatmap(discrete_mat, name = "mat", col = colors,
+    column_title = "a discrete numeric matrix")
+```
+
+
+```{r}
+discrete_mat = matrix(sample(letters[1:4], 100, replace = TRUE), 10, 10)
+colors = structure(1:4, names = letters[1:4])
+Heatmap(discrete_mat, name = "mat", col = colors,
+    column_title = "a discrete character matrix")
+```
+
+```{r}
+Heatmap(mat, 
+        border_gp = gpar(col = "black", lty = 2), 
+        column_title = "set heatmap borders", 
+        rect_gp = gpar(lty = 2, col = "grey", lwd = 0.5))
+```
+
+```{r}
+Heatmap(matrix = mat, 
+        name = "mat", 
+        rect_gp = gpar(type = "none"), 
+        column_title = "nothing is drawn in the heatmap body")
+```
+
+## 2.9 Customize the heatmap body
+
+
+
+# heatmap annotation
+Heatmap annotations are important components of a heatmap that it shows additional information that associates with rows or columns in the heatmap. `ComplexHeatmap` package provides very flexible supports for setting annotations and defining new annotation graphics. The annotations can be put on the four sides of the heatmap, by `top_annotation`, `bottom_annotation`, `left_annotation` and `right_annotation` arguments.
+
+**Heatmap annotations can also be independent of the heatmaps. They can be concatenated to the heatmap list by + if it is horizontal, or %v% if it is vertical**.
+
+```{r}
+library(ComplexHeatmap)
+library(circlize)
+
+set.seed(123)
+mat <- matrix(rnorm(100), 10)
+rownames(mat) <- paste0("R", 1:10)
+colnames(mat) <- paste0("C", 1:10)
+
+column_ha <- HeatmapAnnotation(foo1 = runif(10), 
+                               bar1 = anno_barplot(runif(10)))
+row_ha <- rowAnnotation(foo2 = runif(10), 
+                        bar2 = anno_barplot(runif(10)))
+
+Heatmap(mat, name = "mat", 
+        top_annotation = column_ha, 
+        right_annotation = row_ha)
+```
+
+```{r}
+column_ha
+```
+
+```{r}
+row_ha
+```
+
+```{r}
+ha <- HeatmapAnnotation(foo = 1:10)
+plot(ha)
+```
+
+```{r}
+ha <- HeatmapAnnotation(bar = sample(letters[1:3], 10, replace = TRUE))
+plot(ha)
+```
+
+
+```{r}
+?HeatmapAnnotation
+col_fun <- colorRamp2(c(0, 5, 10), c("blue", "white", "red"))
+ha <- HeatmapAnnotation(bar = sample(letters[1:3], 10, replace = T), 
+                        col = list(bar = c("a" = "red", "b" = "green", "c" = "blue")))
+
+plot(ha)
+```
+
+```{r}
+hs <- HeatmapAnnotation(
+  foo = 1:10, 
+  bar = sample(letters[1:3], 10, T), 
+  col = list(
+    foo = col_fun, # the continuous value should be a color mapping function
+    bar = c("a" = "red", "b" = "green", "c" = "blue")
+  )
+)
+plot(hs)
+```
+
+```{r}
+ha <- HeatmapAnnotation(
+  foo = c(1:4, NA, 6:10), 
+  bar = c(NA, sample(letters[1:3], 9, T)), 
+  col = list(foo = col_fun, 
+             bar = c("a" = "red", "b" = "green", "c" = "blue")), 
+  na_col = "black"
+)
+plot(ha)
+```
+
+
+```{r}
+ha <- HeatmapAnnotation(
+  foo = 1:10, 
+  bar = sample(letters[1:3], 10, T), 
+  col = list(
+    foo = col_fun, 
+    bar = c("a" = "red", "b" = "green", "c" = "blue")
+  ),
+  gp = gpar(col = "black", lty = 2)
+)
+plot(ha)
+```
+
+## 3.2
+
+
+
