@@ -1,0 +1,29 @@
+---
+title: "fastml"
+author: "YinCY"
+format: html
+editor: source
+---
+
+```{r}
+library(fastml)
+
+data(iris)
+iris <- iris[iris$Species != "setosa", ]
+iris$Species = factor(iris$Species)
+
+# train model
+model <- fastml(data = iris, 
+                label = "Species", 
+                algorithms = "all")
+summary(model)
+```
+
+
+
+
+
+
+
+
+
