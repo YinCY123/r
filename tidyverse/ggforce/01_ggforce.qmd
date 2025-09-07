@@ -1,0 +1,130 @@
+---
+title: "ggforce"
+author: "YinCY"
+format: html
+editor: source
+---
+
+
+# The Shape of Geoms
+Many of the new and current geoms and stats in ggforce are really there to allow you to draw different types of shapes easily. This means that the workhorse of these has been geom_polygon(), while ggforce provided the means to describe the shapes in meaningful ways (e.g. wedges, circles, thick arcs). With the new release all of these geoms (as well as the new ones) will use the new `geom_shape()` under the hood. The shape geom is an extension of the polygon one that allows a bit more flourish in how the final shape is presented. It does this by providing two additional parameters: `expand` and `radius`, which will allow fixed unit expansion (and contraction) of the polygons as well as rounding of the corners based on a fixed unit radius. What do I mean with fixed unit? In the same way as the points in `geom_point` stay the same size during resizing of the plot, so does the corner radius and expansion of the polygon.
+
+```{r}
+library(ggforce)
+
+ids <- factor(c("1.1", "2.1", "1.2", "2.2", "1.3", "2.3"))
+
+values <- data.frame(
+  id = ids, 
+  value = c(3, 3.1, 3.1, 3.2, 3.15, 3.5)
+)
+
+
+positions <- data.frame(
+  id = rep(ids, each = 4), 
+  x = c(2, 1, 1.1, 2.2, 1, 0, 0.3, 1.1, 2.2, 1.1, 1.2, 2.5, 1.1, 0.3,
+  0.5, 1.2, 2.5, 1.2, 1.3, 2.7, 1.2, 0.5, 0.6, 1.3),
+  y = c(-0.5, 0, 1, 0.5, 0, 0.5, 1.5, 1, 0.5, 1, 2.1, 1.7, 1, 1.5,
+  2.2, 2.1, 1.7, 2.1, 3.2, 2.8, 2.1, 2.2, 3.3, 3.2)
+)
+
+datapoly <- merge(values, positions, by = "id")
+datapoly
+```
+
+```{r}
+ggplot(datapoly, aes(x = x, y = y)) +
+  geom_polygon(aes(fill = value, group = id))
+```
+
+```{r}
+ggplot(data = datapoly, aes(x = x, y = y)) +
+  geom_shape(aes(fill = value, group = id), 
+             expand = unit(-2, "mm"), 
+             radius = unit(5, "mm"))
+```
+
+
+# More shape primitives
+- geom_ellipse
+
+```{r}
+ggplot() +
+  geom_ellipse(aes(x0 = 0, y0 = 0, a = 6, b = 3, angle = -pi / 3, m1 = 3)) +
+  coord_fixed()
+```
+
+- geom_bspline
+
+```{r}
+controls <- data.frame(
+  x = runif(6), 
+  y = runif(6)
+)
+
+ggplot(controls, aes(x, y)) +
+  geom_polygon(fill = NA, color = "grey") +
+  geom_point(color = "red") +
+  geom_bspline_closed(alpha = 0.5)
+```
+
+- geom_regon
+
+```{r}
+ggplot() +
+  geom_regon(aes(x0 = runif(8), 
+                 y0 = runif(8), 
+                 sides = sample(3:10, 8), 
+                 angle = 0, 
+                 r = runif(8)/10)) +
+  coord_fixed()
+```
+
+- geom_diagonal_wide
+
+```{r}
+data <- data.frame(
+  x = c(1, 2, 2, 1, 2, 3, 3, 2), 
+  y = c(1, 2, 3, 2, 3, 1, 2, 5), 
+  group = c(1, 1, 1, 1, 2, 2, 2, 2)
+)
+
+ggplot(data) +
+  geom_diagonal_wide(aes(x, y, group = group))
+```
+
+- geom_parallel_sets
+
+```{r}
+titanic <- Titanic %>% reshape2::melt()
+titanic <- gather_set_data(data = titanic, x = 1:4)
+titanic %>% head
+```
+
+```{r}
+ggplot(data = titanic, aes(x = x, id = id, split = y, value = value)) +
+  geom_parallel_sets(aes(fill = Sex), alpha = 0.3, axis.width = 0.1) +
+  geom_parallel_sets_axes(axis.width = 0.1) +
+  geom_parallel_sets_labels(color = "white")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
