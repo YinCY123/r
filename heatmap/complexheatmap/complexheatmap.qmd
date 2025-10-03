@@ -188,7 +188,7 @@ ha <- HeatmapAnnotation(
 plot(ha)
 ```
 
-## 3.2
+
 
 
 
