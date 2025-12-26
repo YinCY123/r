@@ -282,6 +282,38 @@ the width, height, annotation_width and annotation_height arguments in `HeatmapA
 
 
 
+# Legend
+```{r}
+library(ComplexHeatmap)
+library(circlize)
+
+col_fun <- colorRamp2(c(0, 0.5, 1), c("blue", "white", "red"))
+lgd <- Legend(col_fun = col_fun, title = "foo")
+
+draw(lgd)
+```
+
+```{r}
+pushViewport(viewport(width = 0.9, height = 0.9))
+grid.rect()
+draw(lgd, x = unit(1, "cm"), y = unit(1, "cm"), just = c("left", "bottom"))
+draw(lgd, x = unit(0.5, "npc"), y = unit(1, "npc"), just = c("right", "top"))
+draw(lgd, x = unit(1, "npc"), y = unit(0.5, "npc"), just = c("right", "top"))
+popViewport()
+```
+
+```{r}
+Heatmap(matrix(rnorm(100), 10), 
+  heatmap_legend_param = list(
+    title = "rnorm", 
+    at = c(-2, 0, 2), 
+    labels = c("neg_two", "zero", "pos_two"), 
+  top_annotation = HeatmapAnnotation(
+    foo = 1:10, 
+    annotation_legend_param = list(foo = list(title = "foo_top_anno"))
+  )
+  ))
+```
 
 
 
@@ -292,9 +324,6 @@ the width, height, annotation_width and annotation_height arguments in `HeatmapA
 
 
 
-
-
->>>>>>> cd47aca44b5278129d9a8cfdb31fecac176dbcc9
 
 
 
